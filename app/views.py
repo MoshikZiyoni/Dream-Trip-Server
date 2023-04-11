@@ -3,6 +3,8 @@ import os
 import openai
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from dotenv import load_dotenv
+load_dotenv()
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
@@ -10,7 +12,7 @@ def gpt_func(request):
 
     print('this is the request print',ourmessage)
     # Load your API key from an environment variable or secret management service
-    openai.api_key = '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'
+    openai.api_key = os.getenv('API_KEY')
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
