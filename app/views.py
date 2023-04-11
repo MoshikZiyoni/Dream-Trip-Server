@@ -3,8 +3,8 @@ import os
 import openai
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
