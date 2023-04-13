@@ -17,6 +17,7 @@ def gpt_func(request):
 
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
+    # openai.api_key ='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'
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
@@ -47,3 +48,15 @@ def gpt_func(request):
     print (data)
     return Response(data)
     # return  Response('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
+
+
+
+# @api_view(['GET', 'POST'])
+# def all_country(request):
+#     country_name=request.data['country']
+#     country = Country(country_name=country_name)
+#     country.save()
+
+
+
+    
