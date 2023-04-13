@@ -18,8 +18,5 @@ class Attractions(models.Model):
     price=models.SmallIntegerField(null=True)
 
 class QueryChatGPT(models.Model):
-    country_name=models.CharField(max_length=50)
-    during_trip=models.SmallIntegerField()
-    max_stop=models.SmallIntegerField()
-    traveler=models.SmallIntegerField()
-    budget=models.SmallIntegerField()
+    question=models.CharField(max_length=500,default='')
+    answer=models.TextField(null=False,default='')
