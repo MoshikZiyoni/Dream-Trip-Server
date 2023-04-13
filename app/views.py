@@ -3,16 +3,18 @@ import os
 import openai
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-# from dotenv import load_dotenv
-# load_dotenv()
+
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
-    ourmessage = list(request.data.keys())[0]
+    # print (request.data['people'],"HHHHH")
+    
+    ourmessage=f"I'm looking for a vacation, for {request.data['people']} , with budget of {request.data['budget']}$, destination: {request.data['mainland']} ,durring trip {request.data['durring']}, give me also details about the attractions there"
 
     print('this is the request print',ourmessage)
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
+    print(openai.api_key,'KEYYYYYYYYYYYYYYYY')
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
