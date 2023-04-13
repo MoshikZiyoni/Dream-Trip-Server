@@ -16,7 +16,7 @@ def gpt_func(request):
 
 
     # Load your API key from an environment variable or secret management service
-    openai.api_key = 'API_KEY'
+    openai.api_key = os.environ.get('API_KEY')
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
