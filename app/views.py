@@ -41,12 +41,15 @@ def gpt_func(request):
     query.answer = our_answer
     ##Save to DATABASE
     query.save()
-    start_index = our_answer.find('{')
-    end_index = our_answer.rfind('}') + 1
-    json_string = our_answer[start_index:end_index]
-    data = json.loads(json_string)
-    print (data)
-    return Response(data)
+    try:
+        start_index = our_answer.find('{')
+        end_index = our_answer.rfind('}') + 1
+        json_string = our_answer[start_index:end_index]
+        data = json.loads(json_string)
+        print (data)
+        return Response(data)
+    except:
+        return Response(our_answer)
     # return  Response('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
 
 
