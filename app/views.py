@@ -46,10 +46,13 @@ def gpt_func(request):
         end_index = our_answer.rfind('}') + 1
         json_string = our_answer[start_index:end_index]
         data = json.loads(json_string)
-        print (data)
         return Response(data)
-    except:
-        return Response(our_answer)
+    except (ValueError, KeyError, TypeError) as e:
+        # Catch specific exceptions that might be raised by json.loads()
+        return Response({'error': str(e)})
+    except Exception as e:
+        # Catch any other exceptions
+        return Response({'error': str(e)})
     # return  Response('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
 
 
