@@ -8,16 +8,16 @@ import json
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
-    # print (request.data)
     query = QueryChatGPT()
 
-    ourmessage=f"Can you provide a JSON-formatted itinerary for a {request.data['budget']} {request.data['durring']}-day {request.data['travelers']} vacation in {request.data['mainland']}, including the country, city, description, and attractions for each city?"
+    question2='{country,cities:[{city:,description:,attraction:[name:],travelDay:}]}'
+    ourmessage=f"Can you provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},return me as format {question2}"
+    print(ourmessage)
     query.question = ourmessage
-
 
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
-    # openai.api_key ='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'
+    # openai.api_key ='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'
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
