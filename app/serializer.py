@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from gpt_app.app.models import Search
+from app.models import QueryChatGPT
 
 
-class SearchSerializer(serializers.ModelSerializer):
+class SerializerQueryChatGPT(serializers.ModelSerializer):
     class Meta:
-        model = Search
+        model = QueryChatGPT
         fields = '__all__'
