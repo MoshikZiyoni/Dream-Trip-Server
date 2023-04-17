@@ -40,17 +40,20 @@ def gpt_func(request):
         conversation.append({'role': response.choices[0].message.role, 'content': response.choices[0].message.content})
         return conversation 
 
-    conversation = []
-    conversation.append({'role': 'system', 'content': 'How may I help you?'})
-    conversation = ChatGPT_conversation(conversation)
-    # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
+    try:
+        conversation = []
+        conversation.append({'role': 'system', 'content': 'How may I help you?'})
+        conversation = ChatGPT_conversation(conversation)
+        # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
 
-    prompt = (ourmessage)
-    conversation.append({'role': 'user', 'content': prompt})
-    conversation = ChatGPT_conversation(conversation)
-    # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
-    our_answer = (conversation[-1]['content'].strip())
-    
+        prompt = (ourmessage)
+        conversation.append({'role': 'user', 'content': prompt})
+        conversation = ChatGPT_conversation(conversation)
+        # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
+        our_answer = (conversation[-1]['content'].strip())
+    except:
+            print ('cant GPT')
+            print (our_answer,'our_answer ERROR')  
     try:
         start = our_answer.index("```") + 3 # Add 3 to skip over the opening ```
         end = our_answer.rindex("```") # Find the index of the closing ```
