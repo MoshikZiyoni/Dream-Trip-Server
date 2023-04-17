@@ -28,8 +28,8 @@ def gpt_func(request):
     query.question = ourmessage
 
     # Load your API key from an environment variable or secret management service
-    # openai.api_key = os.environ.get('API_KEY')
-    openai.api_key ='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'
+    openai.api_key = os.environ.get('API_KEY')
+    # openai.api_key 
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
