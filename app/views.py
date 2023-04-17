@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.models import QueryChatGPT
 from rest_framework import status
+import traceback
 
 
 @api_view(['GET', 'POST'])
@@ -51,9 +52,11 @@ def gpt_func(request):
         conversation = ChatGPT_conversation(conversation)
         # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
         our_answer = (conversation[-1]['content'].strip())
-    except:
+    except Exception as e:
             print ('cant GPT')
             print (our_answer,'our_answer ERROR')  
+            traceback.print_exc()
+            print (e)
     try:
         start = our_answer.index("```") + 3 # Add 3 to skip over the opening ```
         end = our_answer.rindex("```") # Find the index of the closing ```
