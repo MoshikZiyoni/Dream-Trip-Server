@@ -4,28 +4,32 @@ import openai
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.models import QueryChatGPT
-import json
-import re
-import ast
-from app.serializer import SerializerQueryChatGPT
+from rest_framework import status
+
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
-    question2="{country:'..',cities:[{city:,description:,attraction:[name:],travelDay:}]}"
+    question2="{country:'..',cities:[{city:,description:,attractions:[name:],travelDay:}]}"
     ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure \n``` {question2}"
     # print (ourmessage)
     try:
-        answer_from_data=QueryChatGPT.objects.filter(question=ourmessage).values('answer')
-        serializer=SerializerQueryChatGPT(answer_from_data)
-        return (Response(serializer))
+        answer_from_data=QueryChatGPT.objects.filter(question__exact=ourmessage)
+        if answer_from_data.exists():
+            data=answer_from_data.values('answer')[0]
+            answer = data['answer']
+            print ('answer in data')
+            return Response(answer, status=status.HTTP_200_OK)
+        else:
+            print('Not Found')
+            
     except:
-            print ('Not Good')
+        print ('Internal Server Error')
     query = QueryChatGPT()
     query.question = ourmessage
 
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
-    # openai.api_key ='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'
+    # openai.api_key ='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'
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):

@@ -6,3 +6,5 @@ class SerializerQueryChatGPT(serializers.ModelSerializer):
     class Meta:
         model = QueryChatGPT
         fields = '__all__'
+
+   
