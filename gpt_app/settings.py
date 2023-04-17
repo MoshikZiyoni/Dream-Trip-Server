@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-y=8!%^v9_=x$&#z_t%5cp_$*te6jaemndo%&id9pn&4v3(&py&
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOW_CREDENTIALS = True
 
 
 
@@ -49,13 +50,14 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     "corsheaders.middleware.CorsPostCsrfMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+
 ]
 
 ROOT_URLCONF = 'gpt_app.urls'
@@ -83,7 +85,7 @@ WSGI_APPLICATION = 'gpt_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#Render
+# Render
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -95,13 +97,23 @@ DATABASES = {
     }
 }
 
+
+# '''
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+# '''
+# ###  'MONGODB'
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'tripdatabase'
+# ,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -154,7 +166,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ORIGIN = ['*']
-CORS_ALLOW_CREDENTIALS = True
 
 
 CSRF_COOKIE_HTTPONLY = True
