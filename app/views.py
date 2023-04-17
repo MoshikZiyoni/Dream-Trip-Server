@@ -29,7 +29,7 @@ def gpt_func(request):
 
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
-    # openai.api_key 
+    # openai.api_key = 
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
@@ -51,9 +51,14 @@ def gpt_func(request):
     # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
     our_answer = (conversation[-1]['content'].strip())
     
-    start = our_answer.index("```") + 3 # Add 3 to skip over the opening ```
-    end = our_answer.rindex("```") # Find the index of the closing ```
-    json_str = our_answer[start:end] # Extract the JSON string
+    try:
+        start = our_answer.index("```") + 3 # Add 3 to skip over the opening ```
+        end = our_answer.rindex("```") # Find the index of the closing ```
+        json_str = our_answer[start:end] # Extract the JSON string
+    except:
+        print ('json_str',json_str)
+        our_answer=json_str
+        print ('not found ''')
     # print('number 1',json_str)
     try:
         json_str= json_str.replace('json', '')
@@ -65,11 +70,6 @@ def gpt_func(request):
         # print ('not possible')
         query.answer = json_str
         query.save()
+        print ('excpet json_str',json_str)
         return (Response(json_str))
    
-   
-    
-
-
-
-    
