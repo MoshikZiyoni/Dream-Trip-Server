@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 import os
 import openai
@@ -54,7 +55,7 @@ def gpt_func(request):
         our_answer = (conversation[-1]['content'].strip())
     except Exception as e:
             print ('cant GPT')
-            print (our_answer,'our_answer ERROR')  
+            print ((conversation[-1]['content'].strip()),'our_answer ERROR')  
             traceback.print_exc()
             print (e)
     try:
