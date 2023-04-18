@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.shortcuts import render
 import os
 import openai
@@ -7,6 +6,7 @@ from rest_framework.response import Response
 from app.models import QueryChatGPT
 from rest_framework import status
 import traceback
+import time
 
 
 @api_view(['GET', 'POST'])
@@ -35,24 +35,37 @@ def gpt_func(request):
     model_id = 'gpt-3.5-turbo'
 
     def ChatGPT_conversation(conversation):
-        response = openai.ChatCompletion.create(
+
+        response =  openai.ChatCompletion.create(
             model=model_id,
             messages=conversation
         )
         conversation.append({'role': response.choices[0].message.role, 'content': response.choices[0].message.content})
         return conversation 
+    
+    def retry(func, max_attempts=3, sleep_time=3):
+    
+        for attempt in range(max_attempts):
+            try:
+                return func()
+            except Exception as e:
+                print(f"Attempt {attempt+1} failed with error: {e}")
+                time.sleep(sleep_time)
+        raise Exception(f"Function call failed after {max_attempts} attempts")
+    conversation = []
+    conversation.append({'role': 'system', 'content': 'How may I help you?'})
+    conversation = ChatGPT_conversation(conversation)
+    # call ChatGPT_conversation with retry up to 3 times, with a delay of 1 second between retries
+    conversation = retry(lambda: ChatGPT_conversation(conversation), max_attempts=3, sleep_time=1)
 
+    # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
     try:
-        conversation = []
-        conversation.append({'role': 'system', 'content': 'How may I help you?'})
-        conversation = ChatGPT_conversation(conversation)
-        # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
-
         prompt = (ourmessage)
         conversation.append({'role': 'user', 'content': prompt})
         conversation = ChatGPT_conversation(conversation)
         # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
         our_answer = (conversation[-1]['content'].strip())
+        print ('our_answer first try')
     except Exception as e:
             print ('cant GPT')
             print ((conversation[-1]['content'].strip()),'our_answer ERROR')  
