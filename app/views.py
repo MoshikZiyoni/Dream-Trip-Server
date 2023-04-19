@@ -44,7 +44,6 @@ def gpt_func(request):
         return conversation 
     
     def retry(func, max_attempts=3, sleep_time=3):
-    
         for attempt in range(max_attempts):
             try:
                 return func()
@@ -52,25 +51,26 @@ def gpt_func(request):
                 print(f"Attempt {attempt+1} failed with error: {e}")
                 time.sleep(sleep_time)
         raise Exception(f"Function call failed after {max_attempts} attempts")
+    
     conversation = []
     conversation.append({'role': 'system', 'content': 'How may I help you?'})
-    conversation = ChatGPT_conversation(conversation)
-    # call ChatGPT_conversation with retry up to 3 times, with a delay of 1 second between retries
     conversation = retry(lambda: ChatGPT_conversation(conversation), max_attempts=3, sleep_time=1)
 
     # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
     try:
         prompt = (ourmessage)
         conversation.append({'role': 'user', 'content': prompt})
-        conversation = ChatGPT_conversation(conversation)
+        conversation = retry(lambda: ChatGPT_conversation(conversation), max_attempts=3, sleep_time=1)
         # our_answer=('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
         our_answer = (conversation[-1]['content'].strip())
         print ('our_answer first try')
     except Exception as e:
-            print ('cant GPT')
-            print ((conversation[-1]['content'].strip()),'our_answer ERROR')  
-            traceback.print_exc()
-            print (e)
+        print ('cant GPT')
+        print ((conversation[-1]['content'].strip()),'our_answer ERROR')  
+        traceback.print_exc()
+        print (e)
+        return Response("Internal Server Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     try:
         start = our_answer.index("```") + 3 # Add 3 to skip over the opening ```
         end = our_answer.rindex("```") # Find the index of the closing ```
