@@ -120,6 +120,17 @@ DATABASES = {
     }
 }
 
+###MYSQL
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'Dream-Trip',
+#         'USER': 'root',
+#         'PASSWORD': 'Theking1!',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 
 # '''
 # DATABASES = {
