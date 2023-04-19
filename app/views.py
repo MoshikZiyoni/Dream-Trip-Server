@@ -78,13 +78,14 @@ def gpt_func(request):
     except:
         print ('json_str',json_str)
         our_answer=json_str
-        print ('not found ''')
+        print ("not found '''  the symbol",our_answer)
     # print('number 1',json_str)
     try:
         json_str= json_str.replace('json', '')
         # print('Success',json_str)
         query.answer = json_str
         query.save()
+        print (json_str,'last try')
         return(Response(json_str))
     except:
         # print ('not possible')
