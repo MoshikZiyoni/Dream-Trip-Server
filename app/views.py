@@ -32,7 +32,7 @@ def gpt_func(request):
         print ('Internal Server Error')
     query = QueryChatGPT()
     query.question = ourmessage
-    query.save()
+    
     # Load your API key from an environment variable or secret management service
     openai.api_key = os.environ.get('API_KEY')
 ##
