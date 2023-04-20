@@ -45,7 +45,7 @@ def gpt_func(request):
             response = openai.Completion.create(
                 model="text-davinci-003",
                 prompt=ourmessage,
-                max_tokens=700,
+                max_tokens=2000,
                 temperature=0.9
             )
             ourdata = response.choices[-1]['text']
