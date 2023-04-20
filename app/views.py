@@ -10,6 +10,8 @@ import traceback
 import time
 
 
+MAX_RETRIES = 3
+WAIT_TIME = 5
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
@@ -37,13 +39,27 @@ def gpt_func(request):
 
     
 
-    response=openai.Completion.create(
-        model="text-davinci-003",
-        prompt=ourmessage,
-        max_tokens=700,
-        temperature=0.9
-        )
-    ourdata=response.choices[-1]['text']
-    query.answer = ourdata
-    query.save()
-    return JsonResponse(ourdata,safe=False)
+    try_count = 0
+    while try_count < MAX_RETRIES:
+        try:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=ourmessage,
+                max_tokens=700,
+                temperature=0.9
+            )
+            ourdata = response.choices[-1]['text']
+
+            query = QueryChatGPT()
+            query.question = ourmessage
+            query.answer = ourdata
+            query.save()
+
+            return JsonResponse(ourdata, safe=False)
+
+        except Exception as e:
+            print(f"An error occurred in try {try_count+1}: {e}")
+            try_count += 1
+            time.sleep(WAIT_TIME)
+
+   
