@@ -34,7 +34,9 @@ def gpt_func(request):
     query.question = ourmessage
     
     # Load your API key from an environment variable or secret management service
-    openai.api_key = os.environ.get('API_KEY')
+    # openai.api_key = os.environ.get('API_KEY')
+    openai.api_key = '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' 
+
 ##
 
     
@@ -42,13 +44,14 @@ def gpt_func(request):
     try_count = 0
     while try_count < MAX_RETRIES:
         try:
-            response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt=ourmessage,
-                max_tokens=3000,
-                temperature=0.9
-            )
-            ourdata = response.choices[-1]['text']
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": ourmessage}
+                ]
+                )
+            
+            ourdata = (completion.choices[0].message.content)
 
             query = QueryChatGPT()
             query.question = ourmessage
