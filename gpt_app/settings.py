@@ -25,10 +25,7 @@ SECRET_KEY = 'django-insecure-y=8!%^v9_=x$&#z_t%5cp_$*te6jaemndo%&id9pn&4v3(&py&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '*',
-    "http://localhost:3000",
-]
+ALLOWED_HOSTS = ['*']
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_HEADERS = [
@@ -199,9 +196,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ORIGIN = [
-    '*',
-    "http://localhost:3000",]
+CORS_ALLOW_ORIGIN = ['*',"http://localhost:3000"]
 
 
 CSRF_COOKIE_HTTPONLY = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
