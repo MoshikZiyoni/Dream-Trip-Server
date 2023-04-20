@@ -24,7 +24,7 @@ def gpt_func(request):
             data=answer_from_data.values('answer')[0]
             answer = data['answer']
             print ('answer in data')
-            return Response(answer, status=status.HTTP_200_OK)
+            return JsonResponse(answer, status=status.HTTP_200_OK,safe=False)
         else:
             print('Not Found')
             
