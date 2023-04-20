@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 import os
 import openai
@@ -12,7 +13,7 @@ import time
 
 @api_view(['GET', 'POST'])
 def gpt_func(request):
-    question2="{country:'..',cities:[{city:,description:,attractions:[name:][descrpition:],travelDay:}]}"
+    question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":}]}'
     ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question2}"
     # print (ourmessage)
     try:
@@ -46,7 +47,7 @@ def gpt_func(request):
     ourdata=response.choices[-1]['text']
     query.answer = ourdata
     query.save()
-    return (Response(ourdata))
+    return JsonResponse(ourdata,safe=False)
 # # print('{0}: {1}\n'.format(conversation[-1]['role'].strip(), conversation[-1]['content'].strip()))
     # max_attempts = 3
     # attempts = 0

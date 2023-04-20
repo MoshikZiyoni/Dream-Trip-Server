@@ -106,16 +106,16 @@ WSGI_APPLICATION = 'gpt_app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Render
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dreamtrip_mhc6', 
-        'USER': 'moshik', 
-        'PASSWORD': 'aHOn2XVjQGdBne1yUMSs5X6SvrD1GOKt',
-        'HOST': 'dpg-cgpu7kheuhlq287lbmpg-a.frankfurt-postgres.render.com', 
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'dreamtrip_mhc6', 
+#         'USER': 'moshik', 
+#         'PASSWORD': 'aHOn2XVjQGdBne1yUMSs5X6SvrD1GOKt',
+#         'HOST': 'dpg-cgpu7kheuhlq287lbmpg-a.frankfurt-postgres.render.com', 
+#         'PORT': '5432',
+#     }
+# }
 
 ###MYSQL
 # DATABASES = {
@@ -130,12 +130,12 @@ DATABASES = {
 # }
 
 # '''
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # '''
 # ###  'MONGODB'
 # DATABASES = {
