@@ -32,8 +32,7 @@ def gpt_func(request):
     query.question = ourmessage
     query.save()
     # Load your API key from an environment variable or secret management service
-    # openai.api_key = os.environ.get('API_KEY')
-    openai.api_key = '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' 
+    openai.api_key = os.environ.get('API_KEY')
 ##
 
     
