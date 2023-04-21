@@ -25,6 +25,7 @@ def run_gpt_func(ourmessage):
     query.question = ourmessage
     
     openai.api_key = os.environ.get('API_KEY')
+    
 
     
     try_count = 0
@@ -32,7 +33,7 @@ def run_gpt_func(ourmessage):
         try:
             start_time = datetime.datetime.now()
             completion = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo-0301",
                 messages=[
                     {"role": "user", "content": ourmessage}
                 ]
