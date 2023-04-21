@@ -5,5 +5,5 @@ from . import views
 app_name = 'app'
 
 urlpatterns = [
-    path("", views.gpt_func, name= "gpt_func"),
+    path("", views.gpt_view, name= "gpt_view"),
 ]
