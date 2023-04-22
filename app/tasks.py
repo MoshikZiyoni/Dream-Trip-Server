@@ -6,7 +6,7 @@ import datetime
 
 MAX_RETRIES = 3
 WAIT_TIME = 5
-TIMEOUT = 25  # maximum time to wait for the result, in seconds
+TIMEOUT = 35  # maximum time to wait for the result, in seconds
 
 def run_gpt_func(ourmessage):
     try:
@@ -36,9 +36,9 @@ def run_gpt_func(ourmessage):
                 model="gpt-3.5-turbo-0301",
                 messages=[
                     {"role": "user", "content": ourmessage}
+                    
                 ]
             )
-            
             ourdata = (completion.choices[0].message.content)
 
             query.answer = ourdata
