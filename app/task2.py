@@ -12,4 +12,5 @@ def run_gpt_func(ourmessage):
                         
                     ]
                 )
+    print (completion.choices[0].message.content)
     return(completion.choices[0].message.content)

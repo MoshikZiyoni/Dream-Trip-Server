@@ -11,4 +11,5 @@ def run_gpt_app(ourmessage):
     max_tokens=1000,
     temperature=1
     )
+    print (response['choices'][0]['text'])
     return (response['choices'][0]['text'])
