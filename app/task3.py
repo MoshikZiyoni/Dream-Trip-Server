@@ -9,7 +9,7 @@ def run_gpt_app(ourmessage):
     model="text-davinci-003",
     prompt=ourmessage,
     max_tokens=1000,
-    temperature=1
+    temperature=0.9
     )
     print (response['choices'][0]['text'])
     return (response['choices'][0]['text'])
