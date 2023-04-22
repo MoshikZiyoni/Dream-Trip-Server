@@ -9,20 +9,20 @@ WAIT_TIME = 5
 TIMEOUT = 35  # maximum time to wait for the result, in seconds
 
 def run_gpt_func(ourmessage):
-    try:
-        answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
-        if answer_from_data.exists():
-            data = answer_from_data.values('answer')[0]
-            answer = data['answer']
-            print('answer in data')
-            return answer
-        else:
-            print('Not Found')
-    except:
-        print('Internal Server Error')
+#     try:
+#         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
+#         if answer_from_data.exists():
+#             data = answer_from_data.values('answer')[0]
+#             answer = data['answer']
+#             print('answer in data')
+#             return answer
+#         else:
+#             print('Not Found')
+#     except:
+#         print('Internal Server Error')
     
-    query = QueryChatGPT()
-    query.question = ourmessage
+#     query = QueryChatGPT()
+#     query.question = ourmessage
     
     openai.api_key = os.environ.get('API_KEY')
     
@@ -41,8 +41,8 @@ def run_gpt_func(ourmessage):
             )
             ourdata = (completion.choices[0].message.content)
 
-            query.answer = ourdata
-            query.save()
+            # query.answer = ourdata
+            # query.save()
 
             return ourdata
 
