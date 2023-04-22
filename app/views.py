@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from app.tasks import run_gpt_func
+from app.task2 import run_gpt_func
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
