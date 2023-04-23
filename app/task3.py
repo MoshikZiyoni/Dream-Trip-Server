@@ -1,4 +1,5 @@
 import os
+from django.http import JsonResponse
 import openai
 import json
 from app.models import QueryChatGPT
@@ -11,7 +12,7 @@ def run_gpt_app(ourmessage):
             data = answer_from_data.values('answer')[0]
             answer = data['answer']
             print('answer in data')
-            return answer
+            return JsonResponse(answer)
         else:
             print('Not Found')
     except:
