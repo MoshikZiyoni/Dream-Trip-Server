@@ -3,7 +3,7 @@ import threading
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from app.chat import run_long_poll, run_long_poll_async
+from app.chat import run_long_poll_async
 
 
 @api_view(['GET', 'POST'])
