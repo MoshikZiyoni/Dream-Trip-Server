@@ -1,15 +1,28 @@
+import asyncio
+import threading
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from app.chat import run_long_poll
+from app.chat import run_long_poll, run_long_poll_async
 
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
     question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":type(integer)}]}'
     ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question2}"
-    result = run_long_poll(ourmessage)
     
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    task = loop.create_task(run_long_poll_async(ourmessage))
+
+    # Start the task in a separate thread
+    thread = threading.Thread(target=loop.run_until_complete, args=(task,))
+    thread.start()
+
+    # Wait for the task to finish and get the result
+    thread.join()
+    result = task.result()
+
     return JsonResponse(result, safe=False)
 
 

@@ -1,13 +1,10 @@
 import os
 import time
 import openai
-from django.http import HttpResponseServerError
 from app.models import QueryChatGPT
 
 
-# def run_gpt_func(conversation,first_prompt):
-def run_long_poll(ourmessage):
-    start_time = time.time()
+async def run_long_poll_async(ourmessage):
     try:
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
         if answer_from_data.exists():
@@ -19,10 +16,9 @@ def run_long_poll(ourmessage):
             print('Not Found')
     except:
         print('Internal Server Error')
-        # Set up the long polling parameters
+    # Set up the long polling parameters
     timeout = 27  # Set the long poll timeout to 25 seconds
     start_time = time.time()
-
     # Loop until a response is received or the timeout is reached
     while True:
         # Check if the timeout has been reached
@@ -31,15 +27,14 @@ def run_long_poll(ourmessage):
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
         try:
-            
             openai.api_key = os.environ.get('API_KEY')
             print ('start GPT')
             completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": ourmessage}
-        ]
-        )
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": ourmessage}
+                ]
+            )
             answer=(completion.choices[0].message.content)
             query = QueryChatGPT(question=ourmessage, answer=answer)
             query.save()
@@ -52,6 +47,7 @@ def run_long_poll(ourmessage):
             else:
                 # If there's another API error, raise an exception
                 raise
+
         
 
         
