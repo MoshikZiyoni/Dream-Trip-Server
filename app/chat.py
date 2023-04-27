@@ -1,12 +1,13 @@
 import os
 import time
 import openai
-
+from django.http import HttpResponseServerError
 from app.models import QueryChatGPT
 
 
 # def run_gpt_func(conversation,first_prompt):
 def run_long_poll(ourmessage):
+    start_time = time.time()
     try:
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
         if answer_from_data.exists():
@@ -18,28 +19,42 @@ def run_long_poll(ourmessage):
             print('Not Found')
     except:
         print('Internal Server Error')
-    try:
-        start_time = time.time()
-        while time.time() - start_time < 60:
+        # Set up the long polling parameters
+    timeout = 27  # Set the long poll timeout to 25 seconds
+    start_time = time.time()
+
+    # Loop until a response is received or the timeout is reached
+    while True:
+        # Check if the timeout has been reached
+        elapsed_time = time.time() - start_time
+        if elapsed_time >= timeout:
+            print('Timeout reached')
+            return "I'm sorry, I could not generate a response. Please try again later."
+        try:
+            
             openai.api_key = os.environ.get('API_KEY')
-            print ('satrt GPT')
+            print ('start GPT')
             completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": ourmessage}
         ]
         )
-        if (completion.choices[0].message.content):
             answer=(completion.choices[0].message.content)
             query = QueryChatGPT(question=ourmessage, answer=answer)
             query.save()
             print (answer)
             return answer
-        time.sleep(3)
+        except openai.error.APIError as e:
+            if e.status_code == 429:
+                # If we hit the API rate limit, wait for a bit before trying again
+                time.sleep(1)
+            else:
+                # If there's another API error, raise an exception
+                raise
+        
 
-    except:
-        answer = "I'm sorry, I could not generate a response. Please try again later."
-        return('Error generating answer with GPT-3.')
+        
     
     
 

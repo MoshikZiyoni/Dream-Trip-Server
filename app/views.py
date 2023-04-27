@@ -8,33 +8,33 @@ from app.chat import run_long_poll
 def gpt_view(request):
     question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":type(integer)}]}'
     ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question2}"
-    
     result = run_long_poll(ourmessage)
     
     return JsonResponse(result, safe=False)
 
 
-@api_view(['GET'])
-def long_poll(request):
+# @api_view(['GET'])
+# def long_poll(request):
    
-    # Get the message to poll for from the query parameters
-    ourmessage = request.GET.get('ourmessage', '')
-    print ('ourmessage')
+#     # Get the message to poll for from the query parameters
+#     ourmessage = request.GET.get('ourmessage', '')
+#     print ('ourmessage')
 
-    # Check if there is a message to poll for
-    if not ourmessage:
-        print ('NOT GOODDDDDDDDDDDDDDDDDDDDDDDDDDDD')
-        return Response({"message": "No message to poll for."})
+#     # Check if there is a message to poll for
+#     if not ourmessage:
+#         print ('NOT GOODDDDDDDDDDDDDDDDDDDDDDDDDDDD')
+#         return Response({"message": "No message to poll for."})
 
-    # Poll for updates using the run_long_poll function
-    print ('start long poll')
-    result = run_long_poll(ourmessage)
-    if result:
-        print (result,'RESULTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
-        return JsonResponse(result, safe=False)  
+#     # Poll for updates using the run_long_poll function
+#     print ('start long poll')
+#     result = run_long_poll(ourmessage)
+#     if result:
+#         print (result,'RESULTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
+#         return JsonResponse(result, safe=False)  
     
-    # Return the response to the client
-    return JsonResponse({})
+#     # Return the response to the client
+#     return JsonResponse({})
+
     # try:
     #     result = run_gpt_func(ourmessage)
     #     return JsonResponse(result,safe=False)
