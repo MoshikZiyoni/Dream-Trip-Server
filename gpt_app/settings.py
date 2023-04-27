@@ -100,6 +100,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'gpt_app.wsgi.application'
+ASGI_APPLICATION = 'gpt_app.wsgi.application'
+ASGI_APPLICATION_OPTIONS = {
+    'timeout': 120,
+}
 
 
 # Database
