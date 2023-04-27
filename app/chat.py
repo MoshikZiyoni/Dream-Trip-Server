@@ -17,7 +17,7 @@ async def run_long_poll_async(ourmessage):
     except:
         print('Internal Server Error')
     # Set up the long polling parameters
-    timeout = 27  # Set the long poll timeout to 25 seconds
+    timeout = 50  # Set the long poll timeout to 25 seconds
     start_time = time.time()
     # Loop until a response is received or the timeout is reached
     while True:
