@@ -8,7 +8,8 @@ from app.chat import run_long_poll_async
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":type(integer)}]}'
+    # question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":type(integer)}]}'
+    question2='{"country":"..","cities":[{"city":,"description":,"travelDay":type(integer)}]}'
     ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question2}"
     
     loop = asyncio.new_event_loop()
