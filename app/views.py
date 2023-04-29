@@ -8,56 +8,35 @@ from app.chat import run_long_poll_async
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    # question2='{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":],"travelDay":type(integer)}]}'
-    question2='{"country":"..","cities":[{"city":,"description":,"travelDay":type(integer)}]}'
-    ourmessage=f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question2}"
-    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    task = loop.create_task(run_long_poll_async(ourmessage))
+    question1 = '{"country":"..","cities":[{"city":,"description":,"travelDay":type(integer)}]}'
+    question2 = 'attractions":["name":]["descrpition":],"travelDay":type(integer)}'
 
-    # Start the task in a separate thread
-    thread = threading.Thread(target=loop.run_until_complete, args=(task,))
-    thread.start()
+    # Process first message
+    ourmessage = f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question1}"
+    loop1 = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop1)
+    task1 = loop1.create_task(run_long_poll_async(ourmessage))
 
-    # Wait for the task to finish and get the result
-    thread.join()
-    result = task.result()
+    # Start the first task in a separate thread
+    thread1 = threading.Thread(target=loop1.run_until_complete, args=(task1,))
+    thread1.start()
 
-    return JsonResponse(result, safe=False)
+    # Process second message
+    message2 = f"provide me attractions to do in {request.data['mainland']} for {request.data['durring']} put the answer in the following JSON structure {question2}"
+    loop2 = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop2)
+    task2 = loop2.create_task(run_long_poll_async(message2))
 
+    # Start the second task in a separate thread
+    thread2 = threading.Thread(target=loop2.run_until_complete, args=(task2,))
+    thread2.start()
 
-# @api_view(['GET'])
-# def long_poll(request):
-   
-#     # Get the message to poll for from the query parameters
-#     ourmessage = request.GET.get('ourmessage', '')
-#     print ('ourmessage')
+    # Wait for both tasks to finish and get the results
+    thread1.join()
+    result1 = task1.result()
 
-#     # Check if there is a message to poll for
-#     if not ourmessage:
-#         print ('NOT GOODDDDDDDDDDDDDDDDDDDDDDDDDDDD')
-#         return Response({"message": "No message to poll for."})
+    thread2.join()
+    result2 = task2.result()
+    mainresult=result1+result2
 
-#     # Poll for updates using the run_long_poll function
-#     print ('start long poll')
-#     result = run_long_poll(ourmessage)
-#     if result:
-#         print (result,'RESULTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
-#         return JsonResponse(result, safe=False)  
-    
-#     # Return the response to the client
-#     return JsonResponse({})
-
-    # try:
-    #     result = run_gpt_func(ourmessage)
-    #     return JsonResponse(result,safe=False)
-    # except:
-    #     print ('The first attempt failed. Trying again...')
-    #     try:
-    #         result = run_gpt_app(ourmessage)
-    #         return JsonResponse(result,safe=False)
-    #     except:
-    #         print ('Both attempts failed. Cannot generate response.')
-    
-    
+    return JsonResponse(mainresult, safe=False)

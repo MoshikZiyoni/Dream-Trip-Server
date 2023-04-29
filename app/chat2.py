@@ -4,9 +4,9 @@ import openai
 from app.models import QueryChatGPT
 
 
-async def run_long_poll_async(ourmessage):
+async def run_long_poll_async(message2):
     try:
-        answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
+        answer_from_data = QueryChatGPT.objects.filter(question__exact=message2)
         if answer_from_data.exists():
             data = answer_from_data.values('answer')[0]
             answer = data['answer']
@@ -32,7 +32,7 @@ async def run_long_poll_async(ourmessage):
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "user", "content": ourmessage}
+                    {"role": "user", "content": message2}
                 ]
             )
             answer=(completion.choices[0].message.content)
