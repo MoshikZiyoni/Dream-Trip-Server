@@ -14,6 +14,17 @@ def gpt_view(request):
 
     # Process first message
     ourmessage = f"provide me a Trip to {request.data['mainland']} ,for {request.data['travelers']} trip,budget {request.data['budget']} {request.data['durring']},put the answer in the following JSON structure {question1}"
+    try:
+        answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
+        if answer_from_data.exists():
+            data = answer_from_data.values('answer')[0]
+            answer = data['answer']
+            print('answer in data')
+            return Response(answer) 
+        else:
+            print('Not Found')
+    except:
+        print('Internal Server Error')
     loop1 = asyncio.new_event_loop()
     asyncio.set_event_loop(loop1)
     task1 = loop1.create_task(run_long_poll_async(ourmessage))

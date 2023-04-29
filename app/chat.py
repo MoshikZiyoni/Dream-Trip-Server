@@ -5,17 +5,7 @@ from app.models import QueryChatGPT
 
 
 async def run_long_poll_async(ourmessage):
-    try:
-        answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage)
-        if answer_from_data.exists():
-            data = answer_from_data.values('answer')[0]
-            answer = data['answer']
-            print('answer in data')
-            return answer
-        else:
-            print('Not Found')
-    except:
-        print('Internal Server Error')
+    
     # Set up the long polling parameters
     timeout = 50  # Set the long poll timeout to 25 seconds
     start_time = time.time()
@@ -27,7 +17,8 @@ async def run_long_poll_async(ourmessage):
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
         try:
-            openai.api_key = os.environ.get('API_KEY')
+            # openai.api_key = os.environ.get('API_KEY')
+            openai.api_key = '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' 
             print ('start GPT')
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
