@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
+from app.models import QueryChatGPT
 
 
 @api_view(['GET', 'POST'])
@@ -38,5 +39,6 @@ def gpt_view(request):
     thread2.join()
     result2 = task2.result()
     mainresult=result1+result2
-
+    query = QueryChatGPT(question=ourmessage, answer=mainresult)
+    query.save()
     return JsonResponse(mainresult, safe=False)
