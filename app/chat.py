@@ -36,8 +36,8 @@ async def run_long_poll_async(ourmessage):
                 ]
             )
             answer=(completion.choices[0].message.content)
-            # query = QueryChatGPT(question=ourmessage, answer=answer)
-            # query.save()
+            query = QueryChatGPT(question=ourmessage, answer=answer)
+            query.save()
             # await database_sync_to_async(query.save)()
 
             print (answer)

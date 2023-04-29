@@ -17,7 +17,7 @@ async def run_long_poll_async(message2):
     except:
         print('Internal Server Error')
     # Set up the long polling parameters
-    timeout = 50  # Set the long poll timeout to 25 seconds
+    timeout = 50  # Set the long poll timeout to 50 seconds
     start_time = time.time()
     # Loop until a response is received or the timeout is reached
     while True:
@@ -36,8 +36,8 @@ async def run_long_poll_async(message2):
                 ]
             )
             answer=(completion.choices[0].message.content)
-            # query = QueryChatGPT(question=ourmessage, answer=answer)
-            # query.save()
+            query = QueryChatGPT(question=message2, answer=answer)
+            query.save()
             # await database_sync_to_async(query.save)()
 
             print (answer)
