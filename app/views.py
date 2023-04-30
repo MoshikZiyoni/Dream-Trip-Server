@@ -43,7 +43,7 @@ def attractions(request):
         data = json.loads(list(request.POST.keys())[0])
         cities = data['cities']
     question2='"city":city-name[{attractions:"name":,"descrpition":}]'
-    message2=f'give me attractions for each {cities} in this json format: {question2}'
+    message2=f'give me no more than 3 attractions for each {cities} in this json format: {question2}'
     result2=run_long_poll_async1(message2)
     return JsonResponse(result2,safe=False)
     # # Create the two event loops
