@@ -38,7 +38,9 @@ def gpt_view(request):
         return  Response("An error occurred while processing your request.")
     
 @api_view(['GET', 'POST'])
-def attractions(response_data):
+def attractions(request):
+    print (request.data)
+    response_data=request.data
     cities = [city['city'] for city in response_data['cities']]
     question2='"city":[{attractions:"name":,"descrpition":}]'
     message2=f'give me 2 attractions for each {cities} in this json format: {question2}'
