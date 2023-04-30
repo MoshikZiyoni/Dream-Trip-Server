@@ -1,15 +1,10 @@
-import boto3
-from botocore.exceptions import ClientError
-
-
 import json
 import boto3
 import base64
 from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
-    environment = event['env']
-    secret_name = "openaisecret" % environment
+    secret_name = "openaisecret" 
     region_name = "eu-north-1"
 
     # Create a Secrets Manager client

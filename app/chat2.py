@@ -2,7 +2,6 @@ import os
 import time
 import openai
 
-from app.task3 import get_secret
 
 
 def run_long_poll_async1(message2):
