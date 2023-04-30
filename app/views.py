@@ -39,10 +39,20 @@ def gpt_view(request):
     
 @api_view(['GET', 'POST'])
 def attractions(request):
+    print (request.data,'REQUESTTTTTTTT')
     if request.method == 'POST':
         if len(request.POST) > 0:
             try:
-                data = json.loads(list(request.POST.keys())[0])
+                data = None
+                for key in request.POST:
+                    print (key,'KEYYYYYYYY')
+                    try:
+                        data = json.loads(key)
+                        break
+                    except json.JSONDecodeError:
+                        pass
+                if data is None:
+                    raise json.JSONDecodeError('No valid JSON data found', '', 0)
                 cities = data['cities']
                 city_names = [city['city'] for city in cities]
                 question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
