@@ -40,12 +40,18 @@ def gpt_view(request):
 @api_view(['GET', 'POST'])
 def attractions(request):
     if request.method == 'POST':
-        data = json.loads(list(request.POST.keys())[0])
-        cities = data['cities']
-    question2='"city":city-name[{attractions:"name":,"descrpition":}]'
-    message2=f'give me no more than 3 attractions for each {cities} in this json format: {question2}'
-    result2=run_long_poll_async1(message2)
-    return JsonResponse(result2,safe=False)
+        if len(request.POST) > 0:
+            try:
+                data = json.loads(list(request.POST.keys())[0])
+                cities = data['cities']
+                city_names = [city['city'] for city in cities]
+                question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
+                message2 = f'Give me no more than 3 attractions for each city in this JSON format: {question2}'
+                result2 = run_long_poll_async1(message2)
+                return JsonResponse(result2, safe=False)
+            except (json.JSONDecodeError, KeyError) as e:
+                return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
     # # Create the two event loops
     # loop1 = asyncio.new_event_loop()
     # loop2 = asyncio.new_event_loop()
