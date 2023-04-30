@@ -1,6 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 
+
 def get_secret():
 
     secret_name = "openaisecret"
@@ -21,7 +22,3 @@ def get_secret():
         # For a list of exceptions thrown, see
         # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
         raise e
-
-    # Parse and return the API key
-    secret_dict = get_secret_value_response['SecretString']
-    return secret_dict['api_key']

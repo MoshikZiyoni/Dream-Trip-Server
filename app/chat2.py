@@ -18,7 +18,6 @@ def run_long_poll_async1(message2):
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
         api_key = get_secret()
-        print (api_key)
         try:
             # openai.api_key = os.environ.get('API_KEY')
             
