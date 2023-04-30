@@ -81,6 +81,6 @@ def get_secret():
         raise e
 
     # Decrypts secret using the associated KMS key.
-    secret = get_secret_value_response['SecretString']
+    secret = get_secret_value_response['API_KEY']
 
     return secret
