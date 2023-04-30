@@ -20,7 +20,11 @@ def run_long_poll_async(ourmessage):
             return "I'm sorry, I could not generate a response. Please try again later."
         try:
             # openai.api_key = os.environ.get('API_KEY')
-            openai.api_key=get_secret()
+            api_key = get_secret()
+
+# Set the API key for the OpenAI SDK
+            openai.api_key = api_key
+
             print ('start GPT')
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
