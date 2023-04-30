@@ -1,21 +1,14 @@
 import os
 import time
 import openai
-import boto3
-from app.task3 import lambda_handler
+from app.task3 import get_secret
 
 
 
 def run_long_poll_async1(message2):
     print ('start GPT2')
-    client = boto3.client('lambda', region_name='eu-north-1')
+    api_key = get_secret()
 
-    response = client.invoke(
-    FunctionName=lambda_handler,
-    InvocationType='RequestResponse',
-)
-
-    api_key = response['Payload'].read().decode('utf-8')
     openai.api_key = api_key
     # Set up the long polling parameters
     timeout = 50  # Set the long poll timeout to 50 seconds
