@@ -21,11 +21,11 @@ def run_long_poll_async(ourmessage):
         
         
         try:
-            # openai.api_key = os.environ.get('API_KEY')
+            openai.api_key = os.environ.get('API_KEY')
 
 # Set the API key for the OpenAI SDK
-            print(lambda_handler())
-            openai.api_key = (lambda_handler())
+            # print(lambda_handler())
+            # openai.api_key = (lambda_handler())
             
 
             
