@@ -56,7 +56,7 @@ def attractions(request):
                 cities = data['cities']
                 city_names = [city['city'] for city in cities]
                 question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
-                message2 = f'Give me no more than 3 attractions for each city in this JSON format: {question2}'
+                message2 = f'Give me no more than 2 attractions for each city in this JSON format: {question2}'
                 result2 = run_long_poll_async1(message2)
                 return JsonResponse(result2, safe=False)
             except (json.JSONDecodeError, KeyError) as e:
