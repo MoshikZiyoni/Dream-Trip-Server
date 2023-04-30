@@ -3,6 +3,7 @@ import os
 import time
 import openai
 from app.models import QueryChatGPT
+from app.task3 import lambda_handler
 
 
 def run_long_poll_async(ourmessage):
@@ -23,7 +24,9 @@ def run_long_poll_async(ourmessage):
             # openai.api_key = os.environ.get('API_KEY')
 
 # Set the API key for the OpenAI SDK
-            openai.api_key = ('API_KEY')
+            print(lambda_handler())
+            openai.api_key = (lambda_handler())
+            
 
             
             completion = openai.ChatCompletion.create(
