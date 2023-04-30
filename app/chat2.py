@@ -2,6 +2,8 @@ import os
 import time
 import openai
 
+from app.task3 import get_secret
+
 
 def run_long_poll_async1(message2):
     
@@ -16,7 +18,9 @@ def run_long_poll_async1(message2):
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
         try:
-            openai.api_key = os.environ.get('API_KEY')
+            # openai.api_key = os.environ.get('API_KEY')
+            openai.api_key=get_secret()
+
             print ('start GPT2')
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
