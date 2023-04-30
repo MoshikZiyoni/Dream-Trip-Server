@@ -12,7 +12,7 @@ def run_long_poll_async(ourmessage):
     client = boto3.client('lambda', region_name='eu-north-1')
 
     response = client.invoke(
-    FunctionName=lambda_handler,
+    FunctionName='lambda_handler',
     InvocationType='RequestResponse',
 )
 
