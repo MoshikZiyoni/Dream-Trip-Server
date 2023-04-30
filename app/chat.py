@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import openai
@@ -27,8 +28,9 @@ def run_long_poll_async(ourmessage):
             )
             answer=(completion.choices[0].message.content)
             
+            print (answer,'ANSWERRRRRRRRRRRRRRRR')
 
-            print (answer)
+            print (json.loads(answer),'with json loadssssssssssssssssss')
             return answer
         except openai.error.APIError as e:
             if e.status_code == 429:
