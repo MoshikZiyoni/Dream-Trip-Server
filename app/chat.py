@@ -4,10 +4,20 @@ import time
 import openai
 from app.models import QueryChatGPT
 from app.task3 import lambda_handler
+import boto3
 
 
 def run_long_poll_async(ourmessage):
     print ('start GPT')
+    client = boto3.client('lambda', region_name='eu-north-1')
+
+    response = client.invoke(
+    FunctionName=lambda_handler,
+    InvocationType='RequestResponse',
+)
+
+    api_key = response['Payload'].read().decode('utf-8')
+    openai.api_key = api_key
     # Set up the long polling parameters
     timeout = 50  # Set the long poll timeout to 25 seconds
     start_time = time.time()
@@ -21,7 +31,7 @@ def run_long_poll_async(ourmessage):
         
         
         try:
-            openai.api_key = os.environ.get('API_KEY')
+            # openai.api_key = os.environ.get('openaisecret')
 
 # Set the API key for the OpenAI SDK
             # print(lambda_handler())
