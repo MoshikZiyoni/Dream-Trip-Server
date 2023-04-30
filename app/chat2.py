@@ -17,13 +17,13 @@ def run_long_poll_async1(message2):
         if elapsed_time >= timeout:
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
-        api_key = get_secret()
+        
         try:
             # openai.api_key = os.environ.get('API_KEY')
             
 
 # Set the API key for the OpenAI SDK
-            openai.api_key = api_key
+            openai.api_key = ('API_KEY')
             
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",

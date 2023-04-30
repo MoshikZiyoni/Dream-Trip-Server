@@ -2,9 +2,14 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-def get_secret():
+import json
+import boto3
+import base64
+from botocore.exceptions import ClientError
 
-    secret_name = "openaisecret"
+def lambda_handler(event, context):
+    environment = event['env']
+    secret_name = "openaisecret" % environment
     region_name = "eu-north-1"
 
     # Create a Secrets Manager client
@@ -15,10 +20,15 @@ def get_secret():
     )
 
     try:
-        get_secret_value_response = client.get_secret_value(
+        secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
+    except ClientError as error:
+        print (error)
+    else:
+        if 'SecretString' in secret_value_response:
+            secret= json.loads(secret_value_response['SecretString'])
+            return secret
+        else:
+            decoded_binary_secret=base64.b64decode(secret_value_response['SecretBinary'])
+            return decoded_binary_secret
