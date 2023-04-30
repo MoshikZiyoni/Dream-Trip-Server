@@ -11,6 +11,7 @@ import asyncio
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    print (request.data)
     try:
         # Define variables
         mainland = request.data['mainland']
