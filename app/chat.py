@@ -18,9 +18,10 @@ def run_long_poll_async(ourmessage):
         if elapsed_time >= timeout:
             print('Timeout reached')
             return "I'm sorry, I could not generate a response. Please try again later."
+        api_key = get_secret()
+        print (api_key,"API KEYYYYY")
         try:
             # openai.api_key = os.environ.get('API_KEY')
-            api_key = get_secret()
 
 # Set the API key for the OpenAI SDK
             openai.api_key = api_key
