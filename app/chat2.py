@@ -1,11 +1,14 @@
 import os
 import time
 import openai
+import requests
 
 def run_long_poll_async1(message2):
     print ('start GPT2')
     try:
-        openai.api_key = os.environ.get('openaisecret')    
+        url = "https://f6xh5hezzzorrdtzjkja63tziy0fbjmr.lambda-url.eu-north-1.on.aws/"
+        response = requests.get(url)
+        openai.api_key = response    
     except:
         print('key not good')
     # Set up the long polling parameters
