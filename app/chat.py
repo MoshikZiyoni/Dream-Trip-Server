@@ -10,7 +10,11 @@ def run_long_poll_async(ourmessage):
     try:
         
         url = "https://f6xh5hezzzorrdtzjkja63tziy0fbjmr.lambda-url.eu-north-1.on.aws/"
-        response = requests.get(url)
+        payload={}
+        headers = {}
+        response = requests.request("GET", url, headers=headers, data=payload)
+        print(response)
+        print(response.text)
         openai.api_key = response
     except:
         print('key not good')
