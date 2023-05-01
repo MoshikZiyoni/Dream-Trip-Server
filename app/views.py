@@ -18,7 +18,7 @@ def gpt_view(request):
         travelers = request.data['travelers']
         budget = request.data['budget']
         durring = request.data['durring']
-        question1 = '{"country":"..","cities":[{"city":,"description":,"travelDay":type(integer)}]}'
+        question1 = '{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":]"travelDay":type(integer)}]}'
         # question2 = 'attractions":["name":]["descrpition":],"travelDay":type(integer)}'
         # message2 = f"provide me attractions to do in {request.data['mainland']} for {request.data['durring']} put the answer in the following JSON structure {question2}"
 
