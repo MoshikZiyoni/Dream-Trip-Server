@@ -8,8 +8,10 @@ from app.task3 import get_secret
 
 def run_long_poll_async(ourmessage):
     print ('start GPT')
-    api_key = get_secret()
-    openai.api_key = api_key
+    try:
+        openai.api_key = os.environ.get('openaisecret')    
+    except:
+        print('key not good')
     # Set up the long polling parameters
     timeout = 50  # Set the long poll timeout to 25 seconds
     start_time = time.time()
@@ -23,14 +25,6 @@ def run_long_poll_async(ourmessage):
         
         
         try:
-            # openai.api_key = os.environ.get('openaisecret')
-
-# Set the API key for the OpenAI SDK
-            # print(lambda_handler())
-            # openai.api_key = (lambda_handler())
-            
-
-            
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
