@@ -2,8 +2,6 @@ import json
 import os
 import time
 import openai
-from app.models import QueryChatGPT
-from app.task3 import get_secret
 
 
 def run_long_poll_async(ourmessage):
