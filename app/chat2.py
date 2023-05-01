@@ -10,9 +10,7 @@ def run_long_poll_async1(message2):
         payload={}
         headers = {}
         response = requests.request("GET", url, headers=headers, data=payload)
-        print(response)
-        print(response.text)
-        openai.api_key = response    
+        openai.api_key = response.text    
     except:
         print('key not good')
     # Set up the long polling parameters
