@@ -37,7 +37,7 @@ def run_long_poll_async(ourmessage):
             )
             answer=(completion.choices[0].message.content)
             
-            print (answer,'ANSWERRRRRRRRRRRRRRRR')
+            # print (answer,'ANSWERRRRRRRRRRRRRRRR')
 
             print (json.loads(answer),'with json loadssssssssssssssssss')
             return answer

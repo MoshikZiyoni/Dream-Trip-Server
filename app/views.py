@@ -36,37 +36,41 @@ def gpt_view(request):
         return  JsonResponse(result1,safe=False)
     except Exception as e:
         print(f'error: {e}')
+        query=QueryChatGPT()
+        query.question = ourmessage
+        query.answer = result1
+
         return  Response("An error occurred while processing your request.")
     
-@api_view(['GET', 'POST'])
-def attractions(request):
-    try:
-        print (request.data,'REQUESTTTTTTTT')
-        if request.method == 'POST':
-            if len(request.POST) > 0:
-                try:
-                    data = None
-                    for key in request.POST:
-                        print (key,'KEYYYYYYYY')
-                        try:
-                            data = json.loads(key)
-                            break
-                        except json.JSONDecodeError:
-                            pass
-                    if data is None:
-                        raise json.JSONDecodeError('No valid JSON data found', '', 0)
-                    cities = data['cities']
-                    city_names = [city['city'] for city in cities]
-                    question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
-                    message2 = f'Give me no more than 2 attractions for each city in this JSON format: {question2}'
-                    result2 = run_long_poll_async1(message2)
-                    return JsonResponse(result2, safe=False)
-                except (json.JSONDecodeError, KeyError) as e:
-                    return JsonResponse({'error': str(e)}, status=400)
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
-    except Exception as e:
-        print(f'error: {e}')
-        return  Response("An error occurred while processing your request.")
+# @api_view(['GET', 'POST'])
+# def attractions(request):
+#     try:
+#         print (request.data,'REQUESTTTTTTTT')
+#         if request.method == 'POST':
+#             if len(request.POST) > 0:
+#                 try:
+#                     data = None
+#                     for key in request.POST:
+#                         print (key,'KEYYYYYYYY')
+#                         try:
+#                             data = json.loads(key)
+#                             break
+#                         except json.JSONDecodeError:
+#                             pass
+#                     if data is None:
+#                         raise json.JSONDecodeError('No valid JSON data found', '', 0)
+#                     cities = data['cities']
+#                     city_names = [city['city'] for city in cities]
+#                     question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
+#                     message2 = f'Give me no more than 2 attractions for each city in this JSON format: {question2}'
+#                     result2 = run_long_poll_async1(message2)
+#                     return JsonResponse(result2, safe=False)
+#                 except (json.JSONDecodeError, KeyError) as e:
+#                     return JsonResponse({'error': str(e)}, status=400)
+#         return JsonResponse({'error': 'Invalid request method'}, status=405)
+#     except Exception as e:
+#         print(f'error: {e}')
+#         return  Response("An error occurred while processing your request.")
 
     # # Create the two event loops
     # loop1 = asyncio.new_event_loop()

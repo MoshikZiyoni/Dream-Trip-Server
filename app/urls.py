@@ -6,6 +6,4 @@ app_name = 'app'
 
 urlpatterns = [
     path("", views.gpt_view, name= "gpt_view"),
-    path('attractions/', views.attractions, name='attractions'),
-
 ]

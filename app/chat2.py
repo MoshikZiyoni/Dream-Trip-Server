@@ -34,7 +34,7 @@ def run_long_poll_async1(message2):
             answer=(completion.choices[0].message.content)
             
 
-            print (answer)
+            # print (answer)
             return answer
         except openai.error.APIError as e:
             if e.status_code == 429:
