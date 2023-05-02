@@ -4,12 +4,15 @@ import time
 import openai
 import requests
 
+from app.getKey import create_api_gateway
+
 
 def run_long_poll_async(ourmessage):
     print ('start GPT')
     try:
         
-        url = "https://f6xh5hezzzorrdtzjkja63tziy0fbjmr.lambda-url.eu-north-1.on.aws/"
+        # url = "https://f6xh5hezzzorrdtzjkja63tziy0fbjmr.lambda-url.eu-north-1.on.aws/"
+        url = create_api_gateway()
         payload={}
         headers = {}
         response = requests.request("GET", url, headers=headers, data=payload)
