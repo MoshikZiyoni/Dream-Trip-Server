@@ -34,6 +34,7 @@ def gpt_view(request):
         query=QueryChatGPT()
         query.question = ourmessage
         query.answer = result1
+        query.save()
         # Wait for both coroutines to complete
         return  JsonResponse(result1,safe=False)
     except Exception as e:
