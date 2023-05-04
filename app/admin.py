@@ -1,4 +1,4 @@
 from django.contrib import admin
-from app.models import Search
+from app.models import QueryChatGPT
 # Register your models here.
-admin.site.register(Search)
+admin.site.register(QueryChatGPT)
