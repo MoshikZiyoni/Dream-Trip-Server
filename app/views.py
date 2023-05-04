@@ -31,15 +31,13 @@ def gpt_view(request):
 
         # Run the two coroutines asynchronously
         result1=(run_long_poll_async(ourmessage))
-
+        query=QueryChatGPT()
+        query.question = ourmessage
+        query.answer = result1
         # Wait for both coroutines to complete
         return  JsonResponse(result1,safe=False)
     except Exception as e:
         print(f'error: {e}')
-        query=QueryChatGPT()
-        query.question = ourmessage
-        query.answer = result1
-
         return  Response("An error occurred while processing your request.")
     
 # @api_view(['GET', 'POST'])
