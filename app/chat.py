@@ -12,11 +12,13 @@ def run_long_poll_async(ourmessage):
     try:
         
         # url = "https://f6xh5hezzzorrdtzjkja63tziy0fbjmr.lambda-url.eu-north-1.on.aws/"
-        url = create_api_gateway()
-        payload={}
-        headers = {}
-        response = requests.request("GET", url, headers=headers, data=payload)
-        openai.api_key = response.text
+        # url = create_api_gateway()
+        # payload={}
+        # headers = {}
+        # response = requests.request("GET", url, headers=headers, data=payload)
+        # openai.api_key = response.text
+        api_key = os.environ.get('OPENAI_API_KEY')
+        openai.api_key = api_key
     except:
         print('key not good')
     # Set up the long polling parameters
