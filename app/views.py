@@ -15,12 +15,13 @@ def gpt_view(request):
     # Check if the user's email exists in the request count dictionary
     request_count = cache.get(email, 0)
     # If the user has made more than 10 requests in the past 24 hours, block the request
-    if request_count >= 10:
+    if request_count >= 100:
         return JsonResponse({'error': 'Too many requests'})
 
     # Otherwise, increment the request count and set the cache with the new value
     request_count += 1
     print (request_count)
+    request_left=11-request_count
     timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
     cache.set(email, request_count, timeout=timeout_seconds)
 
@@ -48,7 +49,7 @@ def gpt_view(request):
         query.answer = result1
         query.save()
         # Wait for both coroutines to complete
-        return  JsonResponse(result1,request_count,safe=False)
+        return  JsonResponse(result1,request_count,request_left,safe=False)
     except Exception as e:
         print(f'error: {e}')
         return  Response("An error occurred while processing your request.")
