@@ -4,8 +4,6 @@ import time
 import openai
 import requests
 
-from app.getKey import create_api_gateway
-
 
 def run_long_poll_async(ourmessage):
     print ('start GPT')

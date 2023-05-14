@@ -1,17 +1,29 @@
-import json
-from concurrent.futures import ThreadPoolExecutor
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import openai
 from app.chat import run_long_poll_async
-from app.chat2 import run_long_poll_async1
 from app.models import QueryChatGPT
-import asyncio
+
+from django.core.cache import cache
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    print (request.data)
+    email=request.data['email']
+    if not email:
+        return JsonResponse({'error': 'Email not provided'})
+
+    # Check if the user's email exists in the request count dictionary
+    request_count = cache.get(email, 0)
+    # If the user has made more than 10 requests in the past 24 hours, block the request
+    if request_count >= 10:
+        return JsonResponse({'error': 'Too many requests'})
+
+    # Otherwise, increment the request count and set the cache with the new value
+    request_count += 1
+    print (request_count)
+    timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
+    cache.set(email, request_count, timeout=timeout_seconds)
+
     try:
         # Define variables
         mainland = request.data['mainland']
@@ -36,71 +48,34 @@ def gpt_view(request):
         query.answer = result1
         query.save()
         # Wait for both coroutines to complete
-        return  JsonResponse(result1,safe=False)
+        return  JsonResponse(result1,request_count,safe=False)
     except Exception as e:
         print(f'error: {e}')
         return  Response("An error occurred while processing your request.")
     
 # @api_view(['GET', 'POST'])
-# def attractions(request):
-#     try:
-#         print (request.data,'REQUESTTTTTTTT')
-#         if request.method == 'POST':
-#             if len(request.POST) > 0:
-#                 try:
-#                     data = None
-#                     for key in request.POST:
-#                         print (key,'KEYYYYYYYY')
-#                         try:
-#                             data = json.loads(key)
-#                             break
-#                         except json.JSONDecodeError:
-#                             pass
-#                     if data is None:
-#                         raise json.JSONDecodeError('No valid JSON data found', '', 0)
-#                     cities = data['cities']
-#                     city_names = [city['city'] for city in cities]
-#                     question2 = f'"city": {city_names} [{{"attractions": {{"name":,"descrpition":}}}}]'
-#                     message2 = f'Give me no more than 2 attractions for each city in this JSON format: {question2}'
-#                     result2 = run_long_poll_async1(message2)
-#                     return JsonResponse(result2, safe=False)
-#                 except (json.JSONDecodeError, KeyError) as e:
-#                     return JsonResponse({'error': str(e)}, status=400)
-#         return JsonResponse({'error': 'Invalid request method'}, status=405)
-#     except Exception as e:
-#         print(f'error: {e}')
-#         return  Response("An error occurred while processing your request.")
+# def get_user_email(request):
+#     if request.method == 'POST':
+#         email = (request.data['email'])
+#         email_obj = Email(email=email, created_at=timezone.now())
+#         email_obj.save()
 
-    # # Create the two event loops
-    # loop1 = asyncio.new_event_loop()
-    # loop2 = asyncio.new_event_loop()
-
-    # # Set the event loops for the tasks
-    # asyncio.set_event_loop(loop1)
-    # asyncio.set_event_loop(loop2)
-
-    # # Create the tasks
-    # message2 = f"provide me attractions to do in {request.data['mainland']} for {request.data['durring']} put the answer in the following JSON structure {question2}"
-    # task2 = loop2.create_task(run_long_poll_async1(message2))
-    # task1 = loop1.create_task(run_long_poll_async(ourmessage))
+#         return JsonResponse({'success': True})
+#     else:
+#         return JsonResponse({'success': False})
     
 
-    # # Start the tasks in separate threads
-    # thread2 = threading.Thread(target=loop2.run_until_complete, args=(task2,))
-    # thread2.start()
-    # thread1 = threading.Thread(target=loop1.run_until_complete, args=(task1,))
-    # thread1.start()
-    
+# Get the user's IP address or other identifier
+    user_id = get_user_id(request)
+ # Get the number of requests made by the user in the last 24 hours
+    requests_made = cache.get(user_id, 0)
 
-    # # Wait for both tasks to finish and get the results
-    # thread1.join()
-    # result1 = task1.result()
+    # If the user has made more than 10 requests, return an error response
+    if requests_made >= 10:
+        return JsonResponse({'error': 'Rate limit exceeded'})
 
-    # thread2.join()
-    # result2 = task2.result()
+    # Process the request as usual
+    print(request.data)
 
-    # mainresult=result1+result2
-    # query = QueryChatGPT(question=ourmessage, answer=mainresult)
-    # query.save()
-    # return JsonResponse(mainresult, safe=False)
-
+    # Increment the number of requests made by the user and store it in the cache for 24 hours
+    cache.set(user_id, requests_made + 1, 24 * 60 * 60)

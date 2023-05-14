@@ -9,3 +9,5 @@ class Search(models.Model):
 class QueryChatGPT(models.Model):
     question = models.CharField(max_length=500, default="")
     answer = models.TextField(null=False, default="")
+
+
