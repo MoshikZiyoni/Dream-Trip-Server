@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
 from app.models import QueryChatGPT
-
 from django.core.cache import cache
 
 @api_view(['GET', 'POST'])
@@ -32,23 +31,19 @@ def gpt_view(request):
         budget = request.data['budget']
         durring = request.data['durring']
         question1 = '{"country":"..","cities":[{"city":,"description":,"attractions":["name":]["descrpition":]"travelDay":type(integer)}]}'
-        # question2 = 'attractions":["name":]["descrpition":],"travelDay":type(integer)}'
-        # message2 = f"provide me attractions to do in {request.data['mainland']} for {request.data['durring']} put the answer in the following JSON structure {question2}"
-
-        # Process first message
         ourmessage = f"provide me a Trip to {mainland}, for {travelers} trip, budget {budget} {durring}, put the answer in the following JSON structure {question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
             print('answer in data')
-            return Response(answer_from_data['answer'])
+            answer=(answer_from_data['answer'],{request_left:"request_left"})
+            return Response(answer)
 
-        # Run the two coroutines asynchronously
         result1=(run_long_poll_async(ourmessage))
         query=QueryChatGPT()
         query.question = ourmessage
         query.answer = result1
         query.save()
-        result1=result1+request_left
+        result1=result1,{request_left:"request_left"}
         # Wait for both coroutines to complete
         return  JsonResponse(result1,safe=False)
     except Exception as e:
