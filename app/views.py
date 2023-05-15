@@ -48,35 +48,10 @@ def gpt_view(request):
         query.question = ourmessage
         query.answer = result1
         query.save()
+        result1=result1+request_left
         # Wait for both coroutines to complete
-        return  JsonResponse(result1,request_count,request_left,safe=False)
+        return  JsonResponse(result1,safe=False)
     except Exception as e:
         print(f'error: {e}')
         return  Response("An error occurred while processing your request.")
     
-# @api_view(['GET', 'POST'])
-# def get_user_email(request):
-#     if request.method == 'POST':
-#         email = (request.data['email'])
-#         email_obj = Email(email=email, created_at=timezone.now())
-#         email_obj.save()
-
-#         return JsonResponse({'success': True})
-#     else:
-#         return JsonResponse({'success': False})
-    
-
-# Get the user's IP address or other identifier
-    user_id = get_user_id(request)
- # Get the number of requests made by the user in the last 24 hours
-    requests_made = cache.get(user_id, 0)
-
-    # If the user has made more than 10 requests, return an error response
-    if requests_made >= 10:
-        return JsonResponse({'error': 'Rate limit exceeded'})
-
-    # Process the request as usual
-    print(request.data)
-
-    # Increment the number of requests made by the user and store it in the cache for 24 hours
-    cache.set(user_id, requests_made + 1, 24 * 60 * 60)
