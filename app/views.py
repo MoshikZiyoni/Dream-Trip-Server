@@ -35,7 +35,7 @@ def gpt_view(request):
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
             print('answer in data')
-            answer=({answer :answer_from_data['answer'],"request_left":request_left})
+            answer=({'answer' :answer_from_data['answer'],"request_left":request_left})
             return Response(answer)
 
         result1=(run_long_poll_async(ourmessage))
