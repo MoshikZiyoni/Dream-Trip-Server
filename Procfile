@@ -1,2 +1,2 @@
-web: daphne gpt_app.asgi:application --port $PORT --bind 0.0.0.0 -v2
+web:  gpt_app.wsgi:application --timeout 150
 
