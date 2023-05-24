@@ -1,2 +1,2 @@
-web:  gunicorn gpt_app.wsgi:application --timeout 100
+web: gunicorn gpt_app:app --timeout 100
 
