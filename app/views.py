@@ -43,7 +43,9 @@ def gpt_view(request):
         query.question = ourmessage
         query.answer = result1
         query.save()
-        result1=result1,{request_left:"request_left"}
+        result1=result1,{"request_left":request_left}
+        print (result1)
+
         return  JsonResponse(result1,safe=False)
     except Exception as e:
         print(f'error: {e}')
