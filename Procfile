@@ -1,1 +1,1 @@
-web: gunicorn -c gunicorn.conf.py gpt_app:app
+web: gunicorn -c gunicorn.conf.py gpt_app.wsgi
