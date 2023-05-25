@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from app.chat import run_long_poll_async
 from app.models import QueryChatGPT
 from django.core.cache import cache
+import asyncio
 
 @api_view(['GET', 'POST'])
-def gpt_view(request):
+async def gpt_view(request):
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
@@ -38,7 +39,7 @@ def gpt_view(request):
             answer=({'answer' :answer_from_data['answer'],"request_left":request_left})
             return Response(answer)
 
-        result1=(run_long_poll_async(ourmessage))
+        result1=await (run_long_poll_async(ourmessage))
         query=QueryChatGPT()
         query.question = ourmessage
         query.answer = result1
