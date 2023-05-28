@@ -2,7 +2,7 @@ import multiprocessing
 
 # Number of worker processes
 # workers = multiprocessing.cpu_count() * 2 + 1
-
+workers = 4
 # Maximum number of requests a worker will process before restarting
 max_requests = 1000
 
