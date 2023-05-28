@@ -16,4 +16,4 @@ timeout = 120
 keepalive = 5
 
 # Enable thread-based concurrency
-threads = 2
+# threads = 2
