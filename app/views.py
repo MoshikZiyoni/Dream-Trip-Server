@@ -31,7 +31,7 @@ def gpt_view(request):
         budget = request.data['budget']
         durring = request.data['durring']
         question1 = '{"country": "..", "cities": [{"city": "", "description": "", "attractions": [{"name": "", "description": "","reviews": {"rating": , "comment": ""}}], , "travelDay": }]}'
-        ourmessage=f"Create a {budget} {durring} {travelers} trip to {mainland} in the following JSON structure:{question1} "
+        ourmessage=f"Create a {budget} {durring} {travelers} trip to {mainland} in the following JSON structure:{question1}"
         # ourmessage = f"provide me a Trip to {mainland}, for a {travelers} trip,have a budget {budget} plan to stay for {durring}, put the answer in the following JSON structure {question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
@@ -40,8 +40,7 @@ def gpt_view(request):
             return Response(answer)
 
         result1=(run_long_poll_async(ourmessage))
-        query = QueryChatGPT(question=ourmessage, answer=result1)
-        query.save()
+        
         result1=result1,{"request_left":request_left}
         print (result1)
 

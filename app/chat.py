@@ -4,6 +4,8 @@ import time
 import openai
 from dotenv import load_dotenv
 
+from app.models import QueryChatGPT
+
 # Load environment variables from .env file
 load_dotenv()
 def run_long_poll_async(ourmessage, retries=3, delay=1):
@@ -22,13 +24,10 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     {"role": "user", "content": ourmessage}
                 ]
             )
-            answer = completion.choices[0].message.content
-
-            print(json.loads(answer), 'with json loadssssssssssssssssss')
-            try: 
-                return json.loads(answer)
-            except:
-                return answer
+            answer1 = completion.choices[0].message.content
+            query = QueryChatGPT(question=ourmessage, answer=answer1)
+            query.save()            
+            return answer1
         except openai.error.APIError as e:
             if e.status_code == 429:
                 # If we hit the API rate limit, wait for a bit before trying again
