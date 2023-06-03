@@ -40,9 +40,7 @@ def gpt_view(request):
             return Response(answer)
 
         result1=(run_long_poll_async(ourmessage))
-        query=QueryChatGPT()
-        query.question = ourmessage
-        query.answer = result1
+        query = QueryChatGPT(question=ourmessage, answer=result1)
         query.save()
         result1=result1,{"request_left":request_left}
         print (result1)

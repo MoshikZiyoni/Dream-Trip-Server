@@ -2,34 +2,19 @@ import json
 import os
 import time
 import openai
-import requests
+from dotenv import load_dotenv
 
-
-def run_long_poll_async(ourmessage):
-    print ('start GPT')
+# Load environment variables from .env file
+load_dotenv()
+def run_long_poll_async(ourmessage, retries=3, delay=1):
+    print('Start GPT')
     try:
-        
-        # url = create_api_gateway()
-        # payload={}
-        # headers = {}
-        # response = requests.request("GET", url, headers=headers, data=payload)
-        # openai.api_key = response.text
         api_key = os.environ.get('OPENAI_API_KEY')
         openai.api_key = api_key
     except:
-        print('key not good')
-    # Set up the long polling parameters
-    timeout = 50  # Set the long poll timeout to 25 seconds
-    start_time = time.time()
-    # Loop until a response is received or the timeout is reached
-    while True:
-        # Check if the timeout has been reached
-        elapsed_time = time.time() - start_time
-        if elapsed_time >= timeout:
-            print('Timeout reached')
-            return "I'm sorry, I could not generate a response. Please try again later."
-        
-        
+        print('Key not found or invalid')
+
+    for attempt in range(retries):
         try:
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -37,12 +22,13 @@ def run_long_poll_async(ourmessage):
                     {"role": "user", "content": ourmessage}
                 ]
             )
-            answer=(completion.choices[0].message.content)
-            
-            # print (answer,'ANSWERRRRRRRRRRRRRRRR')
+            answer = completion.choices[0].message.content
 
-            print (json.loads(answer),'with json loadssssssssssssssssss')
-            return answer
+            print(json.loads(answer), 'with json loadssssssssssssssssss')
+            try: 
+                return json.loads(answer)
+            except:
+                return answer
         except openai.error.APIError as e:
             if e.status_code == 429:
                 # If we hit the API rate limit, wait for a bit before trying again
@@ -50,6 +36,10 @@ def run_long_poll_async(ourmessage):
             else:
                 # If there's another API error, raise an exception
                 raise
+        except Exception as e:
+            print(f'Error occurred: {e}')
+            print(f'Retrying... (attempt {attempt + 1})')
+            time.sleep(delay)
 
-
-
+    # If all retries fail, return a default error message
+    return "I'm sorry, an error occurred while generating the response. Please try again later."
