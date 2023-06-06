@@ -11,9 +11,12 @@ class QueryChatGPT(models.Model):
     answer = models.TextField(null=False, default="")
 
 class City(models.Model):
+    country=models.CharField(max_length=100)
     city=models.CharField(max_length=100)
     latitude=models.FloatField(null=False)
     longitude=models.FloatField(null=False)
+    attractions=models.JSONField()
+
 
 
 

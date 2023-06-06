@@ -24,47 +24,45 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     {"role": "user", "content": ourmessage}
                 ]
             )
-            city_list =[]
             answer1 = completion.choices[0].message.content
-            # data = json.loads(answer1)
+            data = json.loads(answer1)
+            # print (data,'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             # # Extract all city names
-            # cities = [city['city'] for city in data['cities']]
-            # for city in cities:
-            #     city_list.append(city)
-            # api_key = os.environ.get('GPS_KEY')
+            key = os.environ.get('TRIP_ADVISOR_KEY')
+            country = data['country']
+            for city in data['cities']:
+                city_name = city['city']
+                landmarks = city['landmarks']
+                print("City:", city_name, landmarks)
+                url = f"https://api.content.tripadvisor.com/api/v1/location/search?language=en&key={key}"
+                headers = {"accept": "application/json"}
+                params = {
+                    'latLong': landmarks,
+                    'searchQuery': city_name,
+                    'category': 'attractions',
+                    'radius': '3',
+                    'radiusUnit':'km'
+                }
+                response = requests.get(url, headers=headers, params=params)
+                print(response)
+                result = response.json()
+                attrcat=result['data']
+                attractions = []
+                for attraction in result['data']:
+                    attractions.append(attraction)
+                existing_city = City.objects.filter(city=city_name).first()
+                if not existing_city:
+                        city_query = City(country=country,city=city, latitude=landmarks[0], longitude=landmarks[1],attractions=attrcat)
+                        city_query.save()
+                        print ('save successefuly for city')
+                city['attractions'] = attractions
 
-            # for city in city_list:
-            #     geocoding_url = f'https://api.opencagedata.com/geocode/v1/json?q={city}&key={api_key}'
+            combined_data =json.dumps(data, indent=2)
 
-            #     response = requests.get(geocoding_url)
-            #     data = response.json()
-
-            #     if data['results']:
-            #         latitude1 = data['results'][0]['geometry']['lat']
-            #         longitude1 = data['results'][0]['geometry']['lng']
-            #         existing_city = City.objects.filter(city=city).first()
-
-            #         if not existing_city:
-            #             city_query = City(city=city, latitude=latitude1, longitude=longitude1)
-            #             city_query.save()
-            #             print(f"City: {city} - Latitude: {latitude1}, Longitude: {longitude1}")
-            #         else:
-            #             print(f"City: {city} - Already exists in the database")
-            #     else:
-            #         print(f"City: {city} - Coordinates not found")
-            query = QueryChatGPT(question=ourmessage, answer=answer1)
+            query = QueryChatGPT(question=ourmessage, answer=combined_data)
             query.save()
-            # city_data_gpt = {}
-            # for city in city_list:
-            #     city_object = City.objects.filter(city=city).first()
-            #     if city_object:
-            #         city_data_gpt[city] = {
-            #             'latitude': city_object.latitude,
-            #             'longitude': city_object.longitude
-            #         }
-            #     else:
-            #         print(f"City data not found for: {city}")            
-            return answer1
+            return combined_data
+
         except openai.error.APIError as e:
             if e.status_code == 429:
                 # If we hit the API rate limit, wait for a bit before trying again
