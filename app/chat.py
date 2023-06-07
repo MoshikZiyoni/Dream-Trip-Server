@@ -5,6 +5,7 @@ import openai
 from dotenv import load_dotenv
 import requests
 from app.models import QueryChatGPT,City
+from urllib.parse import quote
 
 # Load environment variables from .env file
 load_dotenv()
@@ -25,6 +26,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 ]
             )
             answer1 = completion.choices[0].message.content
+            print(answer1)
             data = json.loads(answer1)
             # print (data,'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             # # Extract all city names
@@ -33,26 +35,39 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
             for city in data['cities']:
                 city_name = city['city']
                 landmarks = city['landmarks']
+                description = city['description']
+                if isinstance(landmarks, list):
+                    print ('this is a list')
+                    if len(landmarks)>2:
+                        print((len(landmarks)),'lenn')
+                        print (landmarks,'sucess to landmapr 0')
+                        landmarks = landmarks[0]
+                    else:
+                        print('skip landmarks')
+
                 print("City:", city_name, landmarks)
-                url = f"https://api.content.tripadvisor.com/api/v1/location/search?language=en&key={key}"
+                url = f"https://api.content.tripadvisor.com/api/v1/location/nearby_search?"
                 headers = {"accept": "application/json"}
                 params = {
-                    'latLong': landmarks,
-                    'searchQuery': city_name,
+                    'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
+                    'key' : {key},
+                    # 'searchQuery': city_name+country,
                     'category': 'attractions',
-                    'radius': '3',
-                    'radiusUnit':'km'
+                    'radius': '10',
+                    'radiusUnit':'km',
+                    'language' : 'en'
                 }
                 response = requests.get(url, headers=headers, params=params)
                 print(response)
                 result = response.json()
+                print(result)
                 attrcat=result['data']
                 attractions = []
                 for attraction in result['data']:
                     attractions.append(attraction)
                 existing_city = City.objects.filter(city=city_name).first()
                 if not existing_city:
-                        city_query = City(country=country,city=city, latitude=landmarks[0], longitude=landmarks[1],attractions=attrcat)
+                        city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attrcat,description=description)
                         city_query.save()
                         print ('save successefuly for city')
                 city['attractions'] = attractions

@@ -3,10 +3,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
-from app.models import QueryChatGPT,City
+from app.models import QueryChatGPT
 from django.core.cache import cache
-import requests
-import os
+
 
 
 @api_view(['GET', 'POST'])
