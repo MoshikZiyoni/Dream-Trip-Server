@@ -17,7 +17,7 @@ class City(models.Model):
     longitude=models.FloatField(null=False)
     attractions=models.JSONField()
     description = models.CharField(max_length=1000)
-
+    restaurants=models.JSONField()
 
 
 

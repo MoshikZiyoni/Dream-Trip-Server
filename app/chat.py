@@ -6,10 +6,12 @@ from dotenv import load_dotenv
 import requests
 from app.models import QueryChatGPT,City
 from urllib.parse import quote
+from geopy.geocoders import Nominatim
 
 # Load environment variables from .env file
 load_dotenv()
 def run_long_poll_async(ourmessage, retries=3, delay=1):
+    geolocator = Nominatim(user_agent="dream-trip")
     print('Start GPT')
     try:
         api_key = os.environ.get('OPENAI_API_KEY')
@@ -32,14 +34,15 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
             # # Extract all city names
             key = os.environ.get('TRIP_ADVISOR_KEY')
             country = data['country']
-            for city in data['cities']:
-                city_name = city['city']
-                landmarks = city['landmarks']
-                description = city['description']
+            for city_data  in data['cities']:
+                print(type(city_data ),'typeeeeeeeeeeeeeeeeeeeeee')
+                city_name = city_data ['city']
+                landmarks = city_data ['landmarks']
+                description = city_data ['description']
+
                 if isinstance(landmarks, list):
                     print ('this is a list')
                     if len(landmarks)>2:
-                        print((len(landmarks)),'lenn')
                         print (landmarks,'sucess to landmapr 0')
                         landmarks = landmarks[0]
                     else:
@@ -60,19 +63,60 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 response = requests.get(url, headers=headers, params=params)
                 print(response)
                 result = response.json()
-                print(result)
                 attrcat=result['data']
                 attractions = []
                 for attraction in result['data']:
                     attractions.append(attraction)
+                url = "https://api.content.tripadvisor.com/api/v1/location/nearby_search?"
+                headers = {"accept": "application/json"}
+                params = {
+                    'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
+                    'key': key,
+                    'category': 'restaurants',
+                    'radius': '10',
+                    'radiusUnit': 'km',
+                    'language': 'en'
+                }
+                response_for_restaurants = requests.get(url, headers=headers, params=params)
+                print(response_for_restaurants)
+                result_for_restaurants = response_for_restaurants.json()
+                restaurants = []
+                for restaurant in result_for_restaurants['data']:
+                    address_string = restaurant['address_obj']['address_string']
+                    address_obj = restaurant['address_obj']
+                    if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
+                        street = address_obj['street1']
+                        city_for_restaurant = address_obj['city']
+                        country = address_obj['country']
+                        address_string1 = f"{street}, {city_for_restaurant}, {country}"
+                        location = geolocator.geocode(address_string1)
+                        latitude = None
+                        longitude = None
+                        if location is not None:
+                            latitude = location.latitude
+                            longitude = location.longitude
+                            print('Found landmarks for', latitude, longitude)
+
+                        restaurant_info = {
+                            'location_ID' : restaurant['location_id'],
+                            'name': restaurant['name'],
+                            'latitude': latitude,
+                            'longitude': longitude,
+                            'address_string':address_string,
+                        }
+                        restaurants.append(restaurant_info)                      
+                        
+                print (restaurant_info,'restaurant_info')  
                 existing_city = City.objects.filter(city=city_name).first()
                 if not existing_city:
-                        city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attrcat,description=description)
+                        city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attrcat,description=description,restaurants=restaurants)
                         city_query.save()
                         print ('save successefuly for city')
-                city['attractions'] = attractions
-
+                
+                city_data['attractions'] = attractions
+                city_data['restaurants'] = restaurants
             combined_data =json.dumps(data, indent=2)
+            
 
             query = QueryChatGPT(question=ourmessage, answer=combined_data)
             query.save()

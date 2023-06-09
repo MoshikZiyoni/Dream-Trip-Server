@@ -3,14 +3,15 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
-from app.models import QueryChatGPT
+from app.models import QueryChatGPT,City
 from django.core.cache import cache
 
 
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
+    # QueryChatGPT.objects.all().delete()
+    # City.objects.all().delete()
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
