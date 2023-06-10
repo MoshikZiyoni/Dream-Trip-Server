@@ -320,25 +320,25 @@ geolocator = Nominatim(user_agent="your_app_name")
 
 # print (latitude,longitude)
 
-attraction={'location_id': '24135714', 'name': "Museo Dell'Arte Salvata", 'distance': '0.15103240380361369', 'bearing': 'east', 'address_obj': {'street1': 'Via Giuseppe Romita 8', 'street2': 'Octagon Hall Of The National Roman Museum', 'city': 'Rome', 'country': 'Italy', 'postalcode': '00185', 'address_string': 'Via Giuseppe Romita 8 Octagon Hall Of The National Roman Museum, 00185 Rome Italy'}} 
+# attraction={'location_id': '24135714', 'name': "Museo Dell'Arte Salvata", 'distance': '0.15103240380361369', 'bearing': 'east', 'address_obj': {'street1': 'Via Giuseppe Romita 8', 'street2': 'Octagon Hall Of The National Roman Museum', 'city': 'Rome', 'country': 'Italy', 'postalcode': '00185', 'address_string': 'Via Giuseppe Romita 8 Octagon Hall Of The National Roman Museum, 00185 Rome Italy'}} 
 
-{'location_id': '23586841', 'name': 'The Lodge Club Firenze', 'distance': '0.14052398442976793', 'bearing': 'northeast', 'address_obj': {'street1': 'Viale Giuseppe Poggi 1', 'city': 'Florence', 'state': 'Province of Florence', 'country': 'Italy', 'postalcode': '50125', 'address_string': 'Viale Giuseppe Poggi 1, 50125, Florence Italy'}}
-
-
-address_obj = attraction['address_obj']
-if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
-    street = address_obj['street1']
-    city = address_obj['city']
-    country = address_obj['country']
-    address_string = f"{street}, {city}, {country}"
-    location = geolocator.geocode(address_string)
-    latitude = location.latitude
-    longitude = location.longitude
-    print(f"Latitude: {latitude}, Longitude: {longitude}")
+# {'location_id': '23586841', 'name': 'The Lodge Club Firenze', 'distance': '0.14052398442976793', 'bearing': 'northeast', 'address_obj': {'street1': 'Viale Giuseppe Poggi 1', 'city': 'Florence', 'state': 'Province of Florence', 'country': 'Italy', 'postalcode': '50125', 'address_string': 'Viale Giuseppe Poggi 1, 50125, Florence Italy'}}
 
 
-# location = geolocator.geocode("Via Giuseppe Romita 8, 00185 Rome Italy")
-# latitude = location.latitude
-# longitude = location.longitude
+# address_obj = attraction['address_obj']
+# if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
+#     street = address_obj['street1']
+#     city = address_obj['city']
+#     country = address_obj['country']
+#     address_string = f"{street}, {city}, {country}"
+#     location = geolocator.geocode(address_string)
+#     latitude = location.latitude
+#     longitude = location.longitude
+#     print(f"Latitude: {latitude}, Longitude: {longitude}")
 
-# print (latitude,longitude)
+
+location = geolocator.geocode("Prat de la Creu,andorra de vella,Andora")
+latitude = location.latitude
+longitude = location.longitude
+
+print (latitude,longitude)
