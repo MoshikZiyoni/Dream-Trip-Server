@@ -10,8 +10,8 @@ from django.core.cache import cache
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    QueryChatGPT.objects.all().delete()
-    City.objects.all().delete()
+    # QueryChatGPT.objects.all().delete()
+    # City.objects.all().delete()
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
