@@ -339,39 +339,43 @@
 
 # location = geolocator.geocode("Prat de la Creu,andorra de vella,Andora")
 
-# # import requests
-# # import json
-# # import flickrapi
 
-# # latitude = -8.7776416
-# # longitude = 13.2432628
-# # landmarks=latitude,longitude
-# # api_key ='bf2ed6da714a97beef541c4708d527fa'
-# # query = 'tel aviv,Israel'
 
-# # api_secret = 'e2593a81ffab5ade'
-# # landmark_name = 'tel aviv'
-# # print (query)
-# # # Create the Flickr API client
-# # flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-# # # Search for photos by tags (landmark name)
-# # photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=5, extras='url_o')
-# # print (photos)
-# # # Extract the photo URLs
-# # if 'photos' in photos and 'photo' in photos['photos']:
-# #     for photo in photos['photos']['photo']:
-# #         photo_id = photo['id']  # URL of the original-sized photo
-# #         flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+latitude = -8.7776416
+longitude = 13.2432628
+landmarks=latitude,longitude
 
-# #         # Get the sizes of the photo
-# #         sizes = flickr.photos.getSizes(photo_id=photo_id)
+landmark_name = 'Place des Jacobins'
+def flickr_api(attraction_name,latitude,longitude):
+  import flickrapi
+  api_key ='bf2ed6da714a97beef541c4708d527fa'
+  api_secret = 'e2593a81ffab5ade'
+  image_list = []
+  flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+  # Search for photos by tags (landmark name)
+  photos = flickr.photos.search(text=attraction_name, per_page=5, extras='url_o',sort='relevance')
+  if len(photos['photos']['photo']) == 0:
+        print (0)
+        # No photos found for the attraction name, search by latitude and longitude
+        photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=5, extras='url_o', sort='relevance')
 
-# #         # Extract the URL of the image
-# #         if 'sizes' in sizes and 'size' in sizes['sizes']:
-# #             # Assuming you want the URL of the largest available size
-# #             largest_size = sizes['sizes']['size'][-1]
-# #             image_url = largest_size['source']
-# #             print(image_url)
-# #         else:
-# #             print('No image URL available for the photo')
+        if len(photos['photos']['photo']) == 0:
+            print('No photos found for the attraction')
+  # Extract the photo URLs
+  if 'photos' in photos and 'photo' in photos['photos']:
+      for photo in photos['photos']['photo']:
+          photo_id = photo['id']  # URL of the original-sized photo
+          flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+          # Get the sizes of the photo
+          sizes = flickr.photos.getSizes(photo_id=photo_id)
+          # Extract the URL of the image
+          if 'sizes' in sizes and 'size' in sizes['sizes']:
+              # Assuming you want the URL of the largest available size
+              largest_size = sizes['sizes']['size'][-1]
+              image_url = largest_size['source']
+              image_list.append(image_url)
+          else:
+              print('No image URL available for the photo')
+  return(image_list)
 
+print (flickr_api(attraction_name="Mus\u00e9e des Beaux-Arts de Lyon", latitude= 45.767018, longitude= 4.833468))

@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from app.trip_advisor import trip_advisor_attraction,trip_advisor_restaurants,flickr_api
 import openai
 from dotenv import load_dotenv
 import requests
@@ -33,7 +34,6 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     data = json.loads(answer1)
                     # # Extract all city names
                     api_key=os.environ.get('FOURSQUARE')
-                    key=os.environ.get('TRIP_ADVISOR_KEY')
                     country = data['country']
                     for city_data  in data['cities']:
                         city_name = city_data ['city']
@@ -74,49 +74,11 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                         reslut=jsonto['results']
                         restaurants=[]
                         if len(reslut) == 0:
-                            url = "https://api.content.tripadvisor.com/api/v1/location/search?"
-                            headers = {"accept": "application/json"}
-                            params = {
-                                'searchQuery':f"{city_name},{country}",
-                                'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
-                                'key': key,
-                                'category': 'restaurants',
-                                'radius': '10',
-                                'radiusUnit': 'km',
-                                'language': 'en'
-                            }
-                            response_for_restaurants = requests.get(url, headers=headers, params=params)
-                            print(response_for_restaurants)
-                            result_for_restaurants = response_for_restaurants.json()
-                            restaurants = []
-                            for restaurant in result_for_restaurants['data']:
-                                address_string = restaurant['address_obj']['address_string']
-                                address_obj = restaurant['address_obj']
-                                if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
-                                    street = address_obj['street1']
-                                    city_for_restaurant = address_obj['city']
-                                    country = address_obj['country']
-                                    address_string1 = f"{street}, {city_for_restaurant}, {country}"
-                                    location = geolocator.geocode(address_string1)
-                                    time.sleep(0.5)
-                                    latitude = None
-                                    longitude = None
-                                    if location is not None:
-                                        latitude = location.latitude
-                                        longitude = location.longitude
-                                        print('Found landmarks for', latitude, longitude)
-
-                                    restaurant_info = {
-                                        'location_ID' : restaurant['location_id'],
-                                        'name': restaurant['name'],
-                                        'latitude': latitude,
-                                        'longitude': longitude,
-                                        'address_string':address_string,
-                                    }
-                                    restaurants.append(restaurant_info)
+                            restaurant_=trip_advisor_restaurants(city_name,country,landmarks)
+                            restaurants.append(restaurant_)
                         else:
                             for i in reslut:
-                                print (i)
+                                # print (i)
                                 name= (i['name'])
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
@@ -147,67 +109,34 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                         reslut=jsonto1['results']
                         attractions=[]
                         if len(reslut)==0:
-                            url = f"https://api.content.tripadvisor.com/api/v1/location/nearby_search?"
-                            headers = {"accept": "application/json"}
-                            params = {
-                                'searchQuery': f"{city_name},{country}",
-                                'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
-                                'key' : {key},
-                                'category': 'attractions',
-                                'radius': '10',
-                                'radiusUnit':'km',
-                                'language' : 'en'
-                            }
-                            response = requests.get(url, headers=headers, params=params)
-                            print(response)
-                            result = response.json()
-                            attractions = []
-                            for attraction in result['data']:
-                                address_string = attraction['address_obj']['address_string']
-                                address_obj = attraction['address_obj']
-                                if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
-                                    street = address_obj['street1']
-                                    city_for_attraction = address_obj['city']
-                                    country = address_obj['country']
-                                    address_string1 = f"{street}, {city_for_attraction}, {country}"
-                                    location = geolocator.geocode(address_string1)
-                                    time.sleep(0.5)
-                                    latitude = None
-                                    longitude = None
-                                    if location is not None:
-                                        latitude = location.latitude
-                                        longitude = location.longitude
-                                        print('Found landmarks for', latitude, longitude)
-
-                                    attraction_info = {
-                                        'location_ID' : attraction['location_id'],
-                                        'name': attraction['name'],
-                                        'latitude': latitude,
-                                        'longitude': longitude,
-                                        'address_string':address_string,
-                                    }
-                                    attractions.append(attraction_info) 
+                            attractions_info_trip=trip_advisor_attraction(city_name,country,landmarks)
+                            attractions.append(attractions_info_trip)
+                           
                         else:
                             for i in reslut:
                                 name= (i['name'])
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
+                                flickr_photos=flickr_api(name,latitude,longitude)
+
                                 attractions_info={
                                     'name':name,
                                     'latitude':latitude,
-                                    'longitude':longitude
+                                    'longitude':longitude,
+                                    'photos':flickr_photos,
                                 }
                                 attractions.append(attractions_info)
                                     
                         
                         existing_city = City.objects.filter(city=city_name).first()
                         if not existing_city:
-                                city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attractions,description=description,restaurants=restaurants)
-                                city_query.save()
-                                print ('save successefuly for city')
+                            city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attractions,description=description,restaurants=restaurants)
+                            city_query.save()
+                            print ('save successefuly for city')
                         
                         city_data['attractions'] = attractions
                         city_data['restaurants'] = restaurants
+                    # print (data['cities'],'city dataaaaaaaaaaaaaaaaaaaaaaa')
                     combined_data =json.dumps(data, indent=2)
                     
 
