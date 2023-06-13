@@ -2,6 +2,7 @@ import json
 import os
 import time
 from app.trip_advisor import trip_advisor_attraction,trip_advisor_restaurants,flickr_api
+from app.bs4 import google_search
 import openai
 from dotenv import load_dotenv
 import requests
@@ -82,10 +83,12 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                                 name= (i['name'])
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
+                                goog_result1=google_search(f"{name},{city_name},{country}")
                                 restaurants_info={
                                     'name':name,
                                     'latitude':latitude,
-                                    'longitude':longitude
+                                    'longitude':longitude,
+                                    'review_score': goog_result1['review_score'],
                                 }
                                 restaurants.append(restaurants_info)
 
@@ -118,12 +121,14 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
                                 flickr_photos=flickr_api(name,latitude,longitude)
-
+                                goog_result=google_search(f"{name},{city_name},{country}")
                                 attractions_info={
                                     'name':name,
                                     'latitude':latitude,
                                     'longitude':longitude,
                                     'photos':flickr_photos,
+                                    'review_score': goog_result['review_score'],
+                                    
                                 }
                                 attractions.append(attractions_info)
                                     
