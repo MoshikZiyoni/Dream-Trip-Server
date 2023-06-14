@@ -43,6 +43,9 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                         existing_city = City.objects.filter(city=city_name).first()
                         if existing_city:
                             print ('continue')
+                            print('City:', city_name)
+                            city_data['attractions']= existing_city.attractions
+                            city_data['restaurants']=existing_city.restaurants
                             continue
                         if isinstance(landmarks, list):
                             print ('this is a list')
