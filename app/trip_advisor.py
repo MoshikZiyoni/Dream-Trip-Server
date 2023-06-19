@@ -1,4 +1,5 @@
 
+import json
 import requests
 from urllib.parse import quote
 from geopy.geocoders import Nominatim
@@ -108,6 +109,7 @@ def flickr_api(name,latitude,longitude):
   flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
   # Search for photos by tags (landmark name)
   photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
+  print ('regular')
   if len(photos['photos']['photo']) == 0:
     print (0)
     # No photos found for the attraction name, search by latitude and longitude
@@ -132,3 +134,49 @@ def flickr_api(name,latitude,longitude):
           else:
               print('No image URL available for the photo')
 #   return(image_list)
+
+api_key=os.environ.get('FOURSQUARE')
+
+def foursquare_restaurant(landmarks):
+
+    url = "https://api.foursquare.com/v3/places/search?"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
+    query= {
+        'categories':'13000',
+        "ll" :  f"{landmarks[0]},{landmarks[1]}",
+        'radius':2500,
+        'limit' : 20
+    }
+    response = requests.get(url, params=query,headers=headers)
+
+    response_text=(response.text)
+    jsonto=json.loads(response_text)
+    # print (jsonto)
+    reslut=jsonto['results']
+    return (reslut)
+
+
+def foursquare_attraction(landmarks):
+    url1 = "https://api.foursquare.com/v3/places/search?"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
+
+    query1= {
+        'categories':'10000,16000',
+        "ll" :  f"{landmarks[0]},{landmarks[1]}",
+        'radius':2500,
+        'limit' : 20
+    }
+    response1 = requests.get(url1, params=query1,headers=headers)
+
+    response_text1=(response1.text)
+    jsonto1=json.loads(response_text1)
+    reslut=jsonto1['results']
+    return reslut

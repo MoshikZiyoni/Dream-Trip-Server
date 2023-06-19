@@ -15,10 +15,19 @@ class City(models.Model):
     city=models.CharField(max_length=100)
     latitude=models.FloatField(null=False)
     longitude=models.FloatField(null=False)
-    attractions=models.JSONField()
+    # attractions=models.JSONField()
     description = models.CharField(max_length=1000)
-    restaurants=models.JSONField()
+    # restaurants=models.JSONField()
 
 
 
 
+class Attraction(models.Model):
+    city = models.ForeignKey(City, related_name='attractions', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    details = models.JSONField()
+
+class Restaurant(models.Model):
+    city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    details = models.JSONField()

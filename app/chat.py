@@ -1,12 +1,12 @@
 import json
 import os
 import time
-from app.trip_advisor import trip_advisor_attraction,trip_advisor_restaurants,flickr_api
+from app.trip_advisor import foursquare_attraction, foursquare_restaurant, trip_advisor_attraction,trip_advisor_restaurants,flickr_api
 from app.bs4 import google_search
 import openai
 from dotenv import load_dotenv
 import requests
-from app.models import QueryChatGPT,City
+from app.models import Attraction, QueryChatGPT,City, Restaurant
 from urllib.parse import quote
 from geopy.geocoders import Nominatim
 
@@ -30,6 +30,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 ]
             )
             answer1 = completion.choices[0].message.content
+            print (answer1)
             for attempt_data in range(retries):
                 try:
                     data = json.loads(answer1)
@@ -38,88 +39,69 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     country = data['country']
                     for city_data  in data['cities']:
                         city_name = city_data ['city']
-                        landmarks = city_data ['landmarks']
                         description = city_data ['description']
+                        location = geolocator.geocode(f"{city_name},{country}")
+                        landmarks=[location.latitude, location.longitude]
                         existing_city = City.objects.filter(city=city_name).first()
                         if existing_city:
+                            # Add attractions and restaurants to city_data dictionary
+                            attract=Attraction.objects.filter(city_id=existing_city.id).values()
+                            attractions_list = list(attract)
+                            city_data['attractions'] = attractions_list
+                            restaura=Restaurant.objects.filter(city_id=existing_city.id).values()
+                            restaurants_list = list(restaura)
+                            city_data['restaurants']=restaurants_list
                             print ('continue')
-                            print('City:', city_name)
-                            city_data['attractions']= existing_city.attractions
-                            city_data['restaurants']=existing_city.restaurants
                             continue
-                        if isinstance(landmarks, list):
-                            print ('this is a list')
-                            if len(landmarks)>2:
-                                print (landmarks,'sucess to landmapr 0')
-                                landmarks = landmarks[0]
-                            else:
-                                print('skip landmarks')
-
+                        
                         print("City:", city_name, landmarks)
+                        if not existing_city:
+                            city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],description=description)
+                            city_query.save()
+                            print ('save successefuly for city')
+                        city_to_save=City.objects.filter(city=city_name)
 
-                        url = "https://api.foursquare.com/v3/places/search?"
-
-                        headers = {
-                            "accept": "application/json",
-                            "Authorization": api_key
-                        }
-
-                        query= {
-                            'categories':'13000',
-                            "ll" :  f"{landmarks[0]},{landmarks[1]}",
-                            'radius':2500,
-                            # 'sort': 'distance'
-                        }
-                        response = requests.get(url, params=query,headers=headers)
-
-                        response_text=(response.text)
-                        jsonto=json.loads(response_text)
-                        # print (jsonto)
-                        reslut=jsonto['results']
+                        
+                        reslut=foursquare_restaurant(landmarks)
                         restaurants=[]
                         if len(reslut) == 0:
                             restaurant_=trip_advisor_restaurants(city_name,country,landmarks)
                             restaurants.append(restaurant_)
                         else:
                             for i in reslut:
-                                # print (i)
+                                
                                 name= (i['name'])
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
+                                flickr_photos1=flickr_api(name,latitude,longitude)
                                 goog_result1=google_search(f"{name},{city_name},{country}")
+                                
                                 restaurants_info={
                                     'name':name,
                                     'latitude':latitude,
                                     'longitude':longitude,
+                                    'photos':flickr_photos1,
                                     'review_score': goog_result1['review_score'],
                                 }
                                 restaurants.append(restaurants_info)
-
-                        url1 = "https://api.foursquare.com/v3/places/search?"
-
-                        headers = {
-                            "accept": "application/json",
-                            "Authorization": api_key
-                        }
-
-                        query1= {
-                            'categories':'10000,16000',
-                            "ll" :  f"{landmarks[0]},{landmarks[1]}",
-                            'radius':2500,
-                            # 'sort': 'distance'
-                        }
-                        response1 = requests.get(url1, params=query1,headers=headers)
-
-                        response_text1=(response1.text)
-                        jsonto1=json.loads(response_text1)
-                        reslut=jsonto1['results']
+                                try:
+                                    city_obj = city_to_save.first()  # Get the first city object
+                                    if city_obj is not None:
+                                        resta_query = Restaurant(name=name, city=city_obj, details=restaurants_info)
+                                        resta_query.save()
+                                    else:
+                                        print(f"No city found for {city_name}")
+                                except Exception as e:
+                                    print(f"Error occurred: {e}")
+                        
+                        reslut1=foursquare_attraction(landmarks)
                         attractions=[]
-                        if len(reslut)==0:
+                        if len(reslut1)==0:
                             attractions_info_trip=trip_advisor_attraction(city_name,country,landmarks)
                             attractions.append(attractions_info_trip)
                            
                         else:
-                            for i in reslut:
+                            for i in reslut1:
                                 name= (i['name'])
                                 latitude = i['geocodes']['main']['latitude']
                                 longitude = i['geocodes']['main']['longitude']
@@ -134,17 +116,19 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                                     
                                 }
                                 attractions.append(attractions_info)
-                                    
+                                try:
+                                    city_obj = city_to_save.first()  # Get the first city object
+                                    if city_obj is not None:
+                                        atrc_query = Attraction(name=name, city=city_obj, details=attractions_info)
+                                        atrc_query.save()
+                                    else:
+                                        print(f"No city found for {city_name}")
+                                except Exception as e:
+                                    print(f"Error occurred: {e}")
                         
-                        existing_city = City.objects.filter(city=city_name).first()
-                        if not existing_city:
-                            city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],attractions=attractions,description=description,restaurants=restaurants)
-                            city_query.save()
-                            print ('save successefuly for city')
                         
                         city_data['attractions'] = attractions
                         city_data['restaurants'] = restaurants
-                    # print (data['cities'],'city dataaaaaaaaaaaaaaaaaaaaaaa')
                     combined_data =json.dumps(data, indent=2)
                     
 

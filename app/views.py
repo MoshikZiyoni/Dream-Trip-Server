@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
-from app.models import QueryChatGPT,City
+from app.models import Attraction, QueryChatGPT,City
 from django.core.cache import cache
 
 
@@ -35,15 +35,12 @@ def gpt_view(request):
         travelers = request.data['travelers']
         budget = request.data['budget']
         durring = request.data['durring']
-        question1 = '{"country": "..", "cities": [{"city": "", "description": "",landmarks:[latitude,longitude], "travelDay": }]}'
-        ourmessage=f"Create a {budget} {durring} {travelers} trip to {mainland} in the following JSON structure:{question1}"
+        question1 = '{"country": "..", "cities": [{"city": "", "description": "", "travelDay": }]}'
+        # question1 = '{"country": "..", "cities": [{"city": "", "description": "",landmarks:{latitude : "float",longitude : "float"}, "travelDay": }]}'
+        ourmessage=f"Create a {budget} ,only {durring} {travelers} trip to {mainland} in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
-            print('answer in data')
-            # parsed_data = json.loads(answer_from_data['answer'])
-            # cities_landmarks = [(city['city'], city['landmarks']) for city in parsed_data['cities']]
-            
-                
+            print('answer in data')   
             answer=({'answer' :answer_from_data['answer'],"request_left":request_left})
             return Response(answer)
         

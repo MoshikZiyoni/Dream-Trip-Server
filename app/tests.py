@@ -1,11 +1,13 @@
-# # import json
-# # import os
-# # import time
-# # import openai
-# # from dotenv import load_dotenv
-# # import requests
-# # from urllib.parse import quote
-# # load_dotenv()
+import json
+import os
+import time
+import openai
+from dotenv import load_dotenv
+import requests
+from urllib.parse import quote
+
+from app.models import City
+load_dotenv()
 # # key = os.environ.get('TRIP_ADVISOR_KEY')
 
 # # city_name = 'jerusalem'
@@ -320,7 +322,7 @@
 
 # # print (latitude,longitude)
 
-# # attraction={'location_id': '24135714', 'name': "Museo Dell'Arte Salvata", 'distance': '0.15103240380361369', 'bearing': 'east', 'address_obj': {'street1': 'Via Giuseppe Romita 8', 'street2': 'Octagon Hall Of The National Roman Museum', 'city': 'Rome', 'country': 'Italy', 'postalcode': '00185', 'address_string': 'Via Giuseppe Romita 8 Octagon Hall Of The National Roman Museum, 00185 Rome Italy'}} 
+# # attraction={'location_id': '24135714', 'name': "Museo Dell'Arte Salvata", 'distance': '0.15103240380361369', 'bearing': 'east', 'address_obj': {'street1': 'Via Giuseppe Romita 8', 'street2': 'Octagon Hall Of The National Roman Museum', 'city': 'Rome', 'country': 'Italy', 'postalcode': '00185', 'address_string': 'Via Giuseppe Romita 8 Octagon Hall Of The National Roman Museum, 00185 Rome Italy'}}
 
 # # {'location_id': '23586841', 'name': 'The Lodge Club Firenze', 'distance': '0.14052398442976793', 'bearing': 'northeast', 'address_obj': {'street1': 'Viale Giuseppe Poggi 1', 'city': 'Florence', 'state': 'Province of Florence', 'country': 'Italy', 'postalcode': '50125', 'address_string': 'Viale Giuseppe Poggi 1, 50125, Florence Italy'}}
 
@@ -341,41 +343,52 @@
 
 
 
-latitude = -8.7776416
-longitude = 13.2432628
-landmarks=latitude,longitude
+# latitude = -8.7776416
+# longitude = 13.2432628
+# landmarks=latitude,longitude
 
-landmark_name = 'Place des Jacobins'
-def flickr_api(attraction_name,latitude,longitude):
-  import flickrapi
-  api_key ='bf2ed6da714a97beef541c4708d527fa'
-  api_secret = 'e2593a81ffab5ade'
-  image_list = []
-  flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-  # Search for photos by tags (landmark name)
-  photos = flickr.photos.search(text=attraction_name, per_page=5, extras='url_o',sort='relevance')
-  if len(photos['photos']['photo']) == 0:
-        print (0)
-        # No photos found for the attraction name, search by latitude and longitude
-        photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=5, extras='url_o', sort='relevance')
+# landmark_name = 'Place des Jacobins'
+# def flickr_api(attraction_name,latitude,longitude):
+#   import flickrapi
+#   api_key ='bf2ed6da714a97beef541c4708d527fa'
+#   api_secret = 'e2593a81ffab5ade'
+#   image_list = []
+#   flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+#   # Search for photos by tags (landmark name)
+#   photos = flickr.photos.search(text=attraction_name, per_page=5, extras='url_o',sort='relevance')
+#   if len(photos['photos']['photo']) == 0:
+#         print (0)
+#         # No photos found for the attraction name, search by latitude and longitude
+#         photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=5, extras='url_o', sort='relevance')
 
-        if len(photos['photos']['photo']) == 0:
-            print('No photos found for the attraction')
-  # Extract the photo URLs
-  if 'photos' in photos and 'photo' in photos['photos']:
-      for photo in photos['photos']['photo']:
-          photo_id = photo['id']  # URL of the original-sized photo
-          flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-          # Get the sizes of the photo
-          sizes = flickr.photos.getSizes(photo_id=photo_id)
-          # Extract the URL of the image
-          if 'sizes' in sizes and 'size' in sizes['sizes']:
-              # Assuming you want the URL of the largest available size
-              largest_size = sizes['sizes']['size'][-1]
-              image_url = largest_size['source']
-              image_list.append(image_url)
-          else:
-              print('No image URL available for the photo')
-  return(image_list)
+#         if len(photos['photos']['photo']) == 0:
+#             print('No photos found for the attraction')
+#   # Extract the photo URLs
+#   if 'photos' in photos and 'photo' in photos['photos']:
+#       for photo in photos['photos']['photo']:
+#           photo_id = photo['id']  # URL of the original-sized photo
+#           flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+#           # Get the sizes of the photo
+#           sizes = flickr.photos.getSizes(photo_id=photo_id)
+#           # Extract the URL of the image
+#           if 'sizes' in sizes and 'size' in sizes['sizes']:
+#               # Assuming you want the URL of the largest available size
+#               largest_size = sizes['sizes']['size'][-1]
+#               image_url = largest_size['source']
+#               image_list.append(image_url)
+#           else:
+#               print('No image URL available for the photo')
+#   return(image_list)
 
-print (flickr_api(attraction_name="Mus\u00e9e des Beaux-Arts de Lyon", latitude= 45.767018, longitude= 4.833468))
+# print (flickr_api(attraction_name="Mus\u00e9e des Beaux-Arts de Lyon", latitude= 45.767018, longitude= 4.833468))
+
+
+
+city_name = 'Tel Aviv'
+# landmarks = city_data ['landmarks']
+# description = city_data ['description']
+existing_city = City.objects.filter(city=city_name).first()
+if existing_city:
+    # city_data['attractions']= existing_city.attractions
+    # city_data['restaurants']=existing_city.restaurants
+    print ('continue')

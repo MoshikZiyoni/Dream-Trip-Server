@@ -128,24 +128,24 @@ ASGI_APPLICATION_OPTIONS = {
 # }
 
 ###MYSQL
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'moshik_liran',
-#         'HOST':'dream-trip-database.ceyknkppkpg5.eu-north-1.rds.amazonaws.com',
-#         'USER': 'admin',
-#         'PASSWORD': 'Theking1!',
-#         'PORT':'3306',
-#     },
-# }
-
-# '''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Dream-Trip',
+        # 'HOST':'localhost',
+        'USER': 'Dream-Trip-New',
+        'PASSWORD': 'DreamTrip1!',
+        # 'PORT':'3306',
+    },
 }
+
+# '''
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # '''
 # ###  'MONGODB'
 # DATABASES = {
