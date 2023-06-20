@@ -132,10 +132,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Dream-Trip',
-        # 'HOST':'localhost',
+        'HOST':'localhost',
         'USER': 'Dream-Trip-New',
         'PASSWORD': 'DreamTrip1!',
-        # 'PORT':'3306',
+        'PORT':'5432',
     },
 }
 
