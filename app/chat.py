@@ -9,11 +9,120 @@ import requests
 from app.models import Attraction, QueryChatGPT,City, Restaurant
 from urllib.parse import quote
 from geopy.geocoders import Nominatim
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 # Load environment variables from .env file
 load_dotenv()
+geolocator = Nominatim(user_agent="dream-trip")
+api_key=os.environ.get('FOURSQUARE')
+import threading
+
+def process_restaurant(name, city_name, country, latitude, longitude, city_to_save, restaurants):
+    flickr_photos1 = flickr_api(name, latitude, longitude)
+    goog_result1 = google_search(f"{name},{city_name},{country}")
+
+    restaurant_info = {
+        'name': name,
+        'latitude': latitude,
+        'longitude': longitude,
+        'photos': flickr_photos1,
+        'review_score': goog_result1['review_score'],
+    }
+    restaurants.append(restaurant_info)
+
+    try:
+        city_obj = city_to_save.first()
+        if city_obj is not None:
+            resta_query = Restaurant(name=name, city=city_obj, details=restaurant_info)
+            resta_query.save()
+        else:
+            print(f"No city found for {city_name}")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+def process_attraction(name, city_name, country, latitude, longitude, city_to_save, attractions):
+    flickr_photos = flickr_api(name, latitude, longitude)
+    goog_result = google_search(f"{name},{city_name},{country}")
+
+    attraction_info = {
+        'name': name,
+        'latitude': latitude,
+        'longitude': longitude,
+        'photos': flickr_photos,
+        'review_score': goog_result['review_score'],
+    }
+    attractions.append(attraction_info)
+
+    try:
+        city_obj = city_to_save.first()
+        if city_obj is not None:
+            atrc_query = Attraction(name=name, city=city_obj, details=attraction_info)
+            atrc_query.save()
+        else:
+            print(f"No city found for {city_name}")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+def process_city(city_data, country):
+    city_name = city_data['city']
+    description = city_data['description']
+    location = geolocator.geocode(f"{city_name},{country}")
+    landmarks = [location.latitude, location.longitude]
+    existing_city = City.objects.filter(city=city_name).first()
+
+    print("City:", city_name, landmarks)
+    if not existing_city:
+        city_query = City(country=country, city=city_name, latitude=landmarks[0], longitude=landmarks[1], description=description)
+        city_query.save()
+        print('save successfully for city')
+    city_to_save = City.objects.filter(city=city_name)
+
+    reslut = foursquare_restaurant(landmarks)
+    restaurants = []
+    if len(reslut) == 0:
+        restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
+        restaurants.append(restaurant_)
+    else:
+        threads = []
+        for i in reslut:
+            name = i['name']
+            latitude = i['geocodes']['main']['latitude']
+            longitude = i['geocodes']['main']['longitude']
+
+            thread = threading.Thread(target=process_restaurant, args=(name, city_name, country, latitude, longitude, city_to_save, restaurants))
+            thread.start()
+            threads.append(thread)
+
+        for thread in threads:
+            thread.join()
+
+    reslut1 = foursquare_attraction(landmarks)
+    attractions = []
+    if len(reslut1) == 0:
+        attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
+        attractions.append(attractions_info_trip)
+    else:
+        threads = []
+        for i in reslut1:
+            name = i['name']
+            latitude = i['geocodes']['main']['latitude']
+            longitude = i['geocodes']['main']['longitude']
+
+            thread = threading.Thread(target=process_attraction, args=(name, city_name, country, latitude, longitude, city_to_save, attractions))
+            thread.start()
+            threads.append(thread)
+
+        for thread in threads:
+            thread.join()
+
+    attractions = city_data['attractions'] = attractions
+    restaurants = city_data['restaurants'] = restaurants
+    return attractions, restaurants
+
+
 def run_long_poll_async(ourmessage, retries=3, delay=1):
-    geolocator = Nominatim(user_agent="dream-trip")
+    
     print('Start GPT')
     try:
         api_key = os.environ.get('OPENAI_API_KEY')
@@ -35,13 +144,10 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 try:
                     data = json.loads(answer1)
                     # # Extract all city names
-                    api_key=os.environ.get('FOURSQUARE')
                     country = data['country']
+                    executor = ThreadPoolExecutor()
                     for city_data  in data['cities']:
                         city_name = city_data ['city']
-                        description = city_data ['description']
-                        location = geolocator.geocode(f"{city_name},{country}")
-                        landmarks=[location.latitude, location.longitude]
                         existing_city = City.objects.filter(city=city_name).first()
                         if existing_city:
                             # Add attractions and restaurants to city_data dictionary
@@ -53,85 +159,11 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                             city_data['restaurants']=restaurants_list
                             print ('continue')
                             continue
-                        
-                        print("City:", city_name, landmarks)
-                        if not existing_city:
-                            city_query = City(country=country,city=city_name, latitude=landmarks[0], longitude=landmarks[1],description=description)
-                            city_query.save()
-                            print ('save successefuly for city')
-                        city_to_save=City.objects.filter(city=city_name)
+                        executor.submit(process_city, city_data, country)
 
-                        
-                        reslut=foursquare_restaurant(landmarks)
-                        restaurants=[]
-                        if len(reslut) == 0:
-                            restaurant_=trip_advisor_restaurants(city_name,country,landmarks)
-                            restaurants.append(restaurant_)
-                        else:
-                            for i in reslut:
-                                
-                                name= (i['name'])
-                                latitude = i['geocodes']['main']['latitude']
-                                longitude = i['geocodes']['main']['longitude']
-                                flickr_photos1=flickr_api(name,latitude,longitude)
-                                goog_result1=google_search(f"{name},{city_name},{country}")
-                                
-                                restaurants_info={
-                                    'name':name,
-                                    'latitude':latitude,
-                                    'longitude':longitude,
-                                    'photos':flickr_photos1,
-                                    'review_score': goog_result1['review_score'],
-                                }
-                                restaurants.append(restaurants_info)
-                                try:
-                                    city_obj = city_to_save.first()  # Get the first city object
-                                    if city_obj is not None:
-                                        resta_query = Restaurant(name=name, city=city_obj, details=restaurants_info)
-                                        resta_query.save()
-                                    else:
-                                        print(f"No city found for {city_name}")
-                                except Exception as e:
-                                    print(f"Error occurred: {e}")
-                        
-                        reslut1=foursquare_attraction(landmarks)
-                        attractions=[]
-                        if len(reslut1)==0:
-                            attractions_info_trip=trip_advisor_attraction(city_name,country,landmarks)
-                            attractions.append(attractions_info_trip)
-                           
-                        else:
-                            for i in reslut1:
-                                name= (i['name'])
-                                latitude = i['geocodes']['main']['latitude']
-                                longitude = i['geocodes']['main']['longitude']
-                                flickr_photos=flickr_api(name,latitude,longitude)
-                                goog_result=google_search(f"{name},{city_name},{country}")
-                                attractions_info={
-                                    'name':name,
-                                    'latitude':latitude,
-                                    'longitude':longitude,
-                                    'photos':flickr_photos,
-                                    'review_score': goog_result['review_score'],
-                                    
-                                }
-                                attractions.append(attractions_info)
-                                try:
-                                    city_obj = city_to_save.first()  # Get the first city object
-                                    if city_obj is not None:
-                                        atrc_query = Attraction(name=name, city=city_obj, details=attractions_info)
-                                        atrc_query.save()
-                                    else:
-                                        print(f"No city found for {city_name}")
-                                except Exception as e:
-                                    print(f"Error occurred: {e}")
-                        
-                        
-                        city_data['attractions'] = attractions
-                        city_data['restaurants'] = restaurants
+                    # Shutdown the executor and wait for all threads to complete
+                    executor.shutdown()
                     combined_data =json.dumps(data, indent=2)
-                    
-
                     query = QueryChatGPT(question=ourmessage, answer=combined_data)
                     query.save()
                     return combined_data
