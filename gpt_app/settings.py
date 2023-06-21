@@ -127,17 +127,31 @@ ASGI_APPLICATION_OPTIONS = {
 #     }
 # }
 
-###MYSQL
+###POSTGRESQL
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Dream-Trip',
+#         'HOST':'localhost',
+#         'USER': 'Dream-Trip-New',
+#         'PASSWORD': 'DreamTrip1!',
+#         'PORT':'5432',
+#     },
+# }
+
+
+####MYSQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Dream-Trip',
-        'HOST':'localhost',
-        'USER': 'Dream-Trip-New',
-        'PASSWORD': 'DreamTrip1!',
-        'PORT':'5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'freedb_Dream-Trip-DB',
+        'HOST':'sql.freedb.tech',
+        'USER': 'freedb_Moshik',
+        'PASSWORD': os.environ.get("MY_SQL_PASS"),
+        'PORT':'3306',
     },
 }
+
 
 # '''
 # DATABASES = {
