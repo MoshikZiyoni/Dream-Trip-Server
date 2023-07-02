@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
-from app.models import Attraction, QueryChatGPT,City
+from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from django.core.cache import cache
 
 
@@ -12,6 +12,9 @@ from django.core.cache import cache
 def gpt_view(request):
     # QueryChatGPT.objects.all().delete()
     # City.objects.all().delete()
+    # Attraction.objects.all().delete()
+    # Restaurant.objects.all().delete()
+    # Country.objects.all().delete()
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
@@ -34,7 +37,7 @@ def gpt_view(request):
         mainland = request.data['mainland']
         travelers = request.data['travelers']
         budget = request.data['budget']
-        durring = request.data['durring']
+        durring = request.data['durringDays']
         question1 = '{"country": "..", "cities": [{"city": "", "description": "", "travelDay": }]}'
         # question1 = '{"country": "..", "cities": [{"city": "", "description": "",landmarks:{latitude : "float",longitude : "float"}, "travelDay": }]}'
         ourmessage=f"Create a {budget} ,only {durring} {travelers} trip to {mainland} in the following JSON structure:{question1}"

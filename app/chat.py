@@ -1,16 +1,19 @@
 import json
 import os
 import time
+from app.offical_website import find_official_website
 from app.trip_advisor import foursquare_attraction, foursquare_restaurant, trip_advisor_attraction,trip_advisor_restaurants,flickr_api
 from app.bs4 import google_search
 import openai
 from dotenv import load_dotenv
 import requests
-from app.models import Attraction, QueryChatGPT,City, Restaurant
+from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from urllib.parse import quote
 from geopy.geocoders import Nominatim
 import threading
 from concurrent.futures import ThreadPoolExecutor
+import concurrent.futures
+from app.wikipediaapi import process_query
 
 # Load environment variables from .env file
 load_dotenv()
@@ -43,7 +46,18 @@ def process_restaurant(name, city_name, country, latitude, longitude, city_to_sa
 
 def process_attraction(name, city_name, country, latitude, longitude, city_to_save, attractions):
     flickr_photos = flickr_api(name, latitude, longitude)
-    goog_result = google_search(f"{name},{city_name},{country}")
+    goog_result = None
+    wikisearch = None
+    website = None
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future1 = executor.submit(google_search, f"{name},{city_name},{country}")
+        future2 = executor.submit(process_query, name)
+        future3 = executor.submit(find_official_website, name)
+
+        goog_result = future1.result()
+        wikisearch = future2.result()
+        website = future3.result()
 
     attraction_info = {
         'name': name,
@@ -51,6 +65,8 @@ def process_attraction(name, city_name, country, latitude, longitude, city_to_sa
         'longitude': longitude,
         'photos': flickr_photos,
         'review_score': goog_result['review_score'],
+        'description': wikisearch,
+        'website': website['website'],
     }
     attractions.append(attraction_info)
 
@@ -64,7 +80,7 @@ def process_attraction(name, city_name, country, latitude, longitude, city_to_sa
     except Exception as e:
         print(f"Error occurred: {e}")
 
-def process_city(city_data, country):
+def process_city(city_data, country,country_id):
     city_name = city_data['city']
     description = city_data['description']
     location = geolocator.geocode(f"{city_name},{country}")
@@ -73,7 +89,8 @@ def process_city(city_data, country):
 
     print("City:", city_name, landmarks)
     if not existing_city:
-        city_query = City(country=country, city=city_name, latitude=landmarks[0], longitude=landmarks[1], description=description)
+        
+        city_query = City(country_id=country_id, city=city_name, latitude=landmarks[0], longitude=landmarks[1], description=description)
         city_query.save()
         print('save successfully for city')
     city_to_save = City.objects.filter(city=city_name)
@@ -97,24 +114,33 @@ def process_city(city_data, country):
         for thread in threads:
             thread.join()
 
-    reslut1 = foursquare_attraction(landmarks)
+    reslut1 = foursquare_attraction(landmarks,city_name,country)
     attractions = []
     if len(reslut1) == 0:
         attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
         attractions.append(attractions_info_trip)
     else:
-        threads = []
-        for i in reslut1:
-            name = i['name']
-            latitude = i['geocodes']['main']['latitude']
-            longitude = i['geocodes']['main']['longitude']
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            threads = []
+            for i in reslut1:
+                name = i['name']
+                latitude = i['geocodes']['main']['latitude']
+                longitude = i['geocodes']['main']['longitude']
 
-            thread = threading.Thread(target=process_attraction, args=(name, city_name, country, latitude, longitude, city_to_save, attractions))
-            thread.start()
-            threads.append(thread)
+                thread = executor.submit(
+                    process_attraction,
+                    name,
+                    city_name,
+                    country,
+                    latitude,
+                    longitude,
+                    city_to_save,
+                    attractions
+                )
+                threads.append(thread)
 
-        for thread in threads:
-            thread.join()
+            # Wait for all threads to complete
+            concurrent.futures.wait(threads)
 
     attractions = city_data['attractions'] = attractions
     restaurants = city_data['restaurants'] = restaurants
@@ -145,6 +171,16 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     data = json.loads(answer1)
                     # # Extract all city names
                     country = data['country']
+                    try:
+                        existing_country = Country.objects.filter(name=country).first()
+                        country_id=existing_country.id
+                    except:
+                        print ('not existing_country')
+                    if not existing_country:
+                        query_for_country=Country(name=country)
+                        query_for_country.save()
+                        country_id = query_for_country.id
+                    print (country_id)
                     executor = ThreadPoolExecutor()
                     for city_data  in data['cities']:
                         city_name = city_data ['city']
@@ -159,7 +195,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                             city_data['restaurants']=restaurants_list
                             print ('continue')
                             continue
-                        executor.submit(process_city, city_data, country)
+                        executor.submit(process_city, city_data, country,country_id)
 
                     # Shutdown the executor and wait for all threads to complete
                     executor.shutdown()

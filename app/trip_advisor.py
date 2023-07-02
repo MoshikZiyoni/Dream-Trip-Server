@@ -109,9 +109,7 @@ def flickr_api(name,latitude,longitude):
   flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
   # Search for photos by tags (landmark name)
   photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
-  print ('regular')
   if len(photos['photos']['photo']) == 0:
-    print (0)
     # No photos found for the attraction name, search by latitude and longitude
     photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
 
@@ -160,7 +158,7 @@ def foursquare_restaurant(landmarks):
     return (reslut)
 
 
-def foursquare_attraction(landmarks):
+def foursquare_attraction(landmarks,city_name,country):
     url1 = "https://api.foursquare.com/v3/places/search?"
 
     headers = {
@@ -169,7 +167,8 @@ def foursquare_attraction(landmarks):
     }
 
     query1= {
-        'categories':'10000,16000',
+        'query': f"attractions in {city_name},{country}",
+        'categories':'10027,10025,10055,10068,16000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':2500,
         'limit' : 20

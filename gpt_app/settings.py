@@ -115,17 +115,7 @@ ASGI_APPLICATION_OPTIONS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Render
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'dreamtrip_mhc6', 
-#         'USER': 'moshik', 
-#         'PASSWORD': 'aHOn2XVjQGdBne1yUMSs5X6SvrD1GOKt',
-#         'HOST': 'dpg-cgpu7kheuhlq287lbmpg-a.frankfurt-postgres.render.com', 
-#         'PORT': '5432',
-#     }
-# }
+
 
 ###POSTGRESQL
 # DATABASES = {
@@ -134,32 +124,46 @@ ASGI_APPLICATION_OPTIONS = {
 #         'NAME': 'Dream-Trip',
 #         'HOST':'localhost',
 #         'USER': 'Dream-Trip-New',
-#         'PASSWORD': 'DreamTrip1!',
+#         'PASSWORD': '#####',
 #         'PORT':'5432',
 #     },
 # }
 
 
-####MYSQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'freedb_Dream-Trip-DB',
-        'HOST':'sql.freedb.tech',
-        'USER': 'freedb_Moshik',
-        'PASSWORD': os.environ.get("MY_SQL_PASS"),
-        'PORT':'3306',
-    },
-}
+# ####MYSQL
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'freedb_Dream-Trip-DB',
+#         'HOST':'sql.freedb.tech',
+#         'USER': 'freedb_Moshik',
+#         'PASSWORD': os.environ.get("MY_SQL_PASS"),
+#         'PORT':'3306',
+#     },
+# }
+
+
+###POSTGESQL with 20MB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'fbvfjuoz',
+#         'HOST':'snuffleupagus.db.elephantsql.com',
+#         'USER': 'fbvfjuoz',
+#         'PASSWORD': 'isec3oRHpjjU7AfaevSjPZzSGgCcyZ05',
+#         'PORT':'5432',
+#     },
+# }
+
 
 
 # '''
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # '''
 # ###  'MONGODB'
 # DATABASES = {
