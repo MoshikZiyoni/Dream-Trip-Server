@@ -1,7 +1,6 @@
 import json
 import os
 import time
-from app.offical_website import find_official_website
 from app.trip_advisor import foursquare_attraction, foursquare_restaurant, trip_advisor_attraction,trip_advisor_restaurants,flickr_api
 from app.bs4 import google_search
 import openai
@@ -48,16 +47,13 @@ def process_attraction(name, city_name, country, latitude, longitude, city_to_sa
     flickr_photos = flickr_api(name, latitude, longitude)
     goog_result = None
     wikisearch = None
-    website = None
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future1 = executor.submit(google_search, f"{name},{city_name},{country}")
         future2 = executor.submit(process_query, name)
-        future3 = executor.submit(find_official_website, name)
-
         goog_result = future1.result()
         wikisearch = future2.result()
-        website = future3.result()
+        
 
     attraction_info = {
         'name': name,
@@ -65,10 +61,10 @@ def process_attraction(name, city_name, country, latitude, longitude, city_to_sa
         'longitude': longitude,
         'photos': flickr_photos,
         'review_score': goog_result['review_score'],
-        'description': wikisearch,
-        'website': website['website'],
+        'description': wikisearch[0],
+        'url': wikisearch[1],
     }
-    attractions.append(attraction_info)
+    # attractions.append(attraction_info)
 
     try:
         city_obj = city_to_save.first()
