@@ -15,6 +15,8 @@ def gpt_view(request):
     # Attraction.objects.all().delete()
     # Restaurant.objects.all().delete()
     # Country.objects.all().delete()
+    # print(Attraction.objects.all().values())
+    # exit
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})

@@ -13,6 +13,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 from app.wikipediaapi import process_query
+import traceback
 
 # Load environment variables from .env file
 load_dotenv()
@@ -34,29 +35,32 @@ def process_restaurant(name, city_name, country, latitude, longitude, city_to_sa
     restaurants.append(restaurant_info)
 
     try:
-        city_obj = city_to_save.first()
-        if city_obj is not None:
+        city_objs = city_to_save.all()
+        if city_objs:
+            city_obj = city_objs[0]
+            
             resta_query = Restaurant(name=name, city=city_obj, details=restaurant_info)
             resta_query.save()
         else:
             print(f"No city found for {city_name}")
     except Exception as e:
+        print ('error in 44')
         print(f"Error occurred: {e}")
 
-def process_attraction(name, city_name, country, latitude, longitude, city_to_save, attractions):
-    flickr_photos = flickr_api(name, latitude, longitude)
+def process_attraction(name_attrac, city_name, country, latitude, longitude, city_to_save, attractions):
+    flickr_photos = flickr_api(name_attrac, latitude, longitude)
     goog_result = None
     wikisearch = None
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        future1 = executor.submit(google_search, f"{name},{city_name},{country}")
-        future2 = executor.submit(process_query, name)
+        future1 = executor.submit(google_search, f"{name_attrac},{city_name},{country}")
+        future2 = executor.submit(process_query, name_attrac)
         goog_result = future1.result()
         wikisearch = future2.result()
         
 
     attraction_info = {
-        'name': name,
+        'name': name_attrac,
         'latitude': latitude,
         'longitude': longitude,
         'photos': flickr_photos,
@@ -64,17 +68,41 @@ def process_attraction(name, city_name, country, latitude, longitude, city_to_sa
         'description': wikisearch[0],
         'url': wikisearch[1],
     }
-    # attractions.append(attraction_info)
 
+    attractions.append(attraction_info)
+    if len(goog_result['review_score'])<0:
+        goog_result['review_score']='0'
     try:
-        city_obj = city_to_save.first()
-        if city_obj is not None:
-            atrc_query = Attraction(name=name, city=city_obj, details=attraction_info)
+        city_objs = city_to_save.all()
+        if city_objs:
+            city_obj = city_objs[0]
+            review_score = goog_result.get('review_score', '0')
+            if wikisearch:
+                description = wikisearch[0]
+                url = wikisearch[1] if len(wikisearch) >= 2 else ""
+            else:
+                description = ""
+                url = ""
+
+            atrc_query = Attraction(
+                name=name_attrac,
+                city=city_obj,
+                latitude=latitude,
+                longitude=longitude,
+                photos=flickr_photos,
+                review_score=review_score,
+                description=description,
+                url=url
+            )
             atrc_query.save()
+            attractions.append(attraction_info)
+
         else:
             print(f"No city found for {city_name}")
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print('Error occurred:', e)
+        traceback.print_exc()
+
 
 def process_city(city_data, country,country_id):
     city_name = city_data['city']
@@ -115,17 +143,18 @@ def process_city(city_data, country,country_id):
     if len(reslut1) == 0:
         attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
         attractions.append(attractions_info_trip)
+        print ('tripadvisor line 122')
     else:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             threads = []
             for i in reslut1:
-                name = i['name']
+                name_attrac = i['name']
                 latitude = i['geocodes']['main']['latitude']
                 longitude = i['geocodes']['main']['longitude']
 
                 thread = executor.submit(
                     process_attraction,
-                    name,
+                    name_attrac,
                     city_name,
                     country,
                     latitude,
@@ -176,7 +205,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                         query_for_country=Country(name=country)
                         query_for_country.save()
                         country_id = query_for_country.id
-                    print (country_id)
+                    # print (country_id)
                     executor = ThreadPoolExecutor()
                     for city_data  in data['cities']:
                         city_name = city_data ['city']
@@ -200,6 +229,9 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     query.save()
                     return combined_data
                 except Exception as e:
+                    print ('failed in the end line 205')
+                    traceback.print_exc()
+
                     print(f'Error occurred: {e}')
                     print(f'Retrying... (attempt {attempt_data + 1})')
                     time.sleep(delay)
@@ -212,6 +244,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 # If there's another API error, raise an exception
                 raise
         except Exception as e:
+            print ('fialed in the end line 218')
             print(f'Error occurred: {e}')
             print(f'Retrying... (attempt {attempt + 1})')
             time.sleep(delay)

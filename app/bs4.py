@@ -18,13 +18,12 @@ def google_search(query):
             # print(span)
             score_text = span.text.strip()
             review_score = score_text.split('/')[0] 
-            print (review_score)
+            # print (review_score)
             if review_score is None:
-                print ('ots Noneeeeeeeeeeeeeeee')
-                review_score = ""
+                review_score = "0"
 
-            print ({"review_score":review_score})
+            # print ({"review_score":review_score})
             return {"review_score":review_score}
 
 
-    return {"review_score": ""}
+    return {"review_score": "0"}

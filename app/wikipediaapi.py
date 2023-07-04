@@ -23,8 +23,10 @@ def get_wikipedia_description(query):
             # If there is such a link, get its href attribute value
             if link:
                 url = link["href"]
+
             if description:
                 success = True
+                print ('successsuccesssuccesssuccesssuccesssuccess',url)
                 return description,url
         except:
             pass
@@ -39,7 +41,6 @@ def get_wikipedia_description(query):
         # print ('no des')
 
     if not success:
-        print ('no')
         endpoint = "https://en.wikipedia.org/w/api.php"
         # Set the parameters for the API request
         params = {
@@ -109,4 +110,4 @@ def process_query(query):
       description,url=(description)
       return(description,url)
     else:
-        return({'description':''})
+        return({'description':'No description'})
