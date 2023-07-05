@@ -1,394 +1,431 @@
-import json
-import os
-import time
-import openai
-from dotenv import load_dotenv
-import requests
-from urllib.parse import quote
+# def process_list():
 
-from app.models import City
-load_dotenv()
-# # key = os.environ.get('TRIP_ADVISOR_KEY')
+#         my_list = [
+#         "London, United Kingdom",
+#         "New York City, United States",
+#         "Paris, France",
+#         "Tokyo, Japan",
+#         "Sydney, Australia",
+#         "Rome, Italy",
+#         "Berlin, Germany",
+#         "Moscow, Russia",
+#         "Beijing, China",
+#         "Toronto, Canada",
+#         "Madrid, Spain",
+#         "Cairo, Egypt",
+#         "Istanbul, Turkey",
+#         "Rio de Janeiro, Brazil",
+#         "Cape Town, South Africa",
+#         "Mumbai, India",
+#         "Buenos Aires, Argentina",
+#         "Dubai, United Arab Emirates",
+#         # "Seoul, South Korea",
+#         "Athens, Greece",
+#         "Amsterdam, Netherlands",
+#         "Prague, Czech Republic",
+#         "Vienna, Austria",
+#         "Helsinki, Finland",
+#         "Bangkok, Thailand",
+#         "Singapore, Singapore",
+#         "Stockholm, Sweden",
+#         "Copenhagen, Denmark",
+#         "Budapest, Hungary",
+#         "Dublin, Ireland",
+#         "Warsaw, Poland",
+#         "Lisbon, Portugal",
+#         "Oslo, Norway",
+#         "Reykjavik, Iceland",
+#         "Brasília, Brazil",
+#         "Mexico City, Mexico",
+#         "Santiago, Chile",
+#         "Bogota, Colombia",
+#         "Lima, Peru",
+#         "Caracas, Venezuela",
+#         "Johannesburg, South Africa",
+#         "Nairobi, Kenya",
+#         "Casablanca, Morocco",
+#         "Beirut, Lebanon",
+#         "New Delhi, India",
+#         "Hanoi, Vietnam",
+#         "Manila, Philippines",
+#         "Jakarta, Indonesia",
+#         "Kuala Lumpur, Malaysia",
+#         "Wellington, New Zealand",
+#         "San Francisco, United States",
+#         "Los Angeles, United States",
+#         "Chicago, United States",
+#         "Miami, United States",
+#         "Boston, United States",
+#         "Seattle, United States",
+#         "Las Vegas, United States",
+#         # "Washington, D.C., United States",
+#         "San Diego, United States",
+#         "Houston, United States",
+#         "Dallas, United States",
+#         "Atlanta, United States",
+#         "Denver, United States",
+#         "Phoenix, United States",
+#         "Portland, United States",
+#         "Philadelphia, United States",
+#         "Vancouver, Canada",
+#         "Montreal, Canada",
+#         "Calgary, Canada",
+#         "Ottawa, Canada",
+#         "Edmonton, Canada",
+#         "Quebec City, Canada",
+#         "Sydney, Canada",
+#         "Melbourne, Australia",
+#         "Brisbane, Australia",
+#         "Perth, Australia",
+#         "Adelaide, Australia",
+#         "Auckland, New Zealand",
+#         "Christchurch, New Zealand",
+#         "Wellington, New Zealand",
+#         "Mumbai, India",
+#         "Delhi, India",
+#         "Bangalore, India",
+#         "Chennai, India",
+#         "Kolkata, India",
+#         "Hyderabad, India",
+#         "Ahmedabad, India",
+#         "Pune, India",
+#         "Jaipur, India",
+#         "Tokyo, Japan",
+#         "Yokohama, Japan",
+#         "Osaka, Japan",
+#         "Nagoya, Japan",
+#         "Sapporo, Japan",
+#         "Fukuoka, Japan",
+#         "Kyoto, Japan",
+#         "Hiroshima, Japan",
+#         "Barcelona, Spain",
+#         "Valencia, Spain",
+#         "Seville, Spain",
+#         "Malaga, Spain",
+#         "Bilbao, Spain",
+#         "Granada, Spain",
+#         "Alicante, Spain",
+#         "Zaragoza, Spain",
+#         "Rome, Italy",
+#         "Milan, Italy",
+#         "Naples, Italy",
+#         "Turin, Italy",
+#         "Florence, Italy",
+#         "Venice, Italy",
+#         "Bologna, Italy",
+#         "Genoa, Italy",
+#         "Paris, France",
+#         "Marseille, France",
+#         "Lyon, France",
+#         "Toulouse, France",
+#         "Nice, France",
+#         "Nantes, France",
+#         "Strasbourg, France",
+#         "Bordeaux, France",
+#         "Berlin, Germany",
+#         "Hamburg, Germany",
+#         "Munich, Germany",
+#         "Cologne, Germany",
+#         "Frankfurt, Germany",
+#         "Stuttgart, Germany",
+#         "Düsseldorf, Germany",
+#         "Leipzig, Germany",
+#         "Vienna, Austria",
+#         "Graz, Austria",
+#         "Linz, Austria",
+#         "Salzburg, Austria",
+#         "Innsbruck, Austria",
+#         "Klagenfurt, Austria",
+#         "Geneva, Switzerland",
+#         "Zurich, Switzerland",
+#         "Basel, Switzerland",
+#         "Lausanne, Switzerland",
+#         "Bern, Switzerland",
+#         "Lucerne, Switzerland",
+#         "St. Gallen, Switzerland",
+#         "Moscow, Russia",
+#         "Saint Petersburg, Russia",
+#         "Novosibirsk, Russia",
+#         "Yekaterinburg, Russia",
+#         "Nizhny Novgorod, Russia",
+#         "Kazan, Russia",
+#         "Chelyabinsk, Russia",
+#         "Samara, Russia",
+#         "Istanbul, Turkey",
+#         "Ankara, Turkey",
+#         "Izmir, Turkey",
+#         "Bursa, Turkey",
+#         "Adana, Turkey",
+#         "Gaziantep, Turkey",
+#         "Konya, Turkey",
+#         "Antalya, Turkey",
+#         "Beijing, China",
+#         "Shanghai, China",
+#         "Guangzhou, China",
+#         "Shenzhen, China",
+#         "Chengdu, China",
+#         "Hangzhou, China",
+#         "Wuhan, China",
+#         "Tianjin, China",
+#         "Seoul, South Korea",
+#         "Busan, South Korea",
+#         "Incheon, South Korea",
+#         "Daegu, South Korea",
+#         "Daejeon, South Korea",
+#         "Gwangju, South Korea",
+#         "Ulsan, South Korea",
+#         "Athens, Greece",
+#         "Thessaloniki, Greece",
+#         "Patras, Greece",
+#         "Heraklion, Greece",
+#         "Larissa, Greece",
+#         "Ioannina, Greece",
+#         "Volos, Greece",
+#         "Amsterdam, Netherlands",
+#         "Rotterdam, Netherlands",
+#         "The Hague, Netherlands",
+#         "Utrecht, Netherlands",
+#         "Eindhoven, Netherlands",
+#         "Tilburg, Netherlands",
+#         "Groningen, Netherlands",
+#         "Prague, Czech Republic",
+#         "Brno, Czech Republic",
+#         "Ostrava, Czech Republic",
+#         "Plzen, Czech Republic",
+#         "Olomouc, Czech Republic",
+#         "Liberec, Czech Republic",
+#         "Hradec Kralove, Czech Republic",
+#         "Vienna, Austria",
+#         "Graz, Austria",
+#         "Linz, Austria",
+#         "Salzburg, Austria",
+#         "Innsbruck, Austria",
+#         "Klagenfurt, Austria",
+#         "Helsinki, Finland",
+#         "Espoo, Finland",
+#         "Tampere, Finland",
+#         "Vantaa, Finland",
+#         "Turku, Finland",
+#         "Oulu, Finland",
+#         "Lahti, Finland",
+#         "Bangkok, Thailand",
+#         "Phuket, Thailand",
+#         "Chiang Mai, Thailand",
+#         "Pattaya, Thailand",
+#         "Krabi, Thailand",
+#         "Ayutthaya, Thailand",
+#         "Samui, Thailand",
+#         "Singapore, Singapore",
+#         "Stockholm, Sweden",
+#         "Gothenburg, Sweden",
+#         "Malmo, Sweden",
+#         "Uppsala, Sweden",
+#         "Vasteras, Sweden",
+#         "Orebro, Sweden",
+#         "Linkoping, Sweden",
+#         "Copenhagen, Denmark",
+#         "Aarhus, Denmark",
+#         "Odense, Denmark",
+#         "Aalborg, Denmark",
+#         "Esbjerg, Denmark",
+#         "Randers, Denmark",
+#         "Kolding, Denmark",
+#         "Budapest, Hungary",
+#         "Debrecen, Hungary",
+#         "Szeged, Hungary",
+#         "Miskolc, Hungary",
+#         "Pecs, Hungary",
+#         "Gyor, Hungary",
+#         "Nyiregyhaza, Hungary",
+#         "Dublin, Ireland",
+#         "Cork, Ireland",
+#         "Limerick, Ireland",
+#         "Galway, Ireland",
+#         "Waterford, Ireland",
+#         "Belfast, United Kingdom",
+#         "Manchester, United Kingdom",
+#         "Birmingham, United Kingdom",
+#         "Glasgow, United Kingdom",
+#         "Edinburgh, United Kingdom",
+#         "Liverpool, United Kingdom",
+#         "Leeds, United Kingdom",
+#         "Warsaw, Poland",
+#         "Krakow, Poland",
+#         "Lodz, Poland",
+#         "Wroclaw, Poland",
+#         "Poznan, Poland",
+#         "Gdansk, Poland",
+#         "Szczecin, Poland",
+#         "Lisbon, Portugal",
+#         "Porto, Portugal",
+#         "Vila Nova de Gaia, Portugal",
+#         "Amadora, Portugal",
+#         "Braga, Portugal",
+#         "Coimbra, Portugal",
+#         "Funchal, Portugal",
+#         "Oslo, Norway",
+#         "Bergen, Norway",
+#         "Stavanger, Norway",
+#         "Trondheim, Norway",
+#         "Drammen, Norway",
+#         "Fredrikstad, Norway",
+#         "Sandnes, Norway",
+#         "Reykjavik, Iceland",
+#         "Brasília, Brazil",
+#         "Rio de Janeiro, Brazil",
+#         "São Paulo, Brazil",
+#         "Salvador, Brazil",
+#         "Fortaleza, Brazil",
+#         "Belo Horizonte, Brazil",
+#         "Manaus, Brazil",
+#         "Recife, Brazil",
+#         "Mexico City, Mexico",
+#         "Guadalajara, Mexico",
+#         "Monterrey, Mexico",
+#         "Puebla City, Mexico",
+#         "Tijuana, Mexico",
+#         "Ciudad Juarez, Mexico",
+#         "Leon, Mexico",
+#         "Santiago, Chile",
+#         "Valparaiso, Chile",
+#         "Concepcion, Chile",
+#         "Antofagasta, Chile",
+#         "Vina del Mar, Chile",
+#         "Temuco, Chile",
+#         "Rancagua, Chile",
+#         "Bogota, Colombia",
+#         "Medellin, Colombia",
+#         "Cali, Colombia",
+#         "Barranquilla, Colombia",
+#         "Cartagena, Colombia",
+#         "Cucuta, Colombia",
+#         "Bucaramanga, Colombia",
+#         "Lima, Peru",
+#         "Arequipa, Peru",
+#         "Trujillo, Peru",
+#         "Chiclayo, Peru",
+#         "Piura, Peru",
+#         "Cusco, Peru",
+#         "Chimbote, Peru",
+#         "Caracas, Venezuela",
+#         "Maracaibo, Venezuela",
+#         "Valencia, Venezuela",
+#         "Barquisimeto, Venezuela",
+#         "Maracay, Venezuela",
+#         "Ciudad Guayana, Venezuela",
+#         "Nairobi, Kenya",
+#         "Mombasa, Kenya",
+#         "Kisumu, Kenya",
+#         "Nakuru, Kenya",
+#         "Eldoret, Kenya",
+#         "Nyeri, Kenya",
+#         "Casablanca, Morocco",
+#         "Rabat, Morocco",
+#         "Marrakech, Morocco",
+#         "Fes, Morocco",
+#         "Tangier, Morocco",
+#         "Agadir, Morocco",
+#         "Beirut, Lebanon",
+#         "Tripoli, Lebanon",
+#         "Sidon, Lebanon",
+#         "Tyre, Lebanon",
+#         "Zahle, Lebanon",
+#         "New Delhi, India",
+#         "Mumbai, India",
+#         "Kolkata, India",
+#         "Chennai, India",
+#         "Bangalore, India",
+#         "Hyderabad, India",
+#         "Ahmedabad, India",
+#         "Pune, India",
+#         "Jaipur, India",
+#         "Hanoi, Vietnam",
+#         "Ho Chi Minh City, Vietnam",
+#         "Da Nang, Vietnam",
+#         "Haiphong, Vietnam",
+#         "Nha Trang, Vietnam",
+#         "Can Tho, Vietnam",
+#         "Manila, Philippines",
+#         "Quezon City, Philippines",
+#         "Caloocan, Philippines",
+#         "Davao City, Philippines",
+#         "Cebu City, Philippines",
+#         "Zamboanga City, Philippines",
+#         "Jakarta, Indonesia",
+#         "Surabaya, Indonesia",
+#         "Bandung, Indonesia",
+#         "Medan, Indonesia",
+#         "Semarang, Indonesia",
+#         "Palembang, Indonesia",
+#         "Kuala Lumpur, Malaysia",
+#         "George Town, Malaysia",
+#         "Ipoh, Malaysia",
+#         "Shah Alam, Malaysia",
+#         "Petaling Jaya, Malaysia",
+#         "Malacca City, Malaysia",
+#         "Wellington, New Zealand",
+#         "Auckland, New Zealand",
+#         "Christchurch, New Zealand",
+#         "Hamilton, New Zealand",
+#         "Tauranga, New Zealand",
+#         "Napier, New Zealand",
+#         "Dunedin, New Zealand",
+#         "San Francisco, United States",
+#         "Los Angeles, United States",
+#         "Chicago, United States",
+#         "Miami, United States",
+#         "Boston, United States",
+#         "Seattle, United States",
+#         "Las Vegas, United States",
+#         # "Washington, D.C., United States",
+#         "San Diego, United States",
+#         "Houston, United States",
+#         "Dallas, United States",
+#         "Atlanta, United States",
+#         "Denver, United States",
+#         "Phoenix, United States",
+#         "Portland, United States",
+#         "Philadelphia, United States",
+#         "Vancouver, Canada",
+#         "Montreal, Canada",
+#         "Calgary, Canada",
+#         "Ottawa, Canada",
+#         "Edmonton, Canada",
+#         "Quebec City, Canada",
+#         "Sydney, Canada",
+#         "Melbourne, Australia",
+#         "Brisbane, Australia",
+#         "Perth, Australia",
+#         "Adelaide, Australia",
+#         "Auckland, New Zealand",
+#         "Christchurch, New Zealand",
+#         "Wellington, New Zealand",
+#         "Christchurch, New Zealand"
+#             ]
+#         geolocator = Nominatim(user_agent="dream-trip")
 
-# # city_name = 'jerusalem'
-# # landmarks = [31.7776, 35.2344]
-# # print("City:", city_name, landmarks)
-# # url = f"https://api.content.tripadvisor.com/api/v1/location/nearby_search?"
-# # headers = {"accept": "application/json"}
-# # params = {
-# #     'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
-# #     'key' : {key},
-# #     # 'searchQuery': city_name+country,
-# #     'category': 'attractions,restaurants',
-# #     'radius': '5',
-# #     'radiusUnit':'km',
-# #     'language' : 'en'
-# # }
-# # full_url = requests.Request('GET', url, params=params).prepare().url
-# # print("Full URL:", full_url)
-# # response = requests.get(url, headers=headers, params=params)
-# # print(response)
+#         for item in my_list:
+#             city, country = item.split(", ")
+#             # print(city)
+#             existing_country = Country.objects.filter(name=country).first()
+            
+#             existing_city = City.objects.filter(name=city)
+            
+#             if existing_city:
+#                 print ('continue')
+#                 continue
+#             else:
 
-
-
-# {
-#   "country": "Israel",
-#   "cities": [
-#     {
-#       "city": "Jerusalem",
-#       "description": "Jerusalem is one of the oldest cities in the world with a rich history, holy sites, and a rich cultural heritage. It is the spiritual center of Judaism, Christianity, and Islam.",
-#       "landmarks": [
-#         31.778345,
-#         35.225078
-#       ],
-#       "travelDay": 1,
-#       "attractions": [
-#         {
-#           "location_id": "325133",
-#           "name": "Notre Dame (Jerusalem)",
-#           "distance": "0.13988998098329575",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "HaTsanhanim Rd. 3",
-#             "street2": "",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9120402",
-#             "address_string": "HaTsanhanim Rd. 3, Jerusalem 9120402 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "21020997",
-#           "name": "Jerusalem City Hall Visitor Center",
-#           "distance": "0.14713812145642557",
-#           "bearing": "north",
-#           "address_obj": {
-#             "street1": "Safra Square 3",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "Safra Square 3, Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "8809383",
-#           "name": "HaimToGo",
-#           "distance": "0.11522842738752362",
-#           "bearing": "north",
-#           "address_obj": {
-#             "street1": "Ta Doar 11596",
-#             "street2": "Gilo",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9111402",
-#             "address_string": "Ta Doar 11596 Gilo, Jerusalem 9111402 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "19912602",
-#           "name": "Israel in Color",
-#           "distance": "0.08677132298413011",
-#           "bearing": "northwest",
-#           "address_obj": {
-#             "street1": "Jaffa Gate",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9414105",
-#             "address_string": "Jaffa Gate, Jerusalem 9414105 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "17424676",
-#           "name": "Nissim Slama - Guide et Conferencier - Tour Guide & Lecturer",
-#           "distance": "0.07812943663584473",
-#           "bearing": "northwest",
-#           "address_obj": {
-#             "street1": " Jaffa Gate 1",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9250307",
-#             "address_string": "Jaffa Gate 1, Jerusalem 9250307 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "13378465",
-#           "name": "Easy driver",
-#           "distance": "0.02493240123759995",
-#           "bearing": "east",
-#           "address_obj": {
-#             "street1": "Yaffo gate",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "44828",
-#             "address_string": "Yaffo gate, Jerusalem 44828 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "10364745",
-#           "name": "I Am Jerusalem",
-#           "distance": "0.06366760701206406",
-#           "bearing": "south",
-#           "address_obj": {
-#             "street1": "Rehov Yizhak Kariv 6",
-#             "street2": "Sderot Mamilla",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "94106",
-#             "address_string": "Rehov Yizhak Kariv 6 Sderot Mamilla, Jerusalem 94106 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "12693202",
-#           "name": "Artmosphere Gallery",
-#           "distance": "0.07087016432443383",
-#           "bearing": "south",
-#           "address_obj": {
-#             "street1": "Alrov Mamilla Avenue",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "94149",
-#             "address_string": "Alrov Mamilla Avenue, Jerusalem 94149 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "2613077",
-#           "name": "Mamilla Mall",
-#           "distance": "0.05282990829748297",
-#           "bearing": "southwest",
-#           "address_obj": {
-#             "street2": "",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "",
-#             "address_string": "Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "1758011",
-#           "name": "Pontifical Institute Notre Dame of Jerusalem Center - The Shroud Exhibition",
-#           "distance": "0.12735931013822174",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "Paratroopers Road #3",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "91204",
-#             "address_string": "Paratroopers Road #3, Jerusalem 91204 Israel"
-#           }
-#         }
-#       ],
-#       "restaurants": [
-#         {
-#           "location_id": "25409632",
-#           "name": "Segafredo Zanetti",
-#           "distance": "0.08991504051149923",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "New Gate",
-#             "street2": "4",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "New Gate 4, Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "17804627",
-#           "name": "Churros Cafe",
-#           "distance": "0.09198402799255909",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "Freres_ Street, New Gate, Old City",
-#             "street2": "New Gate, Old City",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "Freres_ Street, New Gate, Old City New Gate, Old City, Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "21117245",
-#           "name": "La Patisserie Abu Seir",
-#           "distance": "0.09198402799255909",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "New Gate 35",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "New Gate 35, Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "23688878",
-#           "name": "The Gateway",
-#           "distance": "0.08862915135710481",
-#           "bearing": "northeast",
-#           "address_obj": {
-#             "street1": "New Gate 9 , Jerusalem",
-#             "street2": "Old City",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9610316",
-#             "address_string": "New Gate 9 , Jerusalem Old City, Jerusalem 9610316 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "15835588",
-#           "name": "EatWith: Osnat of Jerusalem",
-#           "distance": "0.1758222427039205",
-#           "bearing": "north",
-#           "address_obj": {
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "1057301",
-#           "name": "Cheese & Wine Rooftop Restaurant",
-#           "distance": "0.12321867165590981",
-#           "bearing": "north",
-#           "address_obj": {
-#             "street1": "Paratroopers Street 3",
-#             "street2": "Notre Dame",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "91204",
-#             "address_string": "Paratroopers Street 3 Notre Dame, Jerusalem 91204 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "11530302",
-#           "name": "Lebanese Restaurant",
-#           "distance": "0.07812943663584473",
-#           "bearing": "northwest",
-#           "address_obj": {
-#             "street1": "8 David",
-#             "street2": "Jaffa Gate, Old City",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9534700",
-#             "address_string": "8 David Jaffa Gate, Old City, Jerusalem 9534700 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "4291253",
-#           "name": "Tomato",
-#           "distance": "0.016687204519773995",
-#           "bearing": "east",
-#           "address_obj": {
-#             "street1": "Malka shalmazion",
-#             "street2": "Close to Yafo",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "Malka shalmazion Close to Yafo, Jerusalem Israel"
-#           }
-#         },
-#         {
-#           "location_id": "7789289",
-#           "name": "Cafe Greg",
-#           "distance": "0.058959933980328824",
-#           "bearing": "south",
-#           "address_obj": {
-#             "street1": "26 General Pierre Koenig",
-#             "street2": "Hadar Mall",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "postalcode": "9346934",
-#             "address_string": "26 General Pierre Koenig Hadar Mall, Jerusalem 9346934 Israel"
-#           }
-#         },
-#         {
-#           "location_id": "10797732",
-#           "name": "Greg Cafe",
-#           "distance": "0.05956815915262635",
-#           "bearing": "south",
-#           "address_obj": {
-#             "street1": "Rehov Yitshak Kariv 6",
-#             "street2": "Mamila Mall",
-#             "city": "Jerusalem",
-#             "country": "Israel",
-#             "address_string": "Rehov Yitshak Kariv 6 Mamila Mall, Jerusalem Israel"
-#           }
-#         }
-#       ]
-#     }
-#   ]
-# }
-# from geopy.geocoders import Nominatim
-
-# geolocator = Nominatim(user_agent="your_app_name")
-
-# # location = geolocator.geocode("1600 Amphitheatre Parkway, Mountain View, CA")
-# # latitude = location.latitude
-# # longitude = location.longitude
-
-# # print (latitude,longitude)
-
-# # attraction={'location_id': '24135714', 'name': "Museo Dell'Arte Salvata", 'distance': '0.15103240380361369', 'bearing': 'east', 'address_obj': {'street1': 'Via Giuseppe Romita 8', 'street2': 'Octagon Hall Of The National Roman Museum', 'city': 'Rome', 'country': 'Italy', 'postalcode': '00185', 'address_string': 'Via Giuseppe Romita 8 Octagon Hall Of The National Roman Museum, 00185 Rome Italy'}}
-
-# # {'location_id': '23586841', 'name': 'The Lodge Club Firenze', 'distance': '0.14052398442976793', 'bearing': 'northeast', 'address_obj': {'street1': 'Viale Giuseppe Poggi 1', 'city': 'Florence', 'state': 'Province of Florence', 'country': 'Italy', 'postalcode': '50125', 'address_string': 'Viale Giuseppe Poggi 1, 50125, Florence Italy'}}
-
-
-# # address_obj = attraction['address_obj']
-# # if 'street1' in address_obj and 'city' in address_obj and 'country' in address_obj:
-# #     street = address_obj['street1']
-# #     city = address_obj['city']
-# #     country = address_obj['country']
-# #     address_string = f"{street}, {city}, {country}"
-# #     location = geolocator.geocode(address_string)
-# #     latitude = location.latitude
-# #     longitude = location.longitude
-# #     print(f"Latitude: {latitude}, Longitude: {longitude}")
-
-
-# location = geolocator.geocode("Prat de la Creu,andorra de vella,Andora")
-
-
-
-# latitude = -8.7776416
-# longitude = 13.2432628
-# landmarks=latitude,longitude
-
-# landmark_name = 'Place des Jacobins'
-# def flickr_api(attraction_name,latitude,longitude):
-#   import flickrapi
-#   api_key ='bf2ed6da714a97beef541c4708d527fa'
-#   api_secret = 'e2593a81ffab5ade'
-#   image_list = []
-#   flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-#   # Search for photos by tags (landmark name)
-#   photos = flickr.photos.search(text=attraction_name, per_page=5, extras='url_o',sort='relevance')
-#   if len(photos['photos']['photo']) == 0:
-#         print (0)
-#         # No photos found for the attraction name, search by latitude and longitude
-#         photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=5, extras='url_o', sort='relevance')
-
-#         if len(photos['photos']['photo']) == 0:
-#             print('No photos found for the attraction')
-#   # Extract the photo URLs
-#   if 'photos' in photos and 'photo' in photos['photos']:
-#       for photo in photos['photos']['photo']:
-#           photo_id = photo['id']  # URL of the original-sized photo
-#           flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-#           # Get the sizes of the photo
-#           sizes = flickr.photos.getSizes(photo_id=photo_id)
-#           # Extract the URL of the image
-#           if 'sizes' in sizes and 'size' in sizes['sizes']:
-#               # Assuming you want the URL of the largest available size
-#               largest_size = sizes['sizes']['size'][-1]
-#               image_url = largest_size['source']
-#               image_list.append(image_url)
-#           else:
-#               print('No image URL available for the photo')
-#   return(image_list)
-
-# print (flickr_api(attraction_name="Mus\u00e9e des Beaux-Arts de Lyon", latitude= 45.767018, longitude= 4.833468))
-
-
-
-city_name = 'Tel Aviv'
-# landmarks = city_data ['landmarks']
-# description = city_data ['description']
-existing_city = City.objects.filter(city=city_name).first()
-if existing_city:
-    # city_data['attractions']= existing_city.attractions
-    # city_data['restaurants']=existing_city.restaurants
-    print ('continue')
+#                 country_id=existing_country.id
+#                 wiki=process_query(city)
+#                 location = geolocator.geocode(f"{city},{country}")
+#                 landmarks = [location.latitude, location.longitude]
+#                 city_query = City(country_id=country_id, city=city, latitude=landmarks[0], longitude=landmarks[1], description=wiki[0])
+#                 city_query.save()
+#                 print ('save successufly')
+    
+#         print(city,country)
+#     thread = Thread(target=process_list)
+#     thread.start()
+#     exit
+#     exit

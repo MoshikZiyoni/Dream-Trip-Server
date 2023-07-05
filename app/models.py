@@ -34,4 +34,7 @@ class Attraction(models.Model):
 class Restaurant(models.Model):
     city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    details = models.JSONField()
+    latitude=models.FloatField(null=False)
+    longitude=models.FloatField(null=False)
+    photos=models.CharField(max_length=100)
+    review_score=models.CharField(max_length=20)

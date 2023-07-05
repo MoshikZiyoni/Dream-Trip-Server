@@ -39,7 +39,13 @@ def process_restaurant(name, city_name, country, latitude, longitude, city_to_sa
         if city_objs:
             city_obj = city_objs[0]
             
-            resta_query = Restaurant(name=name, city=city_obj, details=restaurant_info)
+            resta_query = Restaurant(
+            name=name,
+            city=city_obj,
+            latitude=latitude,
+            longitude=longitude,
+            photos=flickr_photos1,
+            review_score=goog_result1['review_score'])
             resta_query.save()
         else:
             print(f"No city found for {city_name}")
