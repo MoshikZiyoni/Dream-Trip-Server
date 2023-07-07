@@ -13,10 +13,10 @@ from geopy.geocoders import Nominatim
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    # QueryChatGPT.objects.all().delete()
-    # City.objects.all().delete()
-    # Attraction.objects.all().delete()
-    # Restaurant.objects.all().delete()
+    QueryChatGPT.objects.all().delete()
+    City.objects.all().delete()
+    Attraction.objects.all().delete()
+    Restaurant.objects.all().delete()
     
     email=request.data['email']
     if not email:

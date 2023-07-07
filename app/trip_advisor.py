@@ -147,7 +147,7 @@ def foursquare_restaurant(landmarks):
         'categories':'13000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':2500,
-        'limit' : 20
+        'limit' : 15
     }
     response = requests.get(url, params=query,headers=headers)
 
@@ -171,7 +171,7 @@ def foursquare_attraction(landmarks,city_name,country):
         'categories':'10027,10025,10055,10068,16000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':2500,
-        'limit' : 20
+        'limit' : 10
     }
     response1 = requests.get(url1, params=query1,headers=headers)
 

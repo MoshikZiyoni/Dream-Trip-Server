@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from app.bs4attraction import google_search_attraction
 from app.trip_advisor import foursquare_attraction, foursquare_restaurant, trip_advisor_attraction,trip_advisor_restaurants,flickr_api
 from app.bs4 import google_search
 import openai
@@ -59,7 +60,8 @@ def process_attraction(name_attrac, city_name, country, latitude, longitude, cit
     wikisearch = None
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        future1 = executor.submit(google_search, f"{name_attrac},{city_name},{country}")
+        future1 = executor.submit(google_search_attraction, f"{name_attrac},{city_name},{country},official website")
+        # print (f"{name_attrac},{city_name},{country},official website")
         future2 = executor.submit(process_query, name_attrac)
         goog_result = future1.result()
         wikisearch = future2.result()
@@ -72,7 +74,7 @@ def process_attraction(name_attrac, city_name, country, latitude, longitude, cit
         'photos': flickr_photos,
         'review_score': goog_result['review_score'],
         'description': wikisearch[0],
-        'url': wikisearch[1],
+        'url': goog_result['url'],
     }
 
     attractions.append(attraction_info)
@@ -85,7 +87,7 @@ def process_attraction(name_attrac, city_name, country, latitude, longitude, cit
             review_score = goog_result.get('review_score', '0')
             if wikisearch:
                 description = wikisearch[0]
-                url = wikisearch[1] if len(wikisearch) >= 2 else ""
+                url = goog_result['url'] if len(wikisearch) >= 2 else ""
             else:
                 description = ""
                 url = ""
@@ -123,6 +125,8 @@ def process_city(city_data, country,country_id):
         city_query = City(country_id=country_id, city=city_name, latitude=landmarks[0], longitude=landmarks[1], description=description)
         city_query.save()
         print('save successfully for city')
+    city_data['latitude'] = landmarks[0]
+    city_data['longitude'] = landmarks[1]
     city_to_save = City.objects.filter(city=city_name)
 
     reslut = foursquare_restaurant(landmarks)
