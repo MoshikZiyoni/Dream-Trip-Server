@@ -412,38 +412,58 @@
 #     landmarks = [location.latitude, location.longitude]
 #     city_query = City(country_id=country_id, city=city, latitude=landmarks[0], longitude=landmarks[1], description=wiki[0])
 #     city_query.save()
-# # import json
-# # import requests
-# # from urllib.parse import quote
-# # from geopy.geocoders import Nominatim
-# # from dotenv import load_dotenv
-# # import os
-# # import time
-# # load_dotenv()
-# # api_key=os.environ.get('FOURSQUARE')
+import json
+import requests
+from urllib.parse import quote
+from geopy.geocoders import Nominatim
+from dotenv import load_dotenv
+import os
+import time
+load_dotenv()
+api_key=os.environ.get('FOURSQUARE')
 
-# # def foursquare_attraction(landmarks):
-# #     url1 = "https://api.foursquare.com/v3/places/search?"
+def foursquare_attraction(landmarks):
+    url1 = "https://api.foursquare.com/v3/places/search?"
 
-# #     headers = {
-# #         "accept": "application/json",
-# #         "Authorization": api_key
-# #     }
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
 
-# #     query1= {
-# #         'query': 'attractions in Paris, France',
-# #         'categories':'10027,10025,10055,10068,16000',
-# #         "ll" :  f"{48.8566},{2.3522}",
-# #         'radius':2500,
-# #         'limit' : 20
-# #     }
-# #     response1 = requests.get(url1, params=query1,headers=headers)
+    query1= {
+        'query': 'attractions in Paris, France',
+        'categories':'10027,10025,10055,10068,16000',
+        "ll" :  f"{48.8566},{2.3522}",
+        'radius':2500,
+        'limit' : 10,
+        'fields':'distance,geocodes,name,fsq_id,rating,price,website,description,social_media,menu,hours_popular'
 
-# #     response_text1=(response1.text)
-# #     jsonto1=json.loads(response_text1)
-# #     reslut=jsonto1['results']
-# #     for i in reslut:
-# #             name = i['name']
-# #             print(name)
+    }
+    response1 = requests.get(url1, params=query1,headers=headers)
 
-# # foursquare_attraction(landmarks=0)
+    response_text1=(response1.text)
+    jsonto1=json.loads(response_text1)
+    reslut=jsonto1['results']
+    # print(reslut)
+    for attrac in reslut:
+        name = attrac['name'] if 'name' in attrac else ""
+        distance = attrac['distance'] if 'distance' in attrac else ""
+        latitude = attrac['geocodes']['main']['latitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'latitude' in attrac['geocodes']['main'] else ""
+        longitude = attrac['geocodes']['main']['longitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'longitude' in attrac['geocodes']['main'] else ""
+        rating = attrac['rating'] if 'rating' in attrac else ""
+        price = attrac['price'] if 'price' in attrac else ""
+        website = attrac['website'] if 'website' in attrac else ""
+        description = attrac['description'] if 'description' in attrac else ""
+        social_media = attrac['social_media'] if 'social_media' in attrac else ""
+        menu = attrac['menu'] if 'menu' in attrac else ""
+        hours_popular = attrac['hours_popular'] if 'hours_popular' in attrac else ""
+        print(name)
+        print (latitude,longitude)
+        print ( 'rating: ',rating)
+        print ('price: ',price)
+        print ('website: ',website)
+        print ('description: ',description)
+        print ('social_media: ',social_media)
+        print ('menu: ',menu)
+        print ('hours_popular: ',hours_popular)
+foursquare_attraction(landmarks=0)

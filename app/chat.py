@@ -22,95 +22,6 @@ geolocator = Nominatim(user_agent="dream-trip")
 api_key=os.environ.get('FOURSQUARE')
 import threading
 
-def process_restaurant(name, city_name, country, latitude, longitude, city_to_save, restaurants):
-    flickr_photos1 = flickr_api(name, latitude, longitude)
-    goog_result1 = google_search(f"{name},{city_name},{country}")
-
-    restaurant_info = {
-        'name': name,
-        'latitude': latitude,
-        'longitude': longitude,
-        'photos': flickr_photos1,
-        'review_score': goog_result1['review_score'],
-    }
-    restaurants.append(restaurant_info)
-
-    try:
-        city_objs = city_to_save.all()
-        if city_objs:
-            city_obj = city_objs[0]
-            
-            resta_query = Restaurant(
-            name=name,
-            city=city_obj,
-            latitude=latitude,
-            longitude=longitude,
-            photos=flickr_photos1,
-            review_score=goog_result1['review_score'])
-            resta_query.save()
-        else:
-            print(f"No city found for {city_name}")
-    except Exception as e:
-        print ('error in 44')
-        print(f"Error occurred: {e}")
-
-def process_attraction(name_attrac, city_name, country, latitude, longitude, city_to_save, attractions):
-    flickr_photos = flickr_api(name_attrac, latitude, longitude)
-    goog_result = None
-    wikisearch = None
-
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future1 = executor.submit(google_search_attraction, f"{name_attrac},{city_name},{country},official website")
-        # print (f"{name_attrac},{city_name},{country},official website")
-        future2 = executor.submit(process_query, name_attrac)
-        goog_result = future1.result()
-        wikisearch = future2.result()
-        
-
-    attraction_info = {
-        'name': name_attrac,
-        'latitude': latitude,
-        'longitude': longitude,
-        'photos': flickr_photos,
-        'review_score': goog_result['review_score'],
-        'description': wikisearch[0],
-        'url': goog_result['url'],
-    }
-
-    attractions.append(attraction_info)
-    if len(goog_result['review_score'])<0:
-        goog_result['review_score']='0'
-    try:
-        city_objs = city_to_save.all()
-        if city_objs:
-            city_obj = city_objs[0]
-            review_score = goog_result.get('review_score', '0')
-            if wikisearch:
-                description = wikisearch[0]
-                url = goog_result['url'] if len(wikisearch) >= 2 else ""
-            else:
-                description = ""
-                url = ""
-
-            atrc_query = Attraction(
-                name=name_attrac,
-                city=city_obj,
-                latitude=latitude,
-                longitude=longitude,
-                photos=flickr_photos,
-                review_score=review_score,
-                description=description,
-                url=url
-            )
-            atrc_query.save()
-            attractions.append(attraction_info)
-
-        else:
-            print(f"No city found for {city_name}")
-    except Exception as e:
-        print('Error occurred:', e)
-        traceback.print_exc()
-
 
 def process_city(city_data, country,country_id):
     city_name = city_data['city']
@@ -128,54 +39,109 @@ def process_city(city_data, country,country_id):
     city_data['latitude'] = landmarks[0]
     city_data['longitude'] = landmarks[1]
     city_to_save = City.objects.filter(city=city_name)
-
+    city_objs = city_to_save.all()
+    if city_objs:
+        city_obj = city_objs[0]
+    print(city_obj,'city_obj')
     reslut = foursquare_restaurant(landmarks)
     restaurants = []
     if len(reslut) == 0:
+        print('start trip advisor resturant')
         restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
         restaurants.append(restaurant_)
     else:
-        threads = []
-        for i in reslut:
-            name = i['name']
-            latitude = i['geocodes']['main']['latitude']
-            longitude = i['geocodes']['main']['longitude']
+        print('start the else line 49')
 
-            thread = threading.Thread(target=process_restaurant, args=(name, city_name, country, latitude, longitude, city_to_save, restaurants))
-            thread.start()
-            threads.append(thread)
+        for restaur in reslut:
+            name = restaur['name'] if 'name' in restaur else ""
+            distance = restaur['distance'] if 'distance' in restaur else ""
+            latitude = restaur['geocodes']['main']['latitude'] if 'geocodes' in restaur and 'main' in restaur['geocodes'] and 'latitude' in restaur['geocodes']['main'] else ""
+            longitude = restaur['geocodes']['main']['longitude'] if 'geocodes' in restaur and 'main' in restaur['geocodes'] and 'longitude' in restaur['geocodes']['main'] else ""
+            rating = restaur['rating'] if 'rating' in restaur else "0"
+            price = restaur['price'] if 'price' in restaur else ""
+            website = restaur['website'] if 'website' in restaur else ""
+            social_media = restaur['social_media'] if 'social_media' in restaur else ""
+            menu = restaur['menu'] if 'menu' in restaur else ""
+            hours_popular = restaur['hours_popular'] if 'hours_popular' in restaur else ""
+            flickr_photos1 = flickr_api(name, latitude, longitude)
+            restaurant_info = {
+                'name': name,
+                'latitude': latitude,
+                'longitude': longitude,
+                'photos': flickr_photos1,
+                'review_score': rating,
+                'price':price,
+                'website':website,
+                'social_media':social_media,
+                'menu':menu,
+                'hours_popular':hours_popular
+            }
+            restaurants.append(restaurant_info)
+            resta_query = Restaurant(
+            name=name,
+            city=city_obj,
+            latitude=latitude,
+            longitude=longitude,
+            photos=flickr_photos1,
+            review_score=rating)
+            resta_query.save()
+            print ('save resturants successfuly')
 
-        for thread in threads:
-            thread.join()
-
+    
+    print ('start attracion') 
     reslut1 = foursquare_attraction(landmarks,city_name,country)
     attractions = []
     if len(reslut1) == 0:
+        print('start trip advisor atta')
         attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
         attractions.append(attractions_info_trip)
-        print ('tripadvisor line 122')
+        print ('tripadvisor line 93')
     else:
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            threads = []
-            for i in reslut1:
-                name_attrac = i['name']
-                latitude = i['geocodes']['main']['latitude']
-                longitude = i['geocodes']['main']['longitude']
+        print('start the else line 94')
+        for attrac in reslut1:
+            name1 = attrac['name'] if 'name' in attrac else ""
+            distance1 = attrac['distance'] if 'distance' in attrac else ""
+            latitude1 = attrac['geocodes']['main']['latitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'latitude' in attrac['geocodes']['main'] else ""
+            longitude1 = attrac['geocodes']['main']['longitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'longitude' in attrac['geocodes']['main'] else ""
+            rating1 = attrac['rating'] if 'rating' in attrac else "0"
+            price1 = attrac['price'] if 'price' in attrac else ""
+            website1 = attrac['website'] if 'website' in attrac else ""
+            social_media1 = attrac['social_media'] if 'social_media' in attrac else ""
+            menu1 = attrac['menu'] if 'menu' in attrac else ""
+            hours_popular1 = attrac['hours_popular'] if 'hours_popular' in attrac else ""
+            description = attrac['description'] if 'description' in attrac else ""
 
-                thread = executor.submit(
-                    process_attraction,
-                    name_attrac,
-                    city_name,
-                    country,
-                    latitude,
-                    longitude,
-                    city_to_save,
-                    attractions
-                )
-                threads.append(thread)
+            flickr_photos = flickr_api(name1, latitude1, longitude1)
 
-            # Wait for all threads to complete
-            concurrent.futures.wait(threads)
+            attraction_info = {
+            'name': name,
+                'latitude': latitude1,
+                'longitude': longitude1,
+                'photos': flickr_photos,
+                'review_score': rating1,
+                'price':price1,
+                'website':website1,
+                'social_media':social_media1,
+                'menu':menu1,
+                'hours_popular':hours_popular1,
+                'description':description
+            }
+
+            attractions.append(attraction_info)
+            atrc_query = Attraction(
+            name=name1,
+            city=city_obj,
+            latitude=latitude1,
+            longitude=longitude1,
+            photos=flickr_photos,
+            review_score=rating1,
+            description=description,
+            url=website1
+            )
+            atrc_query.save()
+            print ('save attraction successfuly')
+
+    print(attractions)  
 
     attractions = city_data['attractions'] = attractions
     restaurants = city_data['restaurants'] = restaurants
@@ -230,7 +196,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                             city_data['restaurants']=restaurants_list
                             print ('continue')
                             continue
-                        executor.submit(process_city, city_data, country,country_id)
+                        executor.submit(process_city, city_data, country, country_id).result()
 
                     # Shutdown the executor and wait for all threads to complete
                     executor.shutdown()
