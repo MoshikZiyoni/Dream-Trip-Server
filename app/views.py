@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from app.chat import run_long_poll_async
 from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from django.core.cache import cache
-from geopy.geocoders import Nominatim
 # from threading import Thread
 # from app.wikipediaapi import process_query
 
@@ -13,10 +12,10 @@ from geopy.geocoders import Nominatim
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    QueryChatGPT.objects.all().delete()
-    City.objects.all().delete()
-    Attraction.objects.all().delete()
-    Restaurant.objects.all().delete()
+    # QueryChatGPT.objects.all().delete()
+    # City.objects.all().delete()
+    # Attraction.objects.all().delete()
+    # Restaurant.objects.all().delete()
     
     email=request.data['email']
     if not email:
@@ -41,9 +40,10 @@ def gpt_view(request):
         # adult = request.data['adult']
         # children = request.data['children']
         durring = request.data['durringDays']
-        question1 = '{"country": "..", "cities": [{"city": "", "description": "", "travelDay": }]}'
+        question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }]"itinerary-description":""}'
         # question1 = '{"country": "..", "cities": [{"city": "", "description": "",landmarks:{latitude : "float",longitude : "float"}, "travelDay": }]}'
-        ourmessage=f"Create a trip,only {durring} Days to {mainland} in the following JSON structure:{question1}"
+        # ourmessage=f"Create a circular trip for {durring} days, visiting  {mainland} in the following JSON structure:{question1}. Ensure that each city is visited for at least 2 days. If the duration of the trip is less than or equal to 3 days, return only 1 city."
+        ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
             print('answer in data')   

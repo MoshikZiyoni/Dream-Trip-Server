@@ -51,6 +51,7 @@ def trip_advisor_attraction(city_name,country,landmarks):
                 'longitude': longitude,
                 'address_string':address_string,
             }
+            print ('attraction_info save successfuly')
             attractions.append(attraction_info) 
     return (attractions)
 
@@ -147,8 +148,8 @@ def foursquare_restaurant(landmarks):
         'categories':'13000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':2500,
-        'limit' : 15,
-        'fields':'distance,geocodes,name,fsq_id,rating,price,website,description,social_media,menu,hours_popular'
+        'limit' : 10,
+        'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
     }
     response = requests.get(url, params=query,headers=headers)
 
@@ -173,7 +174,7 @@ def foursquare_attraction(landmarks,city_name,country):
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':2500,
         'limit' : 10,
-        'fields':'distance,geocodes,name,fsq_id,rating,price,website,description,social_media,menu,hours_popular'
+        'fields':'distance,geocodes,name,rating,distance,website,description,photos,menu,hours_popular'
 
     }
     response1 = requests.get(url1, params=query1,headers=headers)

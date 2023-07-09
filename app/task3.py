@@ -436,7 +436,7 @@ def foursquare_attraction(landmarks):
         "ll" :  f"{48.8566},{2.3522}",
         'radius':2500,
         'limit' : 10,
-        'fields':'distance,geocodes,name,fsq_id,rating,price,website,description,social_media,menu,hours_popular'
+        'fields':'distance,geocodes,name,fsq_id,rating,price,website,distance,description,social_media,photos,menu,hours_popular'
 
     }
     response1 = requests.get(url1, params=query1,headers=headers)
@@ -446,24 +446,57 @@ def foursquare_attraction(landmarks):
     reslut=jsonto1['results']
     # print(reslut)
     for attrac in reslut:
-        name = attrac['name'] if 'name' in attrac else ""
-        distance = attrac['distance'] if 'distance' in attrac else ""
-        latitude = attrac['geocodes']['main']['latitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'latitude' in attrac['geocodes']['main'] else ""
-        longitude = attrac['geocodes']['main']['longitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'longitude' in attrac['geocodes']['main'] else ""
-        rating = attrac['rating'] if 'rating' in attrac else ""
-        price = attrac['price'] if 'price' in attrac else ""
-        website = attrac['website'] if 'website' in attrac else ""
-        description = attrac['description'] if 'description' in attrac else ""
-        social_media = attrac['social_media'] if 'social_media' in attrac else ""
-        menu = attrac['menu'] if 'menu' in attrac else ""
-        hours_popular = attrac['hours_popular'] if 'hours_popular' in attrac else ""
+        name = attrac.get("name", "")
+        distance = attrac.get("distance", "")
+        latitude = (
+            attrac["geocodes"]["main"]["latitude"]
+            if "geocodes" in attrac
+            and "main" in attrac["geocodes"]
+            and "latitude" in attrac["geocodes"]["main"]
+            else ""
+        )
+        longitude = (
+            attrac["geocodes"]["main"]["longitude"]
+            if "geocodes" in attrac
+            and "main" in attrac["geocodes"]
+            and "longitude" in attrac["geocodes"]["main"]
+            else ""
+        )
+        rating = attrac.get("rating", "0")
+        price = attrac.get("price", "")
+        website = attrac.get("website", "")
+        social_media = attrac.get("social_media", "")
+        distance=attrac.get('distance',"")
+        try:
+            instagram_handle = social_media.get("instagram", "")
+        except:
+            continue
+        menu = attrac.get("menu", "")
+        photos = attrac.get("photos", "")
+        if photos:
+            first_photo = photos[0]
+            prefix = first_photo.get("prefix", "")
+            suffix = first_photo.get("suffix", "")
+            url = f"{prefix}original{suffix}"
+
+            print('url: ',url)
+        else:
+            print("No photos available")
+
+        hours_popular = attrac.get("hours_popular", "")
+        description = attrac.get("description", "")
+        
+            # wiki=process_query(name)
+            # description=wiki
         print(name)
+        print ('distance: ',type(distance))
+        print (instagram_handle)
         print (latitude,longitude)
-        print ( 'rating: ',rating)
-        print ('price: ',price)
-        print ('website: ',website)
-        print ('description: ',description)
-        print ('social_media: ',social_media)
-        print ('menu: ',menu)
-        print ('hours_popular: ',hours_popular)
+        print ( 'rating: ',type(rating))
+        print ('price: ',type(price))
+        print ('website: ',type(website))
+        print ('description: ',type(description))
+        print ('social_media: ',type(instagram_handle))
+        print ('menu: ',type(menu))
+        print ('hours_popular: ',type(hours_popular))
 foursquare_attraction(landmarks=0)

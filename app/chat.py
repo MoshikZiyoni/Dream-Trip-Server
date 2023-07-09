@@ -1,229 +1,196 @@
 import json
 import os
 import time
-from app.bs4attraction import google_search_attraction
-from app.trip_advisor import foursquare_attraction, foursquare_restaurant, trip_advisor_attraction,trip_advisor_restaurants,flickr_api
-from app.bs4 import google_search
+from app.trip_advisor import (
+    foursquare_attraction,
+    foursquare_restaurant,
+    trip_advisor_attraction,
+    trip_advisor_restaurants,
+)
 import openai
 from dotenv import load_dotenv
-import requests
-from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
-from urllib.parse import quote
+from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 import threading
 from concurrent.futures import ThreadPoolExecutor
-import concurrent.futures
-from app.wikipediaapi import process_query
-import traceback
-
+from app.utils import generate_schedule, process_attraction, process_restaurant
+from threading import Thread
 # Load environment variables from .env file
 load_dotenv()
 geolocator = Nominatim(user_agent="dream-trip")
-api_key=os.environ.get('FOURSQUARE')
+api_key = os.environ.get("FOURSQUARE")
 import threading
 
-
-def process_city(city_data, country,country_id):
-    city_name = city_data['city']
-    description = city_data['description']
+restaurants = []
+def process_city(city_data, country, country_id):
+    city_name = city_data["city"]
+    description = city_data["description"]
     location = geolocator.geocode(f"{city_name},{country}")
     landmarks = [location.latitude, location.longitude]
     existing_city = City.objects.filter(city=city_name).first()
 
     print("City:", city_name, landmarks)
     if not existing_city:
-        
-        city_query = City(country_id=country_id, city=city_name, latitude=landmarks[0], longitude=landmarks[1], description=description)
+        city_query = City(
+            country_id=country_id,
+            city=city_name,
+            latitude=landmarks[0],
+            longitude=landmarks[1],
+            description=description,
+        )
         city_query.save()
-        print('save successfully for city')
-    city_data['latitude'] = landmarks[0]
-    city_data['longitude'] = landmarks[1]
+        print("Save successfully for city")
+    city_data["latitude"] = landmarks[0]
+    city_data["longitude"] = landmarks[1]
     city_to_save = City.objects.filter(city=city_name)
     city_objs = city_to_save.all()
     if city_objs:
         city_obj = city_objs[0]
-    print(city_obj,'city_obj')
+    print(city_obj, "city_obj")
+
+      # Initialize an empty list for restaurants
+
+    restaurants_thread = threading.Thread(
+        target=process_restaurants,
+        args=(landmarks, city_name, country, city_obj, city_data, restaurants),
+    )
+    restaurants_thread.start()
+
+    attractions_thread = threading.Thread(
+        target=process_attractions,
+        args=(landmarks, city_name, country, city_obj, city_data),
+    )
+    attractions_thread.start()
+
+    # Wait for the threads to complete
+    restaurants_thread.join()
+    attractions_thread.join()
+
+    attract = Attraction.objects.filter(city_id=city_obj.id).values()
+    attractions_list = list(attract)
+    resturaa=Restaurant.objects.filter(city_id=city_obj.id).values()
+    restaurant_list=list(resturaa)
+    city_data["attractions"] = attractions_list
+    city_data["restaurants"] = restaurant_list
+    return city_data
+
+
+def process_restaurants(landmarks, city_name, country, city_obj, city_data, restaurants):
     reslut = foursquare_restaurant(landmarks)
-    restaurants = []
     if len(reslut) == 0:
-        print('start trip advisor resturant')
+        print("Start TripAdvisor restaurant")
         restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
         restaurants.append(restaurant_)
     else:
-        print('start the else line 49')
-
+        threads = []
         for restaur in reslut:
-            name = restaur['name'] if 'name' in restaur else ""
-            distance = restaur['distance'] if 'distance' in restaur else ""
-            latitude = restaur['geocodes']['main']['latitude'] if 'geocodes' in restaur and 'main' in restaur['geocodes'] and 'latitude' in restaur['geocodes']['main'] else ""
-            longitude = restaur['geocodes']['main']['longitude'] if 'geocodes' in restaur and 'main' in restaur['geocodes'] and 'longitude' in restaur['geocodes']['main'] else ""
-            rating = restaur['rating'] if 'rating' in restaur else "0"
-            price = restaur['price'] if 'price' in restaur else ""
-            website = restaur['website'] if 'website' in restaur else ""
-            social_media = restaur['social_media'] if 'social_media' in restaur else ""
-            menu = restaur['menu'] if 'menu' in restaur else ""
-            hours_popular = restaur['hours_popular'] if 'hours_popular' in restaur else ""
-            flickr_photos1 = flickr_api(name, latitude, longitude)
-            restaurant_info = {
-                'name': name,
-                'latitude': latitude,
-                'longitude': longitude,
-                'photos': flickr_photos1,
-                'review_score': rating,
-                'price':price,
-                'website':website,
-                'social_media':social_media,
-                'menu':menu,
-                'hours_popular':hours_popular
-            }
-            restaurants.append(restaurant_info)
-            resta_query = Restaurant(
-            name=name,
-            city=city_obj,
-            latitude=latitude,
-            longitude=longitude,
-            photos=flickr_photos1,
-            review_score=rating)
-            resta_query.save()
-            print ('save resturants successfuly')
+            thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+            thread.start()
+            threads.append(thread)
 
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
+
+attractions = []
+def process_attractions(landmarks, city_name, country, city_obj, city_data):
+    reslut1 = foursquare_attraction(landmarks, city_name, country)
     
-    print ('start attracion') 
-    reslut1 = foursquare_attraction(landmarks,city_name,country)
-    attractions = []
+    threads = []
+
     if len(reslut1) == 0:
-        print('start trip advisor atta')
+        print("Start TripAdvisor attraction")
         attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
         attractions.append(attractions_info_trip)
-        print ('tripadvisor line 93')
+        print("TripAdvisor line 93")
     else:
-        print('start the else line 94')
+        print("Start the else line 94")
+
         for attrac in reslut1:
-            name1 = attrac['name'] if 'name' in attrac else ""
-            distance1 = attrac['distance'] if 'distance' in attrac else ""
-            latitude1 = attrac['geocodes']['main']['latitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'latitude' in attrac['geocodes']['main'] else ""
-            longitude1 = attrac['geocodes']['main']['longitude'] if 'geocodes' in attrac and 'main' in attrac['geocodes'] and 'longitude' in attrac['geocodes']['main'] else ""
-            rating1 = attrac['rating'] if 'rating' in attrac else "0"
-            price1 = attrac['price'] if 'price' in attrac else ""
-            website1 = attrac['website'] if 'website' in attrac else ""
-            social_media1 = attrac['social_media'] if 'social_media' in attrac else ""
-            menu1 = attrac['menu'] if 'menu' in attrac else ""
-            hours_popular1 = attrac['hours_popular'] if 'hours_popular' in attrac else ""
-            description = attrac['description'] if 'description' in attrac else ""
+            thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
+            thread.start()
+            threads.append(thread)
 
-            flickr_photos = flickr_api(name1, latitude1, longitude1)
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
 
-            attraction_info = {
-            'name': name,
-                'latitude': latitude1,
-                'longitude': longitude1,
-                'photos': flickr_photos,
-                'review_score': rating1,
-                'price':price1,
-                'website':website1,
-                'social_media':social_media1,
-                'menu':menu1,
-                'hours_popular':hours_popular1,
-                'description':description
-            }
+    city_data["attractions"] = attractions
+    return city_data
 
-            attractions.append(attraction_info)
-            atrc_query = Attraction(
-            name=name1,
-            city=city_obj,
-            latitude=latitude1,
-            longitude=longitude1,
-            photos=flickr_photos,
-            review_score=rating1,
-            description=description,
-            url=website1
-            )
-            atrc_query.save()
-            print ('save attraction successfuly')
 
-    print(attractions)  
 
-    attractions = city_data['attractions'] = attractions
-    restaurants = city_data['restaurants'] = restaurants
-    return attractions, restaurants
 
 
 def run_long_poll_async(ourmessage, retries=3, delay=1):
-    
-    print('Start GPT')
+    print("Start GPT")
     try:
-        api_key = os.environ.get('OPENAI_API_KEY')
+        api_key = os.environ.get("OPENAI_API_KEY")
         openai.api_key = api_key
     except:
-        print('Key not found or invalid')
+        print("Key not found or invalid")
 
     for attempt in range(retries):
         try:
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": ourmessage}
-                ]
+                messages=[{"role": "user", "content": ourmessage}],
             )
             answer1 = completion.choices[0].message.content
-            print (answer1)
+            print(answer1)
             for attempt_data in range(retries):
                 try:
                     data = json.loads(answer1)
-                    # # Extract all city names
-                    country = data['country']
+                    country = data["country"]
+                    itinerary_description=data['itinerary-description']
                     try:
                         existing_country = Country.objects.filter(name=country).first()
-                        country_id=existing_country.id
+                        country_id = existing_country.id
                     except:
-                        print ('not existing_country')
+                        print("Country does not exist")
                     if not existing_country:
-                        query_for_country=Country(name=country)
+                        query_for_country = Country(name=country)
                         query_for_country.save()
                         country_id = query_for_country.id
-                    # print (country_id)
+
                     executor = ThreadPoolExecutor()
-                    for city_data  in data['cities']:
-                        city_name = city_data ['city']
+                    for city_data in data["cities"]:
+                        city_name = city_data["city"]
                         existing_city = City.objects.filter(city=city_name).first()
                         if existing_city:
-                            # Add attractions and restaurants to city_data dictionary
-                            attract=Attraction.objects.filter(city_id=existing_city.id).values()
+                            attract = Attraction.objects.filter(city_id=existing_city.id).values()
                             attractions_list = list(attract)
-                            city_data['attractions'] = attractions_list
-                            restaura=Restaurant.objects.filter(city_id=existing_city.id).values()
+                            city_data["attractions"] = attractions_list
+                            restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
                             restaurants_list = list(restaura)
-                            city_data['restaurants']=restaurants_list
-                            print ('continue')
+                            city_data["restaurants"] = restaurants_list
+                            print("Continue")
                             continue
-                        executor.submit(process_city, city_data, country, country_id).result()
+                        executor.submit(process_city, city_data, country, country_id)
 
-                    # Shutdown the executor and wait for all threads to complete
                     executor.shutdown()
-                    combined_data =json.dumps(data, indent=2)
-                    query = QueryChatGPT(question=ourmessage, answer=combined_data)
-                    query.save()
-                    return combined_data
-                except Exception as e:
-                    print ('failed in the end line 205')
-                    traceback.print_exc()
 
-                    print(f'Error occurred: {e}')
-                    print(f'Retrying... (attempt {attempt_data + 1})')
+                    combined_data = json.dumps(data, indent=2)
+                    # query = QueryChatGPT(question=ourmessage, answer=combined_data)
+                    # query.save()
+                    combined_data2=generate_schedule(data)
+                    query = QueryChatGPT(question=ourmessage, answer=combined_data2)
+                    query.save()
+
+                    return combined_data2,{'itinerary_description':itinerary_description}
+                except Exception as e:
+                    print("Error occurred:", e)
+                    print(f"Retrying... (attempt {attempt_data + 1})")
                     time.sleep(delay)
 
         except openai.error.APIError as e:
             if e.status_code == 429:
-                # If we hit the API rate limit, wait for a bit before trying again
                 time.sleep(1)
             else:
-                # If there's another API error, raise an exception
                 raise
         except Exception as e:
-            print ('fialed in the end line 218')
-            print(f'Error occurred: {e}')
-            print(f'Retrying... (attempt {attempt + 1})')
+            print("Error occurred:", e)
+            print(f"Retrying... (attempt {attempt + 1})")
             time.sleep(delay)
 
-    # If all retries fail, return a default error message
     return "I'm sorry, an error occurred while generating the response. Please try again later."

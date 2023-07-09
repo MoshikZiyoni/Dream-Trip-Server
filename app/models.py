@@ -29,7 +29,9 @@ class Attraction(models.Model):
     photos=models.CharField(max_length=100)
     review_score=models.CharField(max_length=20)
     description=models.CharField(max_length=1000)
-    url=models.CharField(max_length=100)
+    website=models.CharField(max_length=100)
+    hours_popular=models.TextField()
+    distance=models.IntegerField(null=False)
 
 class Restaurant(models.Model):
     city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
@@ -38,3 +40,8 @@ class Restaurant(models.Model):
     longitude=models.FloatField(null=False)
     photos=models.CharField(max_length=100)
     review_score=models.CharField(max_length=20)
+    website=models.CharField(max_length=100)
+    social_media=models.CharField(max_length=100)
+    price=models.CharField(max_length=20)
+    menu=models.CharField(max_length=100)
+    distance=models.IntegerField(null=False)
