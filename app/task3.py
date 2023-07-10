@@ -434,8 +434,8 @@ def foursquare_attraction(landmarks):
         'query': 'attractions in Paris, France',
         'categories':'10027,10025,10055,10068,16000',
         "ll" :  f"{48.8566},{2.3522}",
-        'radius':2500,
-        'limit' : 10,
+        'radius':5000,
+        'limit' : 6,
         'fields':'distance,geocodes,name,fsq_id,rating,price,website,distance,description,social_media,photos,menu,hours_popular'
 
     }
@@ -444,59 +444,40 @@ def foursquare_attraction(landmarks):
     response_text1=(response1.text)
     jsonto1=json.loads(response_text1)
     reslut=jsonto1['results']
-    # print(reslut)
-    for attrac in reslut:
-        name = attrac.get("name", "")
-        distance = attrac.get("distance", "")
-        latitude = (
-            attrac["geocodes"]["main"]["latitude"]
-            if "geocodes" in attrac
-            and "main" in attrac["geocodes"]
-            and "latitude" in attrac["geocodes"]["main"]
-            else ""
-        )
-        longitude = (
-            attrac["geocodes"]["main"]["longitude"]
-            if "geocodes" in attrac
-            and "main" in attrac["geocodes"]
-            and "longitude" in attrac["geocodes"]["main"]
-            else ""
-        )
-        rating = attrac.get("rating", "0")
-        price = attrac.get("price", "")
-        website = attrac.get("website", "")
-        social_media = attrac.get("social_media", "")
-        distance=attrac.get('distance',"")
-        try:
-            instagram_handle = social_media.get("instagram", "")
-        except:
-            continue
-        menu = attrac.get("menu", "")
-        photos = attrac.get("photos", "")
-        if photos:
-            first_photo = photos[0]
-            prefix = first_photo.get("prefix", "")
-            suffix = first_photo.get("suffix", "")
-            url = f"{prefix}original{suffix}"
+    return(reslut)
 
-            print('url: ',url)
-        else:
-            print("No photos available")
 
-        hours_popular = attrac.get("hours_popular", "")
-        description = attrac.get("description", "")
-        
-            # wiki=process_query(name)
-            # description=wiki
-        print(name)
-        print ('distance: ',type(distance))
-        print (instagram_handle)
-        print (latitude,longitude)
-        print ( 'rating: ',type(rating))
-        print ('price: ',type(price))
-        print ('website: ',type(website))
-        print ('description: ',type(description))
-        print ('social_media: ',type(instagram_handle))
-        print ('menu: ',type(menu))
-        print ('hours_popular: ',type(hours_popular))
-foursquare_attraction(landmarks=0)
+import flickrapi
+
+def flickr_api(name,latitude,longitude):
+  time.sleep(1.5)
+  api_key =os.environ.get('flickr_key')
+  api_secret =os.environ.get('flickr_secret')
+  image_list = []
+  flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+  # Search for photos by tags (landmark name)
+  photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
+  if len(photos['photos']['photo']) == 0:
+    # No photos found for the attraction name, search by latitude and longitude
+    photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
+
+    if len(photos['photos']['photo']) == 0:
+        print('No photos found for the attraction')
+  # Extract the photo URLs
+  if 'photos' in photos and 'photo' in photos['photos']:
+      for photo in photos['photos']['photo']:
+          photo_id = photo['id']  # URL of the original-sized photo
+          flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+          # Get the sizes of the photo
+          sizes = flickr.photos.getSizes(photo_id=photo_id)
+          # Extract the URL of the image
+          if 'sizes' in sizes and 'size' in sizes['sizes']:
+              # Assuming you want the URL of the largest available size
+              largest_size = sizes['sizes']['size'][-1]
+              image_url = largest_size['source']
+              return image_url
+            #   image_list.append(image_url)
+          else:
+              return (image_url=="")
+print(flickr_api(name='Parque Fluvial Vallarta,Puerto Vallarta,mexico',latitude=20.641047,longitude=-105.22765))
+

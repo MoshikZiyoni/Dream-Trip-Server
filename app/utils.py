@@ -1,9 +1,10 @@
+import time
 from app.models import Attraction, Restaurant
 from app.trip_advisor import flickr_api
 from app.wikipediaapi import process_query
 import json
 from datetime import datetime, timedelta
-
+import math
 def process_attraction(attrac, city_obj, attractions):
     name1 = attrac.get("name", "")
     distance1 = attrac.get("distance", "")
@@ -42,8 +43,10 @@ def process_attraction(attrac, city_obj, attractions):
         photos1=url1
         
     else:
-        photos1 = flickr_api(name1, latitude1, longitude1)
-    
+        try:
+            photos1 = flickr_api(name=name1, latitude=latitude1, longitude=longitude1)
+        except:
+            print ("flickr api can't bring an image")
 
     attraction_info = {
         "name": name1,
@@ -112,7 +115,10 @@ def process_restaurant(restaur, city_obj, restaurants):
         url = f"{prefix}original{suffix}"
         photos=url
     else:
-        photos = flickr_api(name, latitude, longitude)
+        try:
+            photos = flickr_api(name, latitude, longitude)
+        except:
+            print ("flickr api can't bring an image")
     restaurant_info = {
         "name": name,
         "latitude": latitude,
@@ -146,102 +152,6 @@ def process_restaurant(restaur, city_obj, restaurants):
 
 
 
-# def extract_data_from_combined_data(data):
-#     # Extract the necessary information and create a new variable
-#     extracted_data = {
-#         "country": data["country"],
-#         "cities": []
-#     }
-
-#     for city in data["cities"]:
-#         city_data = {
-#             "city": city["city"],
-#             "attractions": [],
-#             "restaurants": []
-#         }
-        
-#         for attraction in city["attractions"]:
-#             attraction_data = {
-#                 "name": attraction["name"],
-#                 "distance": attraction["distance"]
-#             }
-#             city_data["attractions"].append(attraction_data)
-        
-#         for restaurant in city["restaurants"]:
-#             restaurant_data = {
-#                 "name": restaurant["name"],
-#                 "distance": restaurant["distance"]
-#             }
-#             city_data["restaurants"].append(restaurant_data)
-        
-#         extracted_data["cities"].append(city_data)
-
-#     # Print the extracted data
-#     # print((extracted_data))
-#     return extracted_data
-
-
-# from datetime import datetime, timedelta
-
-# def create_schedule(data):
-#     schedule = []
-#     start_time = datetime.strptime('09:00', '%H:%M')
-#     end_time = datetime.strptime('20:00', '%H:%M')
-#     lunch_start_time = datetime.strptime('14:00', '%H:%M')
-#     lunch_end_time = datetime.strptime('16:00', '%H:%M')
-
-#     for city_data in data['cities']:
-#         city = city_data['city']
-#         attractions = city_data['attractions']
-#         restaurants = city_data['restaurants']
-
-#         city_schedule = {'city': city, 'attractions': [], 'restaurants': []}
-#         current_time = start_time
-
-#         for attraction in attractions:
-#             name = attraction['name']
-#             duration = timedelta(hours=2)
-
-#             if current_time + duration <= end_time:
-#                 lunch_restaurant = find_closest_restaurant(attraction, restaurants)
-#                 city_schedule['attractions'].append({
-#                     'name': name,
-#                     'start_time': current_time.strftime('%H:%M'),
-#                     'end_time': (current_time + duration).strftime('%H:%M'),
-#                     'restaurant': lunch_restaurant
-#                 })
-#                 current_time += duration
-
-#                 # Check if it's time for lunch break
-#                 if current_time >= lunch_start_time and current_time < lunch_end_time:
-#                     current_time = lunch_end_time
-#             else:
-#                 break
-
-#         # Remaining restaurants added to the list
-#         city_schedule['restaurants'] = restaurants
-
-#         schedule.append(city_schedule)
-#     print (schedule,'AAAA')
-#     return schedule
-
-
-# def find_closest_restaurant(attraction, restaurants):
-#     attraction_distance = attraction['distance']
-#     closest_restaurant = None
-#     closest_distance = float('inf')
-
-#     for restaurant in restaurants:
-#         restaurant_distance = restaurant['distance']
-
-#         if restaurant_distance < closest_distance:
-#             closest_restaurant = restaurant
-#             closest_distance = restaurant_distance
-
-#     return closest_restaurant
-
-
-
 def generate_schedule(data):
     cities = data['cities']
     num_attractions_per_day = 3
@@ -256,6 +166,10 @@ def generate_schedule(data):
         city_name = city['city']
         city_description=city['description']
         attractions = city['attractions']
+        try:
+            attractions=sort_attractions_by_distance(attractions=attractions,first_attraction=attractions[0])
+        except Exception as e:
+            print ('already sorted')
         restaurants = city['restaurants']
         days_spent = city['days_spent']
 
@@ -280,14 +194,6 @@ def generate_schedule(data):
 
                 day_schedule.append({
                     'attraction':attraction,
-                    # 'attraction': attraction['name'],
-                    # 'latitude': attraction['latitude'],
-                    # 'longitude': attraction['longitude'],
-                    # 'photos': attraction['photos'],
-                    # 'review_score': attraction['review_score'],
-                    # 'website': attraction['website'],
-                    # 'hours_popular': attraction['hours_popular'],
-                    # 'description': attraction['description'],
                     'start_time': attraction_start.strftime('%H:%M'),
                     'end_time': attraction_end.strftime('%H:%M')
                 })
@@ -328,5 +234,37 @@ def generate_schedule(data):
         })
     # print(json.dumps(schedule,indent=2))
 
-    return json.dumps(schedule,indent=2)
+    return schedule
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # Convert latitude and longitude to radians
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+
+    # Earth's radius in kilometers
+    radius = 6371
+
+    # Haversine formula
+    dlon = lon2_rad - lon1_rad
+    dlat = lat2_rad - lat1_rad
+    a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    distance = radius * c
+
+    return distance
+
+def sort_attractions_by_distance(attractions, first_attraction):
+    print ('start sort')
+    # Sort attractions based on distance from the first attraction
+    first_attraction=attractions[0]
+    sorted_attractions = sorted(attractions, key=lambda x: calculate_distance(
+        first_attraction['latitude'],
+        first_attraction['longitude'],
+        x['latitude'],
+        x['longitude']
+    ))
+    
+    # print (json.dumps(sorted_attractions,indent=2))
+    return sorted_attractions

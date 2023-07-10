@@ -6,6 +6,7 @@ from geopy.geocoders import Nominatim
 from dotenv import load_dotenv
 import os
 import time
+import flickrapi
 load_dotenv()
 
 def trip_advisor_attraction(city_name,country,landmarks):
@@ -103,7 +104,6 @@ def trip_advisor_restaurants(city_name,country,landmarks):
     return (restaurants)
             
 def flickr_api(name,latitude,longitude):
-  import flickrapi
   api_key =os.environ.get('flickr_key')
   api_secret =os.environ.get('flickr_secret')
   image_list = []
@@ -131,8 +131,8 @@ def flickr_api(name,latitude,longitude):
               return image_url
             #   image_list.append(image_url)
           else:
-              print('No image URL available for the photo')
-#   return(image_list)
+              return (image_url=="")
+
 
 api_key=os.environ.get('FOURSQUARE')
 
@@ -147,7 +147,7 @@ def foursquare_restaurant(landmarks):
     query= {
         'categories':'13000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
-        'radius':2500,
+        'radius':5000,
         'limit' : 10,
         'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
     }
@@ -172,7 +172,7 @@ def foursquare_attraction(landmarks,city_name,country):
         'query': f"attractions in {city_name},{country}",
         'categories':'10027,10025,10055,10068,16000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
-        'radius':2500,
+        'radius':6000,
         'limit' : 10,
         'fields':'distance,geocodes,name,rating,distance,website,description,photos,menu,hours_popular'
 

@@ -170,14 +170,11 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
 
                     executor.shutdown()
 
-                    combined_data = json.dumps(data, indent=2)
-                    # query = QueryChatGPT(question=ourmessage, answer=combined_data)
-                    # query.save()
-                    combined_data2=generate_schedule(data)
-                    query = QueryChatGPT(question=ourmessage, answer=combined_data2)
+                    combined_data=generate_schedule(data)
+                    query = QueryChatGPT(question=ourmessage, answer=combined_data)
                     query.save()
-
-                    return combined_data2,{'itinerary_description':itinerary_description}
+                    
+                    return {'combined_data':combined_data,'itinerary_description':itinerary_description}
                 except Exception as e:
                     print("Error occurred:", e)
                     print(f"Retrying... (attempt {attempt_data + 1})")
@@ -194,3 +191,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
             time.sleep(delay)
 
     return "I'm sorry, an error occurred while generating the response. Please try again later."
+
+
+
+
