@@ -142,7 +142,14 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                 try:
                     data = json.loads(answer1)
                     country = data["country"]
-                    itinerary_description=data['itinerary-description']
+                    try:
+                        itinerary_description=data['itinerary-description']
+                    except:
+                        pass
+                    try:
+                        itinerary_description=data['itinerary_description']
+                    except:
+                        pass
                     try:
                         existing_country = Country.objects.filter(name=country).first()
                         country_id = existing_country.id
