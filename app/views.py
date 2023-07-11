@@ -27,7 +27,9 @@ def gpt_view(request):
     # exit
     # exit
     # return 'ok'
-    # QueryChatGPT.objects.all().delete()
+    QueryChatGPT.objects.all().delete()
+    exit
+    exit
     # City.objects.all().delete()
     # Attraction.objects.all().delete()
     # Restaurant.objects.all().delete()
@@ -65,7 +67,7 @@ def gpt_view(request):
             answer=({'answer' :answer_from_data['answer'],"request_left":request_left})
             return Response(answer)
         
-        result1=(run_long_poll_async(ourmessage))
+        result1=(run_long_poll_async(ourmessage,mainland))
         
         result1=result1,{"request_left":request_left}
 

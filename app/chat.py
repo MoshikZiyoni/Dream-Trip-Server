@@ -122,7 +122,7 @@ def process_attractions(landmarks, city_name, country, city_obj, city_data):
 
 
 
-def run_long_poll_async(ourmessage, retries=3, delay=1):
+def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
     print("Start GPT")
     try:
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -141,7 +141,12 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
             for attempt_data in range(retries):
                 try:
                     data = json.loads(answer1)
+                    data1 = json.loads(answer1)
                     country = data["country"]
+                    if country != mainland:
+                        print("Country is not mainland. Retrying...")
+                        break
+                    
                     try:
                         itinerary_description=data['itinerary-description']
                     except:
@@ -178,7 +183,7 @@ def run_long_poll_async(ourmessage, retries=3, delay=1):
                     executor.shutdown()
 
                     combined_data=generate_schedule(data)
-                    query = QueryChatGPT(question=ourmessage, answer=combined_data)
+                    query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     
                     return {'combined_data':combined_data,'itinerary_description':itinerary_description}
