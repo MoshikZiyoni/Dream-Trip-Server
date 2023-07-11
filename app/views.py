@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from app.chat import run_long_poll_async
 from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from django.core.cache import cache
+
+from app.my_selenium import perform_search
 # from threading import Thread
 # from app.wikipediaapi import process_query
 
@@ -12,6 +14,19 @@ from django.core.cache import cache
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    # attractions = Attraction.objects.filter(review_score='0')
+
+    # for attraction in attractions:
+    #     # Call your function to generate a new review score
+    #     new_review_score = perform_search(attraction.name)
+    #     if new_review_score==None:
+    #         break
+    #     # Update the attraction's review score
+    #     attraction.review_score = new_review_score
+    #     attraction.save()
+    # exit
+    # exit
+    # return 'ok'
     # QueryChatGPT.objects.all().delete()
     # City.objects.all().delete()
     # Attraction.objects.all().delete()
