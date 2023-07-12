@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import sys
+import io
+# sys.setrecursionlimit(1500)
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-16')
 
 # Load environment variables from .env file
 load_dotenv()
@@ -118,16 +122,16 @@ ASGI_APPLICATION_OPTIONS = {
 
 
 ###POSTGRESQL
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'Dream-Trip',
-#         'HOST':'localhost',
-#         'USER': 'Dream-Trip-New',
-#         'PASSWORD': '#####',
-#         'PORT':'5432',
-#     },
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'New-DB-Dream-Trip',
+        'HOST':'localhost',
+        'USER': 'Dream-Trip-New',
+        'PASSWORD': os.environ.get('POSGRE_PASS'),
+        'PORT':'5432',
+    },
+}
 
 
 # ####MYSQL
@@ -158,12 +162,12 @@ ASGI_APPLICATION_OPTIONS = {
 
 
 # '''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # '''
 # ###  'MONGODB'
 # DATABASES = {

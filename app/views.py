@@ -1,12 +1,14 @@
+from concurrent.futures import ThreadPoolExecutor
 import json
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from app.chat import run_long_poll_async
+from app.chat import process_city, run_long_poll_async
 from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from django.core.cache import cache
 
 from app.my_selenium import perform_search
+from app.utils import generate_schedule
 # from threading import Thread
 # from app.wikipediaapi import process_query
 
@@ -64,98 +66,98 @@ def gpt_view(request):
     # Attraction.objects.all().delete()
     # Restaurant.objects.all().delete()
     
-    def populate_attractions(attractions_data):
-        city2=City.objects.filter(city='Krabi')
-        city_obj = city2[0]
-        for attraction_data in attractions_data:
+#     def populate_attractions(attractions_data):
+#         city2=City.objects.filter(city='Krabi')
+#         city_obj = city2[0]
+#         for attraction_data in attractions_data:
             
-            attraction = Attraction(
-                city_id=city_obj.id,
-                name=attraction_data["name"],
-                latitude=attraction_data["latitude"],
-                longitude=attraction_data["longitude"],
-                photos=attraction_data["photos"],
-                review_score=attraction_data["review_score"],
-                description=attraction_data["description"],
-                website=attraction_data["website"],
-                hours_popular=attraction_data["hours_popular"],
-                distance=attraction_data["distance"],
-                real_price=attraction_data["real_price"]
-            )
-            print (attraction_data["name"])
-            attraction.save()
-    populate_attractions(attractions_data = [
-    {
-        "city": "Krabi",
-        "name": "Railay Beach",
-        "latitude": 8.0126,
-        "longitude": 98.8375,
-        "photos": "",
-        "review_score": "4.7",
-        "description": "Visit Railay Beach, a stunning beach accessible only by boat. Enjoy the crystal-clear waters, limestone cliffs, and outdoor activities such as rock climbing and kayaking.",
-        "website": "",
-        "hours_popular": "Open 24 hours",
-        "distance": 0,
-        "real_price": "Free"
-    },
-    {
-        "city": "Krabi",
-        "name": "Phi Phi Islands",
-        "latitude": 7.7407,
-        "longitude": 98.7780,
-        "photos": "",
-        "review_score": "4.6",
-        "description": "Explore the picturesque Phi Phi Islands, known for their white sandy beaches and crystal-clear waters. Take a boat tour, snorkel, or relax on the pristine beaches.",
-        "website": "",
-        "hours_popular": "Open all year round",
-        "distance": 40,
-        "real_price": "Varies"
-    },
-    {
-        "city": "Krabi",
-        "name": "Tiger Cave Temple (Wat Tham Sua)",
-        "latitude": 8.0467,
-        "longitude": 98.9225,
-        "photos": "",
-        "review_score": "4.5",
-        "description": "Visit Tiger Cave Temple, a Buddhist temple known for its striking scenery and challenging climb to the top. Enjoy panoramic views of Krabi from the summit.",
-        "website": "",
-        "hours_popular": "Open daily",
-        "distance": 10,
-        "real_price": "Free"
-    },
-    {
-        "city": "Krabi",
-        "name": "Four Islands",
-        "latitude": 7.7065,
-        "longitude": 98.7625,
-        "photos": "",
-        "review_score": "4.4",
-        "description": "Embark on a Four Islands tour, visiting Phra Nang Cave Beach, Chicken Island, Tup Island, and Poda Island. Enjoy snorkeling, swimming, and relaxing on these beautiful islands.",
-        "website": "",
-        "hours_popular": "Open all year round",
-        "distance": 20,
-        "real_price": "Varies"
-    },
-    {
-        "city": "Krabi",
-        "name": "Emerald Pool (Sa Morakot)",
-        "latitude": 8.0105,
-        "longitude": 99.6144,
-        "photos": "",
-        "review_score": "4.3",
-        "description": "Take a refreshing dip in the Emerald Pool, a natural hot spring surrounded by lush rainforest. Enjoy the beautiful turquoise waters and the tranquility of the area.",
-        "website": "",
-        "hours_popular": "Open daily",
-        "distance": 60,
-        "real_price": "Varies"
-    }
-]
+#             attraction = Attraction(
+#                 city_id=city_obj.id,
+#                 name=attraction_data["name"],
+#                 latitude=attraction_data["latitude"],
+#                 longitude=attraction_data["longitude"],
+#                 photos=attraction_data["photos"],
+#                 review_score=attraction_data["review_score"],
+#                 description=attraction_data["description"],
+#                 website=attraction_data["website"],
+#                 hours_popular=attraction_data["hours_popular"],
+#                 distance=attraction_data["distance"],
+#                 real_price=attraction_data["real_price"]
+#             )
+#             print (attraction_data["name"])
+#             attraction.save()
+#     populate_attractions(attractions_data = [
+#     {
+#         "city": "Krabi",
+#         "name": "Railay Beach",
+#         "latitude": 8.0126,
+#         "longitude": 98.8375,
+#         "photos": "",
+#         "review_score": "4.7",
+#         "description": "Visit Railay Beach, a stunning beach accessible only by boat. Enjoy the crystal-clear waters, limestone cliffs, and outdoor activities such as rock climbing and kayaking.",
+#         "website": "",
+#         "hours_popular": "Open 24 hours",
+#         "distance": 0,
+#         "real_price": "Free"
+#     },
+#     {
+#         "city": "Krabi",
+#         "name": "Phi Phi Islands",
+#         "latitude": 7.7407,
+#         "longitude": 98.7780,
+#         "photos": "",
+#         "review_score": "4.6",
+#         "description": "Explore the picturesque Phi Phi Islands, known for their white sandy beaches and crystal-clear waters. Take a boat tour, snorkel, or relax on the pristine beaches.",
+#         "website": "",
+#         "hours_popular": "Open all year round",
+#         "distance": 40,
+#         "real_price": "Varies"
+#     },
+#     {
+#         "city": "Krabi",
+#         "name": "Tiger Cave Temple (Wat Tham Sua)",
+#         "latitude": 8.0467,
+#         "longitude": 98.9225,
+#         "photos": "",
+#         "review_score": "4.5",
+#         "description": "Visit Tiger Cave Temple, a Buddhist temple known for its striking scenery and challenging climb to the top. Enjoy panoramic views of Krabi from the summit.",
+#         "website": "",
+#         "hours_popular": "Open daily",
+#         "distance": 10,
+#         "real_price": "Free"
+#     },
+#     {
+#         "city": "Krabi",
+#         "name": "Four Islands",
+#         "latitude": 7.7065,
+#         "longitude": 98.7625,
+#         "photos": "",
+#         "review_score": "4.4",
+#         "description": "Embark on a Four Islands tour, visiting Phra Nang Cave Beach, Chicken Island, Tup Island, and Poda Island. Enjoy snorkeling, swimming, and relaxing on these beautiful islands.",
+#         "website": "",
+#         "hours_popular": "Open all year round",
+#         "distance": 20,
+#         "real_price": "Varies"
+#     },
+#     {
+#         "city": "Krabi",
+#         "name": "Emerald Pool (Sa Morakot)",
+#         "latitude": 8.0105,
+#         "longitude": 99.6144,
+#         "photos": "",
+#         "review_score": "4.3",
+#         "description": "Take a refreshing dip in the Emerald Pool, a natural hot spring surrounded by lush rainforest. Enjoy the beautiful turquoise waters and the tranquility of the area.",
+#         "website": "",
+#         "hours_popular": "Open daily",
+#         "distance": 60,
+#         "real_price": "Varies"
+#     }
+# ]
 
-)
-# You can now use this attractions_data list to populate your database.
+# )
+# # You can now use this attractions_data list to populate your database.
 
-    return 'ok'
+#     return 'ok'
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
@@ -185,8 +187,51 @@ def gpt_view(request):
         ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
-            print('answer in data')   
-            answer=({'answer' :answer_from_data['answer'],"request_left":request_left})
+            print('answer in data')
+            answer_string = answer_from_data['answer']
+            answer_string_modified = answer_string.replace("'", '"')
+            answer_dict = json.loads(answer_string_modified)
+            itinerary_description = answer_dict.get('itinerary-description')
+            country = answer_dict["country"]
+            if country != mainland:
+                print("Country is not mainland. Retrying...")
+                
+            
+            try:
+                itinerary_description=answer_dict['itinerary-description']
+            except:
+                pass
+            try:
+                itinerary_description=answer_dict['itinerary_description']
+            except:
+                pass
+            try:
+                existing_country = Country.objects.filter(name=country).first()
+                country_id = existing_country.id
+            except:
+                print("Country does not exist")
+            if not existing_country:
+                query_for_country = Country(name=country)
+                query_for_country.save()
+                country_id = query_for_country.id
+            executor = ThreadPoolExecutor()
+            for city_data in answer_dict["cities"]:
+                city_name = city_data["city"]
+                existing_city = City.objects.filter(city=city_name).first()
+                if existing_city:
+                    attract = Attraction.objects.filter(city_id=existing_city.id).values()
+                    attractions_list = list(attract)
+                    city_data["attractions"] = attractions_list
+                    restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
+                    restaurants_list = list(restaura)
+                    city_data["restaurants"] = restaurants_list
+                    print("Continue")
+                    continue
+                executor.submit(process_city, city_data, country, country_id)
+
+            executor.shutdown()
+            answer_from_data1=generate_schedule(answer_dict) 
+            answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description,"request_left":request_left})
             return Response(answer)
         
         result1=(run_long_poll_async(ourmessage,mainland))
