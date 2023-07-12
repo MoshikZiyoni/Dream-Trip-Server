@@ -15,25 +15,147 @@ from app.my_selenium import perform_search
 @api_view(['GET', 'POST'])
 def gpt_view(request):
     # attractions = Attraction.objects.filter(review_score='0')
+    # attractions=Attraction.objects.filter(review_score__exact='')
 
     # for attraction in attractions:
     #     # Call your function to generate a new review score
     #     new_review_score = perform_search(attraction.name)
-    #     if new_review_score==None:
-    #         break
-    #     # Update the attraction's review score
-    #     attraction.review_score = new_review_score
-    #     attraction.save()
-    # exit
-    # exit
+    #     print ('new_review_score: ',new_review_score,len(new_review_score))
+    #     if new_review_score==None or len(new_review_score)==0:
+    #         attraction.review_score='4.0'
+    #         attraction.save()
+    #     else:
+    #         # Update the attraction's review score
+    #         attraction.review_score = str(new_review_score)
+    #         attraction.save()
+    # # exit
+    # # exit
     # return 'ok'
-    QueryChatGPT.objects.all().delete()
-    exit
-    exit
+    #####REAL PRICESSSSS
+    # def extract_attraction_names(attractions):
+    #     # attractions = Attraction.objects.all()
+    #     attractions = Attraction.objects.filter(city__id=291)     
+    #     for attraction in attractions[:10]:
+    #         print (attraction.name)
+    #         # attraction_names.append(attraction.name)
+    #     return 'ok'
+    # extract_attraction_names(attractions='')
+
+#     def extract_attraction_names(attraction_prices):
+#         attractions = Attraction.objects.filter(city__id=291)[:10]
+#         for attraction in attractions:
+#             attraction_name = attraction.name
+#             if attraction_name in attraction_prices:
+#                 attraction.real_price = attraction_prices[attraction_name]
+#                 attraction.save()
+#         return 'ok'
+#     extract_attraction_names(attraction_prices = { "Yatch Club de Cannes": "free entry, membership fees vary 12", "Gare Maritime de Cannes": "free entry, event spaces available for rent 3", "Torch Cannes": "free entry, food and drinks prices vary", "Agence Cannes France": "real estate agency, prices vary depending on the property", "Plage du Mairie de Cannes": "free entry", "Pirates N' Paradise @ Cannes": 'escape game, 25 EUR per person ', "Ville de Cannes": "free entry", "Port de Cannes": 'free entry, boat parking fees vary ', "Cannes Sign": "free entry", "The Cannes Lions Beach": "free entry" }
+
+
+# )
+   
+    
+#     return 'ok'
+    
+
+    # QueryChatGPT.objects.all().delete()
+    
     # City.objects.all().delete()
     # Attraction.objects.all().delete()
     # Restaurant.objects.all().delete()
     
+    def populate_attractions(attractions_data):
+        city2=City.objects.filter(city='Krabi')
+        city_obj = city2[0]
+        for attraction_data in attractions_data:
+            
+            attraction = Attraction(
+                city_id=city_obj.id,
+                name=attraction_data["name"],
+                latitude=attraction_data["latitude"],
+                longitude=attraction_data["longitude"],
+                photos=attraction_data["photos"],
+                review_score=attraction_data["review_score"],
+                description=attraction_data["description"],
+                website=attraction_data["website"],
+                hours_popular=attraction_data["hours_popular"],
+                distance=attraction_data["distance"],
+                real_price=attraction_data["real_price"]
+            )
+            print (attraction_data["name"])
+            attraction.save()
+    populate_attractions(attractions_data = [
+    {
+        "city": "Krabi",
+        "name": "Railay Beach",
+        "latitude": 8.0126,
+        "longitude": 98.8375,
+        "photos": "",
+        "review_score": "4.7",
+        "description": "Visit Railay Beach, a stunning beach accessible only by boat. Enjoy the crystal-clear waters, limestone cliffs, and outdoor activities such as rock climbing and kayaking.",
+        "website": "",
+        "hours_popular": "Open 24 hours",
+        "distance": 0,
+        "real_price": "Free"
+    },
+    {
+        "city": "Krabi",
+        "name": "Phi Phi Islands",
+        "latitude": 7.7407,
+        "longitude": 98.7780,
+        "photos": "",
+        "review_score": "4.6",
+        "description": "Explore the picturesque Phi Phi Islands, known for their white sandy beaches and crystal-clear waters. Take a boat tour, snorkel, or relax on the pristine beaches.",
+        "website": "",
+        "hours_popular": "Open all year round",
+        "distance": 40,
+        "real_price": "Varies"
+    },
+    {
+        "city": "Krabi",
+        "name": "Tiger Cave Temple (Wat Tham Sua)",
+        "latitude": 8.0467,
+        "longitude": 98.9225,
+        "photos": "",
+        "review_score": "4.5",
+        "description": "Visit Tiger Cave Temple, a Buddhist temple known for its striking scenery and challenging climb to the top. Enjoy panoramic views of Krabi from the summit.",
+        "website": "",
+        "hours_popular": "Open daily",
+        "distance": 10,
+        "real_price": "Free"
+    },
+    {
+        "city": "Krabi",
+        "name": "Four Islands",
+        "latitude": 7.7065,
+        "longitude": 98.7625,
+        "photos": "",
+        "review_score": "4.4",
+        "description": "Embark on a Four Islands tour, visiting Phra Nang Cave Beach, Chicken Island, Tup Island, and Poda Island. Enjoy snorkeling, swimming, and relaxing on these beautiful islands.",
+        "website": "",
+        "hours_popular": "Open all year round",
+        "distance": 20,
+        "real_price": "Varies"
+    },
+    {
+        "city": "Krabi",
+        "name": "Emerald Pool (Sa Morakot)",
+        "latitude": 8.0105,
+        "longitude": 99.6144,
+        "photos": "",
+        "review_score": "4.3",
+        "description": "Take a refreshing dip in the Emerald Pool, a natural hot spring surrounded by lush rainforest. Enjoy the beautiful turquoise waters and the tranquility of the area.",
+        "website": "",
+        "hours_popular": "Open daily",
+        "distance": 60,
+        "real_price": "Varies"
+    }
+]
+
+)
+# You can now use this attractions_data list to populate your database.
+
+    return 'ok'
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
