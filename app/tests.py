@@ -430,3 +430,43 @@
 #     exit
 #     exit
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+import flickrapi
+import os
+
+def flickr_api(name,latitude,longitude):
+  api_key =os.environ.get('flickr_key')
+  api_secret =os.environ.get('flickr_secret')
+  image_list = []
+  flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+  # Search for photos by tags (landmark name)
+  photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
+  if len(photos['photos']['photo']) == 0:
+    # No photos found for the attraction name, search by latitude and longitude
+    photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
+
+    if len(photos['photos']['photo']) == 0:
+        print('No photos found for the attraction')
+  # Extract the photo URLs
+  if 'photos' in photos and 'photo' in photos['photos']:
+      for photo in photos['photos']['photo']:
+          photo_id = photo['id']  # URL of the original-sized photo
+          flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+          # Get the sizes of the photo
+          sizes = flickr.photos.getSizes(photo_id=photo_id)
+          # Extract the URL of the image
+          if 'sizes' in sizes and 'size' in sizes['sizes']:
+              # Assuming you want the URL of the largest available size
+              largest_size = sizes['sizes']['size'][-1]
+              image_url = largest_size['source']
+              return image_url
+            #   image_list.append(image_url)
+          else:
+              return (image_url=="")
+
+
+print(flickr_api(name='Shaniwar Wada',latitude= 18.5204,longitude= 73.8567,))

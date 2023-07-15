@@ -32,7 +32,7 @@ class Attraction(models.Model):
     description=models.TextField(max_length=1000)
     website=models.TextField(max_length=100)
     hours_popular=models.TextField()
-    distance=models.IntegerField(null=False)
+    distance=models.TextField(max_length=200)
     real_price=models.CharField(max_length=200)
     
 class Restaurant(models.Model):

@@ -86,6 +86,7 @@
 # "Kolkata, India",
 # "Hyderabad, India",
 # "Ahmedabad, India",
+
 # "Pune, India",
 # "Jaipur, India",
 # "Tokyo, Japan",
@@ -104,7 +105,8 @@
 # "Granada, Spain",
 # "Alicante, Spain",
 # "Zaragoza, Spain",
-# "Rome, Italy",
+
+
 # "Milan, Italy",
 # "Naples, Italy",
 # "Turin, Italy",
@@ -112,17 +114,16 @@
 # "Venice, Italy",
 # "Bologna, Italy",
 # "Genoa, Italy",
-# "Paris, France",
 # "Marseille, France",
 # "Lyon, France",
 # "Toulouse, France",
-# "Nice, France",
 # "Nantes, France",
 # "Strasbourg, France",
 # "Bordeaux, France",
 # "Berlin, Germany",
 # "Hamburg, Germany",
 # "Munich, Germany",
+
 # "Cologne, Germany",
 # "Frankfurt, Germany",
 # "Stuttgart, Germany",

@@ -5,6 +5,8 @@ from app.wikipediaapi import process_query
 import json
 from datetime import datetime, timedelta
 import math
+import traceback
+
 def process_attraction(attrac, city_obj, attractions):
     name1 = attrac.get("name", "")
     distance1 = attrac.get("distance", "")
@@ -191,7 +193,7 @@ def generate_schedule(data):
                     # Add lunch break if within attraction hours
                     if lunch_break_start <= attraction_start.time() < lunch_break_end:
                         attraction_start += timedelta(hours=2)
-
+                    
                     attraction_end = attraction_start + attraction_duration
 
                     attraction_data = {
@@ -207,39 +209,43 @@ def generate_schedule(data):
                             'website': attraction['website'],
                             'hours_popular': attraction['hours_popular'],
                             'distance': attraction['distance'],
+                            'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                             'start_time': attraction_start.strftime('%H:%M'),
                             'end_time': attraction_end.strftime('%H:%M')
                         }
                     }
 
                     day_schedule['attractions'].append(attraction_data)
-
+                try:
                 # Add extra attraction if available and within the schedule
-                if extra_attractions > 0 and day_schedule['attractions'][-1]['attraction']['end_time'] < daily_schedule_end.strftime('%H:%M'):
-                    extra_attraction = attractions[num_attractions - extra_attractions]
-                    extra_attraction_start = start_time + (attraction_duration * (attractions_per_day + extra_attractions - 1))
-                    extra_attraction_end = extra_attraction_start + attraction_duration
+                    if extra_attractions > 0 and day_schedule['attractions'][-1]['attraction']['end_time'] < daily_schedule_end.strftime('%H:%M'):
+                        extra_attraction = attractions[num_attractions - extra_attractions]
+                        extra_attraction_start = start_time + (attraction_duration * (attractions_per_day + extra_attractions - 1))
+                        extra_attraction_end = extra_attraction_start + attraction_duration
 
-                    if extra_attraction_end.time() <= daily_schedule_end:
-                        extra_attraction_data = {
-                            'attraction': {
-                                'id': extra_attraction['id'],
-                                'city_id': extra_attraction['city_id'],
-                                'name': extra_attraction['name'],
-                                'latitude': extra_attraction['latitude'],
-                                'longitude': extra_attraction['longitude'],
-                                'photos': extra_attraction['photos'],
-                                'review_score': extra_attraction['review_score'],
-                                'description': extra_attraction['description'],
-                                'website': extra_attraction['website'],
-                                'hours_popular': extra_attraction['hours_popular'],
-                                'distance': extra_attraction['distance'],
-                                'start_time': extra_attraction_start.strftime('%H:%M'),
-                                'end_time': extra_attraction_end.strftime('%H:%M')
+                        if extra_attraction_end.time() <= daily_schedule_end:
+                            extra_attraction_data = {
+                                'attraction': {
+                                    'id': extra_attraction['id'],
+                                    'city_id': extra_attraction['city_id'],
+                                    'name': extra_attraction['name'],
+                                    'latitude': extra_attraction['latitude'],
+                                    'longitude': extra_attraction['longitude'],
+                                    'photos': extra_attraction['photos'],
+                                    'review_score': extra_attraction['review_score'],
+                                    'description': extra_attraction['description'],
+                                    'website': extra_attraction['website'],
+                                    'hours_popular': extra_attraction['hours_popular'],
+                                    'distance': extra_attraction['distance'],
+                                    'real_price': attraction['real_price'] if 'real_price' in attraction else '',
+                                    'start_time': extra_attraction_start.strftime('%H:%M'),
+                                    'end_time': extra_attraction_end.strftime('%H:%M')
+                                }
                             }
-                        }
-                        day_schedule['attractions'].append(extra_attraction_data)
-                        extra_attractions -= 1
+                            day_schedule['attractions'].append(extra_attraction_data)
+                            extra_attractions -= 1
+                except:
+                    print('not extra attraction')
 
                 # Add lunch break
                 lunch_start = datetime.combine(start_time.date(), lunch_break_start)
@@ -258,7 +264,9 @@ def generate_schedule(data):
 
             schedule['schedules'].append(city_schedule)
     except Exception as e:
+        
         print('failed in 261',e)
+        traceback.print_exc() 
 
     return schedule
 
