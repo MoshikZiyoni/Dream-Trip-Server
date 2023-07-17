@@ -171,10 +171,12 @@ def generate_schedule(data):
         lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
         daily_schedule_end = datetime.strptime('19:00', '%H:%M').time()
 
-        schedule = {'city': '', 'description': '', 'schedules': [] }  # Initialize the schedule dictionary
-
+        schedule = {'city': '', 'description': '','schedules': [] }  # Initialize the schedule dictionary
         for city in cities:
+            # print(city)
             city_name = city['city']
+            query1=City.objects.get(city=city_name)
+            landmarks=[query1.longitude,query1.latitude]
             city_description = city['description']
             attractions = city['attractions']
             try:
@@ -190,7 +192,7 @@ def generate_schedule(data):
 
             start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
 
-            city_schedule = {'city': city_name, 'description': city_description,'restaurants':restaurants, 'schedules': []}
+            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants, 'schedules': []}
 
             for day in range(days_spent):
                 day_schedule = {'day': day + 1, 'attractions': []}
@@ -207,7 +209,7 @@ def generate_schedule(data):
                     attraction_end = attraction_start + attraction_duration
 
                     attraction_data = {
-                        'attraction': {
+                        # 'attraction': {
                             'id': attraction['id'],
                             'city_id': attraction['city_id'],
                             'name': attraction['name'],
@@ -222,7 +224,7 @@ def generate_schedule(data):
                             'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                             'start_time': attraction_start.strftime('%H:%M'),
                             'end_time': attraction_end.strftime('%H:%M')
-                        }
+                        
                     }
 
                     day_schedule['attractions'].append(attraction_data)
