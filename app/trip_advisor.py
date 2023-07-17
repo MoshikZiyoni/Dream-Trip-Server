@@ -68,7 +68,7 @@ def trip_advisor_restaurants(city_name,country,landmarks):
         'latLong': quote(f"{landmarks[0]}, {landmarks[1]}"),  # URL-encode the latLong values
         'key': key,
         'category': 'restaurants',
-        'radius': '10',
+        'radius': '6',
         'radiusUnit': 'km',
         'language': 'en'
     }

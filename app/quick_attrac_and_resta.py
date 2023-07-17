@@ -1,529 +1,66 @@
-my_list = [
-"London, United Kingdom",
-"New York City, United States",
-"Paris, France",
-"Tokyo, Japan",
-"Sydney, Australia",
-"Rome, Italy",
-"Berlin, Germany",
-"Moscow, Russia",
-"Beijing, China",
-"Toronto, Canada",
-"Madrid, Spain",
-"Cairo, Egypt",
-"Istanbul, Turkey",
-"Rio de Janeiro, Brazil",
-"Cape Town, South Africa",
-"Mumbai, India",
-"Buenos Aires, Argentina",
-"Dubai, United Arab Emirates",
-"Seoul, South Korea",
-"Athens, Greece",
-"Amsterdam, Netherlands",
-"Prague, Czech Republic",
-"Vienna, Austria",
-"Helsinki, Finland",
-"Bangkok, Thailand",
-"Singapore, Singapore",
-"Stockholm, Sweden",
-"Copenhagen, Denmark",
-"Budapest, Hungary",
-"Dublin, Ireland",
-"Warsaw, Poland",
-"Lisbon, Portugal",
-"Oslo, Norway",
-"Reykjavik, Iceland",
-"Brasília, Brazil",
-"Mexico City, Mexico",
-"Santiago, Chile",
-"Bogota, Colombia",
-"Lima, Peru",
-"Caracas, Venezuela",
-"Johannesburg, South Africa",
-"Nairobi, Kenya",
-"Casablanca, Morocco",
-"Beirut, Lebanon",
-"New Delhi, India",
-"Hanoi, Vietnam",
-"Manila, Philippines",
-"Jakarta, Indonesia",
-"Kuala Lumpur, Malaysia",
-"Wellington, New Zealand",
-"San Francisco, United States",
-"Los Angeles, United States",
-"Chicago, United States",
-"Miami, United States",
-"Boston, United States",
-"Seattle, United States",
-"Las Vegas, United States",
-# "Washington, D.C., United States",
-"San Diego, United States",
-"Houston, United States",
-"Dallas, United States",
-"Atlanta, United States",
-"Denver, United States",
-"Phoenix, United States",
-"Portland, United States",
-"Philadelphia, United States",
-"Vancouver, Canada",
-"Montreal, Canada",
-"Calgary, Canada",
-"Ottawa, Canada",
-"Edmonton, Canada",
-"Quebec City, Canada",
-"Sydney, Canada",
-"Melbourne, Australia",
-"Brisbane, Australia",
-"Perth, Australia",
-"Adelaide, Australia",
-"Auckland, New Zealand",
-"Christchurch, New Zealand",
-"Wellington, New Zealand",
-"Mumbai, India",
-"Delhi, India",
-"Bangalore, India",
-"Chennai, India",
-"Kolkata, India",
-"Hyderabad, India",
-"Ahmedabad, India",
-
-"Pune, India",
-"Jaipur, India",
-"Tokyo, Japan",
-"Yokohama, Japan",
-"Osaka, Japan",
-"Nagoya, Japan",
-"Sapporo, Japan",
-"Fukuoka, Japan",
-"Kyoto, Japan",
-"Hiroshima, Japan",
-"Barcelona, Spain",
-"Valencia, Spain",
-"Seville, Spain",
-"Malaga, Spain",
-"Bilbao, Spain",
-"Granada, Spain",
-"Alicante, Spain",
-"Zaragoza, Spain",
-
-
-"Milan, Italy",
-"Naples, Italy",
-"Turin, Italy",
-"Florence, Italy",
-"Venice, Italy",
-"Bologna, Italy",
-"Genoa, Italy",
-"Marseille, France",
-"Lyon, France",
-"Toulouse, France",
-"Nantes, France",
-"Strasbourg, France",
-"Bordeaux, France",
-"Berlin, Germany",
-"Hamburg, Germany",
-"Munich, Germany",
-
-"Cologne, Germany",
-"Frankfurt, Germany",
-"Stuttgart, Germany",
-"Düsseldorf, Germany",
-"Leipzig, Germany",
-"Vienna, Austria",
-"Graz, Austria",
-"Linz, Austria",
-"Salzburg, Austria",
-"Innsbruck, Austria",
-"Klagenfurt, Austria",
-"Geneva, Switzerland",
-"Zurich, Switzerland",
-"Basel, Switzerland",
-"Lausanne, Switzerland",
-"Bern, Switzerland",
-"Lucerne, Switzerland",
-"St. Gallen, Switzerland",
-"Moscow, Russia",
-"Saint Petersburg, Russia",
-"Novosibirsk, Russia",
-"Yekaterinburg, Russia",
-"Nizhny Novgorod, Russia",
-"Kazan, Russia",
-"Chelyabinsk, Russia",
-"Samara, Russia",
-"Istanbul, Turkey",
-"Ankara, Turkey",
-"Izmir, Turkey",
-"Bursa, Turkey",
-"Adana, Turkey",
-"Gaziantep, Turkey",
-"Konya, Turkey",
-"Antalya, Turkey",
-"Beijing, China",
-"Shanghai, China",
-"Guangzhou, China",
-"Shenzhen, China",
-"Chengdu, China",
-"Hangzhou, China",
-"Wuhan, China",
-"Tianjin, China",
-"Seoul, South Korea",
-"Busan, South Korea",
-"Incheon, South Korea",
-"Daegu, South Korea",
-"Daejeon, South Korea",
-"Gwangju, South Korea",
-"Ulsan, South Korea",
-"Athens, Greece",
-"Thessaloniki, Greece",
-"Patras, Greece",
-"Heraklion, Greece",
-"Larissa, Greece",
-"Ioannina, Greece",
-"Volos, Greece",
-"Amsterdam, Netherlands",
-"Rotterdam, Netherlands",
-"The Hague, Netherlands",
-"Utrecht, Netherlands",
-"Eindhoven, Netherlands",
-"Tilburg, Netherlands",
-"Groningen, Netherlands",
-"Prague, Czech Republic",
-"Brno, Czech Republic",
-"Ostrava, Czech Republic",
-"Plzen, Czech Republic",
-"Olomouc, Czech Republic",
-"Liberec, Czech Republic",
-"Hradec Kralove, Czech Republic",
-"Vienna, Austria",
-"Graz, Austria",
-"Linz, Austria",
-"Salzburg, Austria",
-"Innsbruck, Austria",
-"Klagenfurt, Austria",
-"Helsinki, Finland",
-"Espoo, Finland",
-"Tampere, Finland",
-"Vantaa, Finland",
-"Turku, Finland",
-"Oulu, Finland",
-"Lahti, Finland",
-"Bangkok, Thailand",
-"Phuket, Thailand",
-"Chiang Mai, Thailand",
-"Pattaya, Thailand",
-"Krabi, Thailand",
-"Ayutthaya, Thailand",
-"Samui, Thailand",
-"Singapore, Singapore",
-"Stockholm, Sweden",
-"Gothenburg, Sweden",
-"Malmo, Sweden",
-"Uppsala, Sweden",
-"Vasteras, Sweden",
-"Orebro, Sweden",
-"Linkoping, Sweden",
-"Copenhagen, Denmark",
-"Aarhus, Denmark",
-"Odense, Denmark",
-"Aalborg, Denmark",
-"Esbjerg, Denmark",
-"Randers, Denmark",
-"Kolding, Denmark",
-"Budapest, Hungary",
-"Debrecen, Hungary",
-"Szeged, Hungary",
-"Miskolc, Hungary",
-"Pecs, Hungary",
-"Gyor, Hungary",
-"Nyiregyhaza, Hungary",
-"Dublin, Ireland",
-"Cork, Ireland",
-"Limerick, Ireland",
-"Galway, Ireland",
-"Waterford, Ireland",
-"Belfast, United Kingdom",
-"Manchester, United Kingdom",
-"Birmingham, United Kingdom",
-"Glasgow, United Kingdom",
-"Edinburgh, United Kingdom",
-    "Liverpool, United Kingdom",
-    "Leeds, United Kingdom",
-    "Warsaw, Poland",
-    "Krakow, Poland",
-    "Lodz, Poland",
-    "Wroclaw, Poland",
-    "Poznan, Poland",
-    "Gdansk, Poland",
-    "Szczecin, Poland",
-    "Lisbon, Portugal",
-    "Porto, Portugal",
-    "Vila Nova de Gaia, Portugal",
-    "Amadora, Portugal",
-    "Braga, Portugal",
-    "Coimbra, Portugal",
-    "Funchal, Portugal",
-    "Oslo, Norway",
-    "Bergen, Norway",
-    "Stavanger, Norway",
-    "Trondheim, Norway",
-    "Drammen, Norway",
-    "Fredrikstad, Norway",
-    "Sandnes, Norway",
-    "Reykjavik, Iceland",
-    "Brasília, Brazil",
-    "Rio de Janeiro, Brazil",
-    "São Paulo, Brazil",
-    "Salvador, Brazil",
-    "Fortaleza, Brazil",
-    "Belo Horizonte, Brazil",
-    "Manaus, Brazil",
-    "Recife, Brazil",
-    "Mexico City, Mexico",
-    "Guadalajara, Mexico",
-    "Monterrey, Mexico",
-    "Puebla City, Mexico",
-    "Tijuana, Mexico",
-    "Ciudad Juarez, Mexico",
-    "Leon, Mexico",
-    "Santiago, Chile",
-    "Valparaiso, Chile",
-    "Concepcion, Chile",
-    "Antofagasta, Chile",
-    "Vina del Mar, Chile",
-    "Temuco, Chile",
-    "Rancagua, Chile",
-    "Bogota, Colombia",
-    "Medellin, Colombia",
-    "Cali, Colombia",
-    "Barranquilla, Colombia",
-    "Cartagena, Colombia",
-    "Cucuta, Colombia",
-    "Bucaramanga, Colombia",
-    "Lima, Peru",
-    "Arequipa, Peru",
-    "Trujillo, Peru",
-    "Chiclayo, Peru",
-    "Piura, Peru",
-    "Cusco, Peru",
-    "Chimbote, Peru",
-    "Caracas, Venezuela",
-    "Maracaibo, Venezuela",
-    "Valencia, Venezuela",
-    "Barquisimeto, Venezuela",
-    "Maracay, Venezuela",
-    "Ciudad Guayana, Venezuela",
-    "Nairobi, Kenya",
-    "Mombasa, Kenya",
-    "Kisumu, Kenya",
-    "Nakuru, Kenya",
-    "Eldoret, Kenya",
-    "Nyeri, Kenya",
-    "Casablanca, Morocco",
-    "Rabat, Morocco",
-    "Marrakech, Morocco",
-    "Fes, Morocco",
-    "Tangier, Morocco",
-    "Agadir, Morocco",
-    "Beirut, Lebanon",
-    "Tripoli, Lebanon",
-    "Sidon, Lebanon",
-    "Tyre, Lebanon",
-    "Zahle, Lebanon",
-    "New Delhi, India",
-    "Mumbai, India",
-    "Kolkata, India",
-    "Chennai, India",
-    "Bangalore, India",
-    "Hyderabad, India",
-    "Ahmedabad, India",
-    "Pune, India",
-    "Jaipur, India",
-    "Hanoi, Vietnam",
-    "Ho Chi Minh City, Vietnam",
-    "Da Nang, Vietnam",
-    "Haiphong, Vietnam",
-    "Nha Trang, Vietnam",
-    "Can Tho, Vietnam",
-    "Manila, Philippines",
-    "Quezon City, Philippines",
-    "Caloocan, Philippines",
-    "Davao City, Philippines",
-    "Cebu City, Philippines",
-    "Zamboanga City, Philippines",
-    "Jakarta, Indonesia",
-    "Surabaya, Indonesia",
-    "Bandung, Indonesia",
-    "Medan, Indonesia",
-    "Semarang, Indonesia",
-    "Palembang, Indonesia",
-    "Kuala Lumpur, Malaysia",
-    "George Town, Malaysia",
-    "Ipoh, Malaysia",
-    "Shah Alam, Malaysia",
-    "Petaling Jaya, Malaysia",
-    "Malacca City, Malaysia",
-    "Wellington, New Zealand",
-    "Auckland, New Zealand",
-    "Christchurch, New Zealand",
-    "Hamilton, New Zealand",
-    "Tauranga, New Zealand",
-    "Napier, New Zealand",
-    "Dunedin, New Zealand",
-    "San Francisco, United States",
-    "Los Angeles, United States",
-    "Chicago, United States",
-    "Miami, United States",
-    "Boston, United States",
-    "Seattle, United States",
-    "Las Vegas, United States",
-    # "Washington, D.C., United States",
-    "San Diego, United States",
-    "Houston, United States",
-    "Dallas, United States",
-    "Atlanta, United States",
-    "Denver, United States",
-    "Phoenix, United States",
-    "Portland, United States",
-    "Philadelphia, United States",
-    "Vancouver, Canada",
-    "Montreal, Canada",
-    "Calgary, Canada",
-    "Ottawa, Canada",
-    "Edmonton, Canada",
-    "Quebec City, Canada",
-    "Sydney, Canada",
-    "Melbourne, Australia",
-    "Brisbane, Australia",
-    "Perth, Australia",
-    "Adelaide, Australia",
-    "Auckland, New Zealand",
-    "Christchurch, New Zealand",
-    "Wellington, New Zealand",
-    "Christchurch, New Zealand"
-]
 # def extract_city_data(city_data):
-#     for city_data in city_data:
-#         country = city_data["country"]
-#         city = city_data["city_name"]
-#         description = city_data["description"]
-#         latitude = city_data["latitude"]
-#         longitude = city_data["longitude"]
-#         try:
-#             existing_country = Country.objects.filter(name=country).first()
-#             country_id = existing_country.id
-#         except:
-#             print("Country does not exist")
-#         if not existing_country:
-#             query_for_country = Country(name=country)
-#             query_for_country.save()
-#             country_id = query_for_country.id
-#         existing_city = City.objects.filter(city=city).first()
-
-#         if not existing_city:
-#             city_query = City(
-#                 country_id=country_id,
-#                 city=city,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 description=description,
-#             )
-#             city_query.save()
+#         for city_data in city_data:
+#             country = city_data["country"]
+#             city = city_data["city_name"]
+#             description = city_data["description"]
+#             latitude = city_data["latitude"]
+#             longitude = city_data["longitude"]
+#             print (city)
+#             try:
+#                 existing_country = Country.objects.filter(name=country).first()
+#                 country_id = existing_country.id
+#                 print ('there is the country')
+#             except:
+#                 print("Country does not exist")
+#             if not existing_country:
+#                 query_for_country = Country(name=country)
+#                 query_for_country.save()
+#                 print ('save country success')
+#                 country_id = query_for_country.id
+#             existing_city = City.objects.filter(city=city).first()
+#             print ('there is already this city')
+#             if not existing_city:
+#                 city_query = City(
+#                     country_id=country_id,
+#                     city=city,
+#                     latitude=latitude,
+#                     longitude=longitude,
+#                     description=description,
+#                 )
+#                 city_query.save()
 #             city_objs = City.objects.filter(city=city).first()
 #             if city_objs:
-#                 print (city_objs.id,'AAAAAAA')
-#                     # city_obj = city_objs[0]
-#                 landmarks=[latitude,longitude]
-#                 result1=foursquare_attraction(landmarks,city_name=city,country=country)
-#                 for attrac in result1:
-#                     process_attraction(attrac=attrac, city_obj=city_objs, attractions={})
-#                 reslut=foursquare_restaurant(landmarks)
-#                 for restaur in reslut:
-#                     process_restaurant(restaur, city_obj=city_objs, restaurants={})
-#                 print('save success')
+#                 attractions_exist = city_objs.attractions.exists()
+#                 restaurants_exist = city_objs.restaurants.exists()
 
-# import json
-# import requests
-# from urllib.parse import quote
-# from geopy.geocoders import Nominatim
-# from dotenv import load_dotenv
-# import os
-# import time
-# load_dotenv()
-# api_key=os.environ.get('FOURSQUARE')
+#                 if attractions_exist:
+#                     # Attractions already exist for this city
+#                     # Skip fetching attractions from Foursquare
+#                     print("Attractions already exist for this city")
+#                 else:
+#                     # Fetch attractions from Foursquare
+#                     landmarks = [city_objs.latitude, city_objs.longitude]
+#                     result1 = foursquare_attraction(landmarks, city_name=city, country=city_objs.country)
+#                     for attrac in result1:
+#                         process_attraction(attrac=attrac, city_obj=city_objs)
 
-# def foursquare_attraction(landmarks):
-#     url1 = "https://api.foursquare.com/v3/places/search?"
+#                 if restaurants_exist:
+#                     # Restaurants already exist for this city
+#                     # Skip fetching restaurants from Foursquare
+#                     print("Restaurants already exist for this city")
+#                 else:
+#                     # Fetch restaurants from Foursquare
+#                     landmarks = [city_objs.latitude, city_objs.longitude]
+#                     result2 = foursquare_restaurant(landmarks)
+#                     for restaur in result2:
+#                         process_restaurant(restaur, city_obj=city_objs )
 
-#     headers = {
-#         "accept": "application/json",
-#         "Authorization": api_key
-#     }
+#                 print("Save success")
+#             else:
+#                 print("City not found")
 
-#     query1= {
-#         'query': 'attractions in Paris, France',
-#         'categories':'10027,10025,10055,10068,16000',
-#         "ll" :  f"{48.8566},{2.3522}",
-#         'radius':5000,
-#         'limit' : 6,
-#         'fields':'distance,geocodes,name,fsq_id,rating,price,website,distance,description,social_media,photos,menu,hours_popular'
-
-#     }
-#     response1 = requests.get(url1, params=query1,headers=headers)
-
-#     response_text1=(response1.text)
-#     jsonto1=json.loads(response_text1)
-#     reslut=jsonto1['results']
-#     return(reslut)
-
-
-# import flickrapi
-
-# def flickr_api(name,latitude,longitude):
-#   time.sleep(1.5)
-#   api_key =os.environ.get('flickr_key')
-#   api_secret =os.environ.get('flickr_secret')
-#   image_list = []
-#   flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-#   # Search for photos by tags (landmark name)
-#   photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
-#   if len(photos['photos']['photo']) == 0:
-#     # No photos found for the attraction name, search by latitude and longitude
-#     photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
-
-#     if len(photos['photos']['photo']) == 0:
-#         print('No photos found for the attraction')
-#   # Extract the photo URLs
-#   if 'photos' in photos and 'photo' in photos['photos']:
-#       for photo in photos['photos']['photo']:
-#           photo_id = photo['id']  # URL of the original-sized photo
-#           flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-#           # Get the sizes of the photo
-#           sizes = flickr.photos.getSizes(photo_id=photo_id)
-#           # Extract the URL of the image
-#           if 'sizes' in sizes and 'size' in sizes['sizes']:
-#               # Assuming you want the URL of the largest available size
-#               largest_size = sizes['sizes']['size'][-1]
-#               image_url = largest_size['source']
-#               return image_url
-#             #   image_list.append(image_url)
-#           else:
-#               return (image_url=="")
-# print(flickr_api(name='Parque Fluvial Vallarta,Puerto Vallarta,mexico',latitude=20.641047,longitude=-105.22765))
-
-
-
-
-# extract_city_data(city_data = [
-#     {"country": "United Kingdom", "city_name": "London","latitude": 51.5074,"longitude": -0.1278, "description": "London is the capital and largest city of England and the United Kingdom. It stands on the River Thames in south-east England."},
-#     {"country": "United States","city_name": "New York City","latitude": 40.7128,"longitude": -74.0060, "description": "New York City comprises 5 boroughs sitting where the Hudson River meets the Atlantic Ocean. At its core is Manhattan, a densely populated borough that’s among the world’s major commercial, financial and cultural centers."},
-#     {"country": "France","city_name": "Paris","latitude": 48.8566,"longitude": 2.3522, "description": "Paris, France's capital, is a major European city and a global center for art, fashion, gastronomy and culture. Its 19th-century cityscape is crisscrossed by wide boulevards and the River Seine."},
-#     {"country": "Japan","city_name": "Tokyo","latitude": 35.6762,"longitude": 139.6503, "description": "Tokyo, Japan’s busy capital, mixes the ultramodern and the traditional, from neon-lit skyscrapers to historic temples. The opulent Meiji Shinto Shrine is known for its towering gate and surrounding woods."},
-#     {"country": "Australia","city_name": "Sydney","latitude": -33.8688,"longitude": 151.2093, "description": "Sydney is the state capital of New South Wales and the most populous city in Australia and Oceania. Located on Australia's east coast, the metropolis surrounds Port Jackson."},
-#     {"country": "Italy","city_name": "Rome","latitude": 41.9028,"longitude": 12.4964, "description": "Rome, Italy’s capital, is a sprawling, cosmopolitan city with nearly 3,000 years of globally influential art, architecture and culture on display."},
-#     {"country": "Germany","city_name": "Berlin","latitude": 52.52,"longitude": 13.405, "description": "Berlin, Germany’s capital, dates to the 13th century. Reminders of the city's turbulent 20th-century history include its Holocaust memorial and the Berlin Wall's graffitied remains."},
-#     {"country": "Russia","city_name": "Moscow","latitude": 55.7558,"longitude": 37.6173, "description": "Moscow is the capital and most populous city of Russia. The city stands on the Moskva River in Central Russia."},
-#     {"country": "China","city_name": "Beijing","latitude": 39.9042,"longitude": 116.4074, "description": "Beijing, China's capital, has a history stretching back 3 millennia. But today, it's known for its modern architecture, world-class museums, opera and theater."},
-#     {"country": "Canada","city_name": "Toronto","latitude": 43.6532,"longitude": -79.3832, "description": "Toronto, the capital of Ontario, is Canada's largest city and a hub of trade and finance. It has a cosmopolitan atmosphere and a modern downtown with iconic skyscrapers."},
+#     extract_city_data(city_data = [
+#    {"country": "Canada","city_name": "Toronto","latitude": 43.6532,"longitude": -79.3832, "description": "Toronto, the capital of Ontario, is Canada's largest city and a hub of trade and finance. It has a cosmopolitan atmosphere and a modern downtown with iconic skyscrapers."},
 #     {"country": "Spain","city_name": "Madrid","latitude": 40.4168,"longitude": -3.7038, "description": "Madrid is the capital and most populous city of Spain. The city has almost 3.3 million inhabitants and a metropolitan area population of approximately 6.7 million."},
 #     {"country": "Egypt","city_name": "Cairo","latitude": 30.0444,"longitude": 31.2357, "description": "Cairo is the capital of Egypt and one of the largest cities in Africa and the Middle East. Located near the Nile Delta, it is known as the \"city of a thousand minarets\"."},
 #     {"country": "Turkey","city_name": "Istanbul","latitude": 41.0082,"longitude": 28.9784, "description": "Istanbul is a major city in Turkey that straddles Europe and Asia across the Bosphorus Strait. Its Old City reflects cultural influences of the many empires that once ruled here."},
@@ -593,3 +130,4 @@ my_list = [
 # {"country": "New Zealand","city_name":"Auckland","latitude":-36.8485,"longitude":174.7633,"description":"Auckland, based around 2 large harbors, is a major city in the north of New Zealand's North Island. In the center is the iconic Sky Tower, an observation and telecommunications tower."},
 # {"country": "New Zealand","city_name":"Christchurch","latitude":-43.5256,"longitude":172.6362,"description":"Christchurch is the largest city in the South Island of New Zealand, and the country's third-most populous urban area."},
 # {"country": "New Zealand","city_name":"Wellington","latitude":-41.2865,"longitude":174.7762,"description":"Wellington is the capital city and second most populous urban area of New Zealand. It is located at the southwestern tip of the North Island."}])
+#     return 'ok'

@@ -13,7 +13,7 @@ from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, process_attraction, process_restaurant
+from app.utils import generate_schedule, process_attraction, process_restaurant, restaurant_GPT
 from threading import Thread
 # Load environment variables from .env file
 load_dotenv()
@@ -79,8 +79,16 @@ def process_restaurants(landmarks, city_name, country, city_obj, city_data, rest
     reslut = foursquare_restaurant(landmarks)
     if len(reslut) == 0:
         print("Start TripAdvisor restaurant")
-        restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
-        restaurants.append(restaurant_)
+        # restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
+        my_restaurant=restaurant_GPT(city=city_name)
+        threads = []
+        for restaur in my_restaurant:
+            thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+            thread.start()
+            threads.append(thread)
+            for thread in threads:
+                thread.join()
+        # restaurants.append(restaurant_)
     else:
         threads = []
         for restaur in reslut:
@@ -193,10 +201,13 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     time.sleep(delay)
 
         except openai.error.APIError as e:
-            if e.status_code == 429:
-                time.sleep(1)
-            else:
-                raise
+            try:
+                if e.status_code == 429:
+                    time.sleep(1)
+                else:
+                    raise
+            except Exception as e:
+                print("Error occurred:", e)
         except Exception as e:
             print("Error occurred:", e)
             print(f"Retrying... (attempt {attempt + 1})")

@@ -1,5 +1,8 @@
+import os
 import time
-from app.models import Attraction, Restaurant
+
+import openai
+from app.models import Attraction, City, Restaurant
 from app.trip_advisor import flickr_api
 from app.wikipediaapi import process_query
 import json
@@ -82,20 +85,28 @@ def process_attraction(attrac, city_obj, attractions):
 def process_restaurant(restaur, city_obj, restaurants):
     name = restaur.get("name", "")
     distance = restaur.get("distance", "")
-    latitude = (
-        restaur["geocodes"]["main"]["latitude"]
-        if "geocodes" in restaur
-        and "main" in restaur["geocodes"]
-        and "latitude" in restaur["geocodes"]["main"]
-        else ""
-    )
-    longitude = (
-        restaur["geocodes"]["main"]["longitude"]
-        if "geocodes" in restaur
-        and "main" in restaur["geocodes"]
-        and "longitude" in restaur["geocodes"]["main"]
-        else ""
-    )
+    try:
+        latitude = (
+            restaur["geocodes"]["main"]["latitude"]
+            if "geocodes" in restaur
+            and "main" in restaur["geocodes"]
+            and "latitude" in restaur["geocodes"]["main"]
+            else ""
+        )
+        longitude = (
+            restaur["geocodes"]["main"]["longitude"]
+            if "geocodes" in restaur
+            and "main" in restaur["geocodes"]
+            and "longitude" in restaur["geocodes"]["main"]
+            else ""
+        )
+    except:
+        print ('no geocodes')
+    try:
+        latitude = restaur["latitude"]
+        longitude = restaur["longitude"]  
+    except:
+        print('no lat and lon')  
     rating = restaur.get("rating", "0")
     price = restaur.get("price", "")
     website = restaur.get("website", "")
@@ -107,7 +118,6 @@ def process_restaurant(restaur, city_obj, restaurants):
         social_media = ""
         print ('no insta')
     menu = restaur.get("menu", "")
-    hours_popular = restaur.get("hours_popular", "")
     distance=restaur.get("distance","")
     photos = restaur.get("photos", "")
     if photos:
@@ -304,3 +314,122 @@ def sort_attractions_by_distance(attractions, first_attraction):
     
     # print (json.dumps(sorted_attractions,indent=2))
     return sorted_attractions
+
+
+
+
+
+
+def extract_attraction_data(my_attractions):
+    
+        for attraction_data in my_attractions:
+            city = attraction_data["city"]
+
+            name = attraction_data["name"]
+            latitude = attraction_data["latitude"]
+            longitude = attraction_data["longitude"]
+            photos = flickr_api(name, latitude, longitude)
+            review_score = attraction_data["review_score"]
+            description = attraction_data["description"]
+            website = attraction_data["website"]
+            hours_popular = attraction_data["hours_popular"]
+            distance = attraction_data["distance"]
+            real_price = attraction_data["real_price"]
+            website = website or ""
+            hours_popular = hours_popular or ""
+            print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
+            city_objs = City.objects.filter(city=city).first()
+            if city_objs:
+                print (city_objs.id,'AAAAAAA')
+                # city_obj = city_objs[0]
+                print (city_objs.id,'AAAAAAA')
+                atrc_query = Attraction(
+                name=name,
+                city=city_objs,
+                latitude=latitude,
+                longitude=longitude,
+                photos=photos,
+                review_score=review_score,
+                description=description,
+                website=website,
+                hours_popular=hours_popular,
+                distance=distance,
+                real_price=real_price
+            )
+                atrc_query.save()
+                print("Save attraction successfully")
+               
+
+            else:
+                print ("can't save")
+
+
+def extract_restaraunt_data(my_resturants):
+    
+        for restaraunt_data in my_resturants:
+            city = restaraunt_data["city"]
+
+            name = restaraunt_data["name"]
+            latitude = restaraunt_data["latitude"]
+            longitude = restaraunt_data["longitude"]
+            photos = flickr_api(name, latitude, longitude)
+            review_score = restaraunt_data["review_score"]
+            website = restaraunt_data["website"]
+            distance = restaraunt_data["distance"]
+            # social_media=restaraunt_data['social_media']
+            price=restaraunt_data['price']
+            menu=restaraunt_data['menu']
+            website = website or ""
+            menu=menu or ""
+            distance= ""
+            city_objs = City.objects.filter(city=city).first()
+            if city_objs:
+                print (city_objs.id,'AAAAAAA')
+                # city_obj = city_objs[0]
+                print (city_objs.id,'AAAAAAA')
+                resta_query = Restaurant(
+                name=name,
+                city=city_objs,
+                latitude=latitude,
+                longitude=longitude,
+                photos=photos,
+                review_score=review_score,
+                website=website,
+                # social_media=social_media,
+                distance=distance,
+                price=price,
+                menu=menu
+                    )
+                resta_query.save()
+                print("Save attraction successfully")
+               
+
+            else:
+                print ("can't save")
+
+
+
+def restaurant_GPT(city):
+        api_key = os.environ.get("OPENAI_API_KEY")
+        openai.api_key = api_key
+        more_data='restaurants:[{name:"",latitude:Float,longitude:Float,review_score:"",website:"",distance:"",price:" 1=cheap5=most expnesive",menu:""}]'
+        message_for_restaurant=f'provide me 10 restarunts in {city} return me as json like that{more_data}'
+        retries = 3  # Maximum number of retries
+            
+        for _ in range(retries):
+            try:
+                completion = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[{"role": "user", "content": message_for_restaurant}],
+                )
+                answer1 = completion.choices[0].message.content
+                data = json.loads(answer1)
+                restaurants = data["restaurants"]
+                return restaurants
+            except Exception as e:
+                print('Error:', str(e))
+                print('Retrying...')
+                continue  # Retry the API call
+            
+        else:
+            print('Failed after retries. Not good with ChatGPT')

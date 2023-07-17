@@ -46,4 +46,4 @@ class Restaurant(models.Model):
     social_media=models.TextField(max_length=100)
     price=models.TextField(max_length=20)
     menu=models.TextField(max_length=100)
-    distance=models.IntegerField(null=False)
+    distance=models.TextField(max_length=200)

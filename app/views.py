@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import json
 from django.http import JsonResponse
+import openai
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
@@ -8,8 +9,8 @@ from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
 from django.core.cache import cache
 
 from app.my_selenium import perform_search
-from app.trip_advisor import flickr_api
-from app.utils import generate_schedule, process_attraction, process_restaurant
+from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_restaurant
+from app.utils import extract_attraction_data, extract_restaraunt_data, generate_schedule, process_attraction, process_restaurant
 # from threading import Thread
 # from app.wikipediaapi import process_query
 import os
@@ -20,48 +21,305 @@ import re
 @api_view(['GET', 'POST'])
 def gpt_view(request):
     
-    # def foursquare_restaurant():
-    #     city='Prague'
+    
+    # def foursquare_restaurant(city,landmark):
     #     api_key=os.environ.get('FOURSQUARE')
-
-    #     landmarks=[50.0755,14.4378]
-    #     url1 = "https://api.foursquare.com/v3/places/search?"
-
+    #     url = "https://api.foursquare.com/v3/places/search?"
+    #     print(landmark[0])
     #     headers = {
     #         "accept": "application/json",
     #         "Authorization": api_key
     #     }
 
-    #     query1= {
-    #         'query': f"attractions in {city},Czech Republic",
-    #         'categories':'10027,10025,10055,10068,16000',
-    #         "ll" :  f"{landmarks[0]},{landmarks[1]}",
-    #         'radius':6000,
-    #         'limit' : 10,
-    #         'fields':'distance,geocodes,name,rating,distance,website,description,photos,menu,hours_popular'
-
+    #     query = {
+    #         'query': f"restaurants in {city}",
+    #         'categories': '13000',
+    #         "ll" :  f"{landmark[0]},{landmark[1]}",
+    #         'radius': 5000,
+    #         'limit': 10,
+    #         'fields':'distance,geocodes,name,rating,price,website,photos,social_media,menu'
     #     }
-    #     response1 = requests.get(url1, params=query1,headers=headers)
 
-    #     response_text1=(response1.text)
-    #     jsonto1=json.loads(response_text1)
-    #     reslut=jsonto1['results']
+    #     response = requests.get(url, params=query, headers=headers)
+    #     response_text = response.text
+    #     jsonto = json.loads(response_text)
+    #     results = jsonto['results']
+    #     print(jsonto)
     #     city_obj = City.objects.filter(city=city).first()
     #     if not city_obj:
     #         pass
-    #     for i in reslut:
-    #         process_attraction(city_obj=city_obj,attrac=i,attractions=[])
-            
+    #     # for i in results:
+    #     #     process_restaurant(city_obj=city_obj,restaur=i,restaurants=[])
+    #     #     print ('save sucess')
+    # foursquare_restaurant(city='Manchester',landmark=[53.4808,2.2426])
+    # return 'ok'
+    # def foursquare_restaurant(city,landmark):
+    #     api_key=os.environ.get('FOURSQUARE')
+    #     url = "https://api.foursquare.com/v3/places/search?"
+    #     print(landmark[0])
+    #     headers = {
+    #         "accept": "application/json",
+    #         "Authorization": api_key
+    #     }
 
-    # foursquare_restaurant()
+    #     query = {
+    #         'categories': '13000',
+    #         "ll" :  f"{landmark[0]},{landmark[1]}",
+    #         'radius': 5000,
+    #         'limit': 10,
+    #         'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
+    #     }
+
+    #     response = requests.get(url, params=query, headers=headers)
+    #     response_text = response.text
+    #     jsonto = json.loads(response_text)
+    #     results = jsonto['results']
+    #     city_obj = City.objects.filter(city=city).first()
+    #     if not city_obj:
+    #         pass
+    #     for i in results:
+    #         process_restaurant(city_obj=city_obj,restaur=i,restaurants=[])
+
+    # def get_landmarks(city):
+    #     landmarks = {  # Example landmarks for Nantes, France
+    #     "Vienna": [48.5839, 7.7455],  # Example landmarks for Strasbourg, France
+    #     "Bordeaux": [44.8378, -0.5792],  # Example landmarks for Bordeaux, France
+    #     "Berlin": [52.5200, 13.4050],  # Example landmarks for Berlin, Germany
+    #     "Hamburg": [53.5511, 9.9937],  # Example landmarks for Hamburg, Germany
+    #     "Munich": [48.1351, 11.5820],  # Example landmarks for Munich, Germany
+    # }
+    #     return landmarks.get(city, [])
+
+    # # Example usage
+    # cities = [
+    #     "Vienna",
+        
+    # ]
+
+    # for city in cities:
+    #     landmark = get_landmarks(city)
+    #     print(landmark,'first')
+    #     foursquare_restaurant(city,landmark)
+
     # return 'ok'
 
 
 
 
 
-#     def extract_attraction_data(attractions):
+
+
+
+
+    # attractions_without_real_price = Attraction.objects.filter(real_price__isnull=True) | Attraction.objects.filter(real_price='')
+    # for attraction in attractions_without_real_price:
+    #     print(attraction.name)  
+    # return 'ok'  
+
+
+
+   
+
+
+
+
+
+    # def extract_attraction_data(attractions):
     
+    #     for attraction_data in attractions:
+    #         city = attraction_data["city"]
+
+    #         name = attraction_data["name"]
+    #         latitude = attraction_data["latitude"]
+    #         longitude = attraction_data["longitude"]
+    #         photos = flickr_api(name, latitude, longitude)
+    #         if photos==None:
+    #             photos=""
+    #         review_score = attraction_data["review_score"]
+    #         description = attraction_data["description"]
+    #         website = attraction_data["website"]
+    #         hours_popular = attraction_data["hours_popular"]
+    #         distance = attraction_data["distance"]
+    #         real_price = attraction_data["real_price"]
+    #         website = website or ""
+    #         hours_popular = hours_popular or ""
+    #         print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
+    #         city_objs = City.objects.filter(city=city).first()
+    #         if city_objs:
+    #             print (city_objs.id,'AAAAAAA')
+    #             # city_obj = city_objs[0]
+    #             print (city_objs.id,'AAAAAAA')
+    #             atrc_query = Attraction(
+    #             name=name,
+    #             city=city_objs,
+    #             latitude=latitude,
+    #             longitude=longitude,
+    #             photos=photos,
+    #             review_score=review_score,
+    #             description=description,
+    #             website=website,
+    #             hours_popular=hours_popular,
+    #             distance=distance,
+    #             real_price=real_price
+    #         )
+    #             atrc_query.save()
+    #             print("Save attraction successfully")
+            
+
+    #         else:
+    #             print ("can't save")
+
+
+#     extract_attraction_data( attractions=[
+#   {
+#     "city": "Altai", 
+#     "name": "Khoton Nuur",
+#     "latitude": 46.4500,
+#     "longitude": 96.1500,
+#     "photos": ["https://live.staticflickr.com/65535/52042651783_a79b62ed52_c.jpg"],
+#     "review_score": 4.6,
+#     "description": "Large scenic freshwater lake surrounded by forested mountains",
+#     "website": "",
+#     "hours_popular": "Always accessible",
+#     "distance": "10 km north of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Tsambagarav Uul",
+#     "latitude": 48.0167,
+#     "longitude": 95.7167,
+#     "photos": ["https://live.staticflickr.com/65535/52042652063_b459b06849_c.jpg"],
+#     "review_score": 4.5,
+#     "description": "Glaciated peak with scenic hiking trails and amazing mountain views",
+#     "website": "",
+#     "hours_popular": "Always open", 
+#     "distance": "90 km northeast of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Biger Nuur",
+#     "latitude": 46.2667,
+#     "longitude": 96.2667,
+#     "photos": ["https://live.staticflickr.com/65535/52042652343_a74062ed6b_c.jpg"],
+#     "review_score": 4.3,
+#     "description": "Picturesque freshwater lake surrounded by rolling steppe hills",
+#     "website": "",
+#     "hours_popular": "Always accessible",
+#     "distance": "35 km south of Altai city",
+#     "real_price": "Free entry"
+#   },
+  
+#   {
+#     "city": "Altai",
+#     "name": "Khan Khokh Canyon",
+#     "latitude": 48.0500,
+#     "longitude": 89.9667,
+#     "photos": ["https://live.staticflickr.com/65535/52042652618_9cba1ddc8c_c.jpg"],
+#     "review_score": 4.5,
+#     "description": "Colorful rock canyon with unusual formations along the Khukh River",
+#     "website": "",
+#     "hours_popular": "Open 24 hours",
+#     "distance": "220 km northwest of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Turgen Canyon",
+#     "latitude": 48.0833,
+#     "longitude": 89.0333,
+#     "photos": ["https://live.staticflickr.com/65535/52042652868_9a2ddb672c_c.jpg"],
+#     "review_score": 4.4,
+#     "description": "Deep river canyon featuring colorful rock formations and cliffs",
+#     "website": "",
+#     "hours_popular": "Always open",
+#     "distance": "190 km northwest of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Altai Tavan Bogd National Park",
+#     "latitude": 48.9667,
+#     "longitude": 88.7500,
+#     "photos": ["https://live.staticflickr.com/65535/52042653118_313c9d64ef_c.jpg"],
+#     "review_score": 4.8,
+#     "description": "Rugged alpine scenery with glaciers, peaks, lakes and endangered wildlife",
+#     "website": "",
+#     "hours_popular": "Always open",
+#     "distance": "260 km northwest of Altai city", 
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Khull Nuur",
+#     "latitude": 46.7667,
+#     "longitude": 95.9667,
+#     "photos": ["https://live.staticflickr.com/65535/52042653353_cc6d10d487_c.jpg"],
+#     "review_score": 4.2,
+#     "description": "Crystal clear lake surrounded by pine forest in the Mongol Altai Mountains",
+#     "website": "",
+#     "hours_popular": "Always accessible",
+#     "distance": "65 km northeast of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Dayan Deereh Valley",
+#     "latitude": 47.4000,
+#     "longitude": 95.0500,
+#     "photos": ["https://live.staticflickr.com/65535/52042653588_f1511b2d94_c.jpg"],
+#     "review_score": 4.3,
+#     "description": "Panoramic valley with rock formations, rivers and nomadic camps",
+#     "website": "",
+#     "hours_popular": "Always open",
+#     "distance": "70 km east of Altai city",
+#     "real_price": "Free entry" 
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Tolbo Lake",
+#     "latitude": 46.5500,
+#     "longitude": 90.8667,
+#     "photos": ["https://live.staticflickr.com/65535/52042653818_9908863e5b_c.jpg"],
+#     "review_score": 4.1,
+#     "description": "Scenic freshwater lake surrounded by rolling grasslands",
+#     "website": "",
+#     "hours_popular": "Always accessible",
+#     "distance": "90 km southwest of Altai city",
+#     "real_price": "Free entry"
+#   },
+
+#   {
+#     "city": "Altai",
+#     "name": "Dayan Lake",
+#     "latitude": 47.7167,
+#     "longitude": 89.6000,
+#     "photos": ["https://live.staticflickr.com/65535/52042654043_a7d7a0fd81_c.jpg"],
+#     "review_score": 4.4,
+#     "description": "Stunning deep blue glacial lake nestled amongst mountain peaks", 
+#     "website": "",
+#     "hours_popular": "Always accessible",
+#     "distance": "160 km northwest of Altai city",
+#     "real_price": "Free entry"  
+#   }
+# ]
+# )
+#     return 'ok'
+    
+
+
+
+
+#     def extract_restaurants_data(attractions):
+        
 #         for attraction_data in attractions:
 #             city = attraction_data["city"]
 
@@ -69,29 +327,31 @@ def gpt_view(request):
 #             latitude = attraction_data["latitude"]
 #             longitude = attraction_data["longitude"]
 #             photos = flickr_api(name, latitude, longitude)
+#             if photos==None:
+#                 photos=""
 #             review_score = attraction_data["review_score"]
-#             description = attraction_data["description"]
+            
 #             website = attraction_data["website"]
-#             hours_popular = attraction_data["hours_popular"]
+            
 #             distance = attraction_data["distance"]
-#             real_price = attraction_data["real_price"]
+#             price = attraction_data["price"]
+#             website = website or ""
+#             print (name,latitude,longitude,review_score,website,distance,price)
 #             city_objs = City.objects.filter(city=city).first()
 #             if city_objs:
 #                 print (city_objs.id,'AAAAAAA')
 #                 # city_obj = city_objs[0]
 #                 print (city_objs.id,'AAAAAAA')
-#                 atrc_query = Attraction(
+#                 atrc_query = Restaurant(
 #                 name=name,
 #                 city=city_objs,
 #                 latitude=latitude,
 #                 longitude=longitude,
 #                 photos=photos,
 #                 review_score=review_score,
-#                 description=description,
 #                 website=website,
-#                 hours_popular=hours_popular,
 #                 distance=distance,
-#                 real_price=real_price
+#                 price=price
 #             )
 #                 atrc_query.save()
 #                 print("Save attraction successfully")
@@ -99,293 +359,17 @@ def gpt_view(request):
 
 #             else:
 #                 print ("can't save")
-
-
-#     extract_attraction_data( attractions = [
-# {
-# "city": "Kutna Hora",
-# "name": "Sedlec Ossuary",
-# "latitude": 49.774444,
-# "longitude": 15.264722,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Kostnice\_Sedlec\_02.jpg/1920px-Kostnice\_Sedlec\_02.jpg"],
-# "review_score": 4.5,
-# "description": "The Sedlec Ossuary is a small Roman Catholic chapel famous for its interior decoration, which contains the skeletal remains of between 40,000 and 70,000 people.",
-# "website": "http://www.ossuary.eu/",
-# "hours_popular": "8:00 AM - 5:00 PM",
-# "distance": "5 km from city center",
-# "real_price": "100 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "St. Barbara's Church",
-# "latitude": 49.766667,
-# "longitude": 15.266667,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Kutna\_Hora-st-barbora-unesco.JPG/1920px-Kutna\_Hora-st-barbora-unesco.JPG"],
-# "review_score": 4.7,
-# "description": "St. Barbara's Church is a Roman Catholic church and one of the most famous Gothic churches in central Europe.",
-# "website": "https://www.khfarnost.cz/en/kostel-svate-barbory/",
-# "hours_popular": "9:00 AM - 5:00 PM",
-# "distance": "In city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Italian Court",
-# "latitude": 49.765278,
-# "longitude": 15.267222,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Vla%C5%A1sk%C3%BD\_dv%C5%AFr\_%28Kutn%C3%A1\_Hora%29.jpg/1280px-Vla%C5%A1sk%C3%BD\_dv%C5%AFr\_%28Kutn%C3%A1\_Hora%29.jpg"],
-# "review_score": 4.4,
-# "description": "The Italian Court is the former seat of the Central Banking Office of Minting and the Royal Mining Board.",
-# "website": "https://www.khfarnost.cz/en/italian-court/",
-# "hours_popular": "10:00 AM - 6:00 PM",
-# "distance": "In city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Cathedral of Saint Barbara",
-# "latitude": 49.766667,
-# "longitude": 15.266667,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Kutn%C3%A1\_Hora%2C\_chr%C3%A1m\_sv.*Barbory%2C\_n%C3%A1m.*%C4%8Ceskoslovensk%C3%BDch\_legion%C3%A1%C5%99%C5%AF\_-*panoramio.jpg/1920px-Kutn%C3%A1\_Hora%2C\_chr%C3%A1m\_sv.*Barbory%2C\_n%C3%A1m.*%C4%8Ceskoslovensk%C3%BDch\_legion%C3%A1%C5%99%C5%AF*-*panoramio.jpg"],
-# "review_score": 4.7,
-# "description": "Imposing Gothic cathedral dating back to the 14th century with an elaborate interior and valuable artwork.",
-# "website": "https://www.khfarnost.cz/en/cathedral-of-st-barbara/",
-# "hours_popular": "9:00 AM - 5:00 PM",
-# "distance": "In city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Czech Museum of Silver",
-# "latitude": 49.771667,
-# "longitude": 15.267222,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Kutna\_Hora\_Muzeum\_stribra\_6.JPG/1920px-Kutna\_Hora\_Muzeum\_stribra\_6.JPG"],
-# "review_score": 4.5,
-# "description": "Museum housed in a renovated building dating from the 14th century displaying silver mining history.",
-# "website": "https://cms-kh.cz/en/",
-# "hours_popular": "10:00 AM - 6:00 PM",
-# "distance": "10 minutes walk from city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Hrádek - Czech Museum of Silver",
-# "latitude": 49.766667,
-# "longitude": 15.283333,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Kutn%C3%A1\_Hora%2C\_Hr%C3%A1dek*-*Czech\_museum\_of\_silver%2C\_castle\_01.jpg/1920px-Kutn%C3%A1\_Hora%2C\_Hr%C3%A1dek*-*Czech\_museum\_of\_silver%2C\_castle\_01.jpg"],
-# "review_score": 4.4,
-# "description": "Gothic castle housing a branch of the Czech Museum of Silver focused on medieval mining.",
-# "website": "https://cms-kh.cz/en/places/hradek/",
-# "hours_popular": "10:00 AM - 6:00 PM",
-# "distance": "2 km from city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Stone House",
-# "latitude": 49.765556,
-# "longitude": 15.267222,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Kutn%C3%A1\_Hora%2C\_Kamenn%C3%BD\_d%C5%AFm*-*panoramio.jpg/1280px-Kutn%C3%A1\_Hora%2C\_Kamenn%C3%BD\_d%C5%AFm*-\_panoramio.jpg"],
-# "review_score": 4.5,
-# "description": "The Stone House is an old burgher house from the 14th century made from stones instead of wood.",
-# "website": "http://infocentrum.kutnahora.cz/en/stone-house/",
-# "hours_popular": "10:00 AM - 5:00 PM",
-# "distance": "In city center",
-# "real_price": "90 CZK"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Saint James Church",
-# "latitude": 49.764722,
-# "longitude": 15.265556,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Kutn%C3%A1\_Hora%2C\_kostel\_sv.*Jakuba%2C\_pr%C5%AF%C4%8Del%C3%AD*-\_panoramio.jpg/1920px-Kutn%C3%A1\_Hora%2C\_kostel\_sv.*Jakuba%2C\_pr%C5%AF%C4%8Del%C3%AD*-\_panoramio.jpg"],
-# "review_score": 4.5,
-# "description": "St. James' Church is a Gothic church dedicated to Saint James the Greater located in the city center.",
-# "website": "https://www.khfarnost.cz/en/st-james-church/",
-# "hours_popular": "10:00 AM - 5:00 PM",
-# "distance": "In city center",
-# "real_price": "free"
-# },
-# {
-# "city": "Kutna Hora",
-# "name": "Kutna Hora Town Hall and Dačický House",
-# "latitude": 49.765833,
-# "longitude": 15.267222,
-# "photos": ["https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Vla%C5%A1sk%C3%BD\_dv%C5%AFr\_a\_radnice\_v\_Kutn%C3%A9\_Ho%C5%99e.jpg/1920px-Vla%C5%A1sk%C3%BD\_dv%C5%AFr\_a\_radnice\_v\_Kutn%C3%A9\_Ho%C5%99e.jpg"],
-# "review_score": 4.4,
-# "description": "Historic town hall complex with Gothic and Renaissance architecture.",
-# "website": "http://infocentrum.kutnahora.cz/en/town-hall/",
-# "hours_popular": "10:00 AM - 6:00 PM",
-# "distance": "In city center",
-# "real_price": "90 CZK"
-# }
+#     extract_restaurants_data(attractions  = [
+  
+   
 # ])
+
+
+
+
 #     return 'ok'
-    
 
-
-
-
-#     def extract_city_data(city_with_country):
-#         for city_data in city_with_country:
-#             country = city_data["country"]
-#             city = city_data["city_name"]
-#             description = city_data["description"]
-#             latitude = city_data["latitude"]
-#             longitude = city_data["longitude"]
-#             try:
-#                 existing_country = Country.objects.filter(name=country).first()
-#                 country_id = existing_country.id
-#             except:
-#                 print("Country does not exist")
-#             if not existing_country:
-#                 query_for_country = Country(name=country)
-#                 query_for_country.save()
-#                 country_id = query_for_country.id
-#             existing_city = City.objects.filter(city=city).first()
-
-#             if not existing_city:
-#                 city_query = City(
-#                     country_id=country_id,
-#                     city=city,
-#                     latitude=latitude,
-#                     longitude=longitude,
-#                     description=description,
-#                 )
-#                 city_query.save()
-#                 print('save success')
-#     extract_city_data(city_with_country =[ {
-#         "country": "India",
-#         "city_name": "Pune",
-#         "latitude": 18.5204,
-#         "longitude": 73.8567,
-#         "description": "Pune is a city in western India known for its educational institutions, historical landmarks, and cultural heritage."
-#     },
-#      {
-#         "country": "India",
-#         "city_name": "Jaipur",
-#         "latitude": 26.9124,
-#         "longitude": 75.7873,
-#         "description": "Jaipur is the capital city of the Indian state of Rajasthan, famous for its rich history, magnificent palaces, and vibrant culture."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Tokyo",
-#         "latitude": 35.6895,
-#         "longitude": 139.6917,
-#         "description": "Tokyo is the capital and largest city of Japan, known for its bustling urban atmosphere, cutting-edge technology, and traditional temples."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Yokohama",
-#         "latitude": 35.4437,
-#         "longitude": 139.638,
-#         "description": "Yokohama is a city in Kanagawa Prefecture, located near Tokyo. It is known for its scenic waterfront, diverse food scene, and historic sites."
-#     },
-#     {
-#         "country": "Japan",
-#         "city_name": "Osaka",
-#         "latitude": 34.6937,
-#         "longitude": 135.5023,
-#         "description": "Osaka is a major city in Japan's Kansai region, recognized for its modern architecture, vibrant street life, and renowned food culture."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Nagoya",
-#         "latitude": 35.1815,
-#         "longitude": 136.9066,
-#         "description": "Nagoya is the largest city in the Chubu region of Japan. It is known for its automotive industry, historical landmarks, and cultural attractions."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Sapporo",
-#         "latitude": 43.0621,
-#         "longitude": 141.3544,
-#         "description": "Sapporo is the capital city of Hokkaido's northernmost island. It is famous for its annual snow festival, ski resorts, and beer."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Fukuoka",
-#         "latitude": 33.5904,
-#         "longitude": 130.4017,
-#         "description": "Fukuoka is a vibrant city in southern Japan, renowned for its ancient temples, bustling shopping districts, and Hakata ramen."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Kyoto",
-#         "latitude": 35.0116,
-#         "longitude": 135.7681,
-#         "description": "Kyoto is a historic city in Japan known for its well-preserved temples, traditional wooden houses, and serene Zen gardens."
-#     },
-#      {
-#         "country": "Japan",
-#         "city_name": "Hiroshima",
-#         "latitude": 34.3853,
-#         "longitude": 132.4553,
-#         "description": "Hiroshima is a city in southwestern Japan, famously associated with the tragic event of the atomic bombing in 1945. It now stands as a symbol of peace and reconciliation."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Barcelona",
-#         "latitude": 41.3851,
-#         "longitude": 2.1734,
-#         "description": "Barcelona is a vibrant city in northeastern Spain, known for its unique architecture, lively street life, and beautiful Mediterranean beaches."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Valencia",
-#         "latitude": 39.4699,
-#         "longitude": -0.3763,
-#         "description": "Valencia is a coastal city in eastern Spain, famous for its futuristic City of Arts and Sciences, delicious paella, and lively festivals."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Seville",
-#         "latitude": 37.3891,
-#         "longitude": -5.9845,
-#         "description": "Seville is the capital city of the Andalusia region in southern Spain, renowned for its stunning Moorish architecture, flamenco music, and vibrant street culture."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Malaga",
-#         "latitude": 36.7213,
-#         "longitude": -4.4214,
-#         "description": "Malaga is a city on Spain's Costa del Sol, known for its beautiful beaches, ancient ruins, and being the birthplace of renowned artist Pablo Picasso."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Bilbao",
-#         "latitude": 43.263,
-#         "longitude": -2.935,
-#         "description": "Bilbao is a city in northern Spain, famous for its avant-garde architecture, including the iconic Guggenheim Museum, as well as its rich Basque culture and cuisine."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Granada",
-#         "latitude": 37.1773,
-#         "longitude": -3.5986,
-#         "description": "Granada is a city in southern Spain, renowned for its stunning Alhambra palace, Moorish heritage, and vibrant flamenco scene."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Alicante",
-#         "latitude": 38.3452,
-#         "longitude": -0.481,
-#         "description": "Alicante is a coastal city in southeastern Spain, known for its beautiful beaches, historic castle, and lively promenade, the Explanada de España."
-#     },
-#      {
-#         "country": "Spain",
-#         "city_name": "Zaragoza",
-#         "latitude": 41.6488,
-#         "longitude": -0.8891,
-#         "description": "Zaragoza is a city in northeastern Spain, renowned for its rich historical heritage, including the Basilica of Our Lady of the Pillar and the Aljafería Palace."
-#     }
-# ]
-# )
-
-
-    
-
+   
     # QueryChatGPT.objects.all().delete()
     
     # City.objects.all().delete()
@@ -393,7 +377,8 @@ def gpt_view(request):
     # Restaurant.objects.all().delete()
     
 
-
+    
+   
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
