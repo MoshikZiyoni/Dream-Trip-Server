@@ -176,7 +176,7 @@ def generate_schedule(data):
             # print(city)
             city_name = city['city']
             query1=City.objects.get(city=city_name)
-            landmarks=[query1.longitude,query1.latitude]
+            landmarks=[query1.latitude,query1.longitude]
             city_description = city['description']
             attractions = city['attractions']
             try:

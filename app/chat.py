@@ -194,7 +194,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     
-                    return {'combined_data':combined_data,'itinerary_description':itinerary_description}
+                    return {'answer':combined_data,'itinerary_description':itinerary_description}
                 except Exception as e:
                     print("Error occurred:", e)
                     print(f"Retrying... (attempt {attempt_data + 1})")
