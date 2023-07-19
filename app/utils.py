@@ -238,17 +238,17 @@ def generate_schedule(data):
                         if extra_attraction_end.time() <= daily_schedule_end:
                             extra_attraction_data = {
                                 'attraction': {
-                                    'id': extra_attraction['id'],
-                                    'city_id': extra_attraction['city_id'],
-                                    'name': extra_attraction['name'],
-                                    'latitude': extra_attraction['latitude'],
-                                    'longitude': extra_attraction['longitude'],
-                                    'photos': extra_attraction['photos'],
-                                    'review_score': extra_attraction['review_score'],
-                                    'description': extra_attraction['description'],
-                                    'website': extra_attraction['website'],
-                                    'hours_popular': extra_attraction['hours_popular'],
-                                    'distance': extra_attraction['distance'],
+                                    'id': extra_attraction['id']if 'id' in attraction else '',
+                                    'city_id': extra_attraction['city_id']if 'city_id' in attraction else '',
+                                    'name': extra_attraction['name']if 'name' in attraction else '',
+                                    'latitude': extra_attraction['latitude']if 'latitude' in attraction else '',
+                                    'longitude': extra_attraction['longitude']if 'longitude' in attraction else '',
+                                    'photos': extra_attraction['photos']if 'photos' in attraction else '',
+                                    'review_score': extra_attraction['review_score']if 'review_score' in attraction else '',
+                                    'description': extra_attraction['description']if 'description' in attraction else '',
+                                    'website': extra_attraction['website']if 'website' in attraction else '',
+                                    'hours_popular': extra_attraction['hours_popular']if 'hours_popular' in attraction else '',
+                                    'distance': extra_attraction['distance']if 'distance' in attraction else '',
                                     'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                                     'start_time': extra_attraction_start.strftime('%H:%M'),
                                     'end_time': extra_attraction_end.strftime('%H:%M')

@@ -121,17 +121,17 @@ ASGI_APPLICATION_OPTIONS = {
 
 
 
-###POSTGRESQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'New-DB-Dream-Trip',
-        'HOST':'localhost',
-        'USER': 'Dream-Trip-New',
-        'PASSWORD': os.environ.get('POSGRE_PASS'),
-        'PORT':'5432',
-    },
-}
+###POSTGRESQL#####last one 18/7/2023
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'New-DB-Dream-Trip',
+#         'HOST':'localhost',
+#         'USER': 'Dream-Trip-New',
+#         'PASSWORD': os.environ.get('POSGRE_PASS'),
+#         'PORT':'5432',
+#     },
+# }
 
 
 # ####MYSQL
@@ -147,17 +147,17 @@ DATABASES = {
 # }
 
 
-###POSTGESQL with 20MB
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'fbvfjuoz',
-#         'HOST':'snuffleupagus.db.elephantsql.com',
-#         'USER': 'fbvfjuoz',
-#         'PASSWORD': 'isec3oRHpjjU7AfaevSjPZzSGgCcyZ05',
-#         'PORT':'5432',
-#     },
-# }
+##POSTGESQL with 20MB
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('posgre_user'),
+        'HOST':os.environ.get('postgre_host'),
+        'USER': os.environ.get('posgre_user'),
+        'PASSWORD': os.environ.get('postgre_new_pass'),
+        'PORT':'5432',
+    },
+}
 
 
 

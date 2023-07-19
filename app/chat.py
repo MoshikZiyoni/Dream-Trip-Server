@@ -15,6 +15,11 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from app.utils import generate_schedule, process_attraction, process_restaurant, restaurant_GPT
 from threading import Thread
+from concurrent.futures import ThreadPoolExecutor
+
+
+executor = ThreadPoolExecutor(max_workers=10)
+
 # Load environment variables from .env file
 load_dotenv()
 geolocator = Nominatim(user_agent="dream-trip")
