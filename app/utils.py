@@ -63,23 +63,24 @@ def process_attraction(attrac, city_obj, attractions):
         "hours_popular": hours_popular1,
         "description": description,
         "distance":distance1,
+        'city_obj':city_obj.id
     }
 
     attractions.append(attraction_info)
-    atrc_query = Attraction(
-        name=name1,
-        city=city_obj,
-        latitude=latitude1,
-        longitude=longitude1,
-        photos=photos1,
-        review_score=rating1,
-        description=description,
-        website=website1,
-        hours_popular=hours_popular1,
-        distance=distance1
-    )
-    atrc_query.save()
-    print("Save attraction successfully")
+    # atrc_query = Attraction(
+    #     name=name1,
+    #     city=city_obj,
+    #     latitude=latitude1,
+    #     longitude=longitude1,
+    #     photos=photos1,
+    #     review_score=rating1,
+    #     description=description,
+    #     website=website1,
+    #     hours_popular=hours_popular1,
+    #     distance=distance1
+    # )
+    # atrc_query.save()
+    # print("Save attraction successfully")
 
 
 def process_restaurant(restaur, city_obj, restaurants):
@@ -106,7 +107,7 @@ def process_restaurant(restaur, city_obj, restaurants):
         latitude = restaur["latitude"]
         longitude = restaur["longitude"]  
     except:
-        print('no lat and lon')  
+        pass  
     rating = restaur.get("rating", "0")
     price = restaur.get("price", "")
     website = restaur.get("website", "")
@@ -142,27 +143,29 @@ def process_restaurant(restaur, city_obj, restaurants):
         "social_media": social_media,
         "menu": menu,
         "distance":distance,
-        # "hours_popular": hours_popular,
+        'city_obj':city_obj.id
+
     }
     restaurants.append(restaurant_info)
-    resta_query = Restaurant(
-        name=name,
-        city=city_obj,
-        latitude=latitude,
-        longitude=longitude,
-        photos=photos,
-        review_score=rating,
-        menu=menu,
-        social_media=social_media,
-        website=website,
-        price=price,
-        distance=distance
-    )
-    resta_query.save()
-    print("Save restaurants successfully")
+    # resta_query = Restaurant(
+    #     name=name,
+    #     city=city_obj,
+    #     latitude=latitude,
+    #     longitude=longitude,
+    #     photos=photos,
+    #     review_score=rating,
+    #     menu=menu,
+    #     social_media=social_media,
+    #     website=website,
+    #     price=price,
+    #     distance=distance
+    # )
+    # resta_query.save()
+    # print("Save restaurants successfully")
 
 
 def generate_schedule(data):
+    # print (data)
     try:
         cities = data['cities']
         num_attractions_per_day = 3
@@ -185,8 +188,11 @@ def generate_schedule(data):
                 print('already sorted')
             restaurants = city['restaurants']
             days_spent = city['days_spent']
+            days_spent=int(days_spent)
+            num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
+            num_attractions_per_day = int(num_attractions_per_day) 
 
-            num_attractions = min(len(attractions), num_attractions_per_day * days_spent)
+            # num_attractions = min(len(attractions), num_attractions_per_day * days_spent)
             attractions_per_day = num_attractions // days_spent
             extra_attractions = num_attractions % days_spent
 
@@ -203,24 +209,29 @@ def generate_schedule(data):
                     attraction_start = start_time + (attraction_duration * i)
 
                     # Add lunch break if within attraction hours
-                    if lunch_break_start <= attraction_start.time() < lunch_break_end:
-                        attraction_start += timedelta(hours=2)
-                    
+                    try:
+                        lunch_break_start = datetime.strptime('14:00', '%H:%M').time() 
+                        lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
+
+                        if lunch_break_start <= attraction_start.time() < lunch_break_end:
+                            attraction_start += timedelta(hours=2)
+                    except Exception as e:
+                        print('filaed in 212',e)
                     attraction_end = attraction_start + attraction_duration
 
                     attraction_data = {
                         # 'attraction': {
-                            'id': attraction['id'],
-                            'city_id': attraction['city_id'],
-                            'name': attraction['name'],
-                            'latitude': attraction['latitude'],
-                            'longitude': attraction['longitude'],
-                            'photos': attraction['photos'],
-                            'review_score': attraction['review_score'],
-                            'description': attraction['description'],
-                            'website': attraction['website'],
-                            'hours_popular': attraction['hours_popular'],
-                            'distance': attraction['distance'],
+                            'id': attraction['id'] if 'id' in attraction else '',
+                            'city_obj': attraction['city_obj'] if 'city_obj' in attraction else '',
+                            'name': attraction['name'] if 'name' in attraction else '',
+                            'latitude': attraction['latitude'] if 'latitude' in attraction else '',
+                            'longitude': attraction['longitude'] if 'longitude' in attraction else '',
+                            'photos': attraction['photos'] if 'photos' in attraction else '',
+                            'review_score': attraction['review_score'] if 'review_score' in attraction else '',
+                            'description': attraction['description'] if 'description' in attraction else '',
+                            'website': attraction['website'] if 'website' in attraction else '',
+                            'hours_popular': attraction['hours_popular'] if 'hours_popular' in attraction else '',
+                            'distance': attraction['distance'] if 'distance' in attraction else '',
                             'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                             'start_time': attraction_start.strftime('%H:%M'),
                             'end_time': attraction_end.strftime('%H:%M')
@@ -235,41 +246,44 @@ def generate_schedule(data):
                         extra_attraction_start = start_time + (attraction_duration * (attractions_per_day + extra_attractions - 1))
                         extra_attraction_end = extra_attraction_start + attraction_duration
 
-                        if extra_attraction_end.time() <= daily_schedule_end:
-                            extra_attraction_data = {
-                                'attraction': {
-                                    'id': extra_attraction['id']if 'id' in attraction else '',
-                                    'city_id': extra_attraction['city_id']if 'city_id' in attraction else '',
-                                    'name': extra_attraction['name']if 'name' in attraction else '',
-                                    'latitude': extra_attraction['latitude']if 'latitude' in attraction else '',
-                                    'longitude': extra_attraction['longitude']if 'longitude' in attraction else '',
-                                    'photos': extra_attraction['photos']if 'photos' in attraction else '',
-                                    'review_score': extra_attraction['review_score']if 'review_score' in attraction else '',
-                                    'description': extra_attraction['description']if 'description' in attraction else '',
-                                    'website': extra_attraction['website']if 'website' in attraction else '',
-                                    'hours_popular': extra_attraction['hours_popular']if 'hours_popular' in attraction else '',
-                                    'distance': extra_attraction['distance']if 'distance' in attraction else '',
-                                    'real_price': attraction['real_price'] if 'real_price' in attraction else '',
-                                    'start_time': extra_attraction_start.strftime('%H:%M'),
-                                    'end_time': extra_attraction_end.strftime('%H:%M')
+                        try:
+                            if extra_attraction_end.time() <= daily_schedule_end:
+                                extra_attraction_data = {
+                                    'attraction': {
+                                        'id': extra_attraction['id']if 'id' in attraction else '',
+                                        'city_id': extra_attraction['city_id']if 'city_id' in attraction else '',
+                                        'name': extra_attraction['name']if 'name' in attraction else '',
+                                        'latitude': extra_attraction['latitude']if 'latitude' in attraction else '',
+                                        'longitude': extra_attraction['longitude']if 'longitude' in attraction else '',
+                                        'photos': extra_attraction['photos']if 'photos' in attraction else '',
+                                        'review_score': extra_attraction['review_score']if 'review_score' in attraction else '',
+                                        'description': extra_attraction['description']if 'description' in attraction else '',
+                                        'website': extra_attraction['website']if 'website' in attraction else '',
+                                        'hours_popular': extra_attraction['hours_popular']if 'hours_popular' in attraction else '',
+                                        'distance': extra_attraction['distance']if 'distance' in attraction else '',
+                                        'real_price': attraction['real_price'] if 'real_price' in attraction else '',
+                                        'start_time': extra_attraction_start.strftime('%H:%M'),
+                                        'end_time': extra_attraction_end.strftime('%H:%M')
+                                    }
                                 }
-                            }
-                            day_schedule['attractions'].append(extra_attraction_data)
-                            extra_attractions -= 1
-                except:
-                    print('not extra attraction')
+                                day_schedule['attractions'].append(extra_attraction_data)
+                                extra_attractions -= 1
+                        except Exception as e:
+                            print ('Error in 265',e)
+                except Exception as e:
+                    print('not extra attraction',e)
 
                 # Add lunch break
-                lunch_start = datetime.combine(start_time.date(), lunch_break_start)
-                lunch_end = datetime.combine(start_time.date(), lunch_break_end)
-                lunch_break_data = {
-                    'attraction': {
-                        'name': 'Lunch Break',
-                        'start_time': lunch_start.strftime('%H:%M'),
-                        'end_time': lunch_end.strftime('%H:%M')
-                    }
-                }
-                day_schedule['attractions'].append(lunch_break_data)
+                # lunch_start = datetime.combine(start_time.date(), lunch_break_start)
+                # lunch_end = datetime.combine(start_time.date(), lunch_break_end)
+                # lunch_break_data = {
+                #     'attraction': {
+                #         'name': 'Lunch Break',
+                #         'start_time': lunch_start.strftime('%H:%M'),
+                #         'end_time': lunch_end.strftime('%H:%M')
+                #     }
+                # }
+                # day_schedule['attractions'].append(lunch_break_data)
 
                 start_time += timedelta(days=1)
                 city_schedule['schedules'].append(day_schedule)
@@ -367,7 +381,7 @@ def extract_attraction_data(my_attractions):
 
 
 def extract_restaraunt_data(my_resturants):
-    
+
         for restaraunt_data in my_resturants:
             city = restaraunt_data["city"]
 
@@ -386,9 +400,6 @@ def extract_restaraunt_data(my_resturants):
             distance= ""
             city_objs = City.objects.filter(city=city).first()
             if city_objs:
-                print (city_objs.id,'AAAAAAA')
-                # city_obj = city_objs[0]
-                print (city_objs.id,'AAAAAAA')
                 resta_query = Restaurant(
                 name=name,
                 city=city_objs,
@@ -435,3 +446,80 @@ def restaurant_GPT(city):
             
         else:
             print('Failed after retries. Not good with ChatGPT')
+
+
+
+def save_to_db(restaurant_for_data,attraction_for_data):
+    # print (attraction_for_data)
+    # print ()
+    # print(restaurant_for_data)
+    try:
+        for attraction in attraction_for_data:
+            # for attraction in i:
+                
+            name1 = (attraction['name'])
+            check_name=Attraction.objects.filter(name=name1).first()
+            if not check_name:   
+                                
+                latitude1 = attraction['latitude']if 'latitude' in attraction else ''
+                longitude1 = attraction['longitude']if 'longitude' in attraction else ''
+                photos1 = attraction['photos']if 'photos' in attraction else ''
+                review_score1 = attraction['review_score']if 'review_score' in attraction else ''
+                website1 = attraction['website']if 'website' in attraction else ''
+                hours_popular1 = attraction['hours_popular']if 'hours_popular' in attraction else ''
+                description = attraction['description']if 'description' in attraction else ''
+                distance1 = attraction['distance']if 'distance' in attraction else ''
+                city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
+                city_obj=City.objects.filter(id=city_obj).first()
+                # print(name1,latitude1,longitude1,photos1,review_score1,website1,hours_popular1,description,distance1,city_obj)
+                # print()
+                atrc_query = Attraction(
+                    name=name1,
+                    city=city_obj,
+                    latitude=latitude1,
+                    longitude=longitude1,
+                    photos=photos1,
+                    review_score=review_score1,
+                    description=description,
+                    website=website1,
+                    hours_popular=hours_popular1,
+                    distance=distance1
+                )
+                atrc_query.save()
+                print(f"Save attraction successfully{name1}")
+        for restaurnt in restaurant_for_data:
+            # for restaurnt in r:
+            name = (restaurnt['name'])
+            check_name1=Restaurant.objects.filter(name=name).first()
+            if not check_name1:   
+                                    
+                latitude = restaurnt['latitude']if 'latitude' in restaurnt else ''
+                longitude = restaurnt['longitude']if 'longitude' in restaurnt else ''
+                photos = restaurnt['photos']if 'photos' in restaurnt else ''
+                review_score = restaurnt['review_score']if 'review_score' in restaurnt else ''
+                website = restaurnt['website']if 'website' in restaurnt else ''
+                social_media = restaurnt['social_media']if 'social_media' in restaurnt else ''
+                menu = restaurnt['menu']if 'menu' in restaurnt else ''
+                distance = restaurnt['distance']if 'distance' in restaurnt else ''
+                price = restaurnt['price']if 'price' in restaurnt else ''
+
+                city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
+                city_obj=City.objects.filter(id=city_obj).first()
+                resta_query = Restaurant(
+                        name=name,
+                        city=city_obj,
+                        latitude=latitude,
+                        longitude=longitude,
+                        photos=photos,
+                        review_score=review_score,
+                        menu=menu,
+                        social_media=social_media,
+                        website=website,
+                        price=price,
+                        distance=distance
+                    )
+                resta_query.save()
+                print(f"Save restaurants successfully {name}")
+
+    except Exception as e:
+        print ('can"t save now',e)

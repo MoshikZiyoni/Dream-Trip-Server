@@ -13,10 +13,14 @@ from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, process_attraction, process_restaurant, restaurant_GPT
+from app.utils import generate_schedule, process_attraction, process_restaurant, restaurant_GPT, save_to_db
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
+from threading import RLock
 
+attrac_lock = RLock()
+restaur_lock = RLock() 
+city_lock=RLock()
 
 executor = ThreadPoolExecutor(max_workers=10)
 
@@ -26,7 +30,8 @@ geolocator = Nominatim(user_agent="dream-trip")
 api_key = os.environ.get("FOURSQUARE")
 import threading
 
-restaurants = []
+main_restaurants = []
+main_attractions = []
 def process_city(city_data, country, country_id):
     city_name = city_data["city"]
     description = city_data["description"]
@@ -53,83 +58,81 @@ def process_city(city_data, country, country_id):
         city_obj = city_objs[0]
     print(city_obj, "city_obj")
 
-      # Initialize an empty list for restaurants
-
-    restaurants_thread = threading.Thread(
-        target=process_restaurants,
-        args=(landmarks, city_name, country, city_obj, city_data, restaurants),
-    )
-    restaurants_thread.start()
-
-    attractions_thread = threading.Thread(
-        target=process_attractions,
-        args=(landmarks, city_name, country, city_obj, city_data),
-    )
-    attractions_thread.start()
-
-    # Wait for the threads to complete
-    restaurants_thread.join()
-    attractions_thread.join()
-
-    attract = Attraction.objects.filter(city_id=city_obj.id).values()
-    attractions_list = list(attract)
-    resturaa=Restaurant.objects.filter(city_id=city_obj.id).values()
-    restaurant_list=list(resturaa)
-    city_data["attractions"] = attractions_list
-    city_data["restaurants"] = restaurant_list
-    return city_data
-
-
-def process_restaurants(landmarks, city_name, country, city_obj, city_data, restaurants):
-    reslut = foursquare_restaurant(landmarks)
-    if len(reslut) == 0:
-        print("Start TripAdvisor restaurant")
-        # restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
-        my_restaurant=restaurant_GPT(city=city_name)
-        threads = []
-        for restaur in my_restaurant:
-            thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
-            thread.start()
-            threads.append(thread)
-            for thread in threads:
-                thread.join()
-        # restaurants.append(restaurant_)
-    else:
-        threads = []
-        for restaur in reslut:
-            thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
-            thread.start()
-            threads.append(thread)
-
-        # Wait for all threads to complete
-        for thread in threads:
-            thread.join()
-
-attractions = []
-def process_attractions(landmarks, city_name, country, city_obj, city_data):
-    reslut1 = foursquare_attraction(landmarks, city_name, country)
     
-    threads = []
+    attraction_for_data=(process_attractions(landmarks, city_name, country, city_obj, city_data))
+    restaurant_for_data=(process_restaurants(landmarks, city_name, country, city_obj, city_data))
 
-    if len(reslut1) == 0:
-        print("Start TripAdvisor attraction")
-        attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
-        attractions.append(attractions_info_trip)
-        print("TripAdvisor line 93")
-    else:
-        print("Start the else line 94")
+    main_attractions.extend(attraction_for_data)
+    main_restaurants.extend(restaurant_for_data)
+    
+    try:
+        save_to_db(attraction_for_data,restaurant_for_data)
 
-        for attrac in reslut1:
-            thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
-            thread.start()
-            threads.append(thread)
+    except:
+        print ('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    city_data["attractions"] = attraction_for_data
+    city_data["restaurants"] = restaurant_for_data
+    return city_data
+
+
+# restaur_lock=Lock()
+def process_restaurants(landmarks, city_name, country, city_obj, city_data):
+    restaurants = []
+
+    with restaur_lock:
+        reslut = foursquare_restaurant(landmarks)
+        if len(reslut) == 0:
+            print("Start TripAdvisor restaurant")
+            # restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
+            my_restaurant=restaurant_GPT(city=city_name)
+            threads = []
+            for restaur in my_restaurant:
+                thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+                thread.start()
+                threads.append(thread)
+                for thread in threads:
+                    thread.join()
+            # restaurants.append(restaurant_)
+        else:
+            threads = []
+            for restaur in reslut:
+                thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+                thread.start()
+                threads.append(thread)
+
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
+    print('return restaurants')
+    return restaurants
+
+# attrac_lock = Lock()
+def process_attractions(landmarks, city_name, country, city_obj, city_data):
+    attractions = []
+    with attrac_lock:
+        reslut1 = foursquare_attraction(landmarks, city_name, country)
+    
+        threads = []
+
+        if len(reslut1) == 0:
+            print("Start TripAdvisor attraction")
+            attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
+            attractions.append(attractions_info_trip)
+            print("TripAdvisor line 93")
+        else:
+            print("Start the else line 94")
+
+            for attrac in reslut1:
+                thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
+                thread.start()
+                threads.append(thread)
 
         # Wait for all threads to complete
         for thread in threads:
             thread.join()
 
-    city_data["attractions"] = attractions
-    return city_data
+    print ('return attractions')
+    return attractions
 
 
 
@@ -180,26 +183,26 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
 
                     executor = ThreadPoolExecutor()
                     for city_data in data["cities"]:
-                        city_name = city_data["city"]
-                        existing_city = City.objects.filter(city=city_name).first()
-                        if existing_city:
-                            attract = Attraction.objects.filter(city_id=existing_city.id).values()
-                            attractions_list = list(attract)
-                            city_data["attractions"] = attractions_list
-                            restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
-                            restaurants_list = list(restaura)
-                            city_data["restaurants"] = restaurants_list
-                            print("Continue")
-                            continue
-                        executor.submit(process_city, city_data, country, country_id)
+                        with city_lock:
+                            city_name = city_data["city"]
+                            existing_city = City.objects.filter(city=city_name).first()
+                            if existing_city:
+                                attract = Attraction.objects.filter(city_id=existing_city.id).values()
+                                attractions_list = list(attract)
+                                city_data["attractions"] = attractions_list
+                                restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
+                                restaurants_list = list(restaura)
+                                city_data["restaurants"] = restaurants_list
+                                print("Continue")
+                                continue
+                            executor.submit(process_city, city_data, country, country_id)
 
-                    executor.shutdown()
-
+                    executor.shutdown()   
                     combined_data=generate_schedule(data)
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     
-                    return {'answer':combined_data,'itinerary_description':itinerary_description}
+                    return {'answer':combined_data,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions}
                 except Exception as e:
                     print("Error occurred:", e)
                     print(f"Retrying... (attempt {attempt_data + 1})")

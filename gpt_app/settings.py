@@ -160,6 +160,18 @@ DATABASES = {
 }
 
 
+####TEST 20MB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'uipwrqra',
+#         'HOST':'isilo.db.elephantsql.com',
+#         'USER': 'uipwrqra',
+#         'PASSWORD': 'CRVgvtYerJsu9x5lgmEGWS_T7EHhUyfW',
+#         'PORT':'5432',
+#     },
+# }
+
 
 # '''
 # DATABASES = {

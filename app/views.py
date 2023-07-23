@@ -20,7 +20,20 @@ import re
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
+#     attractions_with_price = Attraction.objects.filter(real_price="['price']")
+#     for attraction in attractions_with_price:
+#         print(attraction.name)
+# # Extract all the real_price values for these attractions
+#     real_prices = attractions_with_price.values_list('real_price', flat=True)
+
+#     # Convert the result to a list if needed
+#     real_prices_list = list(real_prices)
+
+#     # Now you have a list of all the real_price values where price is equal to 'price'
+#     # print(real_prices_list)
+
+        
+#     return 'ok'
 #     def qiuick_attraction(cities_data):
 #         for data in cities_data:
 #                 country= (data['country'])
@@ -339,8 +352,8 @@ def gpt_view(request):
     # Restaurant.objects.all().delete()
     
 
-    
    
+
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
@@ -364,9 +377,7 @@ def gpt_view(request):
         # adult = request.data['adult']
         # children = request.data['children']
         durring = request.data['durringDays']
-        question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }]"itinerary-description":""}'
-        # question1 = '{"country": "..", "cities": [{"city": "", "description": "",landmarks:{latitude : "float",longitude : "float"}, "travelDay": }]}'
-        # ourmessage=f"Create a circular trip for {durring} days, visiting  {mainland} in the following JSON structure:{question1}. Ensure that each city is visited for at least 2 days. If the duration of the trip is less than or equal to 3 days, return only 1 city."
+        question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }], "itinerary-description": ""}'
         ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
         if answer_from_data:
@@ -420,8 +431,17 @@ def gpt_view(request):
             return Response(answer)
         
         result1=(run_long_poll_async(ourmessage,mainland))
-        
-        result1=result1,{"request_left":request_left}
+        combined_data = result1['answer']
+        itinerary_description1 =result1['itinerary_description']
+        main_restaurants = result1['main_restaurants']
+        main_attractions = result1['main_attractions']
+
+        result1={
+            'answer':combined_data,
+            'itinerary_description':itinerary_description1,
+            'request_left':request_left
+        }
+        # result1=result1,{"request_left":request_left}
 
         return  JsonResponse(result1,safe=False)
     except Exception as e:

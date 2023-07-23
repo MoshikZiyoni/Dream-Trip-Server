@@ -33,7 +33,7 @@ class Attraction(models.Model):
     website=models.TextField(max_length=100)
     hours_popular=models.TextField()
     distance=models.TextField(max_length=200)
-    real_price=models.CharField(max_length=200)
+    real_price=models.TextField(max_length=200)
     
 class Restaurant(models.Model):
     city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
@@ -47,3 +47,6 @@ class Restaurant(models.Model):
     price=models.TextField(max_length=20)
     menu=models.TextField(max_length=100)
     distance=models.TextField(max_length=200)
+
+
+
