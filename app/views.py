@@ -20,6 +20,8 @@ import re
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+
+   
 #     attractions_with_price = Attraction.objects.filter(real_price="['price']")
 #     for attraction in attractions_with_price:
 #         print(attraction.name)
@@ -64,13 +66,13 @@ def gpt_view(request):
 #     {'city': 'Mendoza', 'latitude': -32.8895, 'longitude': -68.8458, 'country': 'Argentina'},
 #     {'city': 'Nagoya', 'latitude': 35.1815, 'longitude': 136.9066, 'country': 'Japan'},
 #     {'city': 'Cartagena', 'latitude': 10.391, 'longitude': -75.4794, 'country': 'Colombia'},
-#     {'city': 'New York city', 'latitude': 40.7128, 'longitude': -74.0060, 'country': 'United States'},
+#     {'city': 'New York city city', 'latitude': 40.7128, 'longitude': -74.0060, 'country': 'United States'},
 #     {'city': 'Burgas', 'latitude': 42.5048, 'longitude': 27.4626, 'country': 'Bulgaria'},
 #     {'city': 'Vanua Levu', 'latitude': -16.5980, 'longitude': 179.8749, 'country': 'Fiji'},
 #     {'city': 'York', 'latitude': 53.9590, 'longitude': -1.0815, 'country': 'United Kingdom'},
 #     {'city': 'Machu Picchu', 'latitude': -13.1631, 'longitude': -72.5450, 'country': 'Peru'},
 #     {'city': 'Mexico city', 'latitude': 19.4326, 'longitude': -99.1332, 'country': 'Mexico'},
-#     {'city': 'New York City', 'latitude': 40.7128, 'longitude': -74.0060, 'country': 'United States'},
+#     {'city': 'New York city City', 'latitude': 40.7128, 'longitude': -74.0060, 'country': 'United States'},
 #     {'city': 'Arequipa', 'latitude': -16.4090, 'longitude': -71.5375, 'country': 'Peru'},
 #     {'city': 'Brasov', 'latitude': 45.6579, 'longitude': 25.6012, 'country': 'Romania'},
 #     {'city': 'Torres del Paine', 'latitude': -51.2592, 'longitude': -72.3450, 'country': 'Chile'},
@@ -243,13 +245,13 @@ def gpt_view(request):
 #             website = website or ""
 #             hours_popular = hours_popular or ""
 #             print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
-#             city_objs = City.objects.filter(city=city).first()
+#             city_objs = City.objects.filter(id=450).first()
 #             if city_objs:
 #                 print (city_objs.id,'AAAAAAA')
 #                 # city_obj = city_objs[0]
 #                 print (city_objs.id,'AAAAAAA')
 #                 atrc_query = Attraction(
-#                 name=name,
+#                 # name=name,
 #                 city=city_objs,
 #                 latitude=latitude,
 #                 longitude=longitude,
@@ -270,79 +272,304 @@ def gpt_view(request):
 
 
 #     extract_attraction_data( attractions=[
- 
+#  {"city": "Angkor Wat",
+# "name": "Angkor Wat Temple",
+# "latitude": 13.4125,
+# "longitude": 103.8667,
+# "photos": [],
+# "review_score": 4.7,
+# "description": "The largest religious monument in the world and a UNESCO World Heritage Site, the Angkor Wat Temple is a must-visit for its stunning architecture and historical significance.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Entrance fee is USD 37 for a one-day pass, USD 62 for a three-day pass, and USD 72 for a seven-day pass"},
+
+# {"city": "Angkor Wat",
+# "name": "Angkor Thom",
+# "latitude": 13.4125,
+# "longitude": 103.8667,
+# "photos": [],
+# "review_score": 4.6,
+# "description": "A fortified city and the last capital of the Khmer Empire, Angkor Thom is a fascinating site to explore for its ancient ruins and grand architecture.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Included in the price of the Angkor Wat Temple pass"},
+
+# {"city": "Angkor Wat",
+# "name": "Ta Prohm Temple",
+# "latitude": 13.4336,
+# "longitude": 103.8894,
+# "photos": [],
+# "review_score": 4.6,
+# "description": "A temple complex famous for its intertwining tree roots and ancient ruins, Ta Prohm Temple is a popular spot for photography and exploring nature and history.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Included in the price of the Angkor Wat Temple pass"
+# },
+# {"city": "Angkor Wat",
+# "name": "Banteay Srei Temple",
+# "latitude": 13.6054,
+# "longitude": 103.5562,
+# "photos": [],
+# "review_score": 4.7,
+# "description": "A beautiful temple known for its intricate carvings and pink sandstone construction, Banteay Srei Temple is a hidden gem in Angkor Wat that is worth the visit.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Included in the price of the Angkor Wat Temple pass"},
+
+# {"city": "Angkor Wat",
+# "name": "Angkor National Museum",
+# "latitude": 13.3668,
+# "longitude": 103.8446,
+# "photos": [],
+# "review_score": 4.4,
+# "description": "A museum showcasing the history and culture of Angkor Wat and the Khmer Empire, the Angkor National Museum is a great place to learn about the region's heritage.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Entrance fee is USD 12 per person"},
+
+# {"city": "Angkor Wat",
+# "name": "Phnom Kulen National Park",
+# "latitude": 13.7361,
+# "longitude": 104.0456,
+# "photos": [],
+# "review_score": 4.5,
+# "description": "A beautiful natural park featuring waterfalls, temples, and scenic views, Phnom Kulen National Park is a great place to escape the crowds and enjoy nature.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located about 50 km from Siem Reap",
+# "real_price": "Entrance fee is USD 20 per person"},
+# {
+# "city": "Angkor Wat",
+# "name": "Preah Khan Temple",
+# "latitude": 13.4672,
+# "longitude": 103.8442,
+# "photos": [],
+# "review_score": 4.5,
+# "description": "A large temple complex with ancient ruins and carvings, Preah Khan Temple is a lesser-known attraction in Angkor Wat that is worth the visit.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Included in the price of the Angkor Wat Temple pass"},
+
+# {"city": "Angkor Wat",
+# "name": "Phare, The Cambodian Circus",
+# "latitude": 13.3716,
+# "longitude": 103.8610,
+# "photos": [],
+# "review_score": 4.8,
+# "description": "A circus performance featuring Cambodian music, dance, and acrobatics, Phare is a unique and entertaining cultural experience in Siem Reap.",
+# "website": "https://pharecircus.org/",
+# "hours_popular": "Performances start at 8:00 PM every night",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Tickets start at USD 18 per person"},
+# {
+# "city": "Angkor Wat",
+# "name": "Tonle Sap Lake",
+# "latitude": 12.6289,
+# "longitude": 104.9910,
+# "photos": [],
+# "review_score": 4.2,
+# "description": "The largest freshwater lake in Southeast Asia, Tonle Sap Lake is a scenic and peaceful destination for boat tours and fishing.",
+# "website": "",
+# "hours_popular": "Most popular in the morning and afternoon",
+# "distance": "Located about 20 km from Siem Reap",
+# "real_price": "Boat tours start at USD 10 per person"
+# },
+# {"city": "Angkor Wat",
+# "name": "Artisans Angkor",
+# "latitude": 13.3534,
+# "longitude": 103.8562,
+# "photos": [],
+# "review_score": 4.4,
+# "description": "A social business promoting traditional Khmer handicrafts, Artisans Angkor offers a range of high-quality products from silk weaving to stone carving.",
+# "website": "https://www.artisansdangkor.com/",
+# "hours_popular": "Open from 7:30 AM to 6:30 PM every day",
+# "distance": "Located in Siem Reap, Cambodia",
+# "real_price": "Prices vary depending on the product, but most items are reasonably priced."}
 # ]
 # )
 
 #     return 'ok'
 
 
-#     def extract_restaurants_data(attractions):
+    def extract_restaurants_data(attractions):
         
-#         for attraction_data in attractions:
-#             city = attraction_data["city"]
+        for attraction_data in attractions:
+            city = attraction_data["city"]
 
-#             name = attraction_data["name"]
-#             latitude = attraction_data["latitude"]
-#             longitude = attraction_data["longitude"]
-#             photos = flickr_api(name, latitude, longitude)
-#             if photos==None:
-#                 photos=""
-#             review_score = attraction_data["review_score"]
+            name = attraction_data["name"]
+            latitude = attraction_data["latitude"]
+            longitude = attraction_data["longitude"]
+            photos = flickr_api(name, latitude, longitude)
+            if photos==None:
+                photos=""
+            review_score = attraction_data["review_score"]
             
-#             website = attraction_data["website"]
+            website = attraction_data["website"]
             
-#             distance = attraction_data["distance"]
-#             price = attraction_data["price"]
-#             website = website or ""
-#             print (name,latitude,longitude,review_score,website,distance,price)
-#             city_objs = City.objects.filter(city=city).first()
-#             if city_objs:
-#                 print (city_objs.id,'AAAAAAA')
-#                 # city_obj = city_objs[0]
-#                 print (city_objs.id,'AAAAAAA')
-#                 atrc_query = Restaurant(
-#                 name=name,
-#                 city=city_objs,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 photos=photos,
-#                 review_score=review_score,
-#                 website=website,
-#                 distance=distance,
-#                 price=price
-#             )
-#                 atrc_query.save()
-#                 print("Save attraction successfully")
+            distance = attraction_data["distance"]
+            price = attraction_data["price"]
+            website = website or ""
+            print (name,latitude,longitude,review_score,website,distance,price)
+            city_objs = City.objects.filter(id=308).first()
+            if city_objs:
+                print (city_objs.id,'AAAAAAA')
+                # city_obj = city_objs[0]
+                print (city_objs.id,'AAAAAAA')
+                atrc_query = Restaurant(
+                name=name,
+                city=city_objs,
+                latitude=latitude,
+                longitude=longitude,
+                photos=photos,
+                review_score=review_score,
+                website=website,
+                distance=distance,
+                price=price
+            )
+                atrc_query.save()
+                print("Save attraction successfully")
             
 
-#             else:
-#                 print ("can't save")
-#     extract_restaurants_data(attractions  = [
-   
-
-   
-# ])
+            else:
+                print ("can't save")
+    extract_restaurants_data(attractions  = [
+   {
+        "city": "Fernando de Noronha", 
+        "name": "Restaurante Cuscuz",
+        "latitude": -3.853056,
+        "longitude": -32.422222,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/0b/restaurante-cuscuz.jpg"],
+        "review_score": 5.0,
+        "website": "",
+        "distance": "In town",
+        "price": 2
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Restaurante Doce de Noronha",
+        "latitude": -3.852222,
+        "longitude": -32.422889,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/f8/photo3jpg.jpg"],
+        "review_score": 5.0,
+        "website": "",
+        "distance": "In town",
+        "price": 2
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Pizzaria Namoita",
+        "latitude": -3.853194,
+        "longitude": -32.42225,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/ef/photo0jpg.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "In town",
+        "price": 2
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Restaurante Teca",
+        "latitude": -3.853333,
+        "longitude": -32.422778,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-f/18/99/60/a7/photo2jpg.jpg"],
+        "review_score": 4.0,
+        "website": "",
+        "distance": "In town",
+        "price": 2
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Pousada Maravilha - Restaurante",
+        "latitude": -3.855,
+        "longitude": -32.425278,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/83/pousada-maravilha.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "1 km from town",
+        "price": 3
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Restaurante Zé Maria",
+        "latitude": -3.853333,
+        "longitude": -32.422889,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-w/19/6c/c0/bb/ze-maria.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "In town",
+        "price": 3  
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Restaurante Cachorro Velho",
+        "latitude": -3.852778,
+        "longitude": -32.422889,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/18/restaurante-cachorro-velho.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "In town",
+        "price": 2
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Picolé Café",
+        "latitude": -3.853333,
+        "longitude": -32.423889,
+        "photos": ["https://b.zmtcdn.com/data/reviews_photos/347/a27d3f28f3cb450d6d233adb43834347_1504710550.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "In town",
+        "price": 1
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Empório Sushi",
+        "latitude": -3.855,
+        "longitude": -32.4227778,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f7/a1/5e/sushi.jpg"],
+        "review_score": 4.5,
+        "website": "",
+        "distance": "In town",
+        "price": 3  
+    },
+    {
+        "city": "Fernando de Noronha",
+        "name": "Restaurante Natureza",
+        "latitude": -3.8508333,
+        "longitude": -32.4236111,
+        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/7e/natureza.jpg"],
+        "review_score": 4.0,
+        "website": "",
+        "distance": "1 km from town",
+        "price": 2
+    }
+])
 #     return 'ok'
 
-    # from django.db.models import Count
+    from django.db.models import Count
 
-    # # Get the cities without attractions
+    # Get the cities without attractions
     # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
 
     # # Get the cities without restaurants
-    # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
+    cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
 
-    # # Print the results
+    # Print the results
     # print("Cities without attractions:")
     # for city in cities_without_attractions:
-    #     print(city.city,',')
-
-    # print("Cities without restaurants:")
-    # for city in cities_without_restaurants:
-    #     print(city.city,',')
-
+    #     print(city.city,city.id,',')
     # return 'ok'
+    print("Cities without restaurants:")
+    for city in cities_without_restaurants:
+        print(city.city,city.id,',')
+
+    return 'ok'
 
    
     # QueryChatGPT.objects.all().delete()
