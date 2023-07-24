@@ -397,179 +397,179 @@ def gpt_view(request):
 #     return 'ok'
 
 
-    def extract_restaurants_data(attractions):
+#     def extract_restaurants_data(attractions):
         
-        for attraction_data in attractions:
-            city = attraction_data["city"]
+#         for attraction_data in attractions:
+#             city = attraction_data["city"]
 
-            name = attraction_data["name"]
-            latitude = attraction_data["latitude"]
-            longitude = attraction_data["longitude"]
-            photos = flickr_api(name, latitude, longitude)
-            if photos==None:
-                photos=""
-            review_score = attraction_data["review_score"]
+#             name = attraction_data["name"]
+#             latitude = attraction_data["latitude"]
+#             longitude = attraction_data["longitude"]
+#             photos = flickr_api(name, latitude, longitude)
+#             if photos==None:
+#                 photos=""
+#             review_score = attraction_data["review_score"]
             
-            website = attraction_data["website"]
+#             website = attraction_data["website"]
             
-            distance = attraction_data["distance"]
-            price = attraction_data["price"]
-            website = website or ""
-            print (name,latitude,longitude,review_score,website,distance,price)
-            city_objs = City.objects.filter(id=308).first()
-            if city_objs:
-                print (city_objs.id,'AAAAAAA')
-                # city_obj = city_objs[0]
-                print (city_objs.id,'AAAAAAA')
-                atrc_query = Restaurant(
-                name=name,
-                city=city_objs,
-                latitude=latitude,
-                longitude=longitude,
-                photos=photos,
-                review_score=review_score,
-                website=website,
-                distance=distance,
-                price=price
-            )
-                atrc_query.save()
-                print("Save attraction successfully")
+#             distance = attraction_data["distance"]
+#             price = attraction_data["price"]
+#             website = website or ""
+#             print (name,latitude,longitude,review_score,website,distance,price)
+#             city_objs = City.objects.filter(id=308).first()
+#             if city_objs:
+#                 print (city_objs.id,'AAAAAAA')
+#                 # city_obj = city_objs[0]
+#                 print (city_objs.id,'AAAAAAA')
+#                 atrc_query = Restaurant(
+#                 name=name,
+#                 city=city_objs,
+#                 latitude=latitude,
+#                 longitude=longitude,
+#                 photos=photos,
+#                 review_score=review_score,
+#                 website=website,
+#                 distance=distance,
+#                 price=price
+#             )
+#                 atrc_query.save()
+#                 print("Save attraction successfully")
             
 
-            else:
-                print ("can't save")
-    extract_restaurants_data(attractions  = [
-   {
-        "city": "Fernando de Noronha", 
-        "name": "Restaurante Cuscuz",
-        "latitude": -3.853056,
-        "longitude": -32.422222,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/0b/restaurante-cuscuz.jpg"],
-        "review_score": 5.0,
-        "website": "",
-        "distance": "In town",
-        "price": 2
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Restaurante Doce de Noronha",
-        "latitude": -3.852222,
-        "longitude": -32.422889,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/f8/photo3jpg.jpg"],
-        "review_score": 5.0,
-        "website": "",
-        "distance": "In town",
-        "price": 2
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Pizzaria Namoita",
-        "latitude": -3.853194,
-        "longitude": -32.42225,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/ef/photo0jpg.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "In town",
-        "price": 2
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Restaurante Teca",
-        "latitude": -3.853333,
-        "longitude": -32.422778,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-f/18/99/60/a7/photo2jpg.jpg"],
-        "review_score": 4.0,
-        "website": "",
-        "distance": "In town",
-        "price": 2
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Pousada Maravilha - Restaurante",
-        "latitude": -3.855,
-        "longitude": -32.425278,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/83/pousada-maravilha.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "1 km from town",
-        "price": 3
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Restaurante Zé Maria",
-        "latitude": -3.853333,
-        "longitude": -32.422889,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-w/19/6c/c0/bb/ze-maria.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "In town",
-        "price": 3  
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Restaurante Cachorro Velho",
-        "latitude": -3.852778,
-        "longitude": -32.422889,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/18/restaurante-cachorro-velho.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "In town",
-        "price": 2
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Picolé Café",
-        "latitude": -3.853333,
-        "longitude": -32.423889,
-        "photos": ["https://b.zmtcdn.com/data/reviews_photos/347/a27d3f28f3cb450d6d233adb43834347_1504710550.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "In town",
-        "price": 1
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Empório Sushi",
-        "latitude": -3.855,
-        "longitude": -32.4227778,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f7/a1/5e/sushi.jpg"],
-        "review_score": 4.5,
-        "website": "",
-        "distance": "In town",
-        "price": 3  
-    },
-    {
-        "city": "Fernando de Noronha",
-        "name": "Restaurante Natureza",
-        "latitude": -3.8508333,
-        "longitude": -32.4236111,
-        "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/7e/natureza.jpg"],
-        "review_score": 4.0,
-        "website": "",
-        "distance": "1 km from town",
-        "price": 2
-    }
-])
+#             else:
+#                 print ("can't save")
+#     extract_restaurants_data(attractions  = [
+#    {
+#         "city": "Fernando de Noronha", 
+#         "name": "Restaurante Cuscuz",
+#         "latitude": -3.853056,
+#         "longitude": -32.422222,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/0b/restaurante-cuscuz.jpg"],
+#         "review_score": 5.0,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 2
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Restaurante Doce de Noronha",
+#         "latitude": -3.852222,
+#         "longitude": -32.422889,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/f8/photo3jpg.jpg"],
+#         "review_score": 5.0,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 2
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Pizzaria Namoita",
+#         "latitude": -3.853194,
+#         "longitude": -32.42225,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/ef/photo0jpg.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 2
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Restaurante Teca",
+#         "latitude": -3.853333,
+#         "longitude": -32.422778,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-f/18/99/60/a7/photo2jpg.jpg"],
+#         "review_score": 4.0,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 2
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Pousada Maravilha - Restaurante",
+#         "latitude": -3.855,
+#         "longitude": -32.425278,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/83/pousada-maravilha.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "1 km from town",
+#         "price": 3
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Restaurante Zé Maria",
+#         "latitude": -3.853333,
+#         "longitude": -32.422889,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-w/19/6c/c0/bb/ze-maria.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 3  
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Restaurante Cachorro Velho",
+#         "latitude": -3.852778,
+#         "longitude": -32.422889,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/18/restaurante-cachorro-velho.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 2
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Picolé Café",
+#         "latitude": -3.853333,
+#         "longitude": -32.423889,
+#         "photos": ["https://b.zmtcdn.com/data/reviews_photos/347/a27d3f28f3cb450d6d233adb43834347_1504710550.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 1
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Empório Sushi",
+#         "latitude": -3.855,
+#         "longitude": -32.4227778,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f7/a1/5e/sushi.jpg"],
+#         "review_score": 4.5,
+#         "website": "",
+#         "distance": "In town",
+#         "price": 3  
+#     },
+#     {
+#         "city": "Fernando de Noronha",
+#         "name": "Restaurante Natureza",
+#         "latitude": -3.8508333,
+#         "longitude": -32.4236111,
+#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/7e/natureza.jpg"],
+#         "review_score": 4.0,
+#         "website": "",
+#         "distance": "1 km from town",
+#         "price": 2
+#     }
+# ])
+# #     return 'ok'
+
+#     from django.db.models import Count
+
+#     # Get the cities without attractions
+#     # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
+
+#     # # Get the cities without restaurants
+#     cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
+
+#     # Print the results
+#     # print("Cities without attractions:")
+#     # for city in cities_without_attractions:
+#     #     print(city.city,city.id,',')
+#     # return 'ok'
+#     print("Cities without restaurants:")
+#     for city in cities_without_restaurants:
+#         print(city.city,city.id,',')
+
 #     return 'ok'
-
-    from django.db.models import Count
-
-    # Get the cities without attractions
-    # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
-
-    # # Get the cities without restaurants
-    cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
-
-    # Print the results
-    # print("Cities without attractions:")
-    # for city in cities_without_attractions:
-    #     print(city.city,city.id,',')
-    # return 'ok'
-    print("Cities without restaurants:")
-    for city in cities_without_restaurants:
-        print(city.city,city.id,',')
-
-    return 'ok'
 
    
     # QueryChatGPT.objects.all().delete()
