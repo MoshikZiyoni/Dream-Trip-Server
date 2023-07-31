@@ -544,7 +544,7 @@ def popular_country(request):
     country_names = []
     for country in top_countries:
         country_names.append(country.name)
-    print (country_names)
+    return JsonResponse(country_names,safe=False)
 
 
 
