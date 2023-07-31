@@ -13,6 +13,13 @@ class QueryChatGPT(models.Model):
 
 class Country(models.Model):
     name=models.CharField(max_length=100)
+    popularity_score = models.IntegerField(default=0)
+
+    def increase_popularity(self):
+        self.popularity_score += 1
+        self.save()
+
+
 
 class City(models.Model):
     country=models.ForeignKey(Country,on_delete=models.CASCADE)
@@ -48,5 +55,13 @@ class Restaurant(models.Model):
     menu=models.TextField(max_length=100)
     distance=models.TextField(max_length=200)
 
-
+class Hotels_foursqaure(models.Model):
+    city = models.ForeignKey(City, related_name='hotels', on_delete=models.CASCADE)
+    name = models.TextField(max_length=500)
+    latitude=models.FloatField(null=False)
+    longitude=models.FloatField(null=False)
+    photos=models.TextField(max_length=100)
+    review_score=models.TextField(max_length=20)
+    description=models.TextField(max_length=1000)
+    website=models.TextField(max_length=100)
 

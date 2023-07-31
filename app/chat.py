@@ -3,17 +3,18 @@ import os
 import time
 from app.trip_advisor import (
     foursquare_attraction,
+    foursquare_hotels,
     foursquare_restaurant,
     trip_advisor_attraction,
     trip_advisor_restaurants,
 )
 import openai
 from dotenv import load_dotenv
-from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
+from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, process_attraction, process_restaurant, restaurant_GPT, save_to_db
+from app.utils import generate_schedule, process_attraction, process_hotel, process_restaurant, restaurant_GPT, save_to_db
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -21,7 +22,7 @@ from threading import RLock
 attrac_lock = RLock()
 restaur_lock = RLock() 
 city_lock=RLock()
-
+hotel_lock=RLock()
 executor = ThreadPoolExecutor(max_workers=10)
 
 # Load environment variables from .env file
@@ -32,6 +33,7 @@ import threading
 
 main_restaurants = []
 main_attractions = []
+main_hotels = []
 def process_city(city_data, country, country_id):
     city_name = city_data["city"]
     description = city_data["description"]
@@ -61,17 +63,20 @@ def process_city(city_data, country, country_id):
     
     attraction_for_data=(process_attractions(landmarks, city_name, country, city_obj, city_data))
     restaurant_for_data=(process_restaurants(landmarks, city_name, country, city_obj, city_data))
+    hotels_for_data=(process_hotels(landmarks, city_name, country, city_obj, city_data))
 
     main_attractions.extend(attraction_for_data)
     main_restaurants.extend(restaurant_for_data)
+    main_hotels.extend(hotels_for_data)
     
     try:
-        save_to_db(attraction_for_data,restaurant_for_data)
+        save_to_db(attraction_for_data,restaurant_for_data,hotels_for_data)
 
     except:
         print ('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     city_data["attractions"] = attraction_for_data
     city_data["restaurants"] = restaurant_for_data
+    city_data["hotels"] = hotels_for_data
     return city_data
 
 
@@ -90,8 +95,8 @@ def process_restaurants(landmarks, city_name, country, city_obj, city_data):
                 thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
                 thread.start()
                 threads.append(thread)
-                for thread in threads:
-                    thread.join()
+        # for thread in threads:
+        #     thread.join()
             # restaurants.append(restaurant_)
         else:
             threads = []
@@ -106,15 +111,14 @@ def process_restaurants(landmarks, city_name, country, city_obj, city_data):
     print('return restaurants')
     return restaurants
 
-# attrac_lock = Lock()
 def process_attractions(landmarks, city_name, country, city_obj, city_data):
     attractions = []
     with attrac_lock:
-        reslut1 = foursquare_attraction(landmarks, city_name, country)
+        result1 = foursquare_attraction(landmarks, city_name, country)
     
         threads = []
 
-        if len(reslut1) == 0:
+        if len(result1) == 0:
             print("Start TripAdvisor attraction")
             attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
             attractions.append(attractions_info_trip)
@@ -122,7 +126,7 @@ def process_attractions(landmarks, city_name, country, city_obj, city_data):
         else:
             print("Start the else line 94")
 
-            for attrac in reslut1:
+            for attrac in result1:
                 thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
                 thread.start()
                 threads.append(thread)
@@ -134,6 +138,23 @@ def process_attractions(landmarks, city_name, country, city_obj, city_data):
     print ('return attractions')
     return attractions
 
+
+def process_hotels(landmarks, city_name, country, city_obj, city_data):
+    hotels = []
+    with hotel_lock:
+        result_for_hotel=foursquare_hotels(landmarks)
+
+        threads = []
+        for hotel in result_for_hotel:
+                thread = Thread(target=process_hotel, args=(hotel, city_obj, hotels))
+                thread.start()
+                threads.append(thread)
+
+        for thread in threads:
+                thread.join()
+
+        print ('return hotels')
+        return hotels
 
 
 
@@ -174,6 +195,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     try:
                         existing_country = Country.objects.filter(name=country).first()
                         country_id = existing_country.id
+                        existing_country.increase_popularity()
                     except:
                         print("Country does not exist")
                     if not existing_country:
@@ -193,6 +215,9 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                 restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
                                 restaurants_list = list(restaura)
                                 city_data["restaurants"] = restaurants_list
+                                hotels=Hotels_foursqaure.objects.filter(city_id=existing_city.id).values()
+                                hotels_list=list(hotels)
+                                city_data["hotels"] = hotels_list
                                 print("Continue")
                                 continue
                             executor.submit(process_city, city_data, country, country_id)

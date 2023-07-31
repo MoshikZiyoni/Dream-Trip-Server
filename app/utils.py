@@ -1,8 +1,10 @@
+from concurrent.futures import ThreadPoolExecutor
 import os
+import re
 import time
 
 import openai
-from app.models import Attraction, City, Restaurant
+from app.models import Attraction, City, Hotels_foursqaure, Restaurant,Country
 from app.trip_advisor import flickr_api
 from app.wikipediaapi import process_query
 import json
@@ -164,6 +166,74 @@ def process_restaurant(restaur, city_obj, restaurants):
     # print("Save restaurants successfully")
 
 
+
+
+def process_hotel(hotel, city_obj, hotels):
+    name12 = hotel.get("name", "")
+    latitude12 = (
+        hotel["geocodes"]["main"]["latitude"]
+        if "geocodes" in hotel
+        and "main" in hotel["geocodes"]
+        and "latitude" in hotel["geocodes"]["main"]
+        else ""
+    )
+    longitude12 = (
+        hotel["geocodes"]["main"]["longitude"]
+        if "geocodes" in hotel
+        and "main" in hotel["geocodes"]
+        and "longitude" in hotel["geocodes"]["main"]
+        else ""
+    )
+    rating12 = hotel.get("rating", "0")
+    website12 = hotel.get("website", "")
+    description1 = hotel.get("description", "")
+    if len(description1)==0:
+            try:
+                wiki=process_query(name12)
+                description1=wiki[0]
+                print ('descrption from wiki')
+            except:
+                 print ('descrption from wiki not gooodddddddddddddddd')
+    photos12 = hotel.get("photos", "")
+    if photos12:
+        first_photo = photos12[0]
+        prefix = first_photo.get("prefix", "")
+        suffix = first_photo.get("suffix", "")
+        url1 = f"{prefix}original{suffix}"
+        photos12=url1
+        
+    else:
+        try:
+            photos12 = flickr_api(name=name12, latitude=latitude12, longitude=longitude12)
+        except:
+            print ("flickr api can't bring an image")
+
+    hotels_info = {
+        "name": name12,
+        "latitude": latitude12,
+        "longitude": longitude12,
+        "photos": photos12,
+        "review_score": rating12,
+        "website": website12,
+        "description": description1,
+        'city_obj':city_obj.id
+    }
+
+    hotels.append(hotels_info)
+    # hotels_query = Hotels_foursqaure(
+    #     name=name12,
+    #     city=city_obj,
+    #     latitude=latitude12,
+    #     longitude=longitude12,
+    #     photos=photos12,
+    #     review_score=rating12,
+    #     website=website12,
+    #     description=description1
+    # )
+    # hotels_query.save()
+    # print("Save hotels successfully")
+
+
 def generate_schedule(data):
     # print (data)
     try:
@@ -187,6 +257,7 @@ def generate_schedule(data):
             except Exception as e:
                 print('already sorted')
             restaurants = city['restaurants']
+            hotels=city['hotels']
             days_spent = city['days_spent']
             days_spent=int(days_spent)
             num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
@@ -198,7 +269,7 @@ def generate_schedule(data):
 
             start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
 
-            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants, 'schedules': []}
+            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels, 'schedules': []}
 
             for day in range(days_spent):
                 day_schedule = {'day': day + 1, 'attractions': []}
@@ -222,7 +293,7 @@ def generate_schedule(data):
                     attraction_data = {
                         # 'attraction': {
                             'id': attraction['id'] if 'id' in attraction else '',
-                            'city_obj': attraction['city_obj'] if 'city_obj' in attraction else '',
+                            'city_id': attraction['city_id'] if 'city_id' in attraction else '',
                             'name': attraction['name'] if 'name' in attraction else '',
                             'latitude': attraction['latitude'] if 'latitude' in attraction else '',
                             'longitude': attraction['longitude'] if 'longitude' in attraction else '',
@@ -449,7 +520,7 @@ def restaurant_GPT(city):
 
 
 
-def save_to_db(restaurant_for_data,attraction_for_data):
+def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
     # print (attraction_for_data)
     # print ()
     # print(restaurant_for_data)
@@ -520,6 +591,81 @@ def save_to_db(restaurant_for_data,attraction_for_data):
                     )
                 resta_query.save()
                 print(f"Save restaurants successfully {name}")
+        
+        for hotel in hotels_for_data:
+            name12 = (hotel['name'])
+            check_name12=Hotels_foursqaure.objects.filter(name=name).first()
+            if not check_name12:  
+                latitude12 = hotel['latitude']if 'latitude' in hotel else ''
+                longitude12 = hotel['longitude']if 'longitude' in hotel else ''
+                photos12 = hotel['photos']if 'photos' in hotel else ''
+                rating12 = hotel['review_score']if 'review_score' in hotel else ''
+                website12 = hotel['website']if 'website' in hotel else ''
+                description12 = hotel['description']if 'description' in hotel else ''
+                city_obj=hotel['city_obj']if 'city_obj' in hotel else ''
+                city_obj=City.objects.filter(id=city_obj).first()
+                hotels_query = Hotels_foursqaure(
+                name=name12,
+                city=city_obj,
+                latitude=latitude12,
+                longitude=longitude12,
+                photos=photos12,
+                review_score=rating12,
+                website=website12,
+                description=description12
+                )
+                hotels_query.save()
+                print("Save hotels successfully")
 
     except Exception as e:
         print ('can"t save now',e)
+
+
+
+def quick_from_data_base(country,answer_dict,process_city):
+    answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
+    answer_dict = json.loads(answer_string_modified)
+    try:
+        itinerary_description=answer_dict['itinerary-description']
+    except:
+        print ('failed in 432')
+        pass
+    try:
+        itinerary_description=answer_dict['itinerary_description']
+    except:
+        pass
+    try:
+        existing_country = Country.objects.filter(name=country).first()
+        country_id = existing_country.id
+        # existing_country.increase_popularity()
+
+    except:
+        print("Country does not exist")
+    if not existing_country:
+        query_for_country = Country(name=country)
+        query_for_country.save()
+        country_id = query_for_country.id
+    executor = ThreadPoolExecutor()
+    for city_data in answer_dict["cities"]:
+        city_name = city_data["city"]
+        existing_city = City.objects.filter(city=city_name).first()
+        if existing_city:
+            attract = Attraction.objects.filter(city_id=existing_city.id).values()
+            attractions_list = list(attract)
+            city_data["attractions"] = attractions_list
+
+            restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
+            restaurants_list = list(restaura)
+            city_data["restaurants"] = restaurants_list
+
+            hotels=Hotels_foursqaure.objects.filter(city_id=existing_city.id).values()
+            hotels_list=list(hotels)
+            city_data["hotels"] = hotels_list
+            print("Continue")
+            continue
+        executor.submit(process_city, city_data, country, country_id)
+
+    executor.shutdown()
+    answer_from_data1=generate_schedule(answer_dict) 
+    answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description})
+    return answer

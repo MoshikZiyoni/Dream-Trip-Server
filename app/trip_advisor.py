@@ -172,9 +172,9 @@ def foursquare_attraction(landmarks,city_name,country):
         'query': f"attractions in {city_name},{country}",
         'categories':'10027,10025,10055,10068,16000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
-        'radius':6000,
-        'limit' : 10,
-        'fields':'distance,geocodes,name,rating,distance,website,description,photos,menu,hours_popular'
+        'radius':8000,
+        'limit' : 20,
+        'fields':'distance,geocodes,name,rating,distance,website,photos,menu,hours_popular'
 
     }
     response1 = requests.get(url1, params=query1,headers=headers)
@@ -183,3 +183,27 @@ def foursquare_attraction(landmarks,city_name,country):
     jsonto1=json.loads(response_text1)
     reslut=jsonto1['results']
     return reslut
+
+
+def foursquare_hotels(landmarks):
+
+    url = "https://api.foursquare.com/v3/places/search?"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
+    query= {
+        'categories':'19014',
+        "ll" :  f"{landmarks[0]},{landmarks[1]}",
+        'radius':5000,
+        'limit' : 10,
+        'fields':'geocodes,name,rating,website,photos,description'
+    }
+    response = requests.get(url, params=query,headers=headers)
+
+    response_text=(response.text)
+    jsonto=json.loads(response_text)
+    print (jsonto)
+    reslut=jsonto['results']
+    return (reslut)

@@ -437,36 +437,31 @@ load_dotenv()
 
 import flickrapi
 import os
+import requests
+import json
+api_key=os.environ.get('FOURSQUARE')
 
-def flickr_api(name,latitude,longitude):
-  api_key =os.environ.get('flickr_key')
-  api_secret =os.environ.get('flickr_secret')
-  image_list = []
-  flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-  # Search for photos by tags (landmark name)
-  photos = flickr.photos.search(text=name, per_page=1, extras='url_o',sort='relevance')
-  if len(photos['photos']['photo']) == 0:
-    # No photos found for the attraction name, search by latitude and longitude
-    photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
+def foursquare_hotels(landmarks):
 
-    if len(photos['photos']['photo']) == 0:
-        print('No photos found for the attraction')
-  # Extract the photo URLs
-  if 'photos' in photos and 'photo' in photos['photos']:
-      for photo in photos['photos']['photo']:
-          photo_id = photo['id']  # URL of the original-sized photo
-          flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-          # Get the sizes of the photo
-          sizes = flickr.photos.getSizes(photo_id=photo_id)
-          # Extract the URL of the image
-          if 'sizes' in sizes and 'size' in sizes['sizes']:
-              # Assuming you want the URL of the largest available size
-              largest_size = sizes['sizes']['size'][-1]
-              image_url = largest_size['source']
-              return image_url
-            #   image_list.append(image_url)
-          else:
-              return (image_url=="")
+    url = "https://api.foursquare.com/v3/places/search?"
 
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
+    query= {
+        'categories':'19014',
+        "ll" :  f"{landmarks[0]},{landmarks[1]}",
+        'radius':5000,
+        'limit' : 10,
+        'fields':'geocodes,name,rating,website,photos,social_media,description'
+    }
+    response = requests.get(url, params=query,headers=headers)
 
-print(flickr_api(name='Shaniwar Wada',latitude= 18.5204,longitude= 73.8567,))
+    response_text=(response.text)
+    jsonto=json.loads(response_text)
+    print (jsonto)
+    reslut=jsonto['results']
+    return (reslut)
+
+foursquare_hotels(landmarks=[48.8566,2.3522])
