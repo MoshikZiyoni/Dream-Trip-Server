@@ -1,4 +1,3 @@
-from concurrent.futures import ThreadPoolExecutor
 import json
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -9,8 +8,6 @@ from django.core.cache import cache
 from app.my_selenium import perform_search
 from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_hotels, foursquare_restaurant
 from app.utils import extract_attraction_data, extract_restaraunt_data, generate_schedule, process_attraction, process_hotel, process_restaurant, quick_from_data_base
-import os
-import requests
 import traceback
 import re
 from django.db.models import Q

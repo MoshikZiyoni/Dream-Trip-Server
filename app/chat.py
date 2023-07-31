@@ -12,7 +12,6 @@ import openai
 from dotenv import load_dotenv
 from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
-import threading
 from concurrent.futures import ThreadPoolExecutor
 from app.utils import generate_schedule, process_attraction, process_hotel, process_restaurant, restaurant_GPT, save_to_db
 from threading import Thread
