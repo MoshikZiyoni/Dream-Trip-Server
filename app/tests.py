@@ -439,29 +439,31 @@ import flickrapi
 import os
 import requests
 import json
-api_key=os.environ.get('FOURSQUARE')
+import time
+from geopy.geocoders import Nominatim
+from urllib.parse import quote
+import pprint
 
-def foursquare_hotels(landmarks):
+# def get_paris_landscape_photo():
+#     url = 'https://api.unsplash.com/photos/random'
+#     params = {'query': 'France landscape', 'orientation':'landscape', 'client_id': 'CatCs1kJYjmDo0XkmBi6Eth2SWAZ8AoAFuSRrKGQ3W0'}
 
-    url = "https://api.foursquare.com/v3/places/search?"
+#     response = requests.get(url, params=params)
+#     data = response.json()
+#     print (data)
+#     return data['urls']['full']
 
-    headers = {
-        "accept": "application/json",
-        "Authorization": api_key
-    }
-    query= {
-        'categories':'19014',
-        "ll" :  f"{landmarks[0]},{landmarks[1]}",
-        'radius':5000,
-        'limit' : 10,
-        'fields':'geocodes,name,rating,website,photos,social_media,description'
-    }
-    response = requests.get(url, params=query,headers=headers)
+# photo_url = get_paris_landscape_photo()
+# print(photo_url)
 
-    response_text=(response.text)
-    jsonto=json.loads(response_text)
-    print (jsonto)
-    reslut=jsonto['results']
-    return (reslut)
 
-foursquare_hotels(landmarks=[48.8566,2.3522])
+
+import requests
+
+url = 'https://pixabay.com/api/'
+params = {'key':'38175640-b01604281e5814abe49174a0e','q':'israel','image_type':'landscape','orientation':'landscape'}
+
+response = requests.get(url, params=params)
+data = response.json()
+image_url = data['hits'][0]['largeImageURL']
+print(image_url)

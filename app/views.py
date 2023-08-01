@@ -12,9 +12,11 @@ import traceback
 import re
 from django.db.models import Q
 import random
-
+import os
+import requests
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+
     
     # from django.db.models import Count
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
@@ -283,7 +285,6 @@ def gpt_view(request):
 
 #     extract_attraction_data( attractions=[
 
-
 # ]
 # )
 
@@ -445,9 +446,29 @@ def gpt_view(request):
 # ])
 # #     return 'ok'
 
+
+    # def city_has_few_attractions():
+    #     cities_with_few_attractions = []
+
+    #     # Get all cities and their attraction count using the Django ORM
+    #     cities = City.objects.all()
+
+    #     for city in cities:
+    #         # Count the number of attractions for each city
+    #         attraction_count = city.attractions.count()
+
+    #         # Check if the city has fewer than 10 attractions
+    #         if attraction_count < 10:
+    #             cities_with_few_attractions.append(city.city)
+
+    #     return cities_with_few_attractions
+    # print(city_has_few_attractions())
+    # return 'ko'
+
+
     # from django.db.models import Count
 
-    # # Get the cities without attractions
+    # Get the cities without attractions
     # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
     # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
     # for city in cities_without_hotels:
@@ -461,7 +482,10 @@ def gpt_view(request):
     # print("Cities without attractions:")
     # for city in cities_without_attractions:
     #     print(city.city,city.id,',')
-    # # return 'ok'
+    # attrac=Attraction.objects.filter(city_id=345).values()
+    # for i in attrac:
+    #     print(i)
+    # return 'ok'
     # print("Cities without restaurants:")
     # for city in cities_without_restaurants:
     #     print(city.city,city.id,',')
@@ -540,7 +564,15 @@ def popular_country(request):
     top_countries = Country.objects.order_by('-popularity_score')[:6]
     country_names = []
     for country in top_countries:
+        url = 'https://pixabay.com/api/'
+        params = {'key':os.environ.get('pixabay_key'),'q':{country.name},'image_type':'landscape','orientation':'landscape'}
+
+        response = requests.get(url, params=params)
+        data = response.json()
+        image_url = data['hits'][0]['largeImageURL']
+        
         country_names.append(country.name)
+        country_names.append(image_url)
     return JsonResponse(country_names,safe=False)
 
 
