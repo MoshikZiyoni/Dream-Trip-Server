@@ -571,8 +571,8 @@ def popular_country(request):
         data = response.json()
         image_url = data['hits'][0]['largeImageURL']
         
-        country_names.append(country.name)
-        country_names.append(image_url)
+        country_pair = [country.name, image_url]
+        country_names.append(country_pair)
     return JsonResponse(country_names,safe=False)
 
 
