@@ -65,3 +65,8 @@ class Hotels_foursqaure(models.Model):
     description=models.TextField(max_length=1000)
     website=models.TextField(max_length=100)
 
+
+class Popular(models.Model):
+    country=models.TextField(max_length=100)
+    image=models.TextField(max_length=255)
+    

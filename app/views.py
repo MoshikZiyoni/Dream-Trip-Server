@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
-from app.models import Attraction, Country, QueryChatGPT,City, Restaurant
+from app.models import Attraction, Country, QueryChatGPT,City, Restaurant,Popular
 from django.core.cache import cache
 from app.my_selenium import perform_search
 from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_hotels, foursquare_restaurant
@@ -17,7 +17,6 @@ import requests
 @api_view(['GET', 'POST'])
 def gpt_view(request):
 
-    
     # from django.db.models import Count
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
 
@@ -561,18 +560,20 @@ def gpt_view(request):
 
 @api_view(['GET', 'POST'])
 def popular_country(request):
-    top_countries = Country.objects.order_by('-popularity_score')[:6]
-    country_names = []
-    for country in top_countries:
-        url = 'https://pixabay.com/api/'
-        params = {'key':os.environ.get('pixabay_key'),'q':{country.name},'image_type':'landscape','orientation':'landscape'}
+    # top_countries = Country.objects.order_by('-popularity_score')[:6]
+    # country_names = []
+    # for country in top_countries:
+    #     url = 'https://pixabay.com/api/'
+    #     params = {'key':os.environ.get('pixabay_key'),'q':{country.name},'image_type':'landscape','orientation':'landscape'}
 
-        response = requests.get(url, params=params)
-        data = response.json()
-        image_url = data['hits'][0]['largeImageURL']
+    #     response = requests.get(url, params=params)
+    #     data = response.json()
+    #     image_url = data['hits'][0]['largeImageURL']
         
-        country_pair = [country.name, image_url]
-        country_names.append(country_pair)
+    #     country_pair = [country.name, image_url]
+    #     country_names.append(country_pair)
+    country_names=Popular.objects.all().values()
+    country_names=list(country_names)
     return JsonResponse(country_names,safe=False)
 
 
