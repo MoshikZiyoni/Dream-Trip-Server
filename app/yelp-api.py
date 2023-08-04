@@ -12,9 +12,9 @@ headers = {
 "Authorization":f"Bearer {api_key}" 
 }
 params= {
-    "location":'thessaloniki',
-    "latitude":40.6401,
-    "longitude":22.9444,
+    "location":'Asuncion',
+    "latitude":25.2637,
+    "longitude":57.5759,
     "radius":10000,
     "categories":"shopping,active,hotels,tours,museums",
     "limit":10,

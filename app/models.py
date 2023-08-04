@@ -41,6 +41,7 @@ class Attraction(models.Model):
     hours_popular=models.TextField()
     distance=models.TextField(max_length=200)
     real_price=models.TextField(max_length=200)
+    place_id=models.TextField(max_length=150,null=True)
     
 class Restaurant(models.Model):
     city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
