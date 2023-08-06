@@ -55,6 +55,7 @@ class Restaurant(models.Model):
     price=models.TextField(max_length=20)
     menu=models.TextField(max_length=100)
     distance=models.TextField(max_length=200)
+    place_id=models.TextField(max_length=150,null=True)
 
 class Hotels_foursqaure(models.Model):
     city = models.ForeignKey(City, related_name='hotels', on_delete=models.CASCADE)

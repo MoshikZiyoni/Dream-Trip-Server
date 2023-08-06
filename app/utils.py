@@ -2,8 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 import re
 import time
-
 import openai
+import requests
 from app.models import Attraction, City, Hotels_foursqaure, Restaurant,Country
 from app.trip_advisor import flickr_api
 from app.wikipediaapi import process_query
@@ -11,6 +11,9 @@ import json
 from datetime import datetime, timedelta
 import math
 import traceback
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def process_attraction(attrac, city_obj, attractions):
     name1 = attrac.get("name", "")
@@ -541,6 +544,7 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 description = attraction['description']if 'description' in attraction else ''
                 distance1 = attraction['distance']if 'distance' in attraction else ''
                 city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
+                place_id=attraction["place_id"] if "place_id" in attraction else ''
                 city_obj=City.objects.filter(id=city_obj).first()
                 # print(name1,latitude1,longitude1,photos1,review_score1,website1,hours_popular1,description,distance1,city_obj)
                 # print()
@@ -554,7 +558,8 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                     description=description,
                     website=website1,
                     hours_popular=hours_popular1,
-                    distance=distance1
+                    distance=distance1,
+                    place_id=place_id
                 )
                 atrc_query.save()
                 print(f"Save attraction successfully{name1}")
@@ -573,7 +578,7 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 menu = restaurnt['menu']if 'menu' in restaurnt else ''
                 distance = restaurnt['distance']if 'distance' in restaurnt else ''
                 price = restaurnt['price']if 'price' in restaurnt else ''
-
+                place_id1=attraction["place_id"] if "place_id" in restaurnt else ''
                 city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
                 city_obj=City.objects.filter(id=city_obj).first()
                 resta_query = Restaurant(
@@ -587,7 +592,8 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                         social_media=social_media,
                         website=website,
                         price=price,
-                        distance=distance
+                        distance=distance,
+                        place_id=place_id1
                     )
                 resta_query.save()
                 print(f"Save restaurants successfully {name}")
@@ -622,7 +628,7 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
 
 
 
-def quick_from_data_base(country,answer_dict,process_city):
+def quick_from_data_base(country,answer_dict,process_city,request_left):
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
     answer_dict = json.loads(answer_string_modified)
     try:
@@ -667,5 +673,58 @@ def quick_from_data_base(country,answer_dict,process_city):
 
     executor.shutdown()
     answer_from_data1=generate_schedule(answer_dict) 
-    answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description})
+    answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description,"request_left":request_left})
     return answer
+
+
+
+
+API_KEY=os.environ.get('google_key')
+def restarunts_from_google(restaur, city_obj, restaurants):
+    name_resta = restaur['name']
+    latt = restaur['geometry']['location']['lat']
+    lng1 = restaur['geometry']['location']['lng']
+    price_level=restaur['price_level'] if restaur.get('price_level') else ""
+    website_resta=restaur['website'] if restaur.get('website') else ""
+    rating = restaur['rating']
+    place_id = restaur['place_id'] if restaur.get('place_id') else None
+    photo_reference = restaur['photos'][0]['photo_reference'] if restaur.get('photos') else None
+
+    initial_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={API_KEY}"
+    response = requests.get(initial_url)
+    final_url = response.url
+    # city_obj1=City.objects.filter(id=city_obj).first()
+    place = {
+    "name": name_resta,
+    "latitude": latt,
+    "longitude": lng1,
+    "review_score": rating,
+    "place_id": place_id,
+    "photos":final_url,
+    "price": price_level,
+    "website":website_resta,
+    "city_obj":city_obj.id
+}
+    restaurants.append(place)
+
+
+def attraction_from_google(attracs, city_obj, attractions):
+    name_attrac = attracs['name']
+    lat = attracs['geometry']['location']['lat']
+    lng = attracs['geometry']['location']['lng']
+    rating1 = attracs['rating']
+    if rating1==0:
+        return ""
+    place_id = attracs['place_id']
+    image = flickr_api(name=name_attrac,latitude=lat,longitude=lng)
+    place = {
+        "name": name_attrac,
+        "latitude": lat,
+        "longitude": lng,
+        "review_score": rating1,
+        "place_id": place_id,
+        "photos":image,
+        "city_obj":city_obj.id
+    }
+    attractions.append(place)
+    

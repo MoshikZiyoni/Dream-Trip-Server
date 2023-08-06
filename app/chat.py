@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from app.google_place import get_attraction_from_google, get_restaurants_google
 from app.trip_advisor import (
     foursquare_attraction,
     foursquare_hotels,
@@ -13,7 +14,7 @@ from dotenv import load_dotenv
 from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, process_attraction, process_hotel, process_restaurant, restaurant_GPT, save_to_db
+from app.utils import generate_schedule, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -22,7 +23,7 @@ attrac_lock = RLock()
 restaur_lock = RLock() 
 city_lock=RLock()
 hotel_lock=RLock()
-executor = ThreadPoolExecutor(max_workers=10)
+executor = ThreadPoolExecutor(max_workers=20)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -86,17 +87,13 @@ def process_restaurants(landmarks, city_name, country, city_obj, city_data):
     with restaur_lock:
         reslut = foursquare_restaurant(landmarks)
         if len(reslut) == 0:
-            print("Start TripAdvisor restaurant")
-            # restaurant_ = trip_advisor_restaurants(city_name, country, landmarks)
-            my_restaurant=restaurant_GPT(city=city_name)
+            print("Start google restaurant")
+            my_restaurant=get_restaurants_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
             threads = []
-            for restaur in my_restaurant:
-                thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+            for restaur in my_restaurant['results']:
+                thread = Thread(target=restarunts_from_google, args=(restaur, city_obj, restaurants))
                 thread.start()
                 threads.append(thread)
-        # for thread in threads:
-        #     thread.join()
-            # restaurants.append(restaurant_)
         else:
             threads = []
             for restaur in reslut:
@@ -114,14 +111,15 @@ def process_attractions(landmarks, city_name, country, city_obj, city_data):
     attractions = []
     with attrac_lock:
         result1 = foursquare_attraction(landmarks, city_name, country)
-    
         threads = []
 
         if len(result1) == 0:
-            print("Start TripAdvisor attraction")
-            attractions_info_trip = trip_advisor_attraction(city_name, country, landmarks)
-            attractions.append(attractions_info_trip)
-            print("TripAdvisor line 93")
+            print("Start google attraction")
+            attractions_info_trip = get_attraction_from_google(city=city_name,city_obj=city_obj,lat=landmarks[0],lon=landmarks[1],attractions=attractions)
+            for attracs in attractions_info_trip['results']:
+                thread = Thread(target=restarunts_from_google, args=(attracs, city_obj, attractions))
+                thread.start()
+                threads.append(thread)
         else:
             print("Start the else line 94")
 

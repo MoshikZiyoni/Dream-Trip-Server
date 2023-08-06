@@ -1,4 +1,6 @@
 import json
+from threading import RLock
+import time
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -14,133 +16,13 @@ from django.db.models import Q
 import random
 import os
 import requests
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+import aiohttp
+
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
-#     city_list=[
-# {"city": "Maceio", "city_obj": 697, "lat": -9.665833, "lon": -35.735278} ,
-# {"city": "Ciudad del Este", "city_obj": 705, "lat": -25.5167, "lon": -54.616667} ,
-# {"city": "Chengdu", "city_obj": 599, "lat": 30.5728, "lon": 104.0668} ,
-# {"city": "Turku", "city_obj": 624, "lat": 60.4518, "lon": 22.2654} ,
-# {"city": "Porto Seguro", "city_obj": 698, "lat": -16.442333, "lon": -39.064722} ,
-# {"city": "Tenerife", "city_obj": 681, "lat": 28.291564, "lon": -16.62913} ,
-# {"city": "Shanghai", "city_obj": 596, "lat": 31.2304, "lon": 121.4737} ,
-# {"city": "St. Gallen", "city_obj": 581, "lat": 47.4239, "lon": 9.3741} ,
-# {"city": "Bergen", "city_obj": 661, "lat": 60.3913, "lon": 5.3221} ,
-# {"city": "Thessaloniki", "city_obj": 609, "lat": 40.64, "lon": 22.9444} ,
-# {"city": "Porto Alegre", "city_obj": 699, "lat": -30.03306, "lon": -51.23} ,
-# {"city": "Cali", "city_obj": 714, "lat": 3.437222, "lon": -76.5225} ,
-# {"city": "Hangzhou", "city_obj": 600, "lat": 30.274, "lon": 120.155} ,
-# {"city": "Antalya", "city_obj": 595, "lat": 36.9128, "lon": 30.6937} ,
-# {"city": "Bursa", "city_obj": 591, "lat": 40.1831, "lon": 29.0567} ,
-# {"city": "Busan", "city_obj": 603, "lat": 35.1796, "lon": 129.0756} ,
-# {"city": "Lodz", "city_obj": 651, "lat": 51.7574, "lon": 19.4585} ,
-# {"city": "Linz", "city_obj": 573, "lat": 48.306, "lon": 14.2864} ,
-# {"city": "Heraklion", "city_obj": 611, "lat": 35.3387, "lon": 25.1442} ,
-# {"city": "Liberec", "city_obj": 619, "lat": 50.7607, "lon": 15.0568} ,
-# {"city": "Punta Cana", "city_obj": 709, "lat": 18.547318, "lon": -68.373535} ,
-# {"city": "Espoo", "city_obj": 621, "lat": 60.205, "lon": 24.655} ,
-# {"city": "Nizhny Novgorod", "city_obj": 585, "lat": 56.3269, "lon": 44.002} ,
-# {"city": "Vantaa", "city_obj": 623, "lat": 60.295, "lon": 25.035} ,
-# {"city": "Fortaleza", "city_obj": 667, "lat": -3.7319, "lon": -38.5428} ,
-# {"city": "Belo Horizonte", "city_obj": 668, "lat": -19.919, "lon": -43.9368} ,
-# {"city": "Potosi", "city_obj": 684, "lat": -19.58002, "lon": -65.75362} ,
-# {"city": "Medellin", "city_obj": 713, "lat": 6.251842, "lon": -75.563592} ,
-# {"city": "Gran Canaria", "city_obj": 680, "lat": 27.94241, "lon": -15.587871} ,
-# {"city": "Leticia", "city_obj": 715, "lat": -4.215, "lon": -69.94} ,
-# {"city": "Wuhan", "city_obj": 601, "lat": 30.5928, "lon": 114.3055} ,
-# {"city": "Izmir", "city_obj": 590, "lat": 38.4237, "lon": 27.1428} ,
-# {"city": "Coimbra", "city_obj": 659, "lat": 40.2044, "lon": -8.4192} ,
-# {"city": "Valparaiso", "city_obj": 685, "lat": -33.047238, "lon": -71.612688} ,
-# {"city": "Drammen", "city_obj": 664, "lat": 59.743, "lon": 10.2044} ,
-# {"city": "Patras", "city_obj": 610, "lat": 38.2444, "lon": 21.7361} ,
-# {"city": "Adana", "city_obj": 592, "lat": 37.0, "lon": 35.3213} ,
-# {"city": "Bern", "city_obj": 579, "lat": 46.948, "lon": 7.4481} ,
-# {"city": "Tampere", "city_obj": 622, "lat": 61.4989, "lon": 23.7609} ,
-# {"city": "Yekaterinburg", "city_obj": 584, "lat": 56.8389, "lon": 60.6056} ,
-# {"city": "Klagenfurt", "city_obj": 574, "lat": 46.6206, "lon": 14.3075} ,
-# {"city": "Hradec Kralove", "city_obj": 620, "lat": 50.2093, "lon": 15.8341} ,
-# {"city": "Tilburg", "city_obj": 616, "lat": 51.565, "lon": 5.0919} ,
-# {"city": "Punta del Este", "city_obj": 706, "lat": -34.9388, "lon": -54.95} ,
-# {"city": "Budva", "city_obj": 673, "lat": 42.290877, "lon": 18.839371} ,
-# {"city": "Belem", "city_obj": 694, "lat": -1.455583, "lon": -48.504444} ,
-# {"city": "Oruro", "city_obj": 683, "lat": -17.983334, "lon": -67.150002} ,
-# {"city": "Samara", "city_obj": 588, "lat": 53.1956, "lon": 50.101} ,
-# {"city": "Glasgow", "city_obj": 647, "lat": 55.8656, "lon": -4.2518} ,
-# {"city": "Volos", "city_obj": 614, "lat": 39.3672, "lon": 22.9444} ,
-# {"city": "Stuttgart", "city_obj": 570, "lat": 48.7758, "lon": 9.1829} ,
-# {"city": "Amadora", "city_obj": 657, "lat": 38.7536, "lon": -9.2368} ,
-# {"city": "Tijuana", "city_obj": 671, "lat": 32.5027, "lon": -117.0002} ,
-# {"city": "Gdansk", "city_obj": 654, "lat": 54.352, "lon": 18.6466} ,
-# {"city": "Vlore", "city_obj": 675, "lat": 40.476658, "lon": 19.494392} ,
-# {"city": "Samui", "city_obj": 628, "lat": 9.5358, "lon": 100.6028} ,
-# {"city": "Joao Pessoa", "city_obj": 696, "lat": -7.115103, "lon": -34.864222} ,
-# {"city": "Poznan", "city_obj": 653, "lat": 52.4063, "lon": 16.9252}]
-
-#     API_KEY=os.environ.get('google_key')
-#     def get_restaurants_google():
-#         base_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-#         params = {
-#             "query": f"best attraction in {city}",
-#             'location':f"{lat},{lon}",
-#             "key": API_KEY,
-#             "types": "restaurant",
-#             "sort": "rating", 
-#             "min_rating": 4,
-#             "radius":10000,
-#             "orderby": "rating",
-#             "fields": "photos,formatted_address,name,rating,opening_hours", 
-#             "language":"en",
-#         }
-#         response = requests.get(base_url, params=params)
-#         data = response.json()
-#         places = []
-#         for result in data['results']:
-#             name = result['name']
-#             latt = result['geometry']['location']['lat']
-#             lng = result['geometry']['location']['lng']
-#             rating = result['rating']
-#             if rating==0:
-#                 continue
-#             place_id = result['place_id']
-#             photo_reference = result['photos'][0]['photo_reference'] if result.get('photos') else None
-#             html_attributions = result['photos'][0]['html_attributions'] if result.get('photos') else None
-
-#             image = flickr_api(name=name,latitude=lat,longitude=lng)
-#             city_obj=City.objects.filter(id=city_obj).first()
-#             atrc_query = Attraction(
-#                 name=name,
-#                 city=city_obj,
-#                 latitude=latt,
-#                 longitude=lng,
-#                 photos=image,
-#                 review_score=rating,
-#                 place_id=place_id,
-#                 # website=website1,
-#                 # hours_popular=hours_popular1,
-#                 # distance=distance1
-#             )
-#             atrc_query.save()
-#             print(f"Save restaurant successfully{name}")
-#         #     place = {
-#         #         'name': name,
-#         #         'latitude': lat,
-#         #         'longitude': lng,
-#         #         'review_score': rating,
-#         #         'place_id': place_id,
-#         #         'photo': image,
-#         #         'html_attributions': html_attributions,
-#         #     }
-#         #     places.append(place)
-            
-#         # return places
-
-#     for city_info in city_list:
-#         city = city_info['city'] 
-#         city_obj = city_info['city_obj']
-#         lat=city_info['lat']
-#         lon=city_info['lon']
-#         get_restaurants_google(city,city_obj,lat,lon)
+   
     # from django.db.models import Count
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
 
@@ -591,28 +473,28 @@ def gpt_view(request):
 
     # from django.db.models import Count
 
-    # # Get the cities without attractions
-    # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
-    # # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
-    # # for city in cities_without_hotels:
-    # #     print(city.city)
+    # # # Get the cities without attractions
+    # # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
+    # # # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
+    # # # for city in cities_without_hotels:
+    # # #     print(city.city)
+    # # # return 'ok'
+
+    # # # # # Get the cities without restaurants
+    # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
+
+    # # # # Print the results
+    # # print("Cities without attractions:")
+    # # for city in cities_without_attractions:
+    # #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
+    # # return 'kkk'
+    # # attrac=Attraction.objects.filter(city_id=345).values()
+    # # for i in attrac:
+    # #     print(i)
     # # return 'ok'
-
-    # # # # Get the cities without restaurants
-    # # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
-
-    # # # Print the results
-    # print("Cities without attractions:")
-    # for city in cities_without_attractions:
-    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
-    # return 'kkk'
-    # attrac=Attraction.objects.filter(city_id=345).values()
-    # for i in attrac:
-    #     print(i)
-    # return 'ok'
-    # print("Cities without restaurants:")
+    # # print("Cities without restaurants:")
     # for city in cities_without_restaurants:
-    #     print(city.city,city.id,',')
+    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
 
     # return 'ok'
 
@@ -658,9 +540,10 @@ def gpt_view(request):
             answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_string)
             answer_dict = json.loads(answer_string_modified)
             country = answer_dict["country"]
-            answer=(quick_from_data_base(country=country,answer_dict=answer_string,process_city=process_city))
-            answer=answer,{"request_left":request_left}
-            return Response(answer)
+            answer=(quick_from_data_base(country=country,answer_dict=answer_string,process_city=process_city,request_left=request_left))
+            
+            
+            return JsonResponse(answer,safe=False)
         
         result1=(run_long_poll_async(ourmessage,mainland))
         combined_data = result1['answer']
