@@ -148,14 +148,13 @@ def foursquare_restaurant(landmarks):
         'categories':'13000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':5000,
-        'limit' : 10,
+        'limit' : 20,
         'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
     }
     response = requests.get(url, params=query,headers=headers)
 
     response_text=(response.text)
     jsonto=json.loads(response_text)
-    # print (jsonto)
     reslut=jsonto['results']
     return (reslut)
 
@@ -197,13 +196,12 @@ def foursquare_hotels(landmarks):
         'categories':'19014',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':5000,
-        'limit' : 10,
+        'limit' : 20,
         'fields':'geocodes,name,rating,website,photos,description'
     }
     response = requests.get(url, params=query,headers=headers)
 
     response_text=(response.text)
     jsonto=json.loads(response_text)
-    print (jsonto)
     reslut=jsonto['results']
     return (reslut)

@@ -1,7 +1,7 @@
 import json
 import os
 import time
-from app.google_place import get_attraction_from_google, get_restaurants_google
+from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
 from app.trip_advisor import (
     foursquare_attraction,
     foursquare_hotels,
@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db
+from app.utils import generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -140,12 +140,20 @@ def process_hotels(landmarks, city_name, country, city_obj, city_data):
     hotels = []
     with hotel_lock:
         result_for_hotel=foursquare_hotels(landmarks)
+        
 
-        threads = []
-        for hotel in result_for_hotel:
-                thread = Thread(target=process_hotel, args=(hotel, city_obj, hotels))
+        if len(result_for_hotel) == 0:
+            print("Start google hotels")
+            hotels_info_trip = get_hotels_from_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
+            for hotel in hotels_info_trip['results']:
+                thread = Thread(target=hotel_from_google, args=(hotel, city_obj, hotels))
                 thread.start()
                 threads.append(thread)
+        threads = []
+        for hotel in result_for_hotel:
+            thread = Thread(target=process_hotel, args=(hotel, city_obj, hotels))
+            thread.start()
+            threads.append(thread)
 
         for thread in threads:
                 thread.join()

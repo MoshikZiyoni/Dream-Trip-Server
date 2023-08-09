@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import math
 import traceback
 from dotenv import load_dotenv
-
+from app.currency_data import calculate_total_price_attractions
 load_dotenv()
 
 def process_attraction(attrac, city_obj, attractions):
@@ -238,7 +238,8 @@ def process_hotel(hotel, city_obj, hotels):
 
 
 def generate_schedule(data):
-    # print (data)
+    total_for_transportation = 0
+    total = 0    
     try:
         cities = data['cities']
         num_attractions_per_day = 3
@@ -255,6 +256,15 @@ def generate_schedule(data):
             landmarks=[query1.latitude,query1.longitude]
             city_description = city['description']
             attractions = city['attractions']
+            count=0
+            for attraction in attractions:
+                print(attraction,city_name,",@@@@@@@@@@@@@@@@@@@@@@@@@")
+                count+=1
+                try:
+                    prices=calculate_total_price_attractions(attraction)
+                    total+=prices
+                except: 
+                    pass
             try:
                 attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
             except Exception as e:
@@ -367,7 +377,8 @@ def generate_schedule(data):
         
         print('failed in 261',e)
         traceback.print_exc() 
-
+    print("total: ",int(total))
+    print ("total transportion: " ,int(total_for_transportation),count)
     return schedule
 
 
@@ -609,6 +620,7 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 website12 = hotel['website']if 'website' in hotel else ''
                 description12 = hotel['description']if 'description' in hotel else ''
                 city_obj=hotel['city_obj']if 'city_obj' in hotel else ''
+                place_id2=attraction["place_id"] if "place_id" in restaurnt else ''
                 city_obj=City.objects.filter(id=city_obj).first()
                 hotels_query = Hotels_foursqaure(
                 name=name12,
@@ -618,7 +630,8 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 photos=photos12,
                 review_score=rating12,
                 website=website12,
-                description=description12
+                description=description12,
+                place_id=place_id2
                 )
                 hotels_query.save()
                 print("Save hotels successfully")
@@ -728,3 +741,25 @@ def attraction_from_google(attracs, city_obj, attractions):
     }
     attractions.append(place)
     
+
+def hotel_from_google(hotel, city_obj, hotels):
+    name_hotel = hotel['name']
+    lattt = hotel['geometry']['location']['lat']
+    lngg1 = hotel['geometry']['location']['lng']
+    rating = hotel['rating']
+    place_id = hotel['place_id'] if hotel.get('place_id') else None
+    photo_reference = hotel['photos'][0]['photo_reference'] if hotel.get('photos') else None
+
+    initial_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={API_KEY}"
+    response = requests.get(initial_url)
+    final_url = response.url
+    place = {
+    "name": name_hotel,
+    "latitude": lattt,
+    "longitude": lngg1,
+    "review_score": rating,
+    "place_id": place_id,
+    "photos":final_url,
+    "city_obj":city_obj.id
+}
+    hotels.append(place)

@@ -66,7 +66,7 @@ class Hotels_foursqaure(models.Model):
     review_score=models.TextField(max_length=20)
     description=models.TextField(max_length=1000)
     website=models.TextField(max_length=100)
-
+    place_id=models.TextField(max_length=200,null=True)
 
 class Popular(models.Model):
     country=models.TextField(max_length=100)

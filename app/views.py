@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
-from app.models import Attraction, Country, QueryChatGPT,City, Restaurant,Popular
+from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT,City, Restaurant,Popular
 from django.core.cache import cache
 from app.my_selenium import perform_search
 from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_hotels, foursquare_restaurant
@@ -215,9 +215,50 @@ def gpt_view(request):
   
 
 
+    # restaurnt_without__price = Restaurant.objects.filter(price__isnull=True) | Restaurant.objects.filter(price='')
+    # for attraction in restaurnt_without__price:
+    #     print(attraction.name,'------',attraction.city.city)  
+    # return 'ok'  
+
+#     def excract_restaurant(attractions_listt):
+#         for attrac in attractions_listt:
+#             name= (attrac['name'])
+#             new_price=attrac['price']
+#             print(new_price)
+#             try:
+#                 attrac=Restaurant.objects.get(name=name)
+#                 print (attrac.id,attrac.price)
+#                 attrac.price=new_price
+#                 attrac.save()
+#                 print ('save success')
+#                 attraction = Restaurant.objects.get(pk=attrac.id)
+#                 print(attraction.price) 
+#             except Exception as e:
+#                 print(f'attrac not exsit,{name},{attrac},{e}')
+                
+#                 dupes = Restaurant.objects.filter(name=name)
+#                 if dupes:
+#                     # Keep the first one  
+#                     keep = dupes[0] 
+                    
+#                     # Delete the rest
+#                     for dupe in dupes[1:]:
+#                         dupe.delete()
+                        
+#                     # Use the kept attraction
+#                     attrac = keep 
+#                     print ('deleteddddddddddddddddddddddddd')
+#                     # Update price 
+#                     attrac.price = new_price
+#                     attrac.save()
+#     excract_restaurant(attractions_listt=[
 
 
+# ])
+   
+#     return 'kk'
 
+    
 
 
     # attractions_without_real_price = Attraction.objects.filter(real_price__isnull=True) | Attraction.objects.filter(real_price='')
@@ -226,21 +267,44 @@ def gpt_view(request):
     # return 'ok'  
 
 
+#     def excract_attraction(attractions_listt):
+#         for attrac in attractions_listt:
+#             name= (attrac['name'])
+#             new_price=attrac['price']
+#             print(new_price)
+#             try:
+#                 attrac=Attraction.objects.get(name=name)
+#                 print (attrac.id,attrac.real_price)
+#                 attrac.real_price=new_price
+#                 attrac.save()
+#                 print ('save success')
+#                 attraction = Attraction.objects.get(pk=attrac.id)
+#                 print(attraction.real_price) 
+#             except Exception as e:
+#                 print(f'attrac not exsit,{name},{attrac},{e}')
+                
+#                 dupes = Attraction.objects.filter(name=name)
+#                 if dupes:
+#                     # Keep the first one  
+#                     keep = dupes[0] 
+                    
+#                     # Delete the rest
+#                     for dupe in dupes[1:]:
+#                         dupe.delete()
+                        
+#                     # Use the kept attraction
+#                     attrac = keep 
+#                     print ('deleteddddddddddddddddddddddddd')
+#                     # Update price 
+#                     attrac.real_price = new_price
+#                     attrac.save()
+#     excract_attraction(attractions_listt=[
 
+
+
+# ])
    
-
-
-    # from django.db.models import Q
-
-    # attractions = Attraction.objects.filter(distance__regex=r'^\d+$')
-    # attraction_names_distances = attractions.values('name', 'distance')
-
-    # for data in attraction_names_distances:
-    #     name = data['name']
-    #     distance = int(data['distance'])
-    #     print(f"Name: {name}")
-    # return 'ok'
-
+#     return 'kk'
 
 #     def extract_attraction_data(attractions):
     
@@ -338,116 +402,7 @@ def gpt_view(request):
 #             else:
 #                 print ("can't save")
 #     extract_restaurants_data(attractions  = [
-#    {
-#         "city": "Fernando de Noronha", 
-#         "name": "Restaurante Cuscuz",
-#         "latitude": -3.853056,
-#         "longitude": -32.422222,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/0b/restaurante-cuscuz.jpg"],
-#         "review_score": 5.0,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 2
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Restaurante Doce de Noronha",
-#         "latitude": -3.852222,
-#         "longitude": -32.422889,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/f8/photo3jpg.jpg"],
-#         "review_score": 5.0,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 2
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Pizzaria Namoita",
-#         "latitude": -3.853194,
-#         "longitude": -32.42225,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f0/50/ef/photo0jpg.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 2
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Restaurante Teca",
-#         "latitude": -3.853333,
-#         "longitude": -32.422778,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-f/18/99/60/a7/photo2jpg.jpg"],
-#         "review_score": 4.0,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 2
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Pousada Maravilha - Restaurante",
-#         "latitude": -3.855,
-#         "longitude": -32.425278,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/83/pousada-maravilha.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "1 km from town",
-#         "price": 3
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Restaurante Zé Maria",
-#         "latitude": -3.853333,
-#         "longitude": -32.422889,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-w/19/6c/c0/bb/ze-maria.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 3  
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Restaurante Cachorro Velho",
-#         "latitude": -3.852778,
-#         "longitude": -32.422889,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/0d/6c/5b/18/restaurante-cachorro-velho.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 2
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Picolé Café",
-#         "latitude": -3.853333,
-#         "longitude": -32.423889,
-#         "photos": ["https://b.zmtcdn.com/data/reviews_photos/347/a27d3f28f3cb450d6d233adb43834347_1504710550.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 1
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Empório Sushi",
-#         "latitude": -3.855,
-#         "longitude": -32.4227778,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/11/f7/a1/5e/sushi.jpg"],
-#         "review_score": 4.5,
-#         "website": "",
-#         "distance": "In town",
-#         "price": 3  
-#     },
-#     {
-#         "city": "Fernando de Noronha",
-#         "name": "Restaurante Natureza",
-#         "latitude": -3.8508333,
-#         "longitude": -32.4236111,
-#         "photos": ["https://media-cdn.tripadvisor.com/media/photo-s/06/72/8f/7e/natureza.jpg"],
-#         "review_score": 4.0,
-#         "website": "",
-#         "distance": "1 km from town",
-#         "price": 2
-#     }
+#   
 # ])
 # #     return 'ok'
 
@@ -464,7 +419,7 @@ def gpt_view(request):
 
     #         # Check if the city has fewer than 10 attractions
     #         if attraction_count < 10:
-    #             cities_with_few_attractions.append(city.city)
+    #             cities_with_few_attractions.append({"city":city.city,"lat":city.latitude,"lon":city.longitude})
 
     #     return cities_with_few_attractions
     # print(city_has_few_attractions())
@@ -473,12 +428,12 @@ def gpt_view(request):
 
     # from django.db.models import Count
 
-    # # # Get the cities without attractions
-    # # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
-    # # # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
-    # # # for city in cities_without_hotels:
-    # # #     print(city.city)
-    # # # return 'ok'
+    # # # # Get the cities without attractions
+    # # # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
+    # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
+    # for city in cities_without_hotels:
+    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')    
+    # return 'ok'
 
     # # # # # Get the cities without restaurants
     # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
