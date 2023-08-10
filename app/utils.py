@@ -5,6 +5,7 @@ import time
 import openai
 import requests
 from app.models import Attraction, City, Hotels_foursqaure, Restaurant,Country
+from app.teleport_api import get_cities_by_country
 from app.trip_advisor import flickr_api
 from app.wikipediaapi import process_query
 import json
@@ -237,8 +238,7 @@ def process_hotel(hotel, city_obj, hotels):
     # print("Save hotels successfully")
 
 
-def generate_schedule(data):
-    total_for_transportation = 0
+def generate_schedule(data,country):
     total = 0    
     try:
         cities = data['cities']
@@ -258,7 +258,6 @@ def generate_schedule(data):
             attractions = city['attractions']
             count=0
             for attraction in attractions:
-                print(attraction,city_name,",@@@@@@@@@@@@@@@@@@@@@@@@@")
                 count+=1
                 try:
                     prices=calculate_total_price_attractions(attraction)
@@ -272,6 +271,7 @@ def generate_schedule(data):
             restaurants = city['restaurants']
             hotels=city['hotels']
             days_spent = city['days_spent']
+
             days_spent=int(days_spent)
             num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
             num_attractions_per_day = int(num_attractions_per_day) 
@@ -357,17 +357,6 @@ def generate_schedule(data):
                 except Exception as e:
                     print('not extra attraction',e)
 
-                # Add lunch break
-                # lunch_start = datetime.combine(start_time.date(), lunch_break_start)
-                # lunch_end = datetime.combine(start_time.date(), lunch_break_end)
-                # lunch_break_data = {
-                #     'attraction': {
-                #         'name': 'Lunch Break',
-                #         'start_time': lunch_start.strftime('%H:%M'),
-                #         'end_time': lunch_end.strftime('%H:%M')
-                #     }
-                # }
-                # day_schedule['attractions'].append(lunch_break_data)
 
                 start_time += timedelta(days=1)
                 city_schedule['schedules'].append(day_schedule)
@@ -377,9 +366,26 @@ def generate_schedule(data):
         
         print('failed in 261',e)
         traceback.print_exc() 
-    print("total: ",int(total))
-    print ("total transportion: " ,int(total_for_transportation),count)
-    return schedule
+    taxi_cost = 0
+    Lunch = 0
+    price_for_dinner = 0
+    prices_for_country=get_cities_by_country(country, limit=2)
+    if prices_for_country:
+        taxi_cost = prices_for_country.get('5km taxi ride', 0)
+        Lunch = prices_for_country.get('Lunch', 0)
+        price_for_dinner=prices_for_country['Price of a meal at a restaurant']
+    else:
+        print('No cities found.')
+
+    if taxi_cost:
+            total_transport_private_taxi = count * int(taxi_cost)
+    else:
+        total_transport_private_taxi = 0
+
+    price_for_dinner=price_for_dinner*days_spent
+    total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
+    
+    return schedule,{"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
 
 
 
@@ -685,7 +691,7 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         executor.submit(process_city, city_data, country, country_id)
 
     executor.shutdown()
-    answer_from_data1=generate_schedule(answer_dict) 
+    answer_from_data1=generate_schedule(answer_dict,country) 
     answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description,"request_left":request_left})
     return answer
 

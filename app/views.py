@@ -22,7 +22,73 @@ import aiohttp
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-   
+    # city_list= 
+    # API_KEY=os.environ.get('google_key')
+    # def get_places_by_city(city,city_obj,lat,lon):
+    #     base_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    #     params = {
+    #         "query": f"best attraction in {city}",
+    #         'location':f"{lat},{lon}",
+    #         "key": API_KEY,
+    #         "types": "tourist_attraction",
+    #         "sort": "rating", 
+    #         "min_rating": 4,
+    #         "radius":10000,
+    #         "orderby": "rating",
+    #         "fields": "photos,formatted_address,name,rating,opening_hours", 
+    #         "language":"en",
+    #     }
+    #     response = requests.get(base_url, params=params)
+    #     data = response.json()
+    #     places = []
+    #     for result in data['results']:
+    #         name = result['name']
+    #         latt = result['geometry']['location']['lat']
+    #         lng = result['geometry']['location']['lng']
+    #         rating = result['rating']
+    #         if rating==0:
+    #             continue
+    #         place_id = result['place_id']
+    #         photo_reference = result['photos'][0]['photo_reference'] if result.get('photos') else None
+    #         html_attributions = result['photos'][0]['html_attributions'] if result.get('photos') else None
+
+    #         image = flickr_api(name=name,latitude=lat,longitude=lng)
+    #         new_image = image if image else ""
+    #         city_obj1=City.objects.filter(id=city_obj).first()
+    #         atrc_query = Attraction(
+    #             name=name,
+    #             city=city_obj1,
+    #             latitude=latt,
+    #             longitude=lng,
+    #             photos=new_image,
+    #             review_score=rating,
+    #             place_id=place_id,
+    #             # website=website1,
+    #             # hours_popular=hours_popular1,
+    #             # distance=distance1
+    #         )
+    #         atrc_query.save()
+    #         print(f"Save attraction successfully{name}")
+    #     #     place = {
+    #     #         'name': name,
+    #     #         'latitude': lat,
+    #     #         'longitude': lng,
+    #     #         'review_score': rating,
+    #     #         'place_id': place_id,
+    #     #         'photo': image,
+    #     #         'html_attributions': html_attributions,
+    #     #     }
+    #     #     places.append(place)
+            
+    #     # return places
+
+    # for city_info in city_list:
+    #     city = city_info['city'] 
+    #     city_obj = city_info['city_obj']
+    #     lat=city_info['lat']
+    #     lon=city_info['lon']
+    #     get_places_by_city(city,city_obj,lat,lon)
+    # return 'kkkkkk'
     # from django.db.models import Count
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
 
@@ -213,6 +279,11 @@ def gpt_view(request):
 
     # return 'ok'
   
+    # restaurnt_without__hours_popular = Restaurant.objects.filter(hours_popular__isnull=True) | Restaurant.objects.filter(hours_popular='')
+    # for attraction in restaurnt_without__hours_popular:
+    #     print(attraction.name,'------',attraction.city.city)  
+    # return 'ok'  
+
 
 
     # restaurnt_without__price = Restaurant.objects.filter(price__isnull=True) | Restaurant.objects.filter(price='')
@@ -251,8 +322,9 @@ def gpt_view(request):
 #                     # Update price 
 #                     attrac.price = new_price
 #                     attrac.save()
-#     excract_restaurant(attractions_listt=[
 
+
+#     excract_restaurant(attractions_listt=[
 
 # ])
    
@@ -419,7 +491,7 @@ def gpt_view(request):
 
     #         # Check if the city has fewer than 10 attractions
     #         if attraction_count < 10:
-    #             cities_with_few_attractions.append({"city":city.city,"lat":city.latitude,"lon":city.longitude})
+    #             cities_with_few_attractions.append({"city":city.city,"lat":city.latitude,"lon":city.longitude,"city_obj":city.id})
 
     #     return cities_with_few_attractions
     # print(city_has_few_attractions())
@@ -461,7 +533,32 @@ def gpt_view(request):
     # Restaurant.objects.all().delete()
     
 
-   
+   # from django.db.models import Count
+# from django.db import transaction
+
+# attractions = Attraction.objects.values('name').annotate(name_count=Count('name')).filter(name_count__gt=1)
+
+
+    # for attraction in attractions:
+    #     name = attraction['name']
+    #     duplicates = Attraction.objects.filter(name=name).order_by('id')
+
+    #     city_ids = set(duplicates.values_list('city_id', flat=True))
+
+    #     with transaction.atomic():
+    #         for city_id in city_ids:
+    #             city_duplicates = duplicates.filter(city_id=city_id)
+
+    #             # Print the duplicates in the same city
+    #             delete_list = city_duplicates.exclude(id=city_duplicates.first().id)
+    #             for duplicate in delete_list:
+    #                 print(f"Deleting duplicate: {duplicate.name}, City ID: {duplicate.city_id}")
+
+    #             # Delete all duplicates except the first one per city (on commit)
+    #             delete_list.delete()
+# # return 'ok'
+
+
 
     email=request.data['email']
     if not email:
@@ -503,8 +600,8 @@ def gpt_view(request):
         result1=(run_long_poll_async(ourmessage,mainland))
         combined_data = result1['answer']
         itinerary_description1 =result1['itinerary_description']
-        main_restaurants = result1['main_restaurants']
-        main_attractions = result1['main_attractions']
+        # main_restaurants = result1['main_restaurants']
+        # main_attractions = result1['main_attractions']
 
         result1={
             'answer':combined_data,

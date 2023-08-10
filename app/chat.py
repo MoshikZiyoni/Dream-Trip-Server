@@ -228,7 +228,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                             executor.submit(process_city, city_data, country, country_id)
 
                     executor.shutdown()   
-                    combined_data=generate_schedule(data)
+                    combined_data=generate_schedule(data,country)
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     
