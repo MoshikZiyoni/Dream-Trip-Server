@@ -149,7 +149,7 @@ def foursquare_restaurant(landmarks):
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':5000,
         'limit' : 20,
-        'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
+        'fields':'distance,geocodes,name,rating,price,website,photos,social_media,menu,hours,location,tel'
     }
     response = requests.get(url, params=query,headers=headers)
 
@@ -173,7 +173,7 @@ def foursquare_attraction(landmarks,city_name,country):
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':8000,
         'limit' : 20,
-        'fields':'distance,geocodes,name,rating,distance,website,photos,menu,hours_popular'
+        'fields':'distance,geocodes,name,rating,distance,website,photos,menu,hours_popular,hours,location,tel'
 
     }
     response1 = requests.get(url1, params=query1,headers=headers)

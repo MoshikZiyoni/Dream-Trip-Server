@@ -41,7 +41,11 @@ class Attraction(models.Model):
     hours_popular=models.TextField()
     distance=models.TextField(max_length=200)
     real_price=models.TextField(max_length=200)
+    hours=models.TextField(max_length=150,null=True)
+    tel=models.TextField(max_length=100,null=True)
+    address=models.TextField(max_length=100,null=True)
     place_id=models.TextField(max_length=150,null=True)
+    tips=models.TextField(max_length=3000,null=True)
     
 class Restaurant(models.Model):
     city = models.ForeignKey(City, related_name='restaurants', on_delete=models.CASCADE)
@@ -55,6 +59,9 @@ class Restaurant(models.Model):
     price=models.TextField(max_length=20)
     menu=models.TextField(max_length=100)
     distance=models.TextField(max_length=200)
+    hours=models.TextField(max_length=150,null=True)
+    tel=models.TextField(max_length=100,null=True)
+    address=models.TextField(max_length=100,null=True)
     place_id=models.TextField(max_length=150,null=True)
 
 class Hotels_foursqaure(models.Model):

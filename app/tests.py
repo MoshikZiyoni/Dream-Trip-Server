@@ -553,29 +553,3 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = [executor.submit(process_result, result) for result in data['results']]
     concurrent.futures.wait(futures)
     
-#     for restaurnt in places:
-#         name1 = (restaurnt['name'])
-#         # check_name=Attraction.objects.filter(name=name1).first()
-#         # if not check_name:   
-                            
-#         latitude1 = restaurnt['latitude']if 'latitude' in restaurnt else ''
-#         longitude1 = restaurnt['longitude']if 'longitude' in restaurnt else ''
-#         photos1 = restaurnt['photos']if 'photos' in restaurnt else ''
-#         review_score1 = restaurnt['review_score']if 'review_score' in restaurnt else ''
-#         city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
-#         # city_obj=City.objects.filter(id=city_obj).first()
-#     print (places)
-# for city_info in city_list:
-#     city = city_info['city'] 
-#     city_obj = city_info['city_obj']
-    
-
-# def fetch_photo():
-#     API_KEY=os.environ.get('google_key')
-#     # base_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-#     city='Tel aviv'
-#     url=f"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotels+in+{city}&key={API_KEY}"
-#     response = requests.get(url)
-#     data = response.json()
-#     print (data)
-# fetch_photo()

@@ -177,7 +177,7 @@ def calculate_total_price_attractions(attraction):
     total=0
     try:
         price = attraction['real_price']
-        print ("price: ",price)
+        # print ("price: ",price)
         pattern = r'\b(?:Free|free|unavailable)\b'
         # Check if the pattern matches the input string
         if re.search(pattern, price) and not re.search(r'\d', price):

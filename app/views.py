@@ -15,13 +15,13 @@ import re
 from django.db.models import Q
 import random
 import os
-import requests
-from concurrent.futures import ThreadPoolExecutor
-import asyncio
-import aiohttp
+import ast
+
+
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+
     # city_list= 
     # API_KEY=os.environ.get('google_key')
     # def get_places_by_city(city,city_obj,lat,lon):
@@ -279,10 +279,7 @@ def gpt_view(request):
 
     # return 'ok'
   
-    # restaurnt_without__hours_popular = Restaurant.objects.filter(hours_popular__isnull=True) | Restaurant.objects.filter(hours_popular='')
-    # for attraction in restaurnt_without__hours_popular:
-    #     print(attraction.name,'------',attraction.city.city)  
-    # return 'ok'  
+    
 
 
 
@@ -329,16 +326,14 @@ def gpt_view(request):
 # ])
    
 #     return 'kk'
-
-    
+ 
 
 
     # attractions_without_real_price = Attraction.objects.filter(real_price__isnull=True) | Attraction.objects.filter(real_price='')
     # for attraction in attractions_without_real_price:
-    #     print(attraction.name)  
+    #     print(attraction.name,",",attraction.city.city)  
     # return 'ok'  
-
-
+   
 #     def excract_attraction(attractions_listt):
 #         for attrac in attractions_listt:
 #             name= (attrac['name'])
@@ -371,8 +366,6 @@ def gpt_view(request):
 #                     attrac.real_price = new_price
 #                     attrac.save()
 #     excract_attraction(attractions_listt=[
-
-
 
 # ])
    
@@ -586,16 +579,14 @@ def gpt_view(request):
         question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }], "itinerary-description": ""}'
         ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer').first()
+        # answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).first()
         if answer_from_data:
             print('answer in data')
             answer_string = answer_from_data['answer']
-            answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_string)
-            answer_dict = json.loads(answer_string_modified)
-            country = answer_dict["country"]
-            answer=(quick_from_data_base(country=country,answer_dict=answer_string,process_city=process_city,request_left=request_left))
-            
-            
+            country = mainland
+            answer=(quick_from_data_base(country=country,answer_dict=answer_string,process_city=process_city,request_left=request_left))    
             return JsonResponse(answer,safe=False)
+           
         
         result1=(run_long_poll_async(ourmessage,mainland))
         combined_data = result1['answer']

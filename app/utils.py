@@ -14,6 +14,8 @@ import math
 import traceback
 from dotenv import load_dotenv
 from app.currency_data import calculate_total_price_attractions
+import ast
+
 load_dotenv()
 
 def process_attraction(attrac, city_obj, attractions):
@@ -36,8 +38,18 @@ def process_attraction(attrac, city_obj, attractions):
     rating1 = attrac.get("rating", "0")
     website1 = attrac.get("website", "")
     hours_popular1 = attrac.get("hours_popular", "")
+    hours=attrac.get('hours', {}).get('display', "")
+    address=attrac.get('location', {}).get('formatted_address', "")
+    tel=attrac.get('tel', "")
     description = attrac.get("description", "")
     distance1=attrac.get("distance","")
+    tips = []
+    result_tips = attrac.get("tips", [])  # Get the list of tips from the current result
+    for j, tip in enumerate(result_tips):
+        if j >= 3:
+            break
+        tip_text = tip.get("text", "")  # Get the text from the tip dictionary
+        tips.append(tip_text)
     if len(description)==0:
             try:
                 wiki=process_query(name1)
@@ -67,6 +79,10 @@ def process_attraction(attrac, city_obj, attractions):
         "review_score": rating1,
         "website": website1,
         "hours_popular": hours_popular1,
+        "hours":hours,
+        "address":address,
+        "tel":tel,
+        'tips':tips,
         "description": description,
         "distance":distance1,
         'city_obj':city_obj.id
@@ -126,6 +142,9 @@ def process_restaurant(restaur, city_obj, restaurants):
         print ('no insta')
     menu = restaur.get("menu", "")
     distance=restaur.get("distance","")
+    hours_for_resta = restaur.get('hours', {}).get('display', "")
+    address_resta = restaur.get('location', {}).get('formatted_address', "")
+    tel_for_resta = restaur.get('tel', "")
     photos = restaur.get("photos", "")
     if photos:
         first_photo = photos[0]
@@ -146,6 +165,9 @@ def process_restaurant(restaur, city_obj, restaurants):
         "review_score": rating,
         "price": price,
         "website": website,
+        "hours":hours_for_resta,
+        "tel":tel_for_resta,
+        "address":address_resta,
         "social_media": social_media,
         "menu": menu,
         "distance":distance,
@@ -315,6 +337,10 @@ def generate_schedule(data,country):
                             'description': attraction['description'] if 'description' in attraction else '',
                             'website': attraction['website'] if 'website' in attraction else '',
                             'hours_popular': attraction['hours_popular'] if 'hours_popular' in attraction else '',
+                            'hours': attraction['hours'] if 'hours' in attraction else '',
+                            'address': attraction['address'] if 'address' in attraction else '',
+                            'tips': attraction['tips'] if 'tips' in attraction else '',
+                            "tel" : attraction['tel']if 'tel' in attraction else '',
                             'distance': attraction['distance'] if 'distance' in attraction else '',
                             'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                             'start_time': attraction_start.strftime('%H:%M'),
@@ -344,6 +370,10 @@ def generate_schedule(data,country):
                                         'description': extra_attraction['description']if 'description' in attraction else '',
                                         'website': extra_attraction['website']if 'website' in attraction else '',
                                         'hours_popular': extra_attraction['hours_popular']if 'hours_popular' in attraction else '',
+                                        'hours': attraction['hours'] if 'hours' in attraction else '',
+                                        'address': attraction['address'] if 'address' in attraction else '',
+                                        'tips': attraction['tips'] if 'tips' in attraction else '',
+                                        "tel" : attraction['tel']if 'tel' in attraction else '',
                                         'distance': extra_attraction['distance']if 'distance' in attraction else '',
                                         'real_price': attraction['real_price'] if 'real_price' in attraction else '',
                                         'start_time': extra_attraction_start.strftime('%H:%M'),
@@ -364,7 +394,7 @@ def generate_schedule(data,country):
             schedule['schedules'].append(city_schedule)
     except Exception as e:
         
-        print('failed in 261',e)
+        print('failed in 261')
         traceback.print_exc() 
     taxi_cost = 0
     Lunch = 0
@@ -419,7 +449,6 @@ def sort_attractions_by_distance(attractions, first_attraction):
         x['longitude']
     ))
     
-    # print (json.dumps(sorted_attractions,indent=2))
     return sorted_attractions
 
 
@@ -541,12 +570,8 @@ def restaurant_GPT(city):
 
 
 def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
-    # print (attraction_for_data)
-    # print ()
-    # print(restaurant_for_data)
     try:
         for attraction in attraction_for_data:
-            # for attraction in i:
                 
             name1 = (attraction['name'])
             check_name=Attraction.objects.filter(name=name1).first()
@@ -560,11 +585,14 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 hours_popular1 = attraction['hours_popular']if 'hours_popular' in attraction else ''
                 description = attraction['description']if 'description' in attraction else ''
                 distance1 = attraction['distance']if 'distance' in attraction else ''
+                hours1 = attraction['hours']if 'hours' in attraction else ''
+                address1 = attraction['address']if 'address' in attraction else ''
+                tips1 = attraction['tips']if 'tips' in attraction else ''
+                tel1 = attraction['tel']if 'tel' in attraction else ''
                 city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
                 place_id=attraction["place_id"] if "place_id" in attraction else ''
                 city_obj=City.objects.filter(id=city_obj).first()
-                # print(name1,latitude1,longitude1,photos1,review_score1,website1,hours_popular1,description,distance1,city_obj)
-                # print()
+
                 atrc_query = Attraction(
                     name=name1,
                     city=city_obj,
@@ -576,12 +604,15 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                     website=website1,
                     hours_popular=hours_popular1,
                     distance=distance1,
+                    hours=hours1,
+                    tel=tel1,
+                    address=address1,
+                    tips=tips1,
                     place_id=place_id
                 )
                 atrc_query.save()
                 print(f"Save attraction successfully{name1}")
         for restaurnt in restaurant_for_data:
-            # for restaurnt in r:
             name = (restaurnt['name'])
             check_name1=Restaurant.objects.filter(name=name).first()
             if not check_name1:   
@@ -594,8 +625,11 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 social_media = restaurnt['social_media']if 'social_media' in restaurnt else ''
                 menu = restaurnt['menu']if 'menu' in restaurnt else ''
                 distance = restaurnt['distance']if 'distance' in restaurnt else ''
+                hours_resta = restaurnt['hours']if 'hours' in restaurnt else ''
+                address_res = restaurnt['address']if 'address' in restaurnt else ''
+                tel_res = restaurnt['tel']if 'tel' in restaurnt else ''
                 price = restaurnt['price']if 'price' in restaurnt else ''
-                place_id1=attraction["place_id"] if "place_id" in restaurnt else ''
+                place_id1=restaurnt["place_id"] if "place_id" in restaurnt else ''
                 city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
                 city_obj=City.objects.filter(id=city_obj).first()
                 resta_query = Restaurant(
@@ -610,6 +644,9 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                         website=website,
                         price=price,
                         distance=distance,
+                        hours=hours_resta,
+                        tel=tel_res,
+                        address=address_res,
                         place_id=place_id1
                     )
                 resta_query.save()
@@ -648,8 +685,14 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
 
 
 def quick_from_data_base(country,answer_dict,process_city,request_left):
+    
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
-    answer_dict = json.loads(answer_string_modified)
+    try:
+        answer_dict = json.loads(answer_string_modified)
+    except:
+        print ('EEXPETTTTTTTTTTTTTTT')
+        answer_dict = ast.literal_eval(answer_dict)
+
     try:
         itinerary_description=answer_dict['itinerary-description']
     except:
