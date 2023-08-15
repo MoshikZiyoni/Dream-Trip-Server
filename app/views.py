@@ -593,6 +593,7 @@ def gpt_view(request):
         combined_data = result1['answer']
         itinerary_description1 =result1['itinerary_description']
         costs=result1['costs']
+        
         # main_restaurants = result1['main_restaurants']
         # main_attractions = result1['main_attractions']
 
@@ -600,9 +601,9 @@ def gpt_view(request):
             "answer":combined_data,
             "itinerary_description":itinerary_description1,
             "request_left":request_left,
-            "costs":costs
+            
         }
-
+        result1.update(costs)
         return  JsonResponse(result1,safe=False)
     except Exception as e:
         print(f'error: {e}')

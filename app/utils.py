@@ -272,7 +272,7 @@ def generate_schedule(data,country,check):
         lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
         daily_schedule_end = datetime.strptime('19:00', '%H:%M').time()
 
-        schedule = {'city': '', 'description': '','schedules': [] }  # Initialize the schedule dictionary
+        schedule = {'schedules': [] }  # Initialize the schedule dictionary
         for city in cities:
             # print(city)
             city_name = city['city']
@@ -755,7 +755,8 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         "total_food_prices":total_food_prices,
     }
     end_result=answer_from_data1["schedule"]
-    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"costs":costs})
+    end_result.update(costs)
+    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left})
     return answer
 
 
