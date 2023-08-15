@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import time
 from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
 from app.trip_advisor import (
@@ -14,7 +15,7 @@ from dotenv import load_dotenv
 from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db
+from app.utils import generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db, sort_attractions_by_distance
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -216,7 +217,14 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                             if existing_city:
                                 attract = Attraction.objects.filter(city_id=existing_city.id).values()
                                 attractions_list = list(attract)
-                                city_data["attractions"] = attractions_list
+                                attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
+                                first_5_attractions = attractions[:5]
+                                remaining_attractions = attractions[5:]
+                                # Shuffle the remaining attractions randomly
+                                random.shuffle(remaining_attractions)
+                                check=True
+                                final_attractions = first_5_attractions + remaining_attractions
+                                city_data["attractions"] = final_attractions
                                 restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
                                 restaurants_list = list(restaura)
                                 city_data["restaurants"] = restaurants_list
@@ -226,13 +234,21 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                 print("Continue")
                                 continue
                             executor.submit(process_city, city_data, country, country_id)
-
+                            check=False
                     executor.shutdown()   
-                    combined_data=generate_schedule(data,country)
+                    combined_data=generate_schedule(data,country,check)
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
-                    
-                    return {'answer':combined_data,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions}
+                    total_prices=combined_data['total_prices']
+                    total_transport_private_taxi=combined_data["total_transport_private_taxi"]
+                    total_food_prices=combined_data['total_food_prices']
+                    costs={
+                        "total_prices":total_prices,
+                        "total_transport_private_taxi":total_transport_private_taxi,
+                        "total_food_prices":total_food_prices,
+                    }
+                    end_result=combined_data["schedule"]
+                    return {'answer':end_result,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions,"costs":costs}
                 except Exception as e:
                     print("Error occurred:", e)
                     print(f"Retrying... (attempt {attempt_data + 1})")

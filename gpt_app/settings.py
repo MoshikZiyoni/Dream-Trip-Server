@@ -89,7 +89,6 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 
 ]
-
 ROOT_URLCONF = 'gpt_app.urls'
 CORS_ORIGIN_ALLOW_ALL = True
 

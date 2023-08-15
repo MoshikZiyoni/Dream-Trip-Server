@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 import os
+import random
 import re
 import time
 import openai
@@ -260,7 +261,8 @@ def process_hotel(hotel, city_obj, hotels):
     # print("Save hotels successfully")
 
 
-def generate_schedule(data,country):
+def generate_schedule(data,country,check):
+    print ('@@@@@@@@@@@@@@@@@@@',check)
     total = 0    
     try:
         cities = data['cities']
@@ -286,14 +288,15 @@ def generate_schedule(data,country):
                     total+=prices
                 except: 
                     pass
-            try:
-                attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
-            except Exception as e:
-                print('already sorted')
+           
             restaurants = city['restaurants']
             hotels=city['hotels']
             days_spent = city['days_spent']
-
+            try:
+                if check==False:
+                    attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
+            except Exception as e:
+                print('already sorted')
             days_spent=int(days_spent)
             num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
             num_attractions_per_day = int(num_attractions_per_day) 
@@ -415,7 +418,8 @@ def generate_schedule(data,country):
     price_for_dinner=price_for_dinner*days_spent
     total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
     
-    return schedule,{"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
+    return {"schedule":schedule,"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
+    # return schedule
 
 
 
@@ -720,7 +724,13 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         if existing_city:
             attract = Attraction.objects.filter(city_id=existing_city.id).values()
             attractions_list = list(attract)
-            city_data["attractions"] = attractions_list
+            attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
+            first_5_attractions = attractions[:5]
+            remaining_attractions = attractions[5:]
+            # Shuffle the remaining attractions randomly
+            random.shuffle(remaining_attractions)
+            final_attractions = first_5_attractions + remaining_attractions
+            city_data["attractions"] = final_attractions
 
             restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
             restaurants_list = list(restaura)
@@ -734,8 +744,18 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         executor.submit(process_city, city_data, country, country_id)
 
     executor.shutdown()
-    answer_from_data1=generate_schedule(answer_dict,country) 
-    answer=({'answer' :answer_from_data1,"itinerary_description":itinerary_description,"request_left":request_left})
+    check=True
+    answer_from_data1=generate_schedule(answer_dict,country,check)
+    total_prices=answer_from_data1['total_prices']
+    total_transport_private_taxi=answer_from_data1["total_transport_private_taxi"]
+    total_food_prices=answer_from_data1['total_food_prices']
+    costs={
+        "total_prices":total_prices,
+        "total_transport_private_taxi":total_transport_private_taxi,
+        "total_food_prices":total_food_prices,
+    }
+    end_result=answer_from_data1["schedule"]
+    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"costs":costs})
     return answer
 
 

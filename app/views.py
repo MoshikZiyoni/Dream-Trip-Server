@@ -21,7 +21,7 @@ import ast
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-
+    
     # city_list= 
     # API_KEY=os.environ.get('google_key')
     # def get_places_by_city(city,city_obj,lat,lon):
@@ -572,7 +572,8 @@ def gpt_view(request):
     try:
 
         # Define variables
-        mainland = request.data['country']
+        mainland = request.data['country']  
+        print("mainland:",mainland)
         # adult = request.data['adult']
         # children = request.data['children']
         durring = request.data['durringDays']
@@ -582,7 +583,7 @@ def gpt_view(request):
         # answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).first()
         if answer_from_data:
             print('answer in data')
-            answer_string = answer_from_data['answer']
+            answer_string = answer_from_data['answer']   
             country = mainland
             answer=(quick_from_data_base(country=country,answer_dict=answer_string,process_city=process_city,request_left=request_left))    
             return JsonResponse(answer,safe=False)
@@ -591,13 +592,15 @@ def gpt_view(request):
         result1=(run_long_poll_async(ourmessage,mainland))
         combined_data = result1['answer']
         itinerary_description1 =result1['itinerary_description']
+        costs=result1['costs']
         # main_restaurants = result1['main_restaurants']
         # main_attractions = result1['main_attractions']
 
         result1={
-            'answer':combined_data,
-            'itinerary_description':itinerary_description1,
-            'request_left':request_left
+            "answer":combined_data,
+            "itinerary_description":itinerary_description1,
+            "request_left":request_left,
+            "costs":costs
         }
 
         return  JsonResponse(result1,safe=False)
@@ -631,6 +634,22 @@ def popular_country(request):
 
 @api_view(['GET', 'POST'])
 def make_short_trip(request): 
+    email=request.data['email']
+    if not email:
+        return JsonResponse({'error': 'Email not provided'})
+
+    # Check if the user's email exists in the request count dictionary
+    request_count = cache.get(email, 0)
+    # If the user has made more than 10 requests in the past 24 hours, block the request
+    if request_count >= 100:
+        return JsonResponse({'error': 'Too many requests'})
+
+    # Otherwise, increment the request count and set the cache with the new value
+    request_count += 1
+    print (request_count)
+    request_left=11-request_count
+    timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
+    cache.set(email, request_count, timeout=timeout_seconds)
     country=(request.data["country"])
     queries = QueryChatGPT.objects.filter(
             Q(question__icontains=country)     
@@ -651,5 +670,5 @@ def make_short_trip(request):
         random_query=random.choice(queries)
         print ('under 7 days')
     answer=(random_query.answer)
-    new_result=(quick_from_data_base(country=country,answer_dict=answer,process_city=process_city))
+    new_result=(quick_from_data_base(country=country,answer_dict=answer,process_city=process_city,request_left=request_left))
     return JsonResponse(new_result,safe=False)

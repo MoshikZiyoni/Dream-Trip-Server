@@ -233,7 +233,7 @@ def calculate_total_price_attractions(attraction):
 
                 
         except:
-            print ('fall in 312')
+            print ()
 
 
     # if currency and amount:
@@ -262,7 +262,7 @@ def calculate_total_price_attractions(attraction):
             return total
 
         except:
-            print ('fall in 336')
+            print ()
             pass
         numerical_values = re.search(r'(\d+(?:,?\d+)*)\s?([€$£¥])?', price)
         if numerical_values:
