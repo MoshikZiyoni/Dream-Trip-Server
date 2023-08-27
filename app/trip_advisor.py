@@ -113,7 +113,7 @@ def flickr_api(name,latitude,longitude):
   if len(photos['photos']['photo']) == 0:
     # No photos found for the attraction name, search by latitude and longitude
     photos = flickr.photos.search(lat=latitude, lon=longitude, per_page=1, extras='url_o', sort='relevance')
-
+    print ("len is 0")
     if len(photos['photos']['photo']) == 0:
         print('No photos found for the attraction')
   # Extract the photo URLs
@@ -132,7 +132,7 @@ def flickr_api(name,latitude,longitude):
             #   image_list.append(image_url)
           else:
               return (image_url=="")
-
+# print(flickr_api(name="Manta Ray",latitude= 32.0853,longitude= 34.7818))
 
 api_key=os.environ.get('FOURSQUARE')
 
@@ -145,11 +145,12 @@ def foursquare_restaurant(landmarks):
         "Authorization": api_key
     }
     query= {
+        # 'query': f"attractions in {city_name},{country}",
         'categories':'13000',
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':5000,
         'limit' : 20,
-        'fields':'distance,geocodes,name,rating,price,website,photos,social_media,menu,hours,location,tel'
+        'fields':'geocodes,name,rating,price,website,photos,social_media,menu,hours,location,tel,tastes,tips'
     }
     response = requests.get(url, params=query,headers=headers)
 
@@ -157,7 +158,6 @@ def foursquare_restaurant(landmarks):
     jsonto=json.loads(response_text)
     reslut=jsonto['results']
     return (reslut)
-
 
 def foursquare_attraction(landmarks,city_name,country):
     url1 = "https://api.foursquare.com/v3/places/search?"

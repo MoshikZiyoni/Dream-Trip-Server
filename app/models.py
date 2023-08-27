@@ -2,8 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Search(models.Model):
-    input=models.TextField(max_length=200)
+
 
     
 class QueryChatGPT(models.Model):
@@ -13,6 +12,7 @@ class QueryChatGPT(models.Model):
 
 class Country(models.Model):
     name=models.CharField(max_length=100)
+    average_prices=models.TextField(max_length=200)
     popularity_score = models.IntegerField(default=0)
 
     def increase_popularity(self):
@@ -55,10 +55,9 @@ class Restaurant(models.Model):
     photos=models.TextField(max_length=100)
     review_score=models.TextField(max_length=20)
     website=models.TextField(max_length=100)
-    social_media=models.TextField(max_length=100)
+    category=models.TextField(max_length=100)
     price=models.TextField(max_length=20)
-    menu=models.TextField(max_length=100)
-    distance=models.TextField(max_length=200)
+    tips=models.TextField(max_length=3000)
     hours=models.TextField(max_length=150,null=True)
     tel=models.TextField(max_length=100,null=True)
     address=models.TextField(max_length=100,null=True)

@@ -1,6 +1,9 @@
 import json
 from threading import RLock
+import threading
 import time
+from unidecode import unidecode
+# from app.poe_selenium import poe,poe1,poe2,poe3,poe4
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -16,80 +19,105 @@ from django.db.models import Q
 import random
 import os
 import ast
-
-
+from collections import Counter
+from django.db.models import Count
+from itertools import combinations
+from django.db.models.functions import Lower
+from selenium.webdriver.common.by import By
+import base64
+import requests
+from selenium import webdriver
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
-    # city_list= 
-    # API_KEY=os.environ.get('google_key')
-    # def get_places_by_city(city,city_obj,lat,lon):
-    #     base_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-    #     params = {
-    #         "query": f"best attraction in {city}",
-    #         'location':f"{lat},{lon}",
-    #         "key": API_KEY,
-    #         "types": "tourist_attraction",
-    #         "sort": "rating", 
-    #         "min_rating": 4,
-    #         "radius":10000,
-    #         "orderby": "rating",
-    #         "fields": "photos,formatted_address,name,rating,opening_hours", 
-    #         "language":"en",
-    #     }
-    #     response = requests.get(base_url, params=params)
-    #     data = response.json()
-    #     places = []
-    #     for result in data['results']:
-    #         name = result['name']
-    #         latt = result['geometry']['location']['lat']
-    #         lng = result['geometry']['location']['lng']
-    #         rating = result['rating']
-    #         if rating==0:
-    #             continue
-    #         place_id = result['place_id']
-    #         photo_reference = result['photos'][0]['photo_reference'] if result.get('photos') else None
-    #         html_attributions = result['photos'][0]['html_attributions'] if result.get('photos') else None
-
-    #         image = flickr_api(name=name,latitude=lat,longitude=lng)
-    #         new_image = image if image else ""
-    #         city_obj1=City.objects.filter(id=city_obj).first()
-    #         atrc_query = Attraction(
-    #             name=name,
-    #             city=city_obj1,
-    #             latitude=latt,
-    #             longitude=lng,
-    #             photos=new_image,
-    #             review_score=rating,
-    #             place_id=place_id,
-    #             # website=website1,
-    #             # hours_popular=hours_popular1,
-    #             # distance=distance1
-    #         )
-    #         atrc_query.save()
-    #         print(f"Save attraction successfully{name}")
-    #     #     place = {
-    #     #         'name': name,
-    #     #         'latitude': lat,
-    #     #         'longitude': lng,
-    #     #         'review_score': rating,
-    #     #         'place_id': place_id,
-    #     #         'photo': image,
-    #     #         'html_attributions': html_attributions,
-    #     #     }
-    #     #     places.append(place)
-            
-    #     # return places
-
-    # for city_info in city_list:
-    #     city = city_info['city'] 
-    #     city_obj = city_info['city_obj']
-    #     lat=city_info['lat']
-    #     lon=city_info['lon']
-    #     get_places_by_city(city,city_obj,lat,lon)
-    # return 'kkkkkk'
     # from django.db.models import Count
+    
+    # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
+    # cities= []
+    # for city in cities_without_hotels:
+    #     cities.append(city.city)
+    # print (cities)
+    # return 'kk'
+    # # Get the cities without attractions
+    # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
+    # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
+    # for city in cities_without_hotels:
+    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')    
+    # return 'ok'
+
+    # # # # # Get the cities without restaurants
+    # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
+
+    # # Print the results
+    # print("Cities without attractions:")
+    # for city in cities_without_attractions:
+    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
+    # return 'kkk'
+      # cities_in_france = City.objects.filter(country__name='France')
+    # for i in cities_in_france:
+    #     print(i.city)
+    # return 'KK'
+    # thread_poe = threading.Thread(target=poe)
+    # thread_poe1 = threading.Thread(target=poe1)
+    # thread_poe2 = threading.Thread(target=poe2)
+    # thread_poe3 = threading.Thread(target=poe3)
+    # thread_poe4 = threading.Thread(target=poe4)
+    # # Start the threads
+    # thread_poe.start()
+    # thread_poe1.start()
+    # thread_poe2.start()
+    # thread_poe3.start()
+    # thread_poe4.start()
+    # # Wait for both threads to complete
+    # thread_poe.join()
+    # thread_poe1.join()
+    # thread_poe2.join()
+    # thread_poe3.join()
+    # thread_poe4.join()
+
+    # print("Both threads have completed.")
+    # return 'kk'
+    # city=City.objects.filter(city="Berlin").first()
+    # attrac=Attraction.objects.filter(city_id=city.id).values()
+    # for i in attrac:
+    #     print("name: ",i['name'],",", "description: ",i["description"])
+    #     print()
+        
+    # return 'kk'
+
+    
+    
+
+   
+    # from django.db.models import Count
+    # attractions = Attraction.objects.filter(place_id__isnull=False).delete()
+    # # count=0
+    # # for attrac in attractions:
+    # #     print(attrac.name,attrac.place_id)
+    # #     count+=1
+    # # print (count)
+    # return 'kk'
+    
+    # # Get the count of matching attractions
+    # count = attractions.count()
+
+    # # Get a set of unique cities among the matching attractions
+    # cities = attractions.values('city__city').distinct()
+
+    # # Print the results
+    # print(count)
+    # print(cities)
+    # attractions = Restaurant.objects.filter(photos__startswith='https://fastly.4sqi.net')
+    # count=0
+    # cities = set()
+    # for attrac in attractions:
+    #     print(count,attrac)
+        
+    #     cities.add(attrac.city.city)
+    #     count+=1
+    # print (count)
+    # print (cities)
+    # return 'kk'
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
 
     # for city in cities_without_hotels:
@@ -372,104 +400,261 @@ def gpt_view(request):
 #     return 'kk'
 
 #     def extract_attraction_data(attractions):
-    
-#         for attraction_data in attractions:
-#             city = attraction_data["city"]
+#         try:
+#             for attraction_data in attractions:
+#                 city = attraction_data["city"]
+#                 name = attraction_data["name"]
+#                 normalized_city_name = unidecode(city)
+#                 try:
+#                     city_objs = City.objects.filter(city=city).first()
+#                     print(city_objs.city)
+#                 except:
+#                     print ('no regular')
+#                     normalized_city_name = normalized_city_name.strip()
+#                     city_objs = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+#                 check_name=Attraction.objects.filter(name=name,city_id=city_objs.id).first()
+                      
+#                 if not check_name:  
+#                     latitude= attraction_data["latitude"]
+#                     longitude= attraction_data["longitude"]
+#                     name_for_flicker=f"{name}, {city}"
+#                     photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
+#                     if photos==None:
+#                         photos=""
+#                     print (photos,'@@@@@',name)
+#                     review_score= attraction_data["review_score"]
+#                     description = attraction_data["description"]
+#                     website= attraction_data["website"]
+#                     try:
+#                         hours= attraction_data["hours"]
+#                     except:
+#                         hours=""
+#                     distance = attraction_data["distance"]
+#                     real_price = attraction_data["real_price"]
+#                     try:
+#                         formatted_address=attraction_data["formatted address"]
+#                     except:
+#                         pass
+#                     try:
+#                         formatted_address=attraction_data["formatted_address"]
+#                     except:
+#                         pass
 
-#             name = attraction_data["name"]
-#             latitude = attraction_data["latitude"]
-#             longitude = attraction_data["longitude"]
-#             photos = flickr_api(name, latitude, longitude)
-#             if photos==None:
-#                 photos=""
-#             review_score = attraction_data["review_score"]
-#             description = attraction_data["description"]
-#             website = attraction_data["website"]
-#             hours_popular = attraction_data["hours_popular"]
-#             distance = attraction_data["distance"]
-#             real_price = attraction_data["real_price"]
-#             website = website or ""
-#             hours_popular = hours_popular or ""
-#             print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
-#             city_objs = City.objects.filter(city=city).first()
-#             if city_objs:
-#                 print (city_objs.id,'AAAAAAA')
-#                 # city_obj = city_objs[0]
-#                 print (city_objs.id,'AAAAAAA')
-#                 atrc_query = Attraction(
-#                 # name=name,
-#                 city=city_objs,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 photos=photos,
-#                 review_score=review_score,
-#                 description=description,
-#                 website=website,
-#                 hours_popular=hours_popular,
-#                 distance=distance,
-#                 real_price=real_price
-#             )
-#                 atrc_query.save()
-#                 print("Save attraction successfully")
-            
+#                     try:
+#                         tel=attraction_data['telephone']
+#                     except:
+#                         tel=""
+#                     website= website or ""
+#                     try:
+#                         tips=attraction_data["tips"]
+#                         if isinstance(tips, list):
+#                             pass
+#                         elif isinstance(tips, str):
+#                             tips_list = [tip.strip() for tip in re.split(r'\d+\.', tips) if tip.strip()]
+#                             tips=tips_list
+#                             print (tips)
+#                     except:
+#                         tips= ""
+                    
+#                     # print (name,latitude,longitude,review_score,description,website,hours,distance,real_price,tips,formatted_address)
+                    
+#                     if city_objs:
+#                         try:
+#                             print (city_objs.id,'AAAAAAA')
+#                             # city_obj = city_objs[0]
+#                             # print (city_objs.id,'AAAAAAA')
+#                             atrc_query = Attraction(
+#                             name=name,
+#                             city=city_objs,
+#                             latitude=latitude,
+#                             longitude=longitude,
+#                             photos=photos,
+#                             review_score=review_score,
+#                             description=description,
+#                             website=website,
+#                             hours=hours,
+#                             distance=distance,
+#                             real_price=real_price,
+#                             address=formatted_address,
+#                             tips=tips,
+#                             tel=tel
+#                         )
+#                             atrc_query.save()
+#                             print("Save attraction successfully")
+#                             with open('attractions_saved.txt', 'a', encoding='utf-8') as f:
+#                                 f.write(name + '\n')
+#                         except Exception as e:
+#                             print (e)
 
-#             else:
-#                 print ("can't save")
+#                     else:
+#                         print ("no city obj")
+#                         with open('attractions_not_saved.txt', 'a', encoding='utf-8') as f:
+#                             f.write(name + '\n')
+#                 else:
+#                     print ('there is the attrac already')
+#         except Exception as e:
+#             print (e)
 
 
 #     extract_attraction_data( attractions=[
-
+	 
+	
 # ]
 # )
 
 #     return 'ok'
 
 
-#     def extract_restaurants_data(attractions):
+    # def extract_restaurants_data(attractions):
         
-#         for attraction_data in attractions:
-#             city = attraction_data["city"]
+    #     try:
+    #         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
 
-#             name = attraction_data["name"]
-#             latitude = attraction_data["latitude"]
-#             longitude = attraction_data["longitude"]
-#             photos = flickr_api(name, latitude, longitude)
-#             if photos==None:
-#                 photos=""
-#             review_score = attraction_data["review_score"]
-            
-#             website = attraction_data["website"]
-            
-#             distance = attraction_data["distance"]
-#             price = attraction_data["price"]
-#             website = website or ""
-#             print (name,latitude,longitude,review_score,website,distance,price)
-#             city_objs = City.objects.filter(id=308).first()
-#             if city_objs:
-#                 print (city_objs.id,'AAAAAAA')
-#                 # city_obj = city_objs[0]
-#                 print (city_objs.id,'AAAAAAA')
-#                 atrc_query = Restaurant(
-#                 name=name,
-#                 city=city_objs,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 photos=photos,
-#                 review_score=review_score,
-#                 website=website,
-#                 distance=distance,
-#                 price=price
-#             )
-#                 atrc_query.save()
-#                 print("Save attraction successfully")
-            
+    #         # Set up the Chrome WebDriver with User-Agent and headless mode
+    #         chrome_options = webdriver.ChromeOptions()
+    #         chrome_options.add_argument(f"user-agent={user_agent}")
+    #         # chrome_options.add_argument("--headless")  # Run in headless mode
+    #         random_time = random.uniform(3,6)
 
-#             else:
-#                 print ("can't save")
-#     extract_restaurants_data(attractions  = [
-#   
-# ])
-# #     return 'ok'
+    #         # Create a Chrome WebDriver instance
+    #         # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
+    #         # service = Service(service_path)
+    #         driver = webdriver.Chrome( options=chrome_options)
+    #         # Initialize the WebDriver (in this case, using Chrome)
+    #         cities_list=['Las Vegas', 'Brașov', 'Cluj-Napoca', 'Boquete','Kandy']
+    #         for attraction_data in attractions:
+    #             city = attraction_data["city"]
+    #             if city not in cities_list:
+    #                 print ('continue')
+    #                 continue
+                
+    #             name = attraction_data["name"]
+    #             normalized_city_name = unidecode(city)
+    #             try:
+    #                 city_objs = City.objects.filter(city=city).first()
+    #                 print(city_objs.city)
+    #             except:
+    #                 print ('no regular')
+    #                 normalized_city_name = normalized_city_name.strip()
+    #                 city_objs = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+    #             check_name=Restaurant.objects.filter(name=name,city_id=city_objs.id).first()
+                      
+    #             if not check_name:
+    #                 time.sleep(random_time)
+                    
+    #                 latitude= attraction_data["latitude"]
+    #                 longitude= attraction_data["longitude"]
+    #                 name_for_flicker=f"{name} restaurant, {city}"
+    #                 try:
+    #                     driver.get(f"https://www.google.com/search?tbm=isch&q={name_for_flicker}")
+    #                     first_image = driver.find_element(By.XPATH,"/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img").get_attribute("src")
+    #                 except:
+    #                     first_image=""
+    #                     photos=""
+    #                 if len(first_image)>2:
+    #                     image_data = first_image.split(',')[1].encode()
+    #                     url = "https://api.imgbb.com/1/upload"
+    #                     api_key = '670a51c4852893f80aa46108e03e0bbc'
+    #                     payload = {
+    #                         "key": api_key,
+    #                         "image": image_data,
+    #                     }
+    #                     response = requests.post(url, payload)
+    #                     print (response.text)
+    #                     photos=(response.json()["data"]["url"])
+
+    #                 # image_data = base64.b64decode(first_image.split(',')[1])
+    #                 # headers = {
+    #                 #     "Authorization": "Client-ID 92a43ec7ca67375" 
+    #                 # }
+    #                 # url = "https://api.imgur.com/3/image"
+    #                 # response = requests.post(url, headers=headers, data=image_data)
+    #                 # imgur_response = json.loads(response.text)
+    #                 # print (imgur_response)
+    #                 # # Get image link
+    #                 # image_link = imgur_response['data']['link']
+    #                 # photos=(image_link)
+    #                 # photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
+    #                 if photos==None:
+    #                     photos=""
+    #                 print (photos,'@@@@@',name)
+    #                 review_score= attraction_data["review_score"]
+    #                 website= attraction_data["website"]
+    #                 try:
+    #                     hours= attraction_data["hours"]
+    #                 except:
+    #                     hours=""
+    #                 price_range= attraction_data["price_range"]
+    #                 category=attraction_data["category"]
+    #                 try:
+    #                     formatted_address=attraction_data["formatted address"]
+    #                 except:
+    #                     pass
+    #                 try:
+    #                     formatted_address=attraction_data["formatted_address"]
+    #                 except:
+    #                     pass
+
+    #                 try:
+    #                     tel=attraction_data['telephone']
+    #                 except:
+    #                     tel=""
+    #                 website= website or ""
+    #                 try:
+    #                     tips=attraction_data["tips"]
+    #                     if isinstance(tips, list):
+    #                         pass
+    #                     elif isinstance(tips, str):
+    #                         tips_list = [tip.strip() for tip in re.split(r'\d+\.', tips) if tip.strip()]
+    #                         tips=tips_list
+    #                         print (tips)
+    #                 except Exception as e:
+    #                     tips= ""
+    #                     print(e)
+                    
+    #                 # print (name,latitude,longitude,review_score,description,website,hours,distance,real_price,tips,formatted_address)
+                    
+    #                 if city_objs:
+    #                     try:
+    #                         print (city_objs.id,'AAAAAAA')
+    #                         # city_obj = city_objs[0]
+    #                         # print (city_objs.id,'AAAAAAA')
+    #                         atrc_query = Restaurant(
+    #                         name=name,
+    #                         city=city_objs,
+    #                         latitude=latitude,
+    #                         longitude=longitude,
+    #                         photos=photos,
+    #                         review_score=review_score,
+    #                         website=website,
+    #                         hours=hours,
+    #                         category=category,
+    #                         price=price_range,
+    #                         address=formatted_address,
+    #                         tips=tips,
+    #                         tel=tel
+    #                     )
+    #                         atrc_query.save()
+    #                         print("Save attraction successfully")
+    #                         with open('restaurants_saved.txt', 'a', encoding='utf-8') as f:
+    #                             f.write(name + '\n')
+    #                     except Exception as e:
+    #                         print (e)
+
+    #                 else:
+    #                     print ("no city obj")
+    #                     with open('restaurants_not_saved.txt', 'a', encoding='utf-8') as f:
+    #                         f.write(name + '\n')
+    #             else:
+    #                 print ('there is the attrac already')
+    #     except Exception as e:
+    #         print (e,'erorrrrrr')
+    # extract_restaurants_data(attractions  = [
+  
+	
+  
+    # ])
+    # return 'ok'
 
 
     # def city_has_few_attractions():
@@ -491,23 +676,7 @@ def gpt_view(request):
     # return 'ko'
 
 
-    # from django.db.models import Count
-
-    # # # # Get the cities without attractions
-    # # # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
-    # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
-    # for city in cities_without_hotels:
-    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')    
-    # return 'ok'
-
-    # # # # # Get the cities without restaurants
-    # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
-
-    # # # # Print the results
-    # # print("Cities without attractions:")
-    # # for city in cities_without_attractions:
-    # #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
-    # # return 'kkk'
+   
     # # attrac=Attraction.objects.filter(city_id=345).values()
     # # for i in attrac:
     # #     print(i)
@@ -549,7 +718,7 @@ def gpt_view(request):
 
     #             # Delete all duplicates except the first one per city (on commit)
     #             delete_list.delete()
-# # return 'ok'
+    # # return 'ok'
 
 
 
@@ -567,7 +736,7 @@ def gpt_view(request):
     request_count += 1
     print (request_count)
     request_left=11-request_count
-    timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
+    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
     cache.set(email, request_count, timeout=timeout_seconds)
     try:
 
@@ -649,7 +818,7 @@ def make_short_trip(request):
     request_count += 1
     print (request_count)
     request_left=11-request_count
-    timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
+    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
     cache.set(email, request_count, timeout=timeout_seconds)
     country=(request.data["country"])
     queries = QueryChatGPT.objects.filter(

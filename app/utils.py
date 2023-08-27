@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 import random
 import re
-import time
+from django.db.models import Q
 import openai
 import requests
 from app.models import Attraction, City, Hotels_foursqaure, Restaurant,Country
@@ -16,6 +16,7 @@ import traceback
 from dotenv import load_dotenv
 from app.currency_data import calculate_total_price_attractions
 import ast
+from unidecode import unidecode
 
 load_dotenv()
 
@@ -586,7 +587,6 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 photos1 = attraction['photos']if 'photos' in attraction else ''
                 review_score1 = attraction['review_score']if 'review_score' in attraction else ''
                 website1 = attraction['website']if 'website' in attraction else ''
-                hours_popular1 = attraction['hours_popular']if 'hours_popular' in attraction else ''
                 description = attraction['description']if 'description' in attraction else ''
                 distance1 = attraction['distance']if 'distance' in attraction else ''
                 hours1 = attraction['hours']if 'hours' in attraction else ''
@@ -606,7 +606,6 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                     review_score=review_score1,
                     description=description,
                     website=website1,
-                    hours_popular=hours_popular1,
                     distance=distance1,
                     hours=hours1,
                     tel=tel1,
@@ -626,14 +625,12 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                 photos = restaurnt['photos']if 'photos' in restaurnt else ''
                 review_score = restaurnt['review_score']if 'review_score' in restaurnt else ''
                 website = restaurnt['website']if 'website' in restaurnt else ''
-                social_media = restaurnt['social_media']if 'social_media' in restaurnt else ''
-                menu = restaurnt['menu']if 'menu' in restaurnt else ''
-                distance = restaurnt['distance']if 'distance' in restaurnt else ''
                 hours_resta = restaurnt['hours']if 'hours' in restaurnt else ''
                 address_res = restaurnt['address']if 'address' in restaurnt else ''
                 tel_res = restaurnt['tel']if 'tel' in restaurnt else ''
-                price = restaurnt['price']if 'price' in restaurnt else ''
+                price = restaurnt['price'] or restaurnt['price_range'] if 'price' in restaurnt else ''
                 place_id1=restaurnt["place_id"] if "place_id" in restaurnt else ''
+                tips_resta=restaurnt['tips'] if 'tips' in restaurnt else ''
                 city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
                 city_obj=City.objects.filter(id=city_obj).first()
                 resta_query = Restaurant(
@@ -643,11 +640,8 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
                         longitude=longitude,
                         photos=photos,
                         review_score=review_score,
-                        menu=menu,
-                        social_media=social_media,
                         website=website,
                         price=price,
-                        distance=distance,
                         hours=hours_resta,
                         tel=tel_res,
                         address=address_res,
@@ -720,7 +714,14 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
     executor = ThreadPoolExecutor()
     for city_data in answer_dict["cities"]:
         city_name = city_data["city"]
-        existing_city = City.objects.filter(city=city_name).first()
+        normalized_city_name = unidecode(city_name)
+        try:
+            existing_city = City.objects.filter(city=city_name).first()
+        except:
+            print ('no regular')
+            existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+        
+        # existing_city = City.objects.filter(Q(city__iexact=city_name) | Q(city__icontains=city_name)).first()
         if existing_city:
             attract = Attraction.objects.filter(city_id=existing_city.id).values()
             attractions_list = list(attract)

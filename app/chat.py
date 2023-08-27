@@ -1,7 +1,9 @@
 import json
 import os
 import random
+from django.db.models import Q
 import time
+from unidecode import unidecode
 from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
 from app.trip_advisor import (
     foursquare_attraction,
@@ -213,7 +215,14 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     for city_data in data["cities"]:
                         with city_lock:
                             city_name = city_data["city"]
-                            existing_city = City.objects.filter(city=city_name).first()
+                            normalized_city_name = unidecode(city_name)
+                            try:
+                                existing_city = City.objects.filter(city=city_name).first()
+                            except:
+                                print ('no regular')
+                                existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                            
+                            # existing_city = City.objects.filter(Q(city__iexact=city_name) | Q(city__icontains=city_name)).first()
                             if existing_city:
                                 attract = Attraction.objects.filter(city_id=existing_city.id).values()
                                 attractions_list = list(attract)
