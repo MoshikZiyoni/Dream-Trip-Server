@@ -16,7 +16,7 @@ import traceback
 from dotenv import load_dotenv
 from app.currency_data import calculate_total_price_attractions
 import ast
-# from unidecode import unidecode
+from unidecode import unidecode
 
 load_dotenv()
 

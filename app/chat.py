@@ -3,7 +3,7 @@ import os
 import random
 from django.db.models import Q
 import time
-# from unidecode import unidecode
+from unidecode import unidecode
 from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
 from app.trip_advisor import (
     foursquare_attraction,
