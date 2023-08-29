@@ -1,8 +1,9 @@
 from django.db import models
 
 # Create your models here.
-
-
+class ApplicationRating(models.Model):
+    rating = models.PositiveSmallIntegerField(default=0)
+    user = models.TextField(max_length=100)
 
     
 class QueryChatGPT(models.Model):

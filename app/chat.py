@@ -9,8 +9,6 @@ from app.trip_advisor import (
     foursquare_attraction,
     foursquare_hotels,
     foursquare_restaurant,
-    trip_advisor_attraction,
-    trip_advisor_restaurants,
 )
 import openai
 from dotenv import load_dotenv
@@ -139,7 +137,7 @@ def process_attractions(landmarks, city_name, country, city_obj, city_data):
     return attractions
 
 
-def process_hotels(landmarks, city_name, country, city_obj, city_data):
+def process_hotels(landmarks, city_name):
     hotels = []
     with hotel_lock:
         result_for_hotel=foursquare_hotels(landmarks)
@@ -149,12 +147,12 @@ def process_hotels(landmarks, city_name, country, city_obj, city_data):
             print("Start google hotels")
             hotels_info_trip = get_hotels_from_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
             for hotel in hotels_info_trip['results']:
-                thread = Thread(target=hotel_from_google, args=(hotel, city_obj, hotels))
+                thread = Thread(target=hotel_from_google, args=(hotel, hotels))
                 thread.start()
                 threads.append(thread)
         threads = []
         for hotel in result_for_hotel:
-            thread = Thread(target=process_hotel, args=(hotel, city_obj, hotels))
+            thread = Thread(target=process_hotel, args=(hotel, hotels))
             thread.start()
             threads.append(thread)
 

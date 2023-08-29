@@ -196,7 +196,7 @@ def process_restaurant(restaur, city_obj, restaurants):
 
 
 
-def process_hotel(hotel, city_obj, hotels):
+def process_hotel(hotel, hotels):
     name12 = hotel.get("name", "")
     latitude12 = (
         hotel["geocodes"]["main"]["latitude"]
@@ -215,13 +215,23 @@ def process_hotel(hotel, city_obj, hotels):
     rating12 = hotel.get("rating", "0")
     website12 = hotel.get("website", "")
     description1 = hotel.get("description", "")
-    if len(description1)==0:
-            try:
-                wiki=process_query(name12)
-                description1=wiki[0]
-                print ('descrption from wiki')
-            except:
-                 print ('descrption from wiki not gooodddddddddddddddd')
+    hours=hotel.get('hours', {}).get('display', "")
+    address=hotel.get('location', {}).get('formatted_address', "")
+    tel=hotel.get('tel', "")
+    tips = []
+    result_tips = hotel.get("tips", [])  # Get the list of tips from the current result
+    for j, tip in enumerate(result_tips):
+        if j >= 3:
+            break
+        tip_text = tip.get("text", "")  # Get the text from the tip dictionary
+        tips.append(tip_text)
+    # if len(description1)==0:
+    #         try:
+    #             wiki=process_query(name12)
+    #             description1=wiki[0]
+    #             print ('descrption from wiki')
+    #         except:
+    #              print ('descrption from wiki not gooodddddddddddddddd')
     photos12 = hotel.get("photos", "")
     if photos12:
         first_photo = photos12[0]
@@ -244,22 +254,15 @@ def process_hotel(hotel, city_obj, hotels):
         "review_score": rating12,
         "website": website12,
         "description": description1,
-        'city_obj':city_obj.id
+        "hours":hours,
+        "address":address,
+        "tel":tel,
+        'tips':tips,
+        # 'city_obj':city_obj.id
     }
 
     hotels.append(hotels_info)
-    # hotels_query = Hotels_foursqaure(
-    #     name=name12,
-    #     city=city_obj,
-    #     latitude=latitude12,
-    #     longitude=longitude12,
-    #     photos=photos12,
-    #     review_score=rating12,
-    #     website=website12,
-    #     description=description1
-    # )
-    # hotels_query.save()
-    # print("Save hotels successfully")
+    
 
 
 def generate_schedule(data,country,check):
@@ -683,7 +686,8 @@ def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
 
 
 def quick_from_data_base(country,answer_dict,process_city,request_left):
-    
+    from app.chat import process_hotels
+
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
     try:
         answer_dict = json.loads(answer_string_modified)
@@ -737,9 +741,13 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
             restaurants_list = list(restaura)
             city_data["restaurants"] = restaurants_list
 
-            hotels=Hotels_foursqaure.objects.filter(city_id=existing_city.id).values()
-            hotels_list=list(hotels)
-            city_data["hotels"] = hotels_list
+            # hotels=Hotels_foursqaure.objects.filter(city_id=existing_city.id).values()
+            # hotels_list=list(hotels)
+            lat=existing_city.latitude
+            lon=existing_city.longitude
+            landmarks=[lat,lon]
+            hotels=process_hotels(landmarks, city_name )
+            city_data["hotels"] = hotels
             print("Continue")
             continue
         executor.submit(process_city, city_data, country, country_id)
@@ -813,7 +821,7 @@ def attraction_from_google(attracs, city_obj, attractions):
     attractions.append(place)
     
 
-def hotel_from_google(hotel, city_obj, hotels):
+def hotel_from_google(hotel, hotels):
     name_hotel = hotel['name']
     lattt = hotel['geometry']['location']['lat']
     lngg1 = hotel['geometry']['location']['lng']
@@ -831,6 +839,6 @@ def hotel_from_google(hotel, city_obj, hotels):
     "review_score": rating,
     "place_id": place_id,
     "photos":final_url,
-    "city_obj":city_obj.id
+    # "city_obj":city_obj.id
 }
     hotels.append(place)

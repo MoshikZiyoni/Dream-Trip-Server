@@ -2,13 +2,13 @@ import json
 from threading import RLock
 import threading
 import time
-from unidecode import unidecode
+# from unidecode import unidecode
 # from app.poe_selenium import poe,poe1,poe2,poe3,poe4
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
-from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT,City, Restaurant,Popular
+from app.models import ApplicationRating, Attraction, Country, Hotels_foursqaure, QueryChatGPT,City, Restaurant,Popular
 from django.core.cache import cache
 from app.my_selenium import perform_search
 from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_hotels, foursquare_restaurant
@@ -31,7 +31,9 @@ from selenium import webdriver
 @api_view(['GET', 'POST'])
 def gpt_view(request):
     # from django.db.models import Count
-    
+    # attrac=Attraction.objects.filter(name='Eiffel Tower').first()
+    # attrac.photos='https://lh3.googleusercontent.com/p/AF1QipOTdWRhZoy5lJGdxy_ir-mQsy6N3O6CYLaOj0vC=s1360-w1360-h1020'
+    # attrac.save()
     # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
     # cities= []
     # for city in cities_without_hotels:
@@ -90,12 +92,15 @@ def gpt_view(request):
 
    
     # from django.db.models import Count
-    # attractions = Attraction.objects.filter(place_id__isnull=False).delete()
-    # # count=0
-    # # for attrac in attractions:
-    # #     print(attrac.name,attrac.place_id)
-    # #     count+=1
-    # # print (count)
+    # attractions = Restaurant.objects.filter(place_id__isnull=False)
+    # count=0
+    # cities_list =set()
+    # for attrac in attractions:
+    #     print(attrac.name,attrac.place_id)
+    #     cities_list.add(attrac.city.city)
+    #     count+=1
+    # print (count)
+    # print(cities_list)
     # return 'kk'
     
     # # Get the count of matching attractions
@@ -107,6 +112,12 @@ def gpt_view(request):
     # # Print the results
     # print(count)
     # print(cities)
+    # attractions = Hotels_foursqaure.objects.filter(place_id__isnull=False).delete()
+    # count=0
+    # for i in attractions:
+    #     count+=1
+    #     print (count)
+
     # attractions = Restaurant.objects.filter(photos__startswith='https://fastly.4sqi.net')
     # count=0
     # cities = set()
@@ -842,3 +853,11 @@ def make_short_trip(request):
     answer=(random_query.answer)
     new_result=(quick_from_data_base(country=country,answer_dict=answer,process_city=process_city,request_left=request_left))
     return JsonResponse(new_result,safe=False)
+
+
+@api_view(['GET', 'POST'])
+def out_applaction_score(request):
+    score=request.data['score']
+    email=request.data['email']
+    rating_to_save=ApplicationRating(rating=score,user=email)
+    rating_to_save.save()

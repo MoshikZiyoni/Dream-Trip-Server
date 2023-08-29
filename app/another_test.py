@@ -15,3 +15,4 @@
 
 
 # return me the avrage price in USD for trip in this countires return me as list json [{country:"",avrage price:""}]
+
