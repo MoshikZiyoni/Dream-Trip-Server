@@ -767,7 +767,7 @@ def out_applaction_score(request):
 @api_view(['GET','POST'])
 def check_before_rate(request):
     email=request.data['email']
-    if ApplicationRating.objects.filter(user=email):
+    if ApplicationRating.objects.filter(user_email=email):
         return JsonResponse(True,safe=False)
     else:
         return JsonResponse(False,safe=False)
