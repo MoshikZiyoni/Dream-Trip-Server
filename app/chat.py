@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from app.models import Attraction, Country, Hotels_foursqaure, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, save_to_db, sort_attractions_by_distance
+from app.utils import generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, restaurant_GPT, sort_attractions_by_distance
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -66,15 +66,15 @@ def process_city(city_data, country, country_id):
     restaurant_for_data=(process_restaurants(landmarks, city_name, country, city_obj, city_data))
     hotels_for_data=(process_hotels(landmarks, city_name, country, city_obj, city_data))
 
-    main_attractions.extend(attraction_for_data)
-    main_restaurants.extend(restaurant_for_data)
-    main_hotels.extend(hotels_for_data)
+    # main_attractions.extend(attraction_for_data)
+    # main_restaurants.extend(restaurant_for_data)
+    # main_hotels.extend(hotels_for_data)
     
-    try:
-        save_to_db(attraction_for_data,restaurant_for_data,hotels_for_data)
+    # try:
+    #     save_to_db(attraction_for_data,restaurant_for_data,hotels_for_data)
 
-    except:
-        print ('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    # except:
+    #     print ('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     city_data["attractions"] = attraction_for_data
     city_data["restaurants"] = restaurant_for_data
     city_data["hotels"] = hotels_for_data
@@ -249,10 +249,12 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     total_prices=combined_data['total_prices']
                     total_transport_private_taxi=combined_data["total_transport_private_taxi"]
                     total_food_prices=combined_data['total_food_prices']
+                    avrage_daily_spent=existing_country.average_prices
                     costs={
                         "total_prices":total_prices,
                         "total_transport_private_taxi":total_transport_private_taxi,
                         "total_food_prices":total_food_prices,
+                        "avrage_daily_spent":avrage_daily_spent,
                     }
                     end_result=combined_data["schedule"]
                     return {'answer':end_result,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions,"costs":costs}

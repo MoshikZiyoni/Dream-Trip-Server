@@ -30,35 +30,14 @@ from selenium import webdriver
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    
     # from django.db.models import Count
     # attrac=Attraction.objects.filter(name='Eiffel Tower').first()
     # attrac.photos='https://lh3.googleusercontent.com/p/AF1QipOTdWRhZoy5lJGdxy_ir-mQsy6N3O6CYLaOj0vC=s1360-w1360-h1020'
     # attrac.save()
-    # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
-    # cities= []
-    # for city in cities_without_hotels:
-    #     cities.append(city.city)
-    # print (cities)
-    # return 'kk'
-    # # Get the cities without attractions
-    # cities_without_attractions = City.objects.annotate(num_attractions=Count('attractions')).filter(num_attractions=0)
-    # cities_without_hotels=City.objects.annotate(num_hotels=Count('hotels')).filter(num_hotels=0)
-    # for city in cities_without_hotels:
-    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')    
-    # return 'ok'
+    
+   
 
-    # # # # # Get the cities without restaurants
-    # cities_without_restaurants = City.objects.annotate(num_restaurants=Count('restaurants')).filter(num_restaurants=0)
-
-    # # Print the results
-    # print("Cities without attractions:")
-    # for city in cities_without_attractions:
-    #     print({"city":city.city,"city_obj":city.id,"lat":city.latitude,"lon":city.longitude},',')
-    # return 'kkk'
-      # cities_in_france = City.objects.filter(country__name='France')
-    # for i in cities_in_france:
-    #     print(i.city)
-    # return 'KK'
     # thread_poe = threading.Thread(target=poe)
     # thread_poe1 = threading.Thread(target=poe1)
     # thread_poe2 = threading.Thread(target=poe2)
@@ -79,16 +58,8 @@ def gpt_view(request):
 
     # print("Both threads have completed.")
     # return 'kk'
-    # city=City.objects.filter(city="Berlin").first()
-    # attrac=Attraction.objects.filter(city_id=city.id).values()
-    # for i in attrac:
-    #     print("name: ",i['name'],",", "description: ",i["description"])
-    #     print()
-        
-    # return 'kk'
+    
 
-    
-    
 
    
     # from django.db.models import Count
@@ -112,23 +83,9 @@ def gpt_view(request):
     # # Print the results
     # print(count)
     # print(cities)
-    # attractions = Hotels_foursqaure.objects.filter(place_id__isnull=False).delete()
-    # count=0
-    # for i in attractions:
-    #     count+=1
-    #     print (count)
+   
 
-    # attractions = Restaurant.objects.filter(photos__startswith='https://fastly.4sqi.net')
-    # count=0
-    # cities = set()
-    # for attrac in attractions:
-    #     print(count,attrac)
-        
-    #     cities.add(attrac.city.city)
-    #     count+=1
-    # print (count)
-    # print (cities)
-    # return 'kk'
+  
     # cities_without_hotels = City.objects.filter(hotels__isnull=True)
 
     # for city in cities_without_hotels:
@@ -233,94 +190,17 @@ def gpt_view(request):
 #                         print ('no restarunt')
 
 
-
-#     qiuick_attraction(cities_data = [
-#  ])
-#     return 'ok'
-    # def foursquare_restaurant(city,landmark):
-    #     api_key=os.environ.get('FOURSQUARE')
-    #     url = "https://api.foursquare.com/v3/places/search?"
-    #     print(landmark[0])
-    #     headers = {
-    #         "accept": "application/json",
-    #         "Authorization": api_key
-    #     }
-
-    #     query = {
-    #         'query': f"restaurants in {city}",
-    #         'categories': '13000',
-    #         "ll" :  f"{landmark[0]},{landmark[1]}",
-    #         'radius': 5000,
-    #         'limit': 10,
-    #         'fields':'distance,geocodes,name,rating,price,website,photos,social_media,menu'
-    #     }
-
-    #     response = requests.get(url, params=query, headers=headers)
-    #     response_text = response.text
-    #     jsonto = json.loads(response_text)
-    #     results = jsonto['results']
-    #     print(jsonto)
-    #     city_obj = City.objects.filter(city=city).first()
-    #     if not city_obj:
-    #         pass
-    #     # for i in results:
-    #     #     process_restaurant(city_obj=city_obj,restaur=i,restaurants=[])
-    #     #     print ('save sucess')
-    # foursquare_restaurant(city='Manchester',landmark=[53.4808,2.2426])
-    # return 'ok'
-    # def foursquare_restaurant(city,landmark):
-    #     api_key=os.environ.get('FOURSQUARE')
-    #     url = "https://api.foursquare.com/v3/places/search?"
-    #     print(landmark[0])
-    #     headers = {
-    #         "accept": "application/json",
-    #         "Authorization": api_key
-    #     }
-
-    #     query = {
-    #         'categories': '13000',
-    #         "ll" :  f"{landmark[0]},{landmark[1]}",
-    #         'radius': 5000,
-    #         'limit': 10,
-    #         'fields':'distance,geocodes,name,rating,price,distance,website,photos,social_media,menu'
-    #     }
-
-    #     response = requests.get(url, params=query, headers=headers)
-    #     response_text = response.text
-    #     jsonto = json.loads(response_text)
-    #     results = jsonto['results']
-    #     city_obj = City.objects.filter(city=city).first()
-    #     if not city_obj:
-    #         pass
-    #     for i in results:
-    #         process_restaurant(city_obj=city_obj,restaur=i,restaurants=[])
-
-    # def get_landmarks(city):
-    #     landmarks = {  # Example landmarks for Nantes, France
-    #     "Vienna": [48.5839, 7.7455],  # Example landmarks for Strasbourg, France
-    #     "Bordeaux": [44.8378, -0.5792],  # Example landmarks for Bordeaux, France
-    #     "Berlin": [52.5200, 13.4050],  # Example landmarks for Berlin, Germany
-    #     "Hamburg": [53.5511, 9.9937],  # Example landmarks for Hamburg, Germany
-    #     "Munich": [48.1351, 11.5820],  # Example landmarks for Munich, Germany
-    # }
-    #     return landmarks.get(city, [])
-
-    # # Example usage
-    # cities = [
-    #     "Vienna",
-        
-    # ]
-
-    # for city in cities:
-    #     landmark = get_landmarks(city)
-    #     print(landmark,'first')
-    #     foursquare_restaurant(city,landmark)
-
-    # return 'ok'
-  
-    
-
-
+#     attraction_list=[
+# ]
+#     restaurnt_without__price = Attraction.objects.filter(name__isnull=True) | Attraction.objects.filter(name='')
+#     for attraction in restaurnt_without__price:
+#         # for attr in attraction_list:
+#         #     if attr["description"] == attraction.description:
+#         #         attraction.name = attr["name"]
+#         #         attraction.save()
+#         #         print ("save sucees")
+#         print(attraction.description,'------',attraction.city.city)  
+#     return 'ok'  
 
     # restaurnt_without__price = Restaurant.objects.filter(price__isnull=True) | Restaurant.objects.filter(price='')
     # for attraction in restaurnt_without__price:
@@ -412,6 +292,20 @@ def gpt_view(request):
 
 #     def extract_attraction_data(attractions):
 #         try:
+           
+#             user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
+
+#             # Set up the Chrome WebDriver with User-Agent and headless mode
+#             chrome_options = webdriver.ChromeOptions()
+#             chrome_options.add_argument(f"user-agent={user_agent}")
+#             # chrome_options.add_argument("--headless")  # Run in headless mode
+#             random_time = random.uniform(3,6)
+
+#             # Create a Chrome WebDriver instance
+#             # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
+#             # service = Service(service_path)
+#             driver = webdriver.Chrome( options=chrome_options)
+#             # Initialize the WebDriver (in this case, using Chrome)
 #             for attraction_data in attractions:
 #                 city = attraction_data["city"]
 #                 name = attraction_data["name"]
@@ -429,10 +323,27 @@ def gpt_view(request):
 #                     latitude= attraction_data["latitude"]
 #                     longitude= attraction_data["longitude"]
 #                     name_for_flicker=f"{name}, {city}"
-#                     photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
-#                     if photos==None:
+#                     try:
+#                         driver.get(f"https://www.google.com/search?tbm=isch&q={name_for_flicker}")
+#                         first_image = driver.find_element(By.XPATH,"/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img").get_attribute("src")
+#                     except:
+#                         first_image=""
 #                         photos=""
-#                     print (photos,'@@@@@',name)
+#                     if len(first_image)>2:
+#                         image_data = first_image.split(',')[1].encode()
+#                         url = "https://api.imgbb.com/1/upload"
+#                         api_key = '670a51c4852893f80aa46108e03e0bbc'
+#                         payload = {
+#                             "key": api_key,
+#                             "image": image_data,
+#                         }
+#                         response = requests.post(url, payload)
+#                         print (response.text)
+#                         photos=(response.json()["data"]["url"])
+#                     # photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
+#                     # if photos==None:
+#                     #     photos=""
+#                     # print (photos,'@@@@@',name)
 #                     review_score= attraction_data["review_score"]
 #                     description = attraction_data["description"]
 #                     website= attraction_data["website"]
@@ -508,7 +419,8 @@ def gpt_view(request):
 
 
 #     extract_attraction_data( attractions=[
-	 
+	
+
 	
 # ]
 # )
@@ -774,8 +686,6 @@ def gpt_view(request):
         itinerary_description1 =result1['itinerary_description']
         costs=result1['costs']
         
-        # main_restaurants = result1['main_restaurants']
-        # main_attractions = result1['main_attractions']
 
         result1={
             "answer":combined_data,
@@ -795,18 +705,6 @@ def gpt_view(request):
 
 @api_view(['GET', 'POST'])
 def popular_country(request):
-    # top_countries = Country.objects.order_by('-popularity_score')[:6]
-    # country_names = []
-    # for country in top_countries:
-    #     url = 'https://pixabay.com/api/'
-    #     params = {'key':os.environ.get('pixabay_key'),'q':{country.name},'image_type':'landscape','orientation':'landscape'}
-
-    #     response = requests.get(url, params=params)
-    #     data = response.json()
-    #     image_url = data['hits'][0]['largeImageURL']
-        
-    #     country_pair = [country.name, image_url]
-    #     country_names.append(country_pair)
     country_names=Popular.objects.all().values()
     country_names=list(country_names)
     return JsonResponse(country_names,safe=False)
@@ -861,3 +759,14 @@ def out_applaction_score(request):
     email=request.data['email']
     rating_to_save=ApplicationRating(rating=score,user=email)
     rating_to_save.save()
+
+
+@api_view(['GET'])
+def check_before_rate(request):
+    email=request.data['email']
+    if ApplicationRating.objects.filter(user=email):
+        return JsonResponse(True,safe=False)
+    else:
+        return JsonResponse(False,safe=False)
+
+

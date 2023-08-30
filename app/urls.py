@@ -9,4 +9,5 @@ urlpatterns = [
     path("popular/",views.popular_country,name='popular_country'),
     path("search/",views.make_short_trip,name="make_short_trip"),
     path("rating/",views.out_applaction_score,name="out_applaction_score"),
+    path("checkrate/",views.check_before_rate,name="check_before_rate"),
 ]

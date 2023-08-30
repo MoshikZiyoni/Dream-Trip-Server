@@ -577,111 +577,111 @@ def restaurant_GPT(city):
 
 
 
-def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
-    try:
-        for attraction in attraction_for_data:
+# def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
+#     try:
+#         for attraction in attraction_for_data:
                 
-            name1 = (attraction['name'])
-            check_name=Attraction.objects.filter(name=name1).first()
-            if not check_name:   
+#             name1 = (attraction['name'])
+#             check_name=Attraction.objects.filter(name=name1).first()
+#             if not check_name:   
                                 
-                latitude1 = attraction['latitude']if 'latitude' in attraction else ''
-                longitude1 = attraction['longitude']if 'longitude' in attraction else ''
-                photos1 = attraction['photos']if 'photos' in attraction else ''
-                review_score1 = attraction['review_score']if 'review_score' in attraction else ''
-                website1 = attraction['website']if 'website' in attraction else ''
-                description = attraction['description']if 'description' in attraction else ''
-                distance1 = attraction['distance']if 'distance' in attraction else ''
-                hours1 = attraction['hours']if 'hours' in attraction else ''
-                address1 = attraction['address']if 'address' in attraction else ''
-                tips1 = attraction['tips']if 'tips' in attraction else ''
-                tel1 = attraction['tel']if 'tel' in attraction else ''
-                city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
-                place_id=attraction["place_id"] if "place_id" in attraction else ''
-                city_obj=City.objects.filter(id=city_obj).first()
+#                 latitude1 = attraction['latitude']if 'latitude' in attraction else ''
+#                 longitude1 = attraction['longitude']if 'longitude' in attraction else ''
+#                 photos1 = attraction['photos']if 'photos' in attraction else ''
+#                 review_score1 = attraction['review_score']if 'review_score' in attraction else ''
+#                 website1 = attraction['website']if 'website' in attraction else ''
+#                 description = attraction['description']if 'description' in attraction else ''
+#                 distance1 = attraction['distance']if 'distance' in attraction else ''
+#                 hours1 = attraction['hours']if 'hours' in attraction else ''
+#                 address1 = attraction['address']if 'address' in attraction else ''
+#                 tips1 = attraction['tips']if 'tips' in attraction else ''
+#                 tel1 = attraction['tel']if 'tel' in attraction else ''
+#                 city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
+#                 place_id=attraction["place_id"] if "place_id" in attraction else ''
+#                 city_obj=City.objects.filter(id=city_obj).first()
 
-                atrc_query = Attraction(
-                    name=name1,
-                    city=city_obj,
-                    latitude=latitude1,
-                    longitude=longitude1,
-                    photos=photos1,
-                    review_score=review_score1,
-                    description=description,
-                    website=website1,
-                    distance=distance1,
-                    hours=hours1,
-                    tel=tel1,
-                    address=address1,
-                    tips=tips1,
-                    place_id=place_id
-                )
-                atrc_query.save()
-                print(f"Save attraction successfully{name1}")
-        for restaurnt in restaurant_for_data:
-            name = (restaurnt['name'])
-            check_name1=Restaurant.objects.filter(name=name).first()
-            if not check_name1:   
+#                 atrc_query = Attraction(
+#                     name=name1,
+#                     city=city_obj,
+#                     latitude=latitude1,
+#                     longitude=longitude1,
+#                     photos=photos1,
+#                     review_score=review_score1,
+#                     description=description,
+#                     website=website1,
+#                     distance=distance1,
+#                     hours=hours1,
+#                     tel=tel1,
+#                     address=address1,
+#                     tips=tips1,
+#                     place_id=place_id
+#                 )
+#                 atrc_query.save()
+#                 print(f"Save attraction successfully{name1}")
+#         for restaurnt in restaurant_for_data:
+#             name = (restaurnt['name'])
+#             check_name1=Restaurant.objects.filter(name=name).first()
+#             if not check_name1:   
                                     
-                latitude = restaurnt['latitude']if 'latitude' in restaurnt else ''
-                longitude = restaurnt['longitude']if 'longitude' in restaurnt else ''
-                photos = restaurnt['photos']if 'photos' in restaurnt else ''
-                review_score = restaurnt['review_score']if 'review_score' in restaurnt else ''
-                website = restaurnt['website']if 'website' in restaurnt else ''
-                hours_resta = restaurnt['hours']if 'hours' in restaurnt else ''
-                address_res = restaurnt['address']if 'address' in restaurnt else ''
-                tel_res = restaurnt['tel']if 'tel' in restaurnt else ''
-                price = restaurnt['price'] or restaurnt['price_range'] if 'price' in restaurnt else ''
-                place_id1=restaurnt["place_id"] if "place_id" in restaurnt else ''
-                tips_resta=restaurnt['tips'] if 'tips' in restaurnt else ''
-                city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
-                city_obj=City.objects.filter(id=city_obj).first()
-                resta_query = Restaurant(
-                        name=name,
-                        city=city_obj,
-                        latitude=latitude,
-                        longitude=longitude,
-                        photos=photos,
-                        review_score=review_score,
-                        website=website,
-                        price=price,
-                        hours=hours_resta,
-                        tel=tel_res,
-                        address=address_res,
-                        place_id=place_id1
-                    )
-                resta_query.save()
-                print(f"Save restaurants successfully {name}")
+#                 latitude = restaurnt['latitude']if 'latitude' in restaurnt else ''
+#                 longitude = restaurnt['longitude']if 'longitude' in restaurnt else ''
+#                 photos = restaurnt['photos']if 'photos' in restaurnt else ''
+#                 review_score = restaurnt['review_score']if 'review_score' in restaurnt else ''
+#                 website = restaurnt['website']if 'website' in restaurnt else ''
+#                 hours_resta = restaurnt['hours']if 'hours' in restaurnt else ''
+#                 address_res = restaurnt['address']if 'address' in restaurnt else ''
+#                 tel_res = restaurnt['tel']if 'tel' in restaurnt else ''
+#                 price = restaurnt['price'] or restaurnt['price_range'] if 'price' in restaurnt else ''
+#                 place_id1=restaurnt["place_id"] if "place_id" in restaurnt else ''
+#                 tips_resta=restaurnt['tips'] if 'tips' in restaurnt else ''
+#                 city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
+#                 city_obj=City.objects.filter(id=city_obj).first()
+#                 resta_query = Restaurant(
+#                         name=name,
+#                         city=city_obj,
+#                         latitude=latitude,
+#                         longitude=longitude,
+#                         photos=photos,
+#                         review_score=review_score,
+#                         website=website,
+#                         price=price,
+#                         hours=hours_resta,
+#                         tel=tel_res,
+#                         address=address_res,
+#                         place_id=place_id1
+#                     )
+#                 resta_query.save()
+#                 print(f"Save restaurants successfully {name}")
         
-        for hotel in hotels_for_data:
-            name12 = (hotel['name'])
-            check_name12=Hotels_foursqaure.objects.filter(name=name).first()
-            if not check_name12:  
-                latitude12 = hotel['latitude']if 'latitude' in hotel else ''
-                longitude12 = hotel['longitude']if 'longitude' in hotel else ''
-                photos12 = hotel['photos']if 'photos' in hotel else ''
-                rating12 = hotel['review_score']if 'review_score' in hotel else ''
-                website12 = hotel['website']if 'website' in hotel else ''
-                description12 = hotel['description']if 'description' in hotel else ''
-                city_obj=hotel['city_obj']if 'city_obj' in hotel else ''
-                place_id2=attraction["place_id"] if "place_id" in restaurnt else ''
-                city_obj=City.objects.filter(id=city_obj).first()
-                hotels_query = Hotels_foursqaure(
-                name=name12,
-                city=city_obj,
-                latitude=latitude12,
-                longitude=longitude12,
-                photos=photos12,
-                review_score=rating12,
-                website=website12,
-                description=description12,
-                place_id=place_id2
-                )
-                hotels_query.save()
-                print("Save hotels successfully")
+#         for hotel in hotels_for_data:
+#             name12 = (hotel['name'])
+#             check_name12=Hotels_foursqaure.objects.filter(name=name).first()
+#             if not check_name12:  
+#                 latitude12 = hotel['latitude']if 'latitude' in hotel else ''
+#                 longitude12 = hotel['longitude']if 'longitude' in hotel else ''
+#                 photos12 = hotel['photos']if 'photos' in hotel else ''
+#                 rating12 = hotel['review_score']if 'review_score' in hotel else ''
+#                 website12 = hotel['website']if 'website' in hotel else ''
+#                 description12 = hotel['description']if 'description' in hotel else ''
+#                 city_obj=hotel['city_obj']if 'city_obj' in hotel else ''
+#                 place_id2=attraction["place_id"] if "place_id" in restaurnt else ''
+#                 city_obj=City.objects.filter(id=city_obj).first()
+#                 hotels_query = Hotels_foursqaure(
+#                 name=name12,
+#                 city=city_obj,
+#                 latitude=latitude12,
+#                 longitude=longitude12,
+#                 photos=photos12,
+#                 review_score=rating12,
+#                 website=website12,
+#                 description=description12,
+#                 place_id=place_id2
+#                 )
+#                 hotels_query.save()
+#                 print("Save hotels successfully")
 
-    except Exception as e:
-        print ('can"t save now',e)
+#     except Exception as e:
+#         print ('can"t save now',e)
 
 
 
@@ -758,10 +758,12 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
     total_prices=answer_from_data1['total_prices']
     total_transport_private_taxi=answer_from_data1["total_transport_private_taxi"]
     total_food_prices=answer_from_data1['total_food_prices']
+    avrage_daily_spent=existing_country.average_prices
     costs={
         "total_prices":total_prices,
         "total_transport_private_taxi":total_transport_private_taxi,
         "total_food_prices":total_food_prices,
+        "avrage_daily_spent":avrage_daily_spent,
     }
     end_result=answer_from_data1["schedule"]
     end_result.update(costs)

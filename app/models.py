@@ -3,8 +3,10 @@ from django.db import models
 # Create your models here.
 class ApplicationRating(models.Model):
     rating = models.PositiveSmallIntegerField(default=0)
-    user = models.TextField(max_length=100)
-
+    user_email = models.TextField(max_length=100)
+    user_name=models.TextField(max_length=100)
+    user_picture=models.TextField(max_length=100,null=True)
+    review=models.TextField(max_length=100,null=True)
     
 class QueryChatGPT(models.Model):
     question = models.CharField(max_length=500, default="")
