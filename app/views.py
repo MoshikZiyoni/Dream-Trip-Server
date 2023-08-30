@@ -757,7 +757,10 @@ def make_short_trip(request):
 def out_applaction_score(request):
     score=request.data['score']
     email=request.data['email']
-    rating_to_save=ApplicationRating(rating=score,user=email)
+    name=request.data['name']
+    photo=request.data['picture'] if request.data['picture'] else ''
+    review=request.data['review'] if request.data['review'] else ''
+    rating_to_save=ApplicationRating(rating=score,user_email=email,user_name=name,user_picture=photo,review=review)
     rating_to_save.save()
 
 
