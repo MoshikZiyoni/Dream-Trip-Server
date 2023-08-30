@@ -762,6 +762,7 @@ def out_applaction_score(request):
     review=request.data['review'] if request.data['review'] else ''
     rating_to_save=ApplicationRating(rating=score,user_email=email,user_name=name,user_picture=photo,review=review)
     rating_to_save.save()
+    return JsonResponse('success',safe=False)
 
 
 @api_view(['GET','POST'])
