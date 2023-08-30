@@ -764,7 +764,7 @@ def out_applaction_score(request):
     rating_to_save.save()
 
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def check_before_rate(request):
     email=request.data['email']
     if ApplicationRating.objects.filter(user=email):
