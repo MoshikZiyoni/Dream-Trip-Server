@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import requests
 import os
-from app.trip_advisor import flickr_api
+# from app.trip_advisor import flickr_api
 
 load_dotenv()
 

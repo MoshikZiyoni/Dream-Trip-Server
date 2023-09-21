@@ -437,12 +437,9 @@ from trip_advisor import flickr_api
 load_dotenv()
 
 
-import os
-import requests
-import json
-import time
-from geopy.geocoders import Nominatim
-from urllib.parse import quote
+
+# from geopy.geocoders import Nominatim
+# from urllib.parse import quote
 
 # def trip_advisor_attraction(city_name,country,landmarks):
 #     geolocator = Nominatim(user_agent="dream-trip")

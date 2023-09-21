@@ -1,36 +1,52 @@
-import json
-from threading import RLock
-import threading
-import time
-from unidecode import unidecode
-# from app.poe_selenium import poe,poe1,poe2,poe3,poe4
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
-from app.models import ApplicationRating, Attraction, Country, Hotels_foursqaure, QueryChatGPT,City, Restaurant,Popular
+from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant
 from django.core.cache import cache
-from app.my_selenium import perform_search
-from app.trip_advisor import flickr_api, foursquare_attraction, foursquare_hotels, foursquare_restaurant
-from app.utils import extract_attraction_data, extract_restaraunt_data, generate_schedule, process_attraction, process_hotel, process_restaurant, quick_from_data_base
+from app.utils import quick_from_data_base
 import traceback
 import re
 from django.db.models import Q
 import random
-import os
-import ast
-from collections import Counter
-from django.db.models import Count
-from itertools import combinations
-from django.db.models.functions import Lower
-from selenium.webdriver.common.by import By
-import base64
-import requests
-from selenium import webdriver
+# from collections import Counter
+# from django.db.models import Count
+# from itertools import combinations
+# from django.db.models.functions import Lower
+# from selenium.webdriver.common.by import By
+# import base64
+# import requests
+# from selenium import webdriver
+# import os
+# import ast
+from geopy.geocoders import Nominatim
+
+geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
+    # restaurnt_without__price = Attraction.objects.filter(name__isnull=True) | Attraction.objects.filter(name='')
+    # for attraction in restaurnt_without__price:
+    #     for attr in attraction_list:
+    #         if attr["description"] == attraction.description:
+    #             attraction.name = attr["name"]
+    #             attraction.save()
+    #             print ("save sucees")
+    #     print(attraction.description,'------',attraction.city.city)  
+    # return 'kk'
+
+
+
+    # s=City.objects.all().values()
+    # for  i in s:
+    #     with open('cities.txt', 'a', encoding='utf-8') as f:
+    #         f.write(str(i) + ',\n')
+    # return 'kk'
+    # city1=City.objects.all()
+    # cities=[]x
+    # for i in city1:
+    #     cities.append(i.city)
+    # print(cities)
     # from django.db.models import Count
     # attrac=Attraction.objects.filter(name='Eiffel Tower').first()
     # attrac.photos='https://lh3.googleusercontent.com/p/AF1QipOTdWRhZoy5lJGdxy_ir-mQsy6N3O6CYLaOj0vC=s1360-w1360-h1020'
@@ -192,6 +208,16 @@ def gpt_view(request):
 
 #     attraction_list=[
 # ]
+
+
+    # restaurnt_without__price = Attraction.objects.filter(description__isnull=True) | Attraction.objects.filter(description='')
+    # for attraction in restaurnt_without__price:
+    #     print(attraction.name,'------',attraction.city.city)  
+    # return 'ok' 
+
+
+
+
 #     restaurnt_without__price = Attraction.objects.filter(name__isnull=True) | Attraction.objects.filter(name='')
 #     for attraction in restaurnt_without__price:
 #         # for attr in attraction_list:
@@ -250,6 +276,9 @@ def gpt_view(request):
 
     # attractions_without_real_price = Attraction.objects.filter(real_price__isnull=True) | Attraction.objects.filter(real_price='')
     # for attraction in attractions_without_real_price:
+    #     if 'Ristorante' in attraction.name or 'Restaurant' in attraction.name:
+    #         attraction.delete()
+    #         print('delete')
     #     print(attraction.name,",",attraction.city.city)  
     # return 'ok'  
    
@@ -287,6 +316,8 @@ def gpt_view(request):
 #     excract_attraction(attractions_listt=[
 
 # ])
+
+
    
 #     return 'kk'
 
@@ -447,9 +478,9 @@ def gpt_view(request):
     #         cities_list=['Las Vegas', 'Brașov', 'Cluj-Napoca', 'Boquete','Kandy']
     #         for attraction_data in attractions:
     #             city = attraction_data["city"]
-    #             if city not in cities_list:
-    #                 print ('continue')
-    #                 continue
+    #             # if city not in cities_list:
+    #             #     print ('continue')
+    #                 # continue
                 
     #             name = attraction_data["name"]
     #             normalized_city_name = unidecode(city)
@@ -477,7 +508,7 @@ def gpt_view(request):
     #                 if len(first_image)>2:
     #                     image_data = first_image.split(',')[1].encode()
     #                     url = "https://api.imgbb.com/1/upload"
-    #                     api_key = '670a51c4852893f80aa46108e03e0bbc'
+    #                     api_key = '0ceb697fbeb4ad555cad07deddcbf4f4'
     #                     payload = {
     #                         "key": api_key,
     #                         "image": image_data,
@@ -574,7 +605,10 @@ def gpt_view(request):
     #         print (e,'erorrrrrr')
     # extract_restaurants_data(attractions  = [
   
-	
+ 
+
+
+
   
     # ])
     # return 'ok'
@@ -768,7 +802,7 @@ def out_applaction_score(request):
 @api_view(['GET','POST'])
 def check_before_rate(request):
     email=request.data['email']
-    if ApplicationRating.objects.filter(user_email=email):
+    if ApplicationRating.objects.get(user_email=email):
         return JsonResponse(True,safe=False)
     else:
         return JsonResponse(False,safe=False)

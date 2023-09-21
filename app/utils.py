@@ -5,9 +5,9 @@ import re
 from django.db.models import Q
 import openai
 import requests
-from app.models import Attraction, City, Hotels_foursqaure, Restaurant,Country
+from app.models import Attraction, City, Restaurant,Country
 from app.teleport_api import get_cities_by_country
-from app.trip_advisor import flickr_api
+from app.trip_advisor import flickr_api,my_night_life, sunset_api
 from app.wikipediaapi import process_query
 import json
 from datetime import datetime, timedelta
@@ -17,6 +17,9 @@ from dotenv import load_dotenv
 from app.currency_data import calculate_total_price_attractions
 import ast
 from unidecode import unidecode
+from threading import Thread,RLock
+
+shared_resource_lock = RLock()
 
 load_dotenv()
 
@@ -265,7 +268,7 @@ def process_hotel(hotel, hotels):
     
 
 
-def generate_schedule(data,country,check):
+def generate_schedule(data,country,check,):
     print ('@@@@@@@@@@@@@@@@@@@',check)
     total = 0    
     try:
@@ -285,6 +288,7 @@ def generate_schedule(data,country,check):
             city_description = city['description']
             attractions = city['attractions']
             count=0
+
             for attraction in attractions:
                 count+=1
                 try:
@@ -295,12 +299,16 @@ def generate_schedule(data,country,check):
            
             restaurants = city['restaurants']
             hotels=city['hotels']
+            night_life=city["night-life"]
+            sunset=city['sunset']
             days_spent = city['days_spent']
+
             try:
                 if check==False:
                     attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
             except Exception as e:
                 print('already sorted')
+
             days_spent=int(days_spent)
             num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
             num_attractions_per_day = int(num_attractions_per_day) 
@@ -311,7 +319,7 @@ def generate_schedule(data,country,check):
 
             start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
 
-            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels, 'schedules': []}
+            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night-life':night_life,'sunset':sunset,'schedules': []}
 
             for day in range(days_spent):
                 day_schedule = {'day': day + 1, 'attractions': []}
@@ -334,24 +342,24 @@ def generate_schedule(data,country,check):
 
                     attraction_data = {
                         # 'attraction': {
-                            'id': attraction['id'] if 'id' in attraction else '',
-                            'city_id': attraction['city_id'] if 'city_id' in attraction else '',
-                            'name': attraction['name'] if 'name' in attraction else '',
-                            'latitude': attraction['latitude'] if 'latitude' in attraction else '',
-                            'longitude': attraction['longitude'] if 'longitude' in attraction else '',
-                            'photos': attraction['photos'] if 'photos' in attraction else '',
-                            'review_score': attraction['review_score'] if 'review_score' in attraction else '',
-                            'description': attraction['description'] if 'description' in attraction else '',
-                            'website': attraction['website'] if 'website' in attraction else '',
-                            'hours_popular': attraction['hours_popular'] if 'hours_popular' in attraction else '',
-                            'hours': attraction['hours'] if 'hours' in attraction else '',
-                            'address': attraction['address'] if 'address' in attraction else '',
-                            'tips': attraction['tips'] if 'tips' in attraction else '',
-                            "tel" : attraction['tel']if 'tel' in attraction else '',
-                            'distance': attraction['distance'] if 'distance' in attraction else '',
-                            'real_price': attraction['real_price'] if 'real_price' in attraction else '',
-                            'start_time': attraction_start.strftime('%H:%M'),
-                            'end_time': attraction_end.strftime('%H:%M')
+                              'id': attraction.get('id', ''),
+                                'city_id': attraction.get('city_id', ''),
+                                'name': attraction.get('name', ''),
+                                'latitude': attraction.get('latitude', ''),
+                                'longitude': attraction.get('longitude', ''),
+                                'photos': attraction.get('photos', ''),
+                                'review_score': attraction.get('review_score', ''),
+                                'description': attraction.get('description', ''),
+                                'website': attraction.get('website', ''),
+                                'hours_popular': attraction.get('hours_popular', ''),
+                                'hours': attraction.get('hours', ''),
+                                'address': attraction.get('address', ''),
+                                'tips': attraction.get('tips', ''),
+                                'tel': attraction.get('tel', ''),
+                                'distance': attraction.get('distance', ''),
+                                'real_price': attraction.get('real_price', ''),
+                                'start_time': attraction_start.strftime('%H:%M'),
+                                'end_time': attraction_end.strftime('%H:%M')
                         
                     }
 
@@ -367,22 +375,22 @@ def generate_schedule(data,country,check):
                             if extra_attraction_end.time() <= daily_schedule_end:
                                 extra_attraction_data = {
                                     'attraction': {
-                                        'id': extra_attraction['id']if 'id' in attraction else '',
-                                        'city_id': extra_attraction['city_id']if 'city_id' in attraction else '',
-                                        'name': extra_attraction['name']if 'name' in attraction else '',
-                                        'latitude': extra_attraction['latitude']if 'latitude' in attraction else '',
-                                        'longitude': extra_attraction['longitude']if 'longitude' in attraction else '',
-                                        'photos': extra_attraction['photos']if 'photos' in attraction else '',
-                                        'review_score': extra_attraction['review_score']if 'review_score' in attraction else '',
-                                        'description': extra_attraction['description']if 'description' in attraction else '',
-                                        'website': extra_attraction['website']if 'website' in attraction else '',
-                                        'hours_popular': extra_attraction['hours_popular']if 'hours_popular' in attraction else '',
-                                        'hours': attraction['hours'] if 'hours' in attraction else '',
-                                        'address': attraction['address'] if 'address' in attraction else '',
-                                        'tips': attraction['tips'] if 'tips' in attraction else '',
-                                        "tel" : attraction['tel']if 'tel' in attraction else '',
-                                        'distance': extra_attraction['distance']if 'distance' in attraction else '',
-                                        'real_price': attraction['real_price'] if 'real_price' in attraction else '',
+                                        'id': extra_attraction.get('id', ''),
+                                        'city_id': extra_attraction.get('city_id', ''),
+                                        'name': extra_attraction.get('name', ''),
+                                        'latitude': extra_attraction.get('latitude', ''),
+                                        'longitude': extra_attraction.get('longitude', ''),
+                                        'photos': extra_attraction.get('photos', ''),
+                                        'review_score': extra_attraction.get('review_score', ''),
+                                        'description': extra_attraction.get('description', ''),
+                                        'website': extra_attraction.get('website', ''),
+                                        'hours_popular': extra_attraction.get('hours_popular', ''),
+                                        'hours': extra_attraction.get('hours', ''),
+                                        'address': extra_attraction.get('address', ''),
+                                        'tips': extra_attraction.get('tips', ''),
+                                        'tel': extra_attraction.get('tel', ''),
+                                        'distance': extra_attraction.get('distance', ''),
+                                        'real_price': extra_attraction.get('real_price', ''),
                                         'start_time': extra_attraction_start.strftime('%H:%M'),
                                         'end_time': extra_attraction_end.strftime('%H:%M')
                                     }
@@ -391,6 +399,7 @@ def generate_schedule(data,country,check):
                                 extra_attractions -= 1
                         except Exception as e:
                             print ('Error in 265',e)
+                            
                 except Exception as e:
                     print('not extra attraction',e)
 
@@ -464,229 +473,119 @@ def sort_attractions_by_distance(attractions, first_attraction):
 
 
 
-def extract_attraction_data(my_attractions):
+# def extract_attraction_data(my_attractions):
     
-        for attraction_data in my_attractions:
-            city = attraction_data["city"]
+#         for attraction_data in my_attractions:
+#             city = attraction_data["city"]
 
-            name = attraction_data["name"]
-            latitude = attraction_data["latitude"]
-            longitude = attraction_data["longitude"]
-            photos = flickr_api(name, latitude, longitude)
-            review_score = attraction_data["review_score"]
-            description = attraction_data["description"]
-            website = attraction_data["website"]
-            hours_popular = attraction_data["hours_popular"]
-            distance = attraction_data["distance"]
-            real_price = attraction_data["real_price"]
-            website = website or ""
-            hours_popular = hours_popular or ""
-            print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
-            city_objs = City.objects.filter(city=city).first()
-            if city_objs:
-                print (city_objs.id,'AAAAAAA')
-                # city_obj = city_objs[0]
-                print (city_objs.id,'AAAAAAA')
-                atrc_query = Attraction(
-                name=name,
-                city=city_objs,
-                latitude=latitude,
-                longitude=longitude,
-                photos=photos,
-                review_score=review_score,
-                description=description,
-                website=website,
-                hours_popular=hours_popular,
-                distance=distance,
-                real_price=real_price
-            )
-                atrc_query.save()
-                print("Save attraction successfully")
-               
-
-            else:
-                print ("can't save")
-
-
-def extract_restaraunt_data(my_resturants):
-
-        for restaraunt_data in my_resturants:
-            city = restaraunt_data["city"]
-
-            name = restaraunt_data["name"]
-            latitude = restaraunt_data["latitude"]
-            longitude = restaraunt_data["longitude"]
-            photos = flickr_api(name, latitude, longitude)
-            review_score = restaraunt_data["review_score"]
-            website = restaraunt_data["website"]
-            distance = restaraunt_data["distance"]
-            # social_media=restaraunt_data['social_media']
-            price=restaraunt_data['price']
-            menu=restaraunt_data['menu']
-            website = website or ""
-            menu=menu or ""
-            distance= ""
-            city_objs = City.objects.filter(city=city).first()
-            if city_objs:
-                resta_query = Restaurant(
-                name=name,
-                city=city_objs,
-                latitude=latitude,
-                longitude=longitude,
-                photos=photos,
-                review_score=review_score,
-                website=website,
-                # social_media=social_media,
-                distance=distance,
-                price=price,
-                menu=menu
-                    )
-                resta_query.save()
-                print("Save attraction successfully")
-               
-
-            else:
-                print ("can't save")
-
-
-
-def restaurant_GPT(city):
-        api_key = os.environ.get("OPENAI_API_KEY")
-        openai.api_key = api_key
-        more_data='restaurants:[{name:"",latitude:Float,longitude:Float,review_score:"",website:"",distance:"",price:" 1=cheap5=most expnesive",menu:""}]'
-        message_for_restaurant=f'provide me 10 restarunts in {city} return me as json like that{more_data}'
-        retries = 3  # Maximum number of retries
-            
-        for _ in range(retries):
-            try:
-                completion = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[{"role": "user", "content": message_for_restaurant}],
-                )
-                answer1 = completion.choices[0].message.content
-                data = json.loads(answer1)
-                restaurants = data["restaurants"]
-                return restaurants
-            except Exception as e:
-                print('Error:', str(e))
-                print('Retrying...')
-                continue  # Retry the API call
-            
-        else:
-            print('Failed after retries. Not good with ChatGPT')
-
-
-
-# def save_to_db(restaurant_for_data,attraction_for_data,hotels_for_data):
-#     try:
-#         for attraction in attraction_for_data:
-                
-#             name1 = (attraction['name'])
-#             check_name=Attraction.objects.filter(name=name1).first()
-#             if not check_name:   
-                                
-#                 latitude1 = attraction['latitude']if 'latitude' in attraction else ''
-#                 longitude1 = attraction['longitude']if 'longitude' in attraction else ''
-#                 photos1 = attraction['photos']if 'photos' in attraction else ''
-#                 review_score1 = attraction['review_score']if 'review_score' in attraction else ''
-#                 website1 = attraction['website']if 'website' in attraction else ''
-#                 description = attraction['description']if 'description' in attraction else ''
-#                 distance1 = attraction['distance']if 'distance' in attraction else ''
-#                 hours1 = attraction['hours']if 'hours' in attraction else ''
-#                 address1 = attraction['address']if 'address' in attraction else ''
-#                 tips1 = attraction['tips']if 'tips' in attraction else ''
-#                 tel1 = attraction['tel']if 'tel' in attraction else ''
-#                 city_obj=attraction['city_obj']if 'city_obj' in attraction else ''
-#                 place_id=attraction["place_id"] if "place_id" in attraction else ''
-#                 city_obj=City.objects.filter(id=city_obj).first()
-
+#             name = attraction_data["name"]
+#             latitude = attraction_data["latitude"]
+#             longitude = attraction_data["longitude"]
+#             photos = flickr_api(name, latitude, longitude)
+#             review_score = attraction_data["review_score"]
+#             description = attraction_data["description"]
+#             website = attraction_data["website"]
+#             hours_popular = attraction_data["hours_popular"]
+#             distance = attraction_data["distance"]
+#             real_price = attraction_data["real_price"]
+#             website = website or ""
+#             hours_popular = hours_popular or ""
+#             print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
+#             city_objs = City.objects.filter(city=city).first()
+#             if city_objs:
+#                 print (city_objs.id,'AAAAAAA')
+#                 # city_obj = city_objs[0]
+#                 print (city_objs.id,'AAAAAAA')
 #                 atrc_query = Attraction(
-#                     name=name1,
-#                     city=city_obj,
-#                     latitude=latitude1,
-#                     longitude=longitude1,
-#                     photos=photos1,
-#                     review_score=review_score1,
-#                     description=description,
-#                     website=website1,
-#                     distance=distance1,
-#                     hours=hours1,
-#                     tel=tel1,
-#                     address=address1,
-#                     tips=tips1,
-#                     place_id=place_id
-#                 )
+#                 name=name,
+#                 city=city_objs,
+#                 latitude=latitude,
+#                 longitude=longitude,
+#                 photos=photos,
+#                 review_score=review_score,
+#                 description=description,
+#                 website=website,
+#                 hours_popular=hours_popular,
+#                 distance=distance,
+#                 real_price=real_price
+#             )
 #                 atrc_query.save()
-#                 print(f"Save attraction successfully{name1}")
-#         for restaurnt in restaurant_for_data:
-#             name = (restaurnt['name'])
-#             check_name1=Restaurant.objects.filter(name=name).first()
-#             if not check_name1:   
-                                    
-#                 latitude = restaurnt['latitude']if 'latitude' in restaurnt else ''
-#                 longitude = restaurnt['longitude']if 'longitude' in restaurnt else ''
-#                 photos = restaurnt['photos']if 'photos' in restaurnt else ''
-#                 review_score = restaurnt['review_score']if 'review_score' in restaurnt else ''
-#                 website = restaurnt['website']if 'website' in restaurnt else ''
-#                 hours_resta = restaurnt['hours']if 'hours' in restaurnt else ''
-#                 address_res = restaurnt['address']if 'address' in restaurnt else ''
-#                 tel_res = restaurnt['tel']if 'tel' in restaurnt else ''
-#                 price = restaurnt['price'] or restaurnt['price_range'] if 'price' in restaurnt else ''
-#                 place_id1=restaurnt["place_id"] if "place_id" in restaurnt else ''
-#                 tips_resta=restaurnt['tips'] if 'tips' in restaurnt else ''
-#                 city_obj=restaurnt['city_obj']if 'city_obj' in restaurnt else ''
-#                 city_obj=City.objects.filter(id=city_obj).first()
+#                 print("Save attraction successfully")
+               
+
+#             else:
+#                 print ("can't save")
+
+
+# def extract_restaraunt_data(my_resturants):
+
+#         for restaraunt_data in my_resturants:
+#             city = restaraunt_data["city"]
+
+#             name = restaraunt_data["name"]
+#             latitude = restaraunt_data["latitude"]
+#             longitude = restaraunt_data["longitude"]
+#             photos = flickr_api(name, latitude, longitude)
+#             review_score = restaraunt_data["review_score"]
+#             website = restaraunt_data["website"]
+#             distance = restaraunt_data["distance"]
+#             # social_media=restaraunt_data['social_media']
+#             price=restaraunt_data['price']
+#             menu=restaraunt_data['menu']
+#             website = website or ""
+#             menu=menu or ""
+#             distance= ""
+#             city_objs = City.objects.filter(city=city).first()
+#             if city_objs:
 #                 resta_query = Restaurant(
-#                         name=name,
-#                         city=city_obj,
-#                         latitude=latitude,
-#                         longitude=longitude,
-#                         photos=photos,
-#                         review_score=review_score,
-#                         website=website,
-#                         price=price,
-#                         hours=hours_resta,
-#                         tel=tel_res,
-#                         address=address_res,
-#                         place_id=place_id1
+#                 name=name,
+#                 city=city_objs,
+#                 latitude=latitude,
+#                 longitude=longitude,
+#                 photos=photos,
+#                 review_score=review_score,
+#                 website=website,
+#                 # social_media=social_media,
+#                 distance=distance,
+#                 price=price,
+#                 menu=menu
 #                     )
 #                 resta_query.save()
-#                 print(f"Save restaurants successfully {name}")
-        
-#         for hotel in hotels_for_data:
-#             name12 = (hotel['name'])
-#             check_name12=Hotels_foursqaure.objects.filter(name=name).first()
-#             if not check_name12:  
-#                 latitude12 = hotel['latitude']if 'latitude' in hotel else ''
-#                 longitude12 = hotel['longitude']if 'longitude' in hotel else ''
-#                 photos12 = hotel['photos']if 'photos' in hotel else ''
-#                 rating12 = hotel['review_score']if 'review_score' in hotel else ''
-#                 website12 = hotel['website']if 'website' in hotel else ''
-#                 description12 = hotel['description']if 'description' in hotel else ''
-#                 city_obj=hotel['city_obj']if 'city_obj' in hotel else ''
-#                 place_id2=attraction["place_id"] if "place_id" in restaurnt else ''
-#                 city_obj=City.objects.filter(id=city_obj).first()
-#                 hotels_query = Hotels_foursqaure(
-#                 name=name12,
-#                 city=city_obj,
-#                 latitude=latitude12,
-#                 longitude=longitude12,
-#                 photos=photos12,
-#                 review_score=rating12,
-#                 website=website12,
-#                 description=description12,
-#                 place_id=place_id2
+#                 print("Save attraction successfully")
+               
+
+#             else:
+#                 print ("can't save")
+
+
+
+# def restaurant_GPT(city):
+#         api_key = os.environ.get("OPENAI_API_KEY")
+#         openai.api_key = api_key
+#         more_data='restaurants:[{name:"",latitude:Float,longitude:Float,review_score:"",website:"",distance:"",price:" 1=cheap5=most expnesive",menu:""}]'
+#         message_for_restaurant=f'provide me 10 restarunts in {city} return me as json like that{more_data}'
+#         retries = 3  # Maximum number of retries
+            
+#         for _ in range(retries):
+#             try:
+#                 completion = openai.ChatCompletion.create(
+#                     model="gpt-3.5-turbo",
+#                     messages=[{"role": "user", "content": message_for_restaurant}],
 #                 )
-#                 hotels_query.save()
-#                 print("Save hotels successfully")
-
-#     except Exception as e:
-#         print ('can"t save now',e)
-
+#                 answer1 = completion.choices[0].message.content
+#                 data = json.loads(answer1)
+#                 restaurants = data["restaurants"]
+#                 return restaurants
+#             except Exception as e:
+#                 print('Error:', str(e))
+#                 print('Retrying...')
+#                 continue  # Retry the API call
+            
+#         else:
+#             print('Failed after retries. Not good with ChatGPT')
 
 
 def quick_from_data_base(country,answer_dict,process_city,request_left):
-    from app.chat import process_hotels
 
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
     try:
@@ -704,61 +603,69 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         itinerary_description=answer_dict['itinerary_description']
     except:
         pass
-    try:
-        existing_country = Country.objects.filter(name=country).first()
-        country_id = existing_country.id
-        # existing_country.increase_popularity()
 
-    except:
-        print("Country does not exist")
-    if not existing_country:
-        query_for_country = Country(name=country)
-        query_for_country.save()
-        country_id = query_for_country.id
-    executor = ThreadPoolExecutor()
+    threads = []
     for city_data in answer_dict["cities"]:
         city_name = city_data["city"]
         normalized_city_name = unidecode(city_name)
+        
         try:
-            existing_city = City.objects.filter(city=city_name).first()
+            existing_city = City.objects.prefetch_related('attractions', 'restaurants').filter(city__iexact=normalized_city_name).first()
         except:
-            print ('no regular')
+            print('no regular')
             existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
         
-        # existing_city = City.objects.filter(Q(city__iexact=city_name) | Q(city__icontains=city_name)).first()
         if existing_city:
-            attract = Attraction.objects.filter(city_id=existing_city.id).values()
-            attractions_list = list(attract)
+            attractions_list = existing_city.attractions.all().values()
+            restaurants_list = existing_city.restaurants.all().values()
+            
             attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
             first_5_attractions = attractions[:5]
             remaining_attractions = attractions[5:]
-            # Shuffle the remaining attractions randomly
             random.shuffle(remaining_attractions)
             final_attractions = first_5_attractions + remaining_attractions
+
             city_data["attractions"] = final_attractions
+            
+            city_data["restaurants"] = list(restaurants_list)
+            
+            lat = existing_city.latitude
+            lon = existing_city.longitude
+            landmarks = [lat, lon]
 
-            restaura = Restaurant.objects.filter(city_id=existing_city.id).values()
-            restaurants_list = list(restaura)
-            city_data["restaurants"] = restaurants_list
+            # hotels = process_hotels(landmarks, city_name)
+            # city_data["hotels"] = hotels
+            # night_life = my_night_life(landmarks)
+            # city_data["night-life"] = night_life
+            # sunset=sunset_api(landmarks)
+            # if sunset:
+            #     city_data['sunset']=sunset
+            sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, landmarks,))
+            hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, landmarks, city_name,))
+            nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, landmarks))
 
-            # hotels=Hotels_foursqaure.objects.filter(city_id=existing_city.id).values()
-            # hotels_list=list(hotels)
-            lat=existing_city.latitude
-            lon=existing_city.longitude
-            landmarks=[lat,lon]
-            hotels=process_hotels(landmarks, city_name )
-            city_data["hotels"] = hotels
-            print("Continue")
-            continue
-        executor.submit(process_city, city_data, country, country_id)
+            threads.extend([sunset_thread, hotels_thread, nightlife_thread])
 
-    executor.shutdown()
+    # Start the threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
+
+    
+    
     check=True
+    
     answer_from_data1=generate_schedule(answer_dict,country,check)
+   
     total_prices=answer_from_data1['total_prices']
     total_transport_private_taxi=answer_from_data1["total_transport_private_taxi"]
     total_food_prices=answer_from_data1['total_food_prices']
-    avrage_daily_spent=existing_country.average_prices
+    existing_country = Country.objects.get(name=country)
+
+    avrage_daily_spent=int(existing_country.average_prices)
     costs={
         "total_prices":total_prices,
         "total_transport_private_taxi":total_transport_private_taxi,
@@ -793,7 +700,6 @@ def restarunts_from_google(restaur, city_obj, restaurants):
     "latitude": latt,
     "longitude": lng1,
     "review_score": rating,
-    "place_id": place_id,
     "photos":final_url,
     "price": price_level,
     "website":website_resta,
@@ -809,14 +715,13 @@ def attraction_from_google(attracs, city_obj, attractions):
     rating1 = attracs['rating']
     if rating1==0:
         return ""
-    place_id = attracs['place_id']
     image = flickr_api(name=name_attrac,latitude=lat,longitude=lng)
     place = {
         "name": name_attrac,
         "latitude": lat,
         "longitude": lng,
         "review_score": rating1,
-        "place_id": place_id,
+        
         "photos":image,
         "city_obj":city_obj.id
     }
@@ -839,8 +744,45 @@ def hotel_from_google(hotel, hotels):
     "latitude": lattt,
     "longitude": lngg1,
     "review_score": rating,
-    "place_id": place_id,
     "photos":final_url,
     # "city_obj":city_obj.id
 }
     hotels.append(place)
+
+
+
+
+from django.core.cache import cache
+
+def fetch_sunset_and_update(city_data,landmarks):
+    cache_key = f"sunset_{landmarks[1]}"
+    # Attempt to retrieve data from the cache
+    sunset1 = cache.get(cache_key)
+    if sunset1 is None:
+        sunset = sunset_api(landmarks)
+        if sunset:
+            city_data["sunset"] = sunset
+            cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
+
+    else:
+        city_data["sunset"] = sunset1
+
+def fetch_hotels_and_update(city_data, landmarks, city_name):
+    from app.chat import process_hotels
+    
+    hotels = process_hotels(landmarks, city_name)
+    city_data["hotels"] = hotels
+
+def fetch_nightlife_and_update(city_data, landmarks):
+    cache_key = f"nightlife_{landmarks[0]}"
+    # Attempt to retrieve data from the cache
+    nightlife1 = cache.get(cache_key)
+    
+    if nightlife1 is None:
+        nightlife = my_night_life(landmarks)
+        city_data["night-life"] = nightlife
+        cache.set(cache_key, nightlife, timeout=7 * 24 * 60 * 60)
+
+    else:
+        print (nightlife1)
+        city_data["night-life"] = nightlife1
