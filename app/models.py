@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 class ApplicationRating(models.Model):
     rating = models.PositiveSmallIntegerField(default=0)
@@ -7,11 +7,18 @@ class ApplicationRating(models.Model):
     user_name=models.TextField(max_length=100)
     user_picture=models.TextField(max_length=100,null=True)
     review=models.TextField(max_length=100,null=True)
-    
+
+
 class QueryChatGPT(models.Model):
     question = models.CharField(max_length=500, default="")
     answer = models.TextField(null=False, default="")
     itinerary_description=models.TextField(null=False,default="")
+
+
+class Users(models.Model):
+    liked_trips = ArrayField(models.IntegerField(), default=list)  # Store trip IDs as a list of integers
+    email=models.TextField(max_length=100)
+    
 
 class Country(models.Model):
     name=models.CharField(max_length=100)
@@ -80,4 +87,6 @@ class Hotels_foursqaure(models.Model):
 class Popular(models.Model):
     country=models.TextField(max_length=100)
     image=models.TextField(max_length=255)
-    
+
+
+

@@ -12,7 +12,7 @@ import requests
 
 import json
 def my_night_life(landmarks):
-    url=''
+    url='https://moshiktm1995.pythonanywhere.com/night-life'
     query={
         "city":"tel aviv",
         "latitude": landmarks[0],
@@ -21,9 +21,10 @@ def my_night_life(landmarks):
     }
 	
     response = requests.post(url, json=query)
-	
+    print(response)
     response_text=(response.text)
     jsonto=json.loads(response_text)
+    
     print(jsonto)
     return jsonto
 

@@ -299,8 +299,8 @@ def generate_schedule(data,country,check,):
            
             restaurants = city['restaurants']
             hotels=city['hotels']
-            night_life=city["night-life"]
-            sunset=city['sunset']
+            night_life=city.get("night-life","")
+            sunset=city.get('sunset',"")
             days_spent = city['days_spent']
 
             try:
@@ -585,7 +585,7 @@ def sort_attractions_by_distance(attractions, first_attraction):
 #             print('Failed after retries. Not good with ChatGPT')
 
 
-def quick_from_data_base(country,answer_dict,process_city,request_left):
+def quick_from_data_base(country,answer_dict,request_left,trip_id):
 
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
     try:
@@ -603,6 +603,7 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
         itinerary_description=answer_dict['itinerary_description']
     except:
         pass
+    # trip_id=answer_dict['id']
 
     threads = []
     for city_data in answer_dict["cities"]:
@@ -674,7 +675,7 @@ def quick_from_data_base(country,answer_dict,process_city,request_left):
     }
     end_result=answer_from_data1["schedule"]
     end_result.update(costs)
-    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left})
+    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"Trip-id":trip_id})
     return answer
 
 
@@ -777,7 +778,7 @@ def fetch_nightlife_and_update(city_data, landmarks):
     cache_key = f"nightlife_{landmarks[0]}"
     # Attempt to retrieve data from the cache
     nightlife1 = cache.get(cache_key)
-    
+
     if nightlife1 is None:
         nightlife = my_night_life(landmarks)
         city_data["night-life"] = nightlife

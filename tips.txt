@@ -1,0 +1,814 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Name: Chapel of the Generous Woman, Paraty, City: Paraty
+Name: Cathédrale Saint - André , City: Bordeaux
+Name: Galway Cathedral, City: Galway
+Name: Galway City Museum, City: Galway
+Name: Galway Bay, City: Galway
+Name: Lynch's Castle, City: Galway
+Name: Eyre Square, City: Galway
+Name: Hall of the Red Earl, City: Galway
+Name: Nicholas Burke’s Pub, City: Galway
+Name: Oyster Festival, City: Galway
+Name: Galway Atlantaquaria, City: Galway
+Name: Galway Arts Centre, City: Galway
+Name: Nicea, City: Nice
+Name: Galway City Gaol, City: Galway
+Name: Spanish Arch & River Corrib, City: Galway
+Name: Claddagh Park, City: Galway
+Name: Vieux Port, City: Marseille
+Name:  Notre-Dame de la Garde, City: Marseille
+Name: Château d'If, City: Marseille
+Name: Palais Longchamp, City: Marseille
+Name: MuCEM, City: Marseille
+Name: Old Port, City: Marseille
+Name: Parc Borely, City: Marseille
+Name: Corniche Président John F Kennedy, City: Marseille
+Name: Rancho, City: Escaldes-Engordany
+Name: Marché aux Poissons, City: Marseille
+Name: Parc Longchamp, City: Marseille
+Name: Corniche Kennedy, City: Marseille
+Name: La Joliette, City: Marseille
+Name: Pharo Gardens, City: Marseille
+Name: King John's Castle, City: Limerick
+Name: Hunt Museum, City: Limerick
+Name: Limerick City Gallery of Art, City: Limerick
+Name: Communauté Urbaine Marseille Provence Métropole MPM, City: Marseille
+Name: Christ Church Cathedral, City: Dublin
+Name: Marseille and Pistes, City: Marseille
+Name: Musée du Vieux Marseille, City: Marseille
+Name: Docklands Area, City: Dublin
+Name: Merrion Square, City: Dublin
+Name: Dublinia Museum, City: Dublin
+Name: Les Bateaux Lyonnais, City: Lyon
+Name: Temple Bar, City: Dublin
+Name: Dublin Botanic Gardens, City: Dublin
+Name: Cork City Gaol, City: Cork
+Name: English Market, City: Cork
+Name: Cork City Hall, City: Cork
+Name: Cork Butter Museum, City: Cork
+Name: Cork Museum, City: Cork
+Name: Crawford Art Gallery, City: Cork
+Name: University College Cork, City: Cork
+Name: St. Anne's Church, City: Cork
+Name: Elizabeth Fort, City: Cork
+Name: Cork City Hall Murals, City: Cork
+Name: Cork City Library, City: Cork
+Name: University College Cork Botanic Gardens, City: Cork
+Name: Petite France, City: Strasbourg
+Name: Grand Île, City: Strasbourg
+Name: Cannes Sign, City: Cannes
+Name: European Parliament, City: Strasbourg
+Name: Ponts Couverts, City: Strasbourg
+Name: Musée Historique du Mont Saint Michel, City: Mont Saint-Michel
+Name: Palais Rohan, City: Strasbourg
+Name: Place de la République, City: Strasbourg
+Name: Musées Historique de Strasbourg, City: Strasbourg
+Name: Aubette Building, City: Strasbourg
+Name: Église Saint-Thomas, City: Strasbourg
+Name: Museum of Modern and Contemporary Art (MAMCS), City: Strasbourg
+Name: Archaeological Museum of the Imperial Baths, City: Strasbourg
+Name: Neustadt, City: Strasbourg
+Name: Le Bardo, City: Algiers
+Name: Sunea Spa Toulouse, City: Toulouse
+Name: Abbey, City: Mont Saint-Michel
+Name: Village, City: Mont Saint-Michel
+Name: Grande Rue, City: Mont Saint-Michel
+Name: Toulouse Capitole, City: Toulouse
+Name: Parc de l'Europe à Toulouse, City: Toulouse
+Name: Institut Guinot, City: Toulouse
+Name: Pont d'Avignon, City: Avignon
+Name: Esthetic Center Thomas Wilson Toulouse, City: Toulouse
+Name: Avignon Tourisme, City: Avignon
+Name: Pont d'Avignon Saint Benézet, City: Avignon
+Name: Les Trains Touristiques d'Avignon, City: Avignon
+Name: Tides, City: Mont Saint-Michel
+Name: Bay Wetlands, City: Mont Saint-Michel
+Name:  Gardens, City: Mont Saint-Michel
+Name: Coastal Path, City: Mont Saint-Michel
+Name: Logis Tiphaine, City: Mont Saint-Michel
+Name: Centro de Salvador, City: Salvador
+Name: Half-Day Tour of Salvador: Address, Phone Number, City: Salvador
+Name: Coastal Camera, City: Mont Saint-Michel
+Name: Bayeux, City: Mont Saint-Michel
+Name:  Avranches, City: Mont Saint-Michel
+Name: Galeria - Igreja Presbiteriana de Manaus IPM, City: Manaus
+Name: Solar da Marquesa de Santos, City: Rio de Janeiro
+Name: Place Kléber , City: Strasbourg
+Name: Moro do Pai Inacio, City: Salvador
+Name: Praça da Celpe do Recife, City: Recife
+Name: Instituto do Patrimonio Historico e Artistico Nacional, City: Ouro Preto
+Name: Hadzhi Dimitar Peak, City: Plovdiv
+Name: House of Humor and Satire Museum, City: Plovdiv
+Name: Svechtari Restaurant District, City: Plovdiv
+Name: St. Constantine and Elena Church, City: Plovdiv
+Name: Stadium Lokomotiv, City: Plovdiv
+Name: Plovdiv Hills Mountain Resort, City: Plovdiv
+Name: Beach hopping, City: Yasawa Islands
+Name: Wayalailai Eco Park, City: Yasawa Islands
+Name: Parque Infantil Romanilla, City: Granada
+Name: Surfing, City: Yasawa Islands
+Name: Overnight village homestay, City: Yasawa Islands
+Name: Underwater snorkeling, City: Yasawa Islands
+Name: Coconut processing, City: Yasawa Islands
+Name: Ulunivanua Village, City: Yasawa Islands
+Name: Major Synagogue, Barcelona, City: Barcelona
+Name: Korovou Temple, City: Yasawa Islands
+Name: Manta Ray night snorkel, City: Yasawa Islands
+Name: Driving Range Nine Islands, City: Yasawa Islands
+Name: Lalati Resort, City: Yasawa Islands
+Name: Tavewa Flying Fox, City: Yasawa Islands
+Name: Yasawa Marine Outdoor Center, City: Yasawa Islands
+Name: Alexander Nevsky Cathedral, City: Sofia
+Name: Vitosha Nature Park, City: Sofia
+Name: Sunbathing, City: Beqa Island
+Name: National Art Gallery, City: Sofia
+Name: Sveta Nedelya Cathedral, City: Sofia
+Name: The National Archaeological Museum, City: Sofia
+Name: Boyardzhievski Market Hall, City: Sofia
+Name: Vasil Levski Monument, City: Sofia
+Name: Lion's Bridge, City: Sofia
+Name: Richard Cobden Statue, Manchester, City: Manchester
+Name: Castello, Venice, City: Venice
+Name: San Martino del Vescovo, Florence, City: Florence
+Name: In Spate La Renata, City: Cluj-Napoca
+Name: Temple II, City: Tikal
+Name: The Great Plaza, City: Tikal
+Name: The Jaguar Temple Complex, City: Tikal
+Name: Denarau Golf and Racquet Club, City: Denarau
+Name: The Denarau Marina, City: Denarau
+Name: The Denarau Island Shopping and Dining District, City: Denarau
+Name: The Church of Saint Peter and Paul, City: Veliko Tarnovo
+Name: International Zip Line, City: Nadi
+Name: Aalborgmanden, City: Aalborg
+Name: The Denarau Beach, City: Denarau
+Name: Nadi Market, City: Nadi
+Name: Savo Island, City: Nadi
+Name: Belfast City Open Top Bus, City: Belfast
+Name: Nadi Museum, City: Nadi
+Name: Jawai Waterfall, City: Nadi
+Name: The Sabeto Hot Springs and Mud Pool, City: Denarau
+Name: The Garden of the Sleeping Giant, City: Denarau
+Name: Denarau Island, City: Nadi
+Name: The Nadi Market, City: Denarau
+Name: The Sri Siva Subramaniya Temple, City: Denarau
+Name: The Big Bula Water Park, City: Denarau
+Name: The Fiji Museum, City: Denarau
+Name: Muckross House, City: Killarney
+Name: Singing Roads, City: Nadi
+Name: Nadi International Market, City: Nadi
+Name: Killarney National Park, City: Killarney
+Name: Killarney Lakes Cruise, City: Killarney
+Name: Royal Davui Island Resort, City: Nadi
+Name: Gap of Dunloe, City: Killarney
+Name: Kate Kearney's Cottage, City: Killarney
+Name: Jaunting Cars, City: Killarney
+Name: Muckross Abbey, City: Killarney
+Name: Shangri-La's Fijian Resort, City: Nadi
+Name: Thomas Thompson Memorial Fountain, Belfast, City: Belfast
+Name: Yaqara Village Home Cooking, City: Beqa Island
+Name: Taviya Rainforest Hike, City: Beqa Island
+Name: Coconut picking, City: Beqa Island
+Name: Aj George Army Barracks, City: Beqa Island
+Name: Koronivia Research Station, City: Beqa Island
+Name: WWII Military History Museum, City: Beqa Island
+Name: Flying Fox ZIPFLYER, City: Beqa Island
+Name: Computer & Communications Museum Of Ireland Company Limited By Guarantee, City: Galway
+Name: Tanah Lot Temple, City: Bali
+Name: Sukuna Inn, City: Beqa Island
+Name: Tivoli Gardens, City: Copenhagen
+Name: Changing of the Guard, City: Copenhagen
+Name: National Museum, City: Copenhagen
+Name: Rosenborg Castle, City: Copenhagen
+Name: Little Mermaid, City: Copenhagen
+Name: Christiania, City: Copenhagen
+Name: National Gallery of Denmark, City: Copenhagen
+Name: Harry Potter the Exhibition Cologne, City: Cologne
+Name: Aalborg Sygehus P Plads, City: Aalborg
+Name: Aalborg Street Food, City: Aalborg
+Name: Urbain Biking Routes, City: Aalborg
+Name: Aalborg Carnival, City: Aalborg
+Name: Aalborg Waterfront, City: Aalborg
+Name: Skywalk 360° viewing platform, City: Aalborg
+Name: Ibirapuera Park, City: São Paulo
+Name: Memorial da América Latina, City: São Paulo
+Name: Avenida Paulista, City: São Paulo
+Name: MASP Art Museum, City: São Paulo
+Name: Bandeirantes Palace, City: São Paulo
+Name: Catedral da Sé, City: São Paulo
+Name: Centro Cultural Banco do Brasil, City: São Paulo
+Name: Pátio do Colégio, City: São Paulo
+Name: Pinacoteca do Estado, City: São Paulo
+Name: Estaiada Bridge, City: São Paulo
+Name: So Paulo Catedral, City: São Paulo
+Name: Parque Villa-Lobos, City: São Paulo
+Name: NS Documentation Centre of the City of Cologne, City: Cologne
+Name: In Focus, City: Cologne
+Name: Reichstag Building, City: Berlin
+Name: Museum Island, City: Berlin
+Name: Jewish Center Munich, City: Munich
+Name: The Munich Residence, City: Munich
+Name: Jüdisches Museum in Altstadt, City: Munich
+Name: CAT Cologne, City: Cologne
+Name: Victory Column, City: Berlin
+Name: Reichstag Dome, City: Berlin
+Name: Berlin Cathedral, City: Berlin
+Name: Checkpoint Charlie, City: Berlin
+Name: East Side Gallery, City: Berlin
+Name: Museum Berggruen, City: Berlin
+Name: Alexanderplatz, City: Berlin
+Name: Hackescher Markt, City: Berlin
+Name: Serra de Sintra, City: Sintra
+Name: Gendarmenmarkt, City: Berlin
+Name: Charlottenburg Palace, City: Berlin
+Name: Meeting of the Waters, City: Manaus
+Name: Teatro Amazonas, City: Manaus
+Name: Run Sintra, City: Sintra
+Name: Sintra Mitos e Lendas, City: Sintra
+Name: Porto Surf School, City: Porto
+Name: Municipal Market, City: Manaus
+Name: Deák tér, Porto, City: Porto
+Name: Ecotour Operators, City: Manaus
+Name: Amazonas Opera House, City: Manaus
+Name: Port Zone, City: Manaus
+Name: Amazon Opera Hotel, City: Manaus
+Name: Innovation Center, City: Manaus
+Name: Rainforest Fruit Market, City: Manaus
+Name: Amazonia Theater, City: Manaus
+Name: Jungle Day/Night Boat Trips, City: Manaus
+Name: Amazon Opera Plaza, City: Manaus
+Name: Gyöngyöspata, Sintra, City: Sintra
+Name: Coliseum Theater, City: Manaus
+Name: Sidewalk Craft Market, City: Manaus
+Name: Cologne Cathedral, City: Cologne
+Name: Hohenzollern Bridge, City: Cologne
+Name: Chocolate Museum, City: Cologne
+Name: RheinEnergieStadion, City: Cologne
+Name: Romano-Germanic Museum, City: Cologne
+Name: Porto de Recreio do Porto de Faro, City: Faro
+Name: Algarve, Portugal, City: Faro
+Name: Ferris Wheel, City: Cologne
+Name:  Museum Ludwig, City: Cologne
+Name: Great St. Martin Church, City: Cologne
+Name: Wallraf-Richartz Museum, City: Cologne
+Name: Palacete Belmarço em Faro, City: Faro
+Name: Rheinpark, City: Cologne
+Name: Boa Viagem Beach, City: Recife
+Name: Porto de Galinhas, City: Recife
+Name: Recife Antigo, City: Recife
+Name: Olinda, City: Recife
+Name: Boa Viagem Kite Festival, City: Recife
+Name:  Marco Zero, City: Recife
+Name: São José dos Cordeiros Church, City: Recife
+Name: Capibaribe River Walk, City: Recife
+Name: Nightlife Cruise, City: Recife
+Name: Open Air Markets, City: Recife
+Name: Shopping Recife, City: Recife
+Name: Recife Zoo, City: Recife
+Name: Akureyri Museum, City: Akureyri
+Name: Into The Arctic, City: Akureyri
+Name: Englischer Garten, City: Munich
+Name: Neue Pinakothek, City: Munich
+Name: Residenz, City: Munich
+Name: BMW Museum, City: Munich
+Name: Nymphenburg Palace, City: Munich
+Name: Viktualienmarkt, City: Munich
+Name: Denarau Golf and Racquet Club, City: Denarau Island
+Name: Deutsche Museum, City: Munich
+Name: Asam Church, City: Munich
+Name: Alter Botanischer Garten München, City: Munich
+Name: Hofbräuhaus, City: Munich
+Name: Chinese Tower, City: Munich
+Name: Pelourinho, City: Salvador
+Name: Elevador Lacerda, City: Salvador
+Name: Bonfim Church, City: Salvador
+Name: Farol da Barra, City: Salvador
+Name: Elevador de Pilar Elevator, City: Salvador
+Name: Museum of Modern Art, City: Salvador
+Name: Bahia Carnival Festival, City: Salvador
+Name: Igreja da Ordem Terceira do Carmo, City: Salvador
+Name: Fishing Boats of Madre de Deus, City: Salvador
+Name: Igreja do Rosário dos Pretos, City: Salvador
+Name: Mercado Modelo, City: Salvador
+Name: Elevador Lacerda Panoramic Viewpoint, City: Salvador
+Name: Quinta da Regaleira, City: Sintra
+Name: Palacio Nacional de Sintra, City: Sintra
+Name: Castelo dos Mouros, City: Sintra
+Name: Palacio de Monserrate, City: Sintra
+Name: Parque Natural Sintra-Cascais, City: Sintra
+Name: Castle of the Moors, City: Sintra
+Name: Palacio Nacional da Pena, City: Sintra
+Name: Convento dos Capuchos, City: Sintra
+Name: Palacio de Seteais, City: Sintra
+Name: Sobreiro Museum, City: Sintra
+Name: Church of São Francisco de Assis, City: Ouro Preto
+Name: Museum of Divine Art, City: Ouro Preto
+Name: Church of the Rosary or Carmo, City: Ouro Preto
+Name: Traditional Coffee, City: Ouro Preto
+Name: Museum of the Inconfidência, City: Ouro Preto
+Name: Panorama Trail, City: Ouro Preto
+Name: Church of Our Lady of Carmel, City: Ouro Preto
+Name: Natural Swimming Holes, City: Ouro Preto
+Name: Belfry of Bruges, City: Bruges
+Name: Impression Bruges, City: Bruges
+Name: Market Square. Bruges Belgium, City: Bruges
+Name: Church of Our Lady of Pilar, City: Ouro Preto
+Name: Largo das Artes, City: Ouro Preto
+Name: Baroque Museum, City: Ouro Preto
+Name: Ouro Preto Cathedral, City: Ouro Preto
+Name: University of Ouro Preto, City: Ouro Preto
+Name: Sao Francisco Church, City: Vila Nova de Gaia
+Name: CLERIGS Tower, City: Vila Nova de Gaia
+Name: Dom Luis I Bridge, City: Vila Nova de Gaia
+Name: Aliados Avenue, City: Vila Nova de Gaia
+Name: Serralves Foundation, City: Vila Nova de Gaia
+Name: Port Wine Caves, City: Vila Nova de Gaia
+Name: Livraria Lello, City: Vila Nova de Gaia
+Name: Brussels Town Hall, City: Brussels
+Name: Et In Arcadia, City: Bruges
+Name: Palacio da Bolsa, City: Vila Nova de Gaia
+Name: Casa da Música, City: Vila Nova de Gaia
+Name: Jardim do Passeio Alegre, City: Vila Nova de Gaia
+Name: Museum of Sacred Art and Archaeology, City: Vila Nova de Gaia
+Name: Miradouro da Vitória, City: Vila Nova de Gaia
+Name: Iguazu Falls (Brazil Side), City: Iguazu Falls
+Name: Iguazu Falls (Argentina Side), City: Iguazu Falls
+Name: Helicopter Flight, City: Iguazu Falls
+Name: Macuco Safari Float, City: Iguazu Falls
+Name: Walkway to Devil's Throat, City: Iguazu Falls
+Name: Iguassu National Park, City: Iguazu Falls
+Name: Jungle Trail (Brazil Side), City: Iguazu Falls
+Name: Itaipu Dam, City: Iguazu Falls
+Name: Birds Eye View of Falls, City: Iguazu Falls
+Name: Foz do Iguaçu City, City: Iguazu Falls
+Name: Puerto Iguazú Town, City: Iguazu Falls
+Name: Alfama District, City: Lisbon
+Name: Castelo de Sao Jorge, City: Lisbon
+Name: Mosteiro dos Jeronimos, City: Lisbon
+Name: Ghent Altarpiece | Adoration of the Mystic Lamb, City: Ghent
+Name: Praca do Comercio, City: Lisbon
+Name: Torre de Belem, City: Lisbon
+Name: Boat in Gent, City: Ghent
+Name: Industriemuseum Gent, City: Ghent
+Name: Museum voor Industriële Archeologie en Textiel Miat, City: Ghent
+Name: Se Cathedral, City: Faro
+Name: Ubud Monkey Forest, City: Bali
+Name: Ubud Art Market, City: Bali
+Name: Tegallalang Rice Terraces, City: Bali
+Name: Ship Building Museum, City: Paraty
+Name: Paraty Eco Diver, City: Paraty
+Name: Akureyrarkirkja Church, City: Akureyri
+Name: Eyjafjörður Fjord, City: Akureyri
+Name: Akureyri Botanical Garden, City: Akureyri
+Name: Culture House, City: Akureyri
+Name: Hof Cultural Center and Café, City: Akureyri
+Name: Akureyri Lighthouse, City: Akureyri
+Name: Uluwatu Temple, City: Bali
+Name: Hrísey Island Ferry, City: Akureyri
+Name: Kuta Beach, City: Bali
+Name: Winter Lights Festival, City: Akureyri
+Name: Akureyri Ski Center, City: Akureyri
+Name: Nonnahús, City: Akureyri
+Name: Seminyak Beach, City: Bali
+Name: Bali Safari and Marine Park, City: Bali
+Name: Mount Batur, City: Bali
+Name: Ubud Palace, City: Bali
+Name: Akureyri Golf Club, City: Akureyri
+Name: Praia da Armacão, City: Florianópolis
+Name: Our World Heritage Exhibition, Edinburgh, City: Edinburgh
+Name: Fexpo Sucre, City: Sucre
+Name: Ein Gedi Nature Reserve, City: Dead Sea
+Name: Dead Sea Panoramic Complex, City: Dead Sea
+Name: Archivos Nacionales de Panamá, City: Panama City
+Name: كويك بيتزا الأقصر, City: Luxor
+Name: Bedouin Museum and Crafts Centre, City: Dead Sea
+Name: Holiday Inn Dead Sea, City: Dead Sea
+Name: Museo Litoral Boliviano, City: La Paz
+Name: Tiger Cave Temple (Wat Tham Sua), City: Krabi
+Name: Museum of Perth, City: Perth
+Name: Gruta da Lagoa Azul Ponto, City: Bonito
+Name: Historic Centre of Warsaw, City: Warsaw
+Name: Centrum Interpretacji Zabytku, City: Warsaw
+Name: Warsaw Barbican, City: Warsaw
+Name: Museu do Índio, City: Florianópolis
+Name: Four Islands, City: Krabi
+Name: La Casona, sector Arriendo Motos Acuáticas Pucon, AquaRent, City: Pucon
+Name: Paseo Costanera Pucón, City: Pucon
+Name: Hosteria y Camping del Bosque Pucón, City: Pucon
+Name: Puerto Varas, City: Puerto Varas
+Name: Muzeum Ewolucji Instytutu Paleobiologii PAN, City: Warsaw
+Name: Warsaw, City: Warsaw
+Name: Emerald Pool (Sa Morakot), City: Krabi
+Name: Iquitos, City: Iquitos
+Name: Inca Roca Street / Calle Hatunrumiyoq, City: Cusco
+Name: Carretera Iquitos Nauta . Arapaima Gigas, City: Iquitos
+Name: Fundacja Warsaw Foundation, City: Warsaw
+Name: Plac Zabaw Na Inflanckiej, City: Warsaw
+Name: National Museum in Warsaw, City: Warsaw
+Name: Town Hall, Jaipur, City: Jaipur
+Name: Weta Cave Workshop Tour, City: Wellington
+Name: City Gallery Wellington, City: Wellington
+Name: Bariloche Moto Tours, City: Bariloche
+Name: Santa Monica Pier, City: Los Angeles
+Name: Venice Beach, City: Los Angeles
+Name: las gradas En san jose, City: San Jose
+Name: The Getty Center, City: Los Angeles
+Name: Griffith Observatory, City: Los Angeles
+Name: Golden Gate Bridge, City: San Francisco
+Name: Casa memorială "C. I. Nottara și C. C. Nottara", City: Bucharest
+Name: Museumhuis Groningen, City: Groningen
+Name: St. Stephen's Cathedral, City: Vienna
+Name: The Ground, City: The Hague
+Name: Karlovy Vary, City: Karlovy Vary
+Name: NH8 (Jaipur-Delhi), City: Jaipur
+Name: Plaza de Armas de Iquitos, City: Iquitos
+Name: Brno Y Castillo Špilberk, City: Brno
+Name: Denarau Watersports, City: Denarau Island
+Name: Port Denarau Shopping Center, City: Denarau Island
+Name: Krumlov, City: Český Krumlov
+Name: Glyphs On The Wall, City: The Hague
+Name: Plano de Santiago en 1712, City: Santiago
+Name: The Galway Fisheries Watchtower Museum: Address, Phone Number, City: Galway
+Name: Sri Siva Subramaniya Temple, City: Nadi
+Name: Nadi Handicraft Market, City: Nadi
+Name: My Fiji - Cultural Show, City: Nadi
+Name: Tavuni Hill Fort, City: Nadi
+Name: Sabeto Hot Springs, City: Nadi
+Name: Tifajek Mud Pools & Hot Springs, City: Nadi
+Name: Waitavala Waterslide, City: Taveuni
+Name: International Dateline, City: Taveuni
+Name: Nagigia Island Resort, City: Taveuni
+Name: Ikh Tamir River, City: Tsetserleg
+Name: Calgary Court House No. 2: Address, Phone Number, City: Calgary
+Name: Shoreline BBQ Grill, City: Khuvsgul Lake
+Name: Korean BBQ House, City: Khuvsgul Lake
+Name: Royal Line M/S Helsinki, City: Helsinki
+Name: Acacia Camp, City: Nairobi
+Name: Chuluut Canyon, City: Tsetserleg
+Name: Taikhar Rock, City: Tsetserleg
+Name: Gpi Outdoor Designs Inc, City: Calgary
+Name: Debreceni Jégcsarnok - Szabadtéri Kondipark, City: Debrecen
+Name: Delizsánsz Kiállítóterem Debrecen, City: Debrecen
+Name: Ulaanbaatar, City: Tsenkher
+Name: Ugii Lake, City: Tsenkher
+Name: Khangai Mountains, City: Tsenkher
+Name: Khujirt Hot Springs, City: Tsenkher
+Name: Turgen Canyon, City: Altai
+Name: Altai Tavan Bogd National Park, City: Altai
+Name: Terkhiin Tsagaan Lake, City: Khorgo
+Name: Uran Togoo Volcano, City: Khorgo
+Name: Yellow Dog Cave, City: Khorgo
+Name: White Lake, City: Khorgo
+Name: Pinacoteca de São Paulo, City: São Paulo
+Name: Khull Nuur, City: Altai
+Name: Dayan Deereh Valley, City: Altai
+Name: Tolbo Lake, City: Altai
+Name: Dayan Lake, City: Altai
+Name: Nugget Square, City: Johannesburg
+Name: Drill Hall, City: Johannesburg
+Name: Tariat Village, City: Khorgo
+Name: Uushigiin Uver Cave Temple, City: Khorgo
+Name: Khorgo-Terkhiin Tsagaan National Park, City: Khorgo
+Name: beirut çarşı, City: Beirut
+Name: Chuluut River Canyon, City: Khorgo
+Name: Khan Khokh Canyon, City: Khorgo
+Name: São Paulo Zoo, City: São Paulo
+Name: Catedral Ortodoxa Antioquina da Anunciação a Nossa Senhora, City: São Paulo
+Name: Oslo School Museum: Address, Phone Number, City: Oslo
+Name: Vallnord, City: Ordino
+Name: Kok Oslo, City: Oslo
+Name: Jødisk Museum i Oslo, City: Oslo
+Name: Tâmpa Mountain, City: Brașov
+Name: Galway City East Camping and Caravan Park, City: Galway
+Name: Belfast Celtic Museum, City: Belfast
+Name: Skanderbeg Square, City: Tirana
+Name: Lekursi Castle, City: Saranda
+Name: Khoton Nuur, City: Altai
+Name: Praça dos Três Poderes, City: Brasília
+Name: Győri Egyházmegyei Kincstár és Könyvtár, City: Gyor
+Name: emberek az állatokért-Győri állatmenhely, City: Gyor
+Name: Civic Museum (Old Dublin Society), City: Dublin
+Name: Tsambagarav Uul, City: Altai
+Name: Dublin Moose Farm, City: Dublin
+Name: Győrújbarát horgasztó, City: Gyor
+Name: Legepladsen I Aalborg Zoo, City: Aalborg
+Name: Sygehusmuseet I Randers, City: Randers
+Name: Las Dalias Hippy Market, City: Ibiza
+Name: The Round Place" - Bænkene v Slotssøen/Kolding Byferie, City: Kolding
+Name: Uluru, City: Ayers Rock (Uluru)
+Name: Budapest Retro Élményközpont, City: Budapest
+Name: White and Black Towers, City: Brasov
+Name: CitySightseeing Dublin, City: Dublin
+Name: Panama Canal, City: Panama City
+Name: Biger Nuur, City: Altai
+Name: FIFE Nemzetközi Macskakiállítás/international cat exhibition, City: Gyor
+Name: Khan Khokh Canyon, City: Altai
+Name: Chichén Itzá, City: Cancún
+Name: Hip Strip, City: Montego Bay
+Name: Győrújbarát híd, City: Gyor
+Name: Kállay Gyűjtemény Nyíregyháza, City: Nyiregyhaza
+Name: ReálPONT Nyíregyháza Ungvár sétány, City: Nyiregyhaza
+Name: Osorno Volcano, City: Puerto Varas
+Name: Instituto Antônio Carlos Magalhães, City: Salvador
+Name: Parque Infantil Jardim Sá da Bandeira, City: Lisbon
+Name: Jarðskjálftinn í Reykjavík, City: Reykjavik
+Name: Fonte Seca,IFBA-Campus Salvador, City: Salvador
+Name: Kampot Pepper Farms, City: Kampot
+Name: Erdene Zuu Monastery, City: Kharkhorin
+Name: Karakorum Museum, City: Kharkhorin
+Name: Kharkhorin Rock, City: Kharkhorin
+Name: Turtle Rock, City: Kharkhorin
+Name: Kharkhorin Museum, City: Kharkhorin
+Name: Khustain Nuruu National Park, City: Kharkhorin
+Name: Tuvkhun Monastery, City: Kharkhorin
+Name: Orkhon Valley, City: Kharkhorin
+Name: Ulaantsutgalan Waterfall, City: Kharkhorin
+Name: Khögnö Khan Mountain, City: Tsenkher
+Name: Chuluut River Canyon, City: Tsenkher
+Name: Deer Stones, City: Tsenkher
+Name: Gurvan Saikhan National Park, City: Tsenkher
+Name: Khanui Valley, City: Tsenkher
+Name: Tsarevets Fortress Sound and Light Show, City: Veliko Tarnovo
+Name: Mining Information Centre, City: Ulaanbaatar
+Name: Miskolci Galéria, City: Miskolc
+Name: Bastimentos National Marine Park, City: Bocas del Toro
+Name: Osaka Castle, City: Osaka
+Name: Shinsaibashi Shopping Arcade, City: Osaka
+Name: Universal Studios Japan, City: Osaka
+Name: Dotonbori, City: Osaka
+Name: Osaka Aquarium Kaiyukan, City: Osaka
+Name: Sumiyoshi Taisha, City: Osaka
+Name: Umeda Sky Building, City: Osaka
+Name: Ōsaka Tenmangū Shrine, City: Osaka
+Name: Minami District, City: Osaka
+Name: Osaka Science Museum, City: Osaka
+Name: São Paulo Cathedral, City: São Paulo
+Name: Museu de Arte de São Paulo (MASP), City: São Paulo
+Name: Parque Ibirapuera, City: São Paulo
+Name: Sveta Gora Monastery, City: Veliko Tarnovo
+Name: Hiroshima Peace Memorial Park, City: Hiroshima
+Name: Itsukushima Shrine, City: Hiroshima
+Name: Hiroshima Castle, City: Hiroshima
+Name: Hiroshima Museum of Art, City: Hiroshima
+Name: Shukkei-en Garden, City: Hiroshima
+Name: Hiroshima National Peace Memorial Hall for the Atomic Bomb Victims, City: Hiroshima
+Name: Hiroshima Central Park, City: Hiroshima
+Name: Hiroshima Orizuru Tower, City: Hiroshima
+Name: Okonomimura, City: Hiroshima
+Name: Mazda Museum, City: Hiroshima
+Name: Parque General San Martín, City: Mendoza
+Name: Museo del Area Fundacional, City: Mendoza
+Name: Parque O'Higgins, City: Mendoza
+Name: Puente del Inca, City: Mendoza
+Name: Chacras de Coria, City: Mendoza
+Name: Plaza Independencia, City: Mendoza
+Name: Museo Municipal de Arte Moderno, City: Mendoza
+Name: Museo del Pasado Cuyano, City: Mendoza
+Name: Alta Montaña, City: Mendoza
+Name: Nagoya Castle, City: Nagoya
+Name: Atsuta Shrine, City: Nagoya
+Name: Toyota Commemorative Museum of Industry and Technology, City: Nagoya
+Name: Osu Shopping District, City: Nagoya
+Name: Nagoya Port Aquarium, City: Nagoya
+Name: Tokugawa Art Museum, City: Nagoya
+Name: Higashiyama Zoo and Botanical Gardens, City: Nagoya
+Name: Nōbi Plain, City: Nagoya
+Name: Nagoya TV Tower, City: Nagoya
+Name: Noritake Garden, City: Nagoya
+Name: Salto Grande, City: Torres del Paine
+Name: Mirador Condor, City: Torres del Paine
+Name: Lago Pehoé, City: Torres del Paine
+Name: Glaciar Grey Camp, City: Torres del Paine
+Name: Base Las Torres, City: Torres del Paine
+Name: Laguna Amarga, City: Torres del Paine
+Name: Mirador Ferrier, City: Torres del Paine
+Name: Pashupatinath Temple, City: Kathmandu
+Name: Swayambhunath, City: Kathmandu
+Name: Thamel, City: Kathmandu
+Name: Chandragiri Hills, City: Kathmandu
+Name: Cesky Krumlov Castle, City: Cesky Krumlov
+Name: St. Vitus Church, City: Cesky Krumlov
+Name: Egon Schiele Art Centrum, City: Cesky Krumlov
+Name: Cesky Krumlov Tower, City: Cesky Krumlov
+Name: Rafting/Canoeing, City: Cesky Krumlov
+Name: Krumlov Castle Gardens, City: Cesky Krumlov
+Name: Museum of Torture, City: Cesky Krumlov
+Name: Brewery Eggenberg, City: Cesky Krumlov
+Name: Castillo de Santa Bárbara, City: Alicante
+Name: Museo de Arte Contemporáneo de Alicante, City: Alicante
+Name: Playa del Postiguet, City: Alicante
+Name: MARQ Archaeological Museum, City: Alicante
+Name: Santa Maria Basilica, City: Alicante
+Name: Tabarca Island, City: Alicante
+Name: Museo de Hogueras, City: Alicante
+Name: Gravina Museum, City: Alicante
+Name: Shoren-in Temple, City: Kyoto
+Name: Mercado de La Merced, City: Malaga
+Name: Treasury (Al Khazneh), City: Petra
+Name: Monastery (Ad Deir), City: Petra
+Name: Alcazaba, City: Malaga
+Name: The Siq, City: Petra
+Name: Street of Facades, City: Petra
+Name: Al Madras Al Khazneh Restaurant, City: Petra
+Name: Petra by Night, City: Petra
+Name: Ad-Deir Monument, City: Petra
+Name: Anakena Beach, City: Easter Island
+Name: Ōhori Park, City: Fukuoka
+Name: Shofukuji Temple, City: Fukuoka
+Name: ACROS Fukuoka, City: Fukuoka
+Name: Fukuoka Tower, City: Fukuoka
+Name: Nokonoshima Island, City: Fukuoka
+Name: Momochi Seaside Park, City: Fukuoka
+Name: Marine World Umino-Nakamichi, City: Fukuoka
+Name: Ochheuteal Beach, City: Sihanoukville
+Name: Independence Beach, City: Sihanoukville
+Name: Ream National Park, City: Sihanoukville
+Name: Wat Leu Temple, City: Sihanoukville
+Name: Koh Rong Island, City: Sihanoukville
+Name: Koh Rong Samloem Island, City: Sihanoukville
+Name: Turtle Sanctuary, City: Sihanoukville
+Name: Red Square, City: Moscow
+Name: St. Basil's Cathedral, City: Moscow
+Name: Bolshoi Theatre, City: Moscow
+Name: State Tretyakov Gallery, City: Moscow
+Name: Moscow Kremlin, City: Moscow
+Name: Lenin's Mausoleum, City: Moscow
+Name: Gorky Park, City: Moscow
+Name: Cathedral of Christ the Saviour, City: Moscow
+Name: VDNH Exhibition Center, City: Moscow
+Name: Bocas del Toro Archipelago, City: Bocas del Toro
+Name: Red Frog Beach, City: Bocas del Toro
+Name: La Gruta Surfing, City: Bocas del Toro
+Name: Up In the Hill Chocolate Farm, City: Bocas del Toro
+Name: La Loma Chocolate Farm Tour, City: Bocas del Toro
+Name: Bocas del Toro Nightlife, City: Bocas del Toro
+Name: Starfish Beach, City: Bocas del Toro
+Name: Bocas Butterfly Farm, City: Bocas del Toro
+Name: Guggenheim Museum, City: Bilbao
+Name: Casco Viejo, City: Bilbao
+Name: Museo de Bellas Artes, City: Bilbao
+Name: Mount Artxanda, City: Bilbao
+Name: Zubizuri Bridge, City: Bilbao
+Name: Bilbao Fine Arts Museum, City: Bilbao
+Name: Estadio San Mamés, City: Bilbao
+Name: Museo Marítimo Ría de Bilbao, City: Bilbao
+Name: Vizcaya Bridge, City: Bilbao
+Name: Arriaga Theatre, City: Bilbao
+Name: Catetinho, City: Brasília
+Name: Congresso Nacional, City: Brasília
+Name: Catedral Metropolitana Nossa Senhora Aparecida, City: Brasília
+Name: Museu Nacional, City: Brasília
+Name: Jardim Botânico de Brasília, City: Brasília
+Name: Pontão do Lago Sul, City: Brasília
+Name: Jemaa el-Fnaa, City: Marrakesh
+Name: Farol das Rocas, City: Fernando de Noronha
+Name: Bahia Palace, City: Marrakesh
+Name: Koutoubia Mosque, City: Marrakesh
+Name: Saadian Tombs, City: Marrakesh
+Name: Majorelle Garden, City: Marrakesh
+Name: El Badi Palace, City: Marrakesh
+Name: Ben Youssef Madrasa, City: Marrakesh
+Name: Ourika Valley, City: Marrakesh
+Name: Menara Gardens, City: Marrakesh
+Name: Scuba diving, City: Beqa Island
+Name: Randers Lokalhistoriske Arkiv, City: Randers
+Name: Island tours, City: Beqa Island
+Name: Fishing, City: Beqa Island
+Name: Kayaking, City: Beqa Island
+Name: Day trips from Pacific Harbour, City: Beqa Island
+Name: Surfing, City: Beqa Island
+Name: Isla Incahuasi, City: Salar de Uyuni
+Name: Train Cemetery, City: Salar de Uyuni
+Name: Tunupa Volcano, City: Salar de Uyuni
+Name: San Juan Village, City: Salar de Uyuni
+Name: Colchani Salt Factory, City: Salar de Uyuni
+Name: Ollagüe Volcano, City: Salar de Uyuni
+Name: San Cristóbal Village, City: Salar de Uyuni
+Name: Coquesa Mummies Museum, City: Salar de Uyuni
+Name:  Atlantis Boat Party, City: Ibiza
+Name: Sapporo TV Tower, City: Sapporo
+Name: Nijo Market, City: Sapporo
+Name: Sapporo Factory, City: Sapporo
+Name: Chichén Itzá, City: Mérida
+Name: Uxmal Archaeological Site, City: Mérida
+Name: Catedral de San Ildefonso, City: Mérida
+Name: Gran Museo del Mundo Maya, City: Mérida
+Name: Paseo de Montejo, City: Mérida
+Name: Mercado Municipal Lucas de Gálvez, City: Mérida
+Name: Dzibilchaltún, City: Mérida
+Name: Clifton Street Graveyard, Belfast, City: Belfast
+Name: Old Town, Edinburgh, City: Edinburgh
+Name: Phi Phi Islands, City: Krabi
+Name: Perth Scuba with Dive Traveller's, City: Perth
+Name: Sail Galway Bay, City: Galway
+Name: Federação de Campismo e Montanhismo de Portugal, City: Lisbon
+Name: Parque Infantil Jardim Constantino, City: Lisbon
+Name: Memorial das Vítimas da Violência Homofóbica e Transfóbica Em Portugal, City: Lisbon
+Name: The Viking Planet Oslo: Hours, Address, City: Oslo
+Name: Parque Fluvial Vallarta, City: Puerto Vallarta
+Name: Ada Sailing Puerto Vallarta, City: Puerto Vallarta
+Name: IPHAN-Instituto do Patrimônio Histórico e Artístico Nacional, City: Ouro Preto
+Name: Mostra Internacional de Instrumentos de Tortura Medieval, City: Florianópolis
+Name: Bunratty Castle, Limerick, City: Limerick
+Name: Nordic Military Training Uppsala, City: Uppsala
+Name: Gamla Uppsala Högar, City: Uppsala
+Name: Salabacke, Uppsala, Sweden, City: Uppsala
+Name: Valsätra, Uppsala, City: Uppsala
+Name: Västerås Konstmuseum, City: Vasteras
+Name: Cityringen Västerås, City: Vasteras
+Name: Västerås Airport Flying Museum, City: Vasteras
+Name: Infostory, City: Manaus
+Name: In The Water, City: Ayutthaya
+Name: Ayutthaya Historical Study Center, City: Ayutthaya
+Name: The Royal Palace Stockholm, City: Stockholm
+Name: Stockholm Syndrome was born here, City: Stockholm
+Name: Riddarholm Church (Riddarholmskyrkan), Stockholm, City: Stockholm
+Name: Modern Museet Stockholm, City: Stockholm
+Name: Göteborgs Operan (Gothenburg's Opera), City: Gothenburg
+Name: Shahana Restaurant, City: Kabul
+Name: Wild Rice, City: Kabul
+Name: Marshall, City: Kabul
+Name: Paitakht Cafe Restaurant and Guesthouse, City: Kabul
+Name: JK Karlovy Vary - St. Role, City: Karlovy Vary
+Name: Muzeum stavebních dějin a řemesel v Českém Krumlově, City: Český Krumlov
+Name: Van Abbemuseum, City: Eindhoven
+Name: Brno autokino, City: Brno
+Name: مطعم وسط البلد, City: Aswan
+Name: مطعم الشاويش, City: Aswan
+Name: Kunsthandwerk am Mehlplatz Graz, City: Graz
+Name: Mevlana Museum, City: Konya
+Name: Tierra del Fuego National Park, City: Ushuaia
+Name: Miskolc Galéria Városi Művészeti Múzeum Feledy-Ház, City: Miskolc
+Name: Herman Ottó Múzeum Kiállítóhelye Miskolc, City: Miskolc
+Name: Herman Ottó Múzeum Ásványtára Miskolc, City: Miskolc
+Name: Magyar Ortodox Egyházművészeti Múzeum Miskolc, City: Miskolc
+Name: Miskolci Galéria Feledy Ház, City: Miskolc
+Name: Miskolctapoika, City: Miskolc
+Name: Lézerpont Látványtár és -műhely Miskolc, City: Miskolc
+Name: Indóház tér Játszótér, City: Pecs
+Name: Pécsi Kesztyű Múzeum, City: Pecs
+Name: Sola Strand, City: Sandnes
+Name: Parque Infantil Jardim das Amoreiras, City: Lisbon
+Name: Lake View Restaurant, City: Khuvsgul Lake
+Name: Lakeside Cafe, City: Khuvsgul Lake
+Name: Gobi Mongolian Grill, City: Khuvsgul Lake
+Name: Thai Fusion, City: Khuvsgul Lake
+Name: Turkish Kebab House, City: Khuvsgul Lake
+Name: Stodolní Street, City: Ostrava
+Name: Memorial Space Bernardo Monteverde, Rio de Janeiro, City: Rio de Janeiro
+Name: Lake Atitlán, City: Lake Atitlán
+Name: Angkor Wat, City: Angkor Wat
+Name: Mont Saint-Michel, City: Mont Saint-Michel
+Name: Sri Mariamman Temple, City: Nadi
+Name: Praia do Sancho, City: Fernando de Noronha
+Name: Pelourinho, City: Paraty
+Name: Valle de los Caídos, City: Valle de los Caídos
+Name: Cinque Terre, City: Cinque Terre
+Name: Grandvalira, City: Soldeu
+Name: Funicamp, City: Encamp
+Name: Grandvalira, City: Canillo
+Name: King John's Castle, City: Limerick
+Name: Reynisfjara, City: Vik
+Name: Akureyrarkirkja, City: Akureyri
+Name: Gravensteen Castle, City: Ghent
+Name: Red Square, City: Moscow
+Name: Golden Gate Bridge, City: San Francisco
+Name: Lagoa da Conceição, City: Florianopolis
+Name: Canton Tower, City: Guangzhou
+Name: Palace of Knossos, City: Crete
+Name: Perito Moreno Glacier, City: El Calafate
+Name: Tayrona National Natural Park, City: Santa Marta
+Name: Altstadt, City: Düsseldorf
+Name: Window of the World, City: Shenzhen
+Name: Anıtkabir, City: Ankara
+Name: La Seu, City: Palma de Mallorca
+Name: Novosibirsk State Academic Opera, City: Novosibirsk
+Name: Jet d'Eau, City: Geneva
+Name: Old Fortress of Corfu, City: Corfu
+Name: Changsu Park, City: Incheon
+Name: Waterford Crystal, City: Waterford
+Name: Palace of the Grand Master of the Knights of Rhodes, City: Rhodes
+Name: Colonial Zone, City: Santo Domingo
+Name: Little Venice, City: Mykonos
+Name: Rambla of Montevideo, City: Montevideo
+Name: Old Town of Kotor, City: Kotor
+Name: Römerberg, City: Frankfurt
+Name: Taehwa River Eco Park, City: Ulsan
+Name: Cerro San Bernardo, City: Salta
+Name: Gwangju Biennale, City: Gwangju

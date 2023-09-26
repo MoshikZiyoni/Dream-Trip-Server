@@ -148,7 +148,7 @@ def process_attractions(landmarks, city_name, country, city_obj):
 
 
 def process_hotels(landmarks, city_name):
-    cache_key = f"hotels_{city_name}"
+    cache_key = f"hotels_{city_name.replace(' ', '_').replace('-', '_')}"
     # Attempt to retrieve data from the cache
     hotels1 = cache.get(cache_key)
     if hotels1 is None:
