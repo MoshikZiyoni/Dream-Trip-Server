@@ -675,7 +675,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
     }
     end_result=answer_from_data1["schedule"]
     end_result.update(costs)
-    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"Trip-id":trip_id})
+    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"Trip_id":trip_id})
     return answer
 
 
