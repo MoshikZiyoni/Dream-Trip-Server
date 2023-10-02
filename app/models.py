@@ -16,12 +16,20 @@ class QueryChatGPT(models.Model):
 
 
 class Users(models.Model):
-    email=models.TextField(max_length=100)
+    email=models.TextField(max_length=100,null=False)
 
 class UserTrip(models.Model):
     user_id=models.ForeignKey(Users,related_name='usertrip',on_delete=models.CASCADE)
-    liked_trips = models.TextField(models.IntegerField(), default=list)  # Store trip IDs as a list of integers
-    # data=
+    liked_trips = models.TextField(max_length=100,null=False)
+    start_trip=models.TextField(max_length=100,null=False)
+    end_trip=models.TextField(max_length=100,null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def formatted_created_date(self):
+        """
+        Custom method to format the created_at field as date only.
+        """
+        return self.created_at.strftime('%Y-%m-%d')
     
 
 class Country(models.Model):
