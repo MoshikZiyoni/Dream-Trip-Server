@@ -2,13 +2,16 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
-from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, Users
+from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users
 from django.core.cache import cache
 from app.utils import quick_from_data_base
 import traceback
 import re
 from django.db.models import Q
 import random
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 # from collections import Counter
 # from django.db.models import Count
 # from itertools import combinations
@@ -29,19 +32,8 @@ def gpt_view(request):
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
+    request_left = user_requests_cache(email)
 
-    # Check if the user's email exists in the request count dictionary
-    request_count = cache.get(email, 0)
-    # If the user has made more than 10 requests in the past 24 hours, block the request
-    if request_count >= 100:
-        return JsonResponse({'error': 'Too many requests'})
-
-    # Otherwise, increment the request count and set the cache with the new value
-    request_count += 1
-    print (request_count)
-    request_left=11-request_count
-    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
-    cache.set(email, request_count, timeout=timeout_seconds)
     try:
 
         # Define variables
@@ -97,19 +89,8 @@ def make_short_trip(request):
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
+    request_left = user_requests_cache(email)
 
-    # Check if the user's email exists in the request count dictionary
-    request_count = cache.get(email, 0)
-    # If the user has made more than 10 requests in the past 24 hours, block the request
-    if request_count >= 100:
-        return JsonResponse({'error': 'Too many requests'})
-
-    # Otherwise, increment the request count and set the cache with the new value
-    request_count += 1
-    print (request_count)
-    request_left=11-request_count
-    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
-    cache.set(email, request_count, timeout=timeout_seconds)
     country=(request.data["country"])
     queries = QueryChatGPT.objects.filter(
             Q(question__icontains=country)     
@@ -161,8 +142,12 @@ def check_before_rate(request):
 def user_trip(request):
     trip_details = []
     email=request.data['email']
-    trip_for_user=Users.objects.get(email=email)
-    trips=(trip_for_user.liked_trips)
+    _user=Users.objects.get(email=email)
+    trips = _user.usertrip.all().values()
+
+    
+    # trips=UserTrip.objects.filter(user_id_id=userid)
+    
     for trip_id in trips:
         trip=QueryChatGPT.objects.get(id=trip_id)
         question=trip.question
@@ -190,45 +175,100 @@ def user_trip(request):
 
     return JsonResponse(trip_details,safe=False)
 
-@api_view(['GET','POST','PUT'])
+
+
+@api_view(['POST'])
 def user_add_trip(request):
-    email=request.data['email']
-    trip_id=int(request.data['trip_id'])
-    
+    UserTrip.objects.all().delete()
     try:
-        save_the_user_trip=Users.objects.get(email=email)
-        if save_the_user_trip:
-            if trip_id not in save_the_user_trip.liked_trips:
-                # If not in the list, append it and save
-                save_the_user_trip.liked_trips.append(trip_id)
-                save_the_user_trip.save()
-                print("Added trip to liked trips for email: ", save_the_user_trip.email)
-                return JsonResponse({"message": f"Trip added to liked trips for email: {save_the_user_trip.email}"})
+        email = request.data.get('email')
+        trip_id = str(request.data.get('trip_id'))
+
+        # Check if the user exists
+        user = Users.objects.get(email=email)
+
+        # Check if the user has any existing liked trips
+        try:
+            user_trip = UserTrip.objects.get(user_id=user)
+            
+            if trip_id not in user_trip.liked_trips:
+                # Add the new trip to liked trips
+                UserTrip(liked_trips=trip_id,user_id=user).save()
+                # user_trip.save()
+
+                return Response({"message": f"Trip added to liked trips for email: {email}"})
             else:
-                return JsonResponse({"message": f"Trip already exists in liked trips for email: {save_the_user_trip.email}"})
+                return Response({"message": f"Trip already exists in liked trips for email: {email}"})
+        except UserTrip.DoesNotExist:
+            # If the UserTrip for the user doesn't exist, create a new one
+            user_trip = UserTrip(user_id=user, liked_trips=trip_id)
+            user_trip.save()
+            return Response({"message": f"Trip added to liked trips for email: {email}"})
 
+    except Users.DoesNotExist:
+        return Response({"message": f"User with email {email} does not exist"})
     except Exception as e:
-        print (e)
-        save_new=Users(email=email,liked_trips=[trip_id])
-        save_new.save()
-        print ('new user save')
-        return JsonResponse({"message": f"Trip save success"})
-
+        print(e)
+        return Response({"message": f"Trip not saved successfully"})
 
 
 
 @api_view(['DELETE'])
 def user_delete_trip(request):
     email=request.data['email']
-    trip_id=int(request.data['trip_id'])
+    trip_id=str(request.data['trip_id'])
     try:
-        save_the_user_trip = Users.objects.get(email=email)
-        if save_the_user_trip:
-            if trip_id in save_the_user_trip.liked_trips:
-                save_the_user_trip.liked_trips.remove(trip_id)
-                save_the_user_trip.save()
+        delete_the_user_trip = Users.objects.get(email=email)
+        if delete_the_user_trip:
+            trip_to_delete=UserTrip.objects.get(liked_trips=trip_id)
+            if trip_to_delete:
+                trip_to_delete.delete()
                 return JsonResponse({'message': f'Trip {trip_id} removed from liked trips for email: {email}'})
             else:
                 return JsonResponse({'message': f'Trip {trip_id} not found in liked trips for email: {email}'})
     except Users.DoesNotExist:
         return JsonResponse({'error': 'User not found'})
+
+
+
+@api_view(['GET','POST'])
+def user_single_trip(request):
+    email=request.data['email']
+    trip_id=int(request.data['trip_id'])
+    request_left = user_requests_cache(email)
+    request_left+=1
+    # user_detail = Users.objects.get(email=email)
+    
+    trip=QueryChatGPT.objects.get(id=trip_id)
+    if trip:
+            print('answer in data') 
+            answer_string = trip.answer
+            question=trip.question   
+            country_match = re.search(r'in (\w+),', question)
+            # Check if a match was found
+            if country_match:
+                country = country_match.group(1)  # Get the matched text and remove leading/trailing spaces
+            print("Country:", country)
+            answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
+            return JsonResponse(answer,safe=False)
+
+
+
+
+
+
+
+def user_requests_cache(email):
+     # Check if the user's email exists in the request count dictionary
+    request_count = cache.get(email, 0)
+    # If the user has made more than 10 requests in the past 24 hours, block the request
+    if request_count >= 100:
+        return JsonResponse({'error': 'Too many requests'})
+
+    # Otherwise, increment the request count and set the cache with the new value
+    request_count += 1
+    print (request_count)
+    request_left=11-request_count
+    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
+    cache.set(email, request_count, timeout=timeout_seconds)
+    return request_left

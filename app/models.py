@@ -16,8 +16,12 @@ class QueryChatGPT(models.Model):
 
 
 class Users(models.Model):
-    liked_trips = ArrayField(models.IntegerField(), default=list)  # Store trip IDs as a list of integers
     email=models.TextField(max_length=100)
+
+class UserTrip(models.Model):
+    user_id=models.ForeignKey(Users,related_name='usertrip',on_delete=models.CASCADE)
+    liked_trips = models.TextField(models.IntegerField(), default=list)  # Store trip IDs as a list of integers
+    # data=
     
 
 class Country(models.Model):

@@ -13,4 +13,5 @@ urlpatterns = [
     path("user_add_trip/",views.user_add_trip,name="user_add_trip"),
     path("user_trip/",views.user_trip,name="user_trip"),
     path("user_delete_trip/",views.user_delete_trip,name="user_delete_trip"),
+    path("user_single_trip/",views.user_single_trip,name="user_single_trip"),
 ]
