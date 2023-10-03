@@ -141,7 +141,7 @@ def check_before_rate(request):
 @api_view(['GET'])
 def user_trip(request):
     trip_details = []
-    email=request.data['email']
+    email = request.data.get('email')
     _user=Users.objects.get(email=email)
     trips = _user.usertrip.all().values()
     print(trips)
