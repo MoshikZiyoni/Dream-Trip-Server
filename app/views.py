@@ -184,37 +184,31 @@ def user_add_trip(request):
     end_trip = str(request.data.get('end_trip'))
     start_trip = str(request.data.get('start_trip'))
     trip_id = str(request.data.get('trip_id'))
-    try:
-        
-
-        # Check if the user exists
-        user = Users.objects.get(email=email)
+       
 
         # Check if the user has any existing liked trips
-        try:
-            user_trip = UserTrip.objects.filter(user_id=user).values('liked_trips')
-            liked_trips_list = [entry['liked_trips'] for entry in user_trip]
-            if trip_id not in liked_trips_list:
-                print("not inside")
-                # Add the new trip to liked trips
-                UserTrip(liked_trips=trip_id,user_id=user,end_trip=end_trip,start_trip=start_trip).save()
-                # user_trip.save()
+    try:
+            # Check if the user exists
+        user = Users.objects.get(email=email)
+        user_trip = UserTrip.objects.filter(user_id=user).values('liked_trips')
+        liked_trips_list = [entry['liked_trips'] for entry in user_trip]
+        if trip_id not in liked_trips_list:
+            print("not inside")
+            # Add the new trip to liked trips
+            UserTrip(liked_trips=trip_id,user_id=user,end_trip=end_trip,start_trip=start_trip).save()
+            # user_trip.save()
 
-                return Response({"message": f"Trip added to liked trips for email: {email}"})
-            else:
-                return Response({"message": f"Trip already exists in liked trips for email: {email}"})
-        except UserTrip.DoesNotExist:
-            # If the UserTrip for the user doesn't exist, create a new one
-            user_trip = UserTrip(user_id=user, liked_trips=trip_id,end_trip=end_trip,start_trip=start_trip)
-            user_trip.save()
             return Response({"message": f"Trip added to liked trips for email: {email}"})
-
+        else:
+            return Response({"message": f"Trip already exists in liked trips for email: {email}"})
     except Users.DoesNotExist:
+        # If the UserTrip for the user doesn't exist, we create a new one
         Users(email=email).save()
         user = Users.objects.get(email=email)
         user_trip = UserTrip(user_id=user, liked_trips=trip_id,end_trip=end_trip,start_trip=start_trip)
         user_trip.save()
-        return Response({"message": f"User with email {email} does not exist,and now save to database"})
+        return Response({"message": f"Trip added to liked trips for NEW email: {email}"})
+
     except Exception as e:
         print(e)
         return Response({"message": f"Trip not saved successfully"})
