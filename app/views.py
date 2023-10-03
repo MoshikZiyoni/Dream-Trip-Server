@@ -180,11 +180,12 @@ def user_trip(request):
 @api_view(['POST'])
 def user_add_trip(request):
     # UserTrip.objects.all().delete()
+    email = request.data.get('email')
+    end_trip = str(request.data.get('end_trip'))
+    start_trip = str(request.data.get('start_trip'))
+    trip_id = str(request.data.get('trip_id'))
     try:
-        email = request.data.get('email')
-        end_trip = str(request.data.get('end_trip'))
-        start_trip = str(request.data.get('start_trip'))
-        trip_id = str(request.data.get('trip_id'))
+        
 
         # Check if the user exists
         user = Users.objects.get(email=email)
@@ -209,7 +210,11 @@ def user_add_trip(request):
             return Response({"message": f"Trip added to liked trips for email: {email}"})
 
     except Users.DoesNotExist:
-        return Response({"message": f"User with email {email} does not exist"})
+        Users(email=email).save()
+        user = Users.objects.get(email=email)
+        user_trip = UserTrip(user_id=user, liked_trips=trip_id,end_trip=end_trip,start_trip=start_trip)
+        user_trip.save()
+        return Response({"message": f"User with email {email} does not exist,and now save to database"})
     except Exception as e:
         print(e)
         return Response({"message": f"Trip not saved successfully"})
