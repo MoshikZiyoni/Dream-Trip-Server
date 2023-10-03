@@ -182,7 +182,7 @@ def user_trip(request):
 
 @api_view(['POST'])
 def user_add_trip(request):
-    UserTrip.objects.all().delete()
+    # UserTrip.objects.all().delete()
     email = request.data.get('email')
     end_trip = str(request.data.get('end_trip'))
     start_trip = str(request.data.get('start_trip'))
