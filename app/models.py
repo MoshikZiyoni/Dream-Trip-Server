@@ -23,13 +23,13 @@ class UserTrip(models.Model):
     liked_trips = models.TextField(max_length=100,null=False)
     start_trip=models.TextField(max_length=100,null=False)
     end_trip=models.TextField(max_length=100,null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def formatted_created_date(self):
         """
         Custom method to format the created_at field as date only.
         """
-        return self.created_at.strftime('%Y-%m-%d')
+        return self.created_at.strftime('%d/%m/%Y')
     
 
 class Country(models.Model):

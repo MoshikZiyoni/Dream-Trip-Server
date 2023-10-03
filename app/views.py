@@ -12,6 +12,7 @@ import random
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from datetime import date
 # from collections import Counter
 # from django.db.models import Count
 # from itertools import combinations
@@ -99,8 +100,12 @@ def make_short_trip(request):
         )
     
     pattern = r'\b(?:[7-9]|[1-2][0-9]|3[0-5])\b'
+    # Use re.search to find the first match of the pattern in the question
     result = []
     for query in queries:
+        days_match = re.search(r'\b\d+\b', query.question)
+        if days_match:
+                first_number = int(days_match.group())
         matches = re.findall(pattern, query.question)
         if matches:
             result.append(query)
@@ -116,6 +121,8 @@ def make_short_trip(request):
     trip_id=(random_query.id)
     print (trip_id)
     new_result=(quick_from_data_base(country=country,answer_dict=answer,request_left=request_left,trip_id=trip_id))
+    days={"days":first_number}
+    new_result.update(days)
     return JsonResponse(new_result,safe=False)
 
 
@@ -200,8 +207,13 @@ def user_add_trip(request):
         if trip_id not in liked_trips_list:
             print("not inside")
             # Add the new trip to liked trips
-            UserTrip(liked_trips=trip_id,user_id=user,end_trip=end_trip,start_trip=start_trip).save()
-            # user_trip.save()
+            user_trip1=UserTrip(liked_trips=trip_id,user_id=user,end_trip=end_trip,start_trip=start_trip)
+            user_trip1.created_at=date.today()
+            formatted_date = user_trip1.created_at.strftime('%d/%m/%Y')
+
+            # formatted_date =user_trip1.formatted_created_date()
+            user_trip1.created_at = formatted_date
+            user_trip1.save()
 
             return Response({"message": f"Trip added to liked trips for email: {email}"})
         else:
@@ -211,6 +223,11 @@ def user_add_trip(request):
         Users(email=email).save()
         user = Users.objects.get(email=email)
         user_trip = UserTrip(user_id=user, liked_trips=trip_id,end_trip=end_trip,start_trip=start_trip)
+        user_trip.created_at=date.today()
+        formatted_date = user_trip.created_at.strftime('%d/%m/%Y')
+
+        # formatted_date =user_trip.formatted_created_date()
+        user_trip.created_at = formatted_date
         user_trip.save()
         return Response({"message": f"Trip added to liked trips for NEW email: {email}"})
 
