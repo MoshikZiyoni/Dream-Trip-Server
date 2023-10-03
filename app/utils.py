@@ -419,7 +419,7 @@ def generate_schedule(data,country,check,):
     if prices_for_country:
         taxi_cost = prices_for_country.get('5km taxi ride', 0)
         Lunch = prices_for_country.get('Lunch', 0)
-        price_for_dinner=prices_for_country['Price of a meal at a restaurant']
+        price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)
     else:
         print('No cities found.')
 

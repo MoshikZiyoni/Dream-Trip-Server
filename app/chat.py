@@ -299,8 +299,11 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                         "total_food_prices":total_food_prices,
                         "avrage_daily_spent":avrage_daily_spent,
                     }
+                    trip_id=QueryChatGPT.objects.get(question=ourmessage)
+                    trip_id=trip_id.id
+                    print(trip_id,'@@@@@@@@@@@@@')
                     end_result=combined_data["schedule"]
-                    return {'answer':end_result,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions,"costs":costs}
+                    return {'answer':end_result,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions,"costs":costs,"trip_id":trip_id}
                 except Exception as e:
                     print("Error occurred:", e)
                     print(f"Retrying... (attempt {attempt_data + 1})")

@@ -58,12 +58,14 @@ def gpt_view(request):
         combined_data = result1['answer']
         itinerary_description1 =result1['itinerary_description']
         costs=result1['costs']
+        trip_id=result1['trip_id']
         
 
         result1={
             "answer":combined_data,
             "itinerary_description":itinerary_description1,
             "request_left":request_left,
+            "trip_id":trip_id
             
         }
         result1.update(costs)
@@ -138,46 +140,46 @@ def check_before_rate(request):
         return JsonResponse(False,safe=False)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def user_trip(request):
-    trip_details = []
-    email = request.data.get('email')
-    _user=Users.objects.get(email=email)
-    trips = _user.usertrip.all().values()
-    print(trips)
-    
-    # trips=UserTrip.objects.filter(user_id_id=userid)
-    
-    for trip_id in trips:
-        trip=QueryChatGPT.objects.get(id=trip_id['liked_trips'])
-        question=trip.question
-        itinerary_description=trip.itinerary_description
-        pattern = r'\b\d+\b'
-        # Use re.search to find the first match of the pattern in the question
-        days_match = re.search(pattern, question)
-        country_match = re.search(r'in (\w+),', question)
+    try:
+        trip_details = []
+        email = request.data.get('email')
+        _user=Users.objects.get(email=email)
+        trips = _user.usertrip.all().values()
+        print(trips)
+            
+        for trip_id in trips:
+            trip=QueryChatGPT.objects.get(id=trip_id['liked_trips'])
+            question=trip.question
+            itinerary_description=trip.itinerary_description
+            pattern = r'\b\d+\b'
+            # Use re.search to find the first match of the pattern in the question
+            days_match = re.search(pattern, question)
+            country_match = re.search(r'in (\w+),', question)
 
-        # Check if a match was found
-        if country_match:
-            country = country_match.group(1)  # Get the matched text and remove leading/trailing spaces
-            print("Country:", country)
-        else:
-            print("No country name found in the question.")
-        # Check if a match was found
-        if days_match:
-            first_number = int(days_match.group())  # Convert the matched text to an integer
-            trip_details.append({
-                    'city':country,
-                    'days': first_number,
-                    'start_trip':trip_id['start_trip'],
-                    'end_trip':trip_id['end_trip'],
-                    'created_at':trip_id['created_at']
-                })
-        else:
-            print("No number found in the question.")
+            # Check if a match was found
+            if country_match:
+                country = country_match.group(1)  # Get the matched text and remove leading/trailing spaces
+                print("Country:", country)
+            else:
+                print("No country name found in the question.")
+            # Check if a match was found
+            if days_match:
+                first_number = int(days_match.group())  # Convert the matched text to an integer
+                trip_details.append({
+                        'city':country,
+                        'days': first_number,
+                        'start_trip':trip_id['start_trip'],
+                        'end_trip':trip_id['end_trip'],
+                        'created_at':trip_id['created_at']
+                    })
+            else:
+                print("No number found in the question.")
 
-    return JsonResponse(trip_details,safe=False)
-
+        return JsonResponse(trip_details,safe=False)
+    except:
+        return JsonResponse("You don't have trips yet",safe=False)
 
 
 @api_view(['POST'])
