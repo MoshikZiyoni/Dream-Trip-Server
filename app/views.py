@@ -138,18 +138,18 @@ def check_before_rate(request):
         return JsonResponse(False,safe=False)
 
 
-@api_view(['GET','POST'])
+@api_view(['GET'])
 def user_trip(request):
     trip_details = []
     email=request.data['email']
     _user=Users.objects.get(email=email)
     trips = _user.usertrip.all().values()
-
+    print(trips)
     
     # trips=UserTrip.objects.filter(user_id_id=userid)
     
     for trip_id in trips:
-        trip=QueryChatGPT.objects.get(id=trip_id)
+        trip=QueryChatGPT.objects.get(id=trip_id['liked_trips'])
         question=trip.question
         itinerary_description=trip.itinerary_description
         pattern = r'\b\d+\b'
@@ -169,6 +169,9 @@ def user_trip(request):
             trip_details.append({
                     'city':country,
                     'days': first_number,
+                    'start_trip':trip_id['start_trip'],
+                    'end_trip':trip_id['end_trip'],
+                    'created_at':trip_id['created_at']
                 })
         else:
             print("No number found in the question.")
@@ -179,7 +182,7 @@ def user_trip(request):
 
 @api_view(['POST'])
 def user_add_trip(request):
-    # UserTrip.objects.all().delete()
+    UserTrip.objects.all().delete()
     email = request.data.get('email')
     end_trip = str(request.data.get('end_trip'))
     start_trip = str(request.data.get('start_trip'))
