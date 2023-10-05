@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from app.chat import process_city, run_long_poll_async
 from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users
@@ -78,14 +79,23 @@ def gpt_view(request):
     
 
 
-
+@cache_page(36000)
 @api_view(['GET', 'POST'])
 def popular_country(request):
-    country_names=Popular.objects.all().values()
-    country_names=list(country_names)
-    return JsonResponse(country_names,safe=False)
+    cache_key = f"popular"
+    popular = cache.get(cache_key)
+    if popular is None:
+        country_names=Popular.objects.all().values()
+        country_names=list(country_names)
+        cache.set(cache_key, country_names, timeout=7 * 24 * 60 * 60)
+        return JsonResponse(country_names,safe=False)
+    else:
+        print ('cache')
+        return JsonResponse(popular,safe=False)
 
-
+# cache_key = f"query{query.question}"
+#         cache_for_query = cache.get(cache_key)
+#         if cache_for_query is None:
 
 @api_view(['GET', 'POST'])
 def make_short_trip(request): 
@@ -141,9 +151,11 @@ def out_applaction_score(request):
 @api_view(['GET','POST'])
 def check_before_rate(request):
     email=request.data['email']
-    if ApplicationRating.objects.get(user_email=email):
-        return JsonResponse(True,safe=False)
-    else:
+    print(email)
+    try:
+        if ApplicationRating.objects.get(user_email=email):
+            return JsonResponse(True,safe=False)
+    except:
         return JsonResponse(False,safe=False)
 
 
@@ -175,7 +187,7 @@ def user_trip(request):
             if days_match:
                 first_number = int(days_match.group())  # Convert the matched text to an integer
                 trip_details.append({
-                        'city':country,
+                        'country':country,
                         'days': first_number,
                         'start_trip':trip_id['start_trip'],
                         'end_trip':trip_id['end_trip'],

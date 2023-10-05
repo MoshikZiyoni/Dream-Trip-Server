@@ -1,8 +1,10 @@
+import ast
 import json
 import os
 import random
 from django.db.models import Q
 import time
+import traceback
 from unidecode import unidecode
 from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
 from app.trip_advisor import (
@@ -17,7 +19,7 @@ from dotenv import load_dotenv
 from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, sort_attractions_by_distance
+from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, sort_attractions_by_distance
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -210,8 +212,15 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
             print(answer1)
             for attempt_data in range(retries):
                 try:
-                    data = json.loads(answer1)
-                    data1 = json.loads(answer1)
+                    try:
+                        data = json.loads(answer1)
+                        data1 = json.loads(answer1)
+                    except:
+                        print('not valid json')
+                        cleaned_data = clean_json_data(cleaned_data)
+                        data=ast.literal_eval(cleaned_data)
+                        print(data)
+                        data1=ast.literal_eval(answer1)
                     country = data["country"]
                     if country != mainland:
                         print("Country is not mainland. Retrying...")
@@ -248,34 +257,41 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                 existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
 
                             if existing_city:
-                                # Use prefetch_related to fetch related attractions and restaurants efficiently
-                                attractions_list = existing_city.attractions.all().values()
-                                restaurants_list = existing_city.restaurants.all().values()
-                                
-                                # Sort attractions by distance, shuffle remaining attractions, and set them in city_data
-                                attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
-                                first_5_attractions = attractions[:5]
-                                remaining_attractions = attractions[5:]
-                                random.shuffle(remaining_attractions)
-                                final_attractions = first_5_attractions + remaining_attractions
-                                city_data["attractions"] = list(final_attractions)
-                                city_data["restaurants"] = list(restaurants_list)
+                                cache_key = f"existing_city_{existing_city.city}"
+                                existing_city_cache = cache.get(cache_key)
+                                if existing_city_cache is None:
+                                    # Use prefetch_related to fetch related attractions and restaurants efficiently
+                                    attractions_list = existing_city.attractions.all().values()
+                                    restaurants_list = existing_city.restaurants.all().values()
+                                    # Sort attractions by distance, shuffle remaining attractions, and set them in city_data
+                                    try:
+                                        attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
+                                        first_5_attractions = attractions[:5]
+                                        remaining_attractions = attractions[5:]
+                                        random.shuffle(remaining_attractions)
+                                        final_attractions = first_5_attractions + remaining_attractions
+                                    except:
+                                        final_attractions=attractions_list
+                                    city_data["attractions"] = list(final_attractions)
+                                    city_data["restaurants"] = list(restaurants_list)
 
-                                # Fetch hotels and night-life data
-                                # hotels = process_hotels(landmarks=[existing_city.latitude, existing_city.longitude], city_name=existing_city.city)
-                                # night_life = my_night_life(landmarks=[existing_city.latitude, existing_city.longitude])
-                                # sunset=sunset_api(landmarks=[existing_city.latitude, existing_city.longitude])
-                                # city_data["hotels"] = hotels
-                                # city_data["night-life"] = night_life
-                                # city_data["sunset"]=sunset
-                                sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
-                                hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude], existing_city.city,))
-                                nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
+                                    # Fetch hotels and night-life data
+                                    # hotels = process_hotels(landmarks=[existing_city.latitude, existing_city.longitude], city_name=existing_city.city)
+                                    # night_life = my_night_life(landmarks=[existing_city.latitude, existing_city.longitude])
+                                    # sunset=sunset_api(landmarks=[existing_city.latitude, existing_city.longitude])
+                                    # city_data["hotels"] = hotels
+                                    # city_data["night-life"] = night_life
+                                    # city_data["sunset"]=sunset
+                                    sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
+                                    hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude], existing_city.city,))
+                                    nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
 
-                                threads.extend([sunset_thread, hotels_thread, nightlife_thread])
+                                    threads.extend([sunset_thread, hotels_thread, nightlife_thread])
+                                    print("Continue")
+                                    cache.set(cache_key, existing_city_cache, timeout=7 * 24 * 60 * 60)
+                                else:
+                                    return existing_city_cache
 
-                       
-                                print("Continue")
                             executor.submit(process_city, city_data, country, country_id,existing_city)
                             check=False
                     executor.shutdown()
@@ -287,6 +303,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     for thread in threads:
                         thread.join()   
                     combined_data=generate_schedule(data,country,check)
+                    print(combined_data)
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     total_prices=combined_data['total_prices']
@@ -305,7 +322,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     end_result=combined_data["schedule"]
                     return {'answer':end_result,'itinerary_description':itinerary_description,'main_restaurants':main_restaurants,'main_attractions':main_attractions,"costs":costs,"trip_id":trip_id}
                 except Exception as e:
-                    print("Error occurred:", e)
+                    print("Error occurred:", e,traceback.print_exc())
                     print(f"Retrying... (attempt {attempt_data + 1})")
                     time.sleep(delay)
 
@@ -316,7 +333,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                 else:
                     raise
             except Exception as e:
-                print("Error occurred:", e)
+                print("Error occurred:", e,)
         except Exception as e:
             print("Error occurred:", e)
             print(f"Retrying... (attempt {attempt + 1})")

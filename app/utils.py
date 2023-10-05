@@ -302,7 +302,10 @@ def generate_schedule(data,country,check,):
             night_life=city.get("night-life","")
             sunset=city.get('sunset',"")
             days_spent = city['days_spent']
-
+            print(restaurants)
+            print(night_life)
+            print(hotels)
+            print(sunset)
             try:
                 if check==False:
                     attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
@@ -457,17 +460,19 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 def sort_attractions_by_distance(attractions, first_attraction):
     print ('start sort')
-    # Sort attractions based on distance from the first attraction
-    first_attraction=attractions[0]
-    sorted_attractions = sorted(attractions, key=lambda x: calculate_distance(
-        first_attraction['latitude'],
-        first_attraction['longitude'],
-        x['latitude'],
-        x['longitude']
-    ))
-    
-    return sorted_attractions
-
+    try:
+        # Sort attractions based on distance from the first attraction
+        first_attraction=attractions[0]
+        sorted_attractions = sorted(attractions, key=lambda x: calculate_distance(
+            first_attraction['latitude'],
+            first_attraction['longitude'],
+            x['latitude'],
+            x['longitude']
+        ))
+        
+        return sorted_attractions
+    except:
+        print(f'first attraction{first_attraction}')
 
 
 
@@ -620,11 +625,14 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
             attractions_list = existing_city.attractions.all().values()
             restaurants_list = existing_city.restaurants.all().values()
             
-            attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
-            first_5_attractions = attractions[:5]
-            remaining_attractions = attractions[5:]
-            random.shuffle(remaining_attractions)
-            final_attractions = first_5_attractions + remaining_attractions
+            try:
+                attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
+                first_5_attractions = attractions[:5]
+                remaining_attractions = attractions[5:]
+                random.shuffle(remaining_attractions)
+                final_attractions = first_5_attractions + remaining_attractions
+            except:
+                final_attractions=attractions_list
 
             city_data["attractions"] = final_attractions
             
@@ -787,3 +795,16 @@ def fetch_nightlife_and_update(city_data, landmarks):
     else:
         print (nightlife1)
         city_data["night-life"] = nightlife1
+
+
+
+def clean_json_data(data_str):
+    # Attempt to clean and fix string literals by adding double quotes
+    data_str = data_str.replace('"itinerary-description":', '"itinerary-description":"')
+    data_str = data_str.replace('Experience the best of', 'Experience the best of"')
+    # Add more similar replacements as needed for your specific data
+    
+    # Wrap the entire data in a JSON object
+    cleaned_data = f'{{{data_str}}}'
+    
+    return cleaned_data
