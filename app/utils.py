@@ -302,10 +302,6 @@ def generate_schedule(data,country,check,):
             night_life=city.get("night-life","")
             sunset=city.get('sunset',"")
             days_spent = city['days_spent']
-            print(restaurants)
-            print(night_life)
-            print(hotels)
-            print(sunset)
             try:
                 if check==False:
                     attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
@@ -767,13 +763,14 @@ def fetch_sunset_and_update(city_data,landmarks):
     cache_key = f"sunset_{landmarks[1]}"
     # Attempt to retrieve data from the cache
     sunset1 = cache.get(cache_key)
-    if sunset1 is None:
+    if sunset1 is None or sunset1=={'sunset': ''}:
         sunset = sunset_api(landmarks)
         if sunset:
             city_data["sunset"] = sunset
             cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
 
     else:
+        print ('sunset cache')
         city_data["sunset"] = sunset1
 
 def fetch_hotels_and_update(city_data, landmarks, city_name):
@@ -787,13 +784,13 @@ def fetch_nightlife_and_update(city_data, landmarks):
     # Attempt to retrieve data from the cache
     nightlife1 = cache.get(cache_key)
 
-    if nightlife1 is None:
+    if nightlife1 is None or nightlife1=={'night-life': ''}:
         nightlife = my_night_life(landmarks)
         city_data["night-life"] = nightlife
         cache.set(cache_key, nightlife, timeout=7 * 24 * 60 * 60)
 
     else:
-        print (nightlife1)
+        print ('night_life cache')
         city_data["night-life"] = nightlife1
 
 

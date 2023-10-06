@@ -198,7 +198,7 @@ def foursquare_hotels(landmarks):
         
         'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
     }
-    response = requests.get(url, params=query,headers=headers)
+    response = requests.get(url, params=query,headers=headers,timeout=5)
 
     response_text=(response.text)
     jsonto=json.loads(response_text)
@@ -213,11 +213,22 @@ def my_night_life(landmarks):
         "latitude": landmarks[0],
         "longitude": landmarks[1], 
     }
-    response = requests.get(url, json=query)
-    response_text=(response.text)
-    jsonto=json.loads(response_text)
-    if len(jsonto)<=0:
-        jsonto={'night-life':''}
+    try:
+        response = requests.get(url, json=query, timeout=3)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+        response_text = response.text
+        jsonto = json.loads(response_text)
+    except requests.Timeout:
+        # Handle timeout (no response within 7 seconds)
+        jsonto = {'night-life': ''}
+    except requests.RequestException as e:
+        # Handle other request exceptions (e.g., network error)
+        print(f"Request Exception: {e}")
+        jsonto = {'night-life': ''}
+    
+    if len(jsonto) <= 0:
+        jsonto = {'night-life': ''}
+    
     return jsonto
 
 
@@ -227,10 +238,19 @@ def sunset_api(landmarks):
         "latitude": landmarks[0],
         "longitude": landmarks[1], 
     }
-    response = requests.post(url, json=query)
-    print (response)
-    response_text=(response.text)
-    jsonto=json.loads(response_text)
-    if len(jsonto)<=0:
-        jsonto={'sunset':''}
+    try:
+        response = requests.post(url, json=query, timeout=3)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+        response_text = response.text
+        jsonto = json.loads(response_text)
+    except requests.Timeout:
+        jsonto = {'sunset': ''}
+    except requests.RequestException as e:
+        print(f"Request Exception: {e}")
+        jsonto = {'sunset': ''}
+    
+    if len(jsonto) <= 0:
+        jsonto = {'sunset': ''}
+        
+    
     return jsonto

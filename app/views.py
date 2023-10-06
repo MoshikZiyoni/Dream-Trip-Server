@@ -49,12 +49,19 @@ def gpt_view(request):
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer','id').first()
         if answer_from_data:
             print('answer in data')
-            trip_id=answer_from_data['id'] 
+            trip_id=answer_from_data['id']
             answer_string = answer_from_data['answer']   
             country = mainland
-            answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
-            return JsonResponse(answer,safe=False)
-           
+            cache_key = f"Trip_{trip_id}"
+            cache_trip_id=cache.get(cache_key)
+            if cache_trip_id is None:
+                answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
+                cache.set(cache_key, answer, timeout=7 * 24 * 60 * 60)
+                return JsonResponse(answer,safe=False)
+            else:
+                print ('answr cache')
+                return JsonResponse(cache_trip_id,safe=False)
+
         
         result1=(run_long_poll_async(ourmessage,mainland))
         combined_data = result1['answer']
@@ -186,13 +193,22 @@ def user_trip(request):
             # Check if a match was found
             if days_match:
                 first_number = int(days_match.group())  # Convert the matched text to an integer
-                trip_details.append({
-                        'country':country,
-                        'days': first_number,
-                        'start_trip':trip_id['start_trip'],
-                        'end_trip':trip_id['end_trip'],
-                        'created_at':trip_id['created_at']
-                    })
+                if not trip_id['end_trip']==trip_id['start_trip']:
+                    trip_details.append({
+                            'country':country,
+                            'days': first_number,
+                            'start_trip':trip_id['start_trip'],
+                            'end_trip':trip_id['end_trip'],
+                            'created_at':trip_id['created_at']
+                        })
+                else:
+                    trip_details.append({
+                            'country':country,
+                            'days': first_number,
+                            'start_trip':[],
+                            'end_trip':[],
+                            'created_at':trip_id['created_at']
+                        })
             else:
                 print("No number found in the question.")
 
