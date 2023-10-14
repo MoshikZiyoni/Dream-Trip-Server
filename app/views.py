@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
-from app.chat import process_city, run_long_poll_async
+from app.chat import run_long_poll_async
 from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users
 from django.core.cache import cache
 from app.utils import quick_from_data_base
@@ -10,9 +10,9 @@ import traceback
 import re
 from django.db.models import Q
 import random
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.authtoken.models import Token
+# from rest_framework.authentication import TokenAuthentication
+# from rest_framework.permissions import IsAuthenticated
 from datetime import date
 # from collections import Counter
 # from django.db.models import Count
@@ -31,6 +31,8 @@ geolocator = Nominatim(user_agent="dream-trip")
 @api_view(['GET', 'POST'])
 def gpt_view(request):
 
+    # ApplicationRating.objects.filter(user_email='moshiktm1995@gmail.com').delete()
+    # return 'ok'
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})
@@ -158,11 +160,13 @@ def out_applaction_score(request):
 @api_view(['GET','POST'])
 def check_before_rate(request):
     email=request.data['email']
-    print(email)
     try:
-        if ApplicationRating.objects.get(user_email=email):
+         check=ApplicationRating.objects.filter(user_email=email)
+         if check:
+            print ('True')
             return JsonResponse(True,safe=False)
     except:
+        print ('False')
         return JsonResponse(False,safe=False)
 
 
@@ -193,25 +197,18 @@ def user_trip(request):
             # Check if a match was found
             if days_match:
                 first_number = int(days_match.group())  # Convert the matched text to an integer
-                if not trip_id['end_trip']==trip_id['start_trip']:
-                    trip_details.append({
-                            'country':country,
-                            'days': first_number,
-                            'start_trip':trip_id['start_trip'],
-                            'end_trip':trip_id['end_trip'],
-                            'created_at':trip_id['created_at']
-                        })
-                else:
-                    trip_details.append({
-                            'country':country,
-                            'days': first_number,
-                            'start_trip':[],
-                            'end_trip':[],
-                            'created_at':trip_id['created_at']
-                        })
+                trip_details.append({
+                'country':country,
+                'days': first_number,
+                'start_trip':trip_id['start_trip'],
+                'end_trip':trip_id['end_trip'],
+                'created_at':trip_id['created_at'],
+                'trip_id':trip_id['id']
+                 })
+                       
             else:
                 print("No number found in the question.")
-
+        print (trip_details)
         return JsonResponse(trip_details,safe=False)
     except:
         return JsonResponse("You don't have trips yet",safe=False)
@@ -301,6 +298,8 @@ def user_single_trip(request):
             print("Country:", country)
             answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
             return JsonResponse(answer,safe=False)
+    else:
+        return JsonResponse('not good',safe=False)
 
 
 

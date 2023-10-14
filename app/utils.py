@@ -1,11 +1,9 @@
-from concurrent.futures import ThreadPoolExecutor
 import os
 import random
 import re
 from django.db.models import Q
-import openai
 import requests
-from app.models import Attraction, City, Restaurant,Country
+from app.models import  City,Country
 from app.teleport_api import get_cities_by_country
 from app.trip_advisor import flickr_api,my_night_life, sunset_api
 from app.wikipediaapi import process_query
@@ -18,8 +16,9 @@ from app.currency_data import calculate_total_price_attractions
 import ast
 from unidecode import unidecode
 from threading import Thread,RLock
+from django.core.cache import cache
 
-shared_resource_lock = RLock()
+# shared_resource_lock = RLock()
 
 load_dotenv()
 
@@ -180,6 +179,7 @@ def process_restaurant(restaur, city_obj, restaurants):
 
     }
     restaurants.append(restaurant_info)
+    return restaurant_info
     # resta_query = Restaurant(
     #     name=name,
     #     city=city_obj,
@@ -273,6 +273,7 @@ def generate_schedule(data,country,check,):
     total = 0    
     try:
         cities = data['cities']
+        
         num_attractions_per_day = 3
         attraction_duration = timedelta(hours=3)
         lunch_break_start = datetime.strptime('14:00', '%H:%M').time()
@@ -281,7 +282,6 @@ def generate_schedule(data,country,check,):
 
         schedule = {'schedules': [] }  # Initialize the schedule dictionary
         for city in cities:
-            # print(city)
             city_name = city['city']
             query1=City.objects.get(city=city_name)
             landmarks=[query1.latitude,query1.longitude]
@@ -290,6 +290,7 @@ def generate_schedule(data,country,check,):
             count=0
 
             for attraction in attractions:
+                
                 count+=1
                 try:
                     prices=calculate_total_price_attractions(attraction)
@@ -297,11 +298,12 @@ def generate_schedule(data,country,check,):
                 except: 
                     pass
            
-            restaurants = city['restaurants']
-            hotels=city['hotels']
+            restaurants = city.get('restaurants',"")
+            hotels=city.get('hotels',"")
             night_life=city.get("night-life","")
             sunset=city.get('sunset',"")
             days_spent = city['days_spent']
+            print (days_spent,'@@@@@@@')
             try:
                 if check==False:
                     attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
@@ -422,9 +424,10 @@ def generate_schedule(data,country,check,):
     else:
         print('No cities found.')
 
-    if taxi_cost:
-            total_transport_private_taxi = count * int(taxi_cost)
-    else:
+    try:
+        
+        total_transport_private_taxi = count * int(taxi_cost)
+    except:
         total_transport_private_taxi = 0
 
     price_for_dinner=price_for_dinner*days_spent
@@ -450,9 +453,11 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     dlat = lat2_rad - lat1_rad
     a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    distance = radius * c
+    distance_km = radius * c
+    distance_meters = distance_km * 1000
 
-    return distance
+
+    return distance_km
 
 def sort_attractions_by_distance(attractions, first_attraction):
     print ('start sort')
@@ -473,119 +478,6 @@ def sort_attractions_by_distance(attractions, first_attraction):
 
 
 
-
-# def extract_attraction_data(my_attractions):
-    
-#         for attraction_data in my_attractions:
-#             city = attraction_data["city"]
-
-#             name = attraction_data["name"]
-#             latitude = attraction_data["latitude"]
-#             longitude = attraction_data["longitude"]
-#             photos = flickr_api(name, latitude, longitude)
-#             review_score = attraction_data["review_score"]
-#             description = attraction_data["description"]
-#             website = attraction_data["website"]
-#             hours_popular = attraction_data["hours_popular"]
-#             distance = attraction_data["distance"]
-#             real_price = attraction_data["real_price"]
-#             website = website or ""
-#             hours_popular = hours_popular or ""
-#             print (name,latitude,longitude,review_score,description,website,hours_popular,distance,real_price)
-#             city_objs = City.objects.filter(city=city).first()
-#             if city_objs:
-#                 print (city_objs.id,'AAAAAAA')
-#                 # city_obj = city_objs[0]
-#                 print (city_objs.id,'AAAAAAA')
-#                 atrc_query = Attraction(
-#                 name=name,
-#                 city=city_objs,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 photos=photos,
-#                 review_score=review_score,
-#                 description=description,
-#                 website=website,
-#                 hours_popular=hours_popular,
-#                 distance=distance,
-#                 real_price=real_price
-#             )
-#                 atrc_query.save()
-#                 print("Save attraction successfully")
-               
-
-#             else:
-#                 print ("can't save")
-
-
-# def extract_restaraunt_data(my_resturants):
-
-#         for restaraunt_data in my_resturants:
-#             city = restaraunt_data["city"]
-
-#             name = restaraunt_data["name"]
-#             latitude = restaraunt_data["latitude"]
-#             longitude = restaraunt_data["longitude"]
-#             photos = flickr_api(name, latitude, longitude)
-#             review_score = restaraunt_data["review_score"]
-#             website = restaraunt_data["website"]
-#             distance = restaraunt_data["distance"]
-#             # social_media=restaraunt_data['social_media']
-#             price=restaraunt_data['price']
-#             menu=restaraunt_data['menu']
-#             website = website or ""
-#             menu=menu or ""
-#             distance= ""
-#             city_objs = City.objects.filter(city=city).first()
-#             if city_objs:
-#                 resta_query = Restaurant(
-#                 name=name,
-#                 city=city_objs,
-#                 latitude=latitude,
-#                 longitude=longitude,
-#                 photos=photos,
-#                 review_score=review_score,
-#                 website=website,
-#                 # social_media=social_media,
-#                 distance=distance,
-#                 price=price,
-#                 menu=menu
-#                     )
-#                 resta_query.save()
-#                 print("Save attraction successfully")
-               
-
-#             else:
-#                 print ("can't save")
-
-
-
-# def restaurant_GPT(city):
-#         api_key = os.environ.get("OPENAI_API_KEY")
-#         openai.api_key = api_key
-#         more_data='restaurants:[{name:"",latitude:Float,longitude:Float,review_score:"",website:"",distance:"",price:" 1=cheap5=most expnesive",menu:""}]'
-#         message_for_restaurant=f'provide me 10 restarunts in {city} return me as json like that{more_data}'
-#         retries = 3  # Maximum number of retries
-            
-#         for _ in range(retries):
-#             try:
-#                 completion = openai.ChatCompletion.create(
-#                     model="gpt-3.5-turbo",
-#                     messages=[{"role": "user", "content": message_for_restaurant}],
-#                 )
-#                 answer1 = completion.choices[0].message.content
-#                 data = json.loads(answer1)
-#                 restaurants = data["restaurants"]
-#                 return restaurants
-#             except Exception as e:
-#                 print('Error:', str(e))
-#                 print('Retrying...')
-#                 continue  # Retry the API call
-            
-#         else:
-#             print('Failed after retries. Not good with ChatGPT')
-
-
 def quick_from_data_base(country,answer_dict,request_left,trip_id):
 
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
@@ -604,8 +496,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
         itinerary_description=answer_dict['itinerary_description']
     except:
         pass
-    # trip_id=answer_dict['id']
-
+    
     threads = []
     for city_data in answer_dict["cities"]:
         city_name = city_data["city"]
@@ -620,7 +511,26 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
         if existing_city:
             attractions_list = existing_city.attractions.all().values()
             restaurants_list = existing_city.restaurants.all().values()
+            lat = existing_city.latitude
+            lon = existing_city.longitude
+            landmarks = [lat, lon]
             
+            
+            
+            
+            if len(restaurants_list)==0:
+                from app.chat import process_restaurants
+                restaurants_list=process_restaurants(landmarks=landmarks, city_name=existing_city.city, city_obj=existing_city)
+            
+            if len(attractions_list)==0:
+                from app.chat import process_attractions
+                attractions_list=process_attractions(landmarks=landmarks,city_name=existing_city.city,city_obj=existing_city,country=existing_city.country)        
+            sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, landmarks))
+            hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, landmarks, city_name))
+            nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, landmarks))
+
+            threads.extend([sunset_thread, hotels_thread, nightlife_thread])
+
             try:
                 attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
                 first_5_attractions = attractions[:5]
@@ -629,28 +539,8 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
                 final_attractions = first_5_attractions + remaining_attractions
             except:
                 final_attractions=attractions_list
-
             city_data["attractions"] = final_attractions
-            
             city_data["restaurants"] = list(restaurants_list)
-            
-            lat = existing_city.latitude
-            lon = existing_city.longitude
-            landmarks = [lat, lon]
-
-            # hotels = process_hotels(landmarks, city_name)
-            # city_data["hotels"] = hotels
-            # night_life = my_night_life(landmarks)
-            # city_data["night-life"] = night_life
-            # sunset=sunset_api(landmarks)
-            # if sunset:
-            #     city_data['sunset']=sunset
-            sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, landmarks,))
-            hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, landmarks, city_name,))
-            nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, landmarks))
-
-            threads.extend([sunset_thread, hotels_thread, nightlife_thread])
-
     # Start the threads
     for thread in threads:
         thread.start()
@@ -662,15 +552,18 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
     
     
     check=True
-    
     answer_from_data1=generate_schedule(answer_dict,country,check)
    
     total_prices=answer_from_data1['total_prices']
     total_transport_private_taxi=answer_from_data1["total_transport_private_taxi"]
     total_food_prices=answer_from_data1['total_food_prices']
     existing_country = Country.objects.get(name=country)
+    avrage_daily_spent=(existing_country.average_prices)
+    if avrage_daily_spent=='':
+        avrage_daily_spent=0
+    else:
+        avrage_daily_spent=int(avrage_daily_spent)
 
-    avrage_daily_spent=int(existing_country.average_prices)
     costs={
         "total_prices":total_prices,
         "total_transport_private_taxi":total_transport_private_taxi,
@@ -693,7 +586,6 @@ def restarunts_from_google(restaur, city_obj, restaurants):
     price_level=restaur['price_level'] if restaur.get('price_level') else ""
     website_resta=restaur['website'] if restaur.get('website') else ""
     rating = restaur['rating']
-    place_id = restaur['place_id'] if restaur.get('place_id') else None
     photo_reference = restaur['photos'][0]['photo_reference'] if restaur.get('photos') else None
 
     initial_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={API_KEY}"
@@ -738,7 +630,6 @@ def hotel_from_google(hotel, hotels):
     lattt = hotel['geometry']['location']['lat']
     lngg1 = hotel['geometry']['location']['lng']
     rating = hotel['rating']
-    place_id = hotel['place_id'] if hotel.get('place_id') else None
     photo_reference = hotel['photos'][0]['photo_reference'] if hotel.get('photos') else None
 
     initial_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={API_KEY}"
@@ -757,41 +648,49 @@ def hotel_from_google(hotel, hotels):
 
 
 
-from django.core.cache import cache
+hotel_lock=RLock()
+night_life_lock=RLock()
+sun_set_lock=RLock()
 
 def fetch_sunset_and_update(city_data,landmarks):
-    cache_key = f"sunset_{landmarks[1]}"
-    # Attempt to retrieve data from the cache
-    sunset1 = cache.get(cache_key)
-    if sunset1 is None or sunset1=={'sunset': ''}:
-        sunset = sunset_api(landmarks)
-        if sunset:
-            city_data["sunset"] = sunset
-            cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
+    with sun_set_lock:
+        cache_key = f"sunset_{landmarks[1]}"
+        # Attempt to retrieve data from the cache
+        sunset1 = cache.get(cache_key)
+        if sunset1 is None or sunset1=={'sunset': ''}:
+            sunset = sunset_api(landmarks)
+            if sunset:
+                city_data["sunset"] = sunset
+                cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
 
-    else:
-        print ('sunset cache')
-        city_data["sunset"] = sunset1
+        else:
+            print ('sunset cache')
+            city_data["sunset"] = sunset1
+
+
 
 def fetch_hotels_and_update(city_data, landmarks, city_name):
     from app.chat import process_hotels
-    
-    hotels = process_hotels(landmarks, city_name)
-    city_data["hotels"] = hotels
+    with hotel_lock:
+        hotels = process_hotels(landmarks, city_name)
+        city_data["hotels"] = hotels
+
+
 
 def fetch_nightlife_and_update(city_data, landmarks):
-    cache_key = f"nightlife_{landmarks[0]}"
-    # Attempt to retrieve data from the cache
-    nightlife1 = cache.get(cache_key)
+    with night_life_lock:
+        cache_key = f"nightlife_{landmarks[0]}"
+        # Attempt to retrieve data from the cache
+        nightlife1 = cache.get(cache_key)
 
-    if nightlife1 is None or nightlife1=={'night-life': ''}:
-        nightlife = my_night_life(landmarks)
-        city_data["night-life"] = nightlife
-        cache.set(cache_key, nightlife, timeout=7 * 24 * 60 * 60)
+        if nightlife1 is None or nightlife1=={'night-life': ''}:
+            nightlife = my_night_life(landmarks)
+            city_data["night-life"] = nightlife
+            cache.set(cache_key, nightlife, timeout=7 * 24 * 60 * 60)
 
-    else:
-        print ('night_life cache')
-        city_data["night-life"] = nightlife1
+        else:
+            print ('night_life cache')
+            city_data["night-life"] = nightlife1
 
 
 

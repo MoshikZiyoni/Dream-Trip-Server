@@ -16,7 +16,7 @@ from app.trip_advisor import (
 )
 import openai
 from dotenv import load_dotenv
-from app.models import Attraction, Country, QueryChatGPT, City, Restaurant
+from app.models import  Country, QueryChatGPT, City
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
 from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, sort_attractions_by_distance
@@ -43,15 +43,23 @@ main_restaurants = []
 main_attractions = []
 main_hotels = []
 main_night_life = []
-def process_city(city_data, country, country_id,existing_city):
+def process_city(city_data, country, country_id):
+    print ('start process city,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     city_name = city_data["city"]
     description = city_data["description"]
     
 
-    print("City:", city_name, landmarks)
-    if not existing_city:
-        location = geolocator.geocode(f"{city_name},{country}")
-        landmarks = [location.latitude, location.longitude]
+    print("City:", city_name)
+    check=''
+    try:
+        city_obj = City.objects.get(city=city_name)
+        if city_obj:
+            check='True'
+    except:
+        pass
+    location = geolocator.geocode(f"{city_name},{country}")
+    landmarks = [location.latitude, location.longitude]
+    if check=='':
         city_query = City(
             country_id=country_id,
             city=city_name,
@@ -61,44 +69,42 @@ def process_city(city_data, country, country_id,existing_city):
         )
         city_query.save()
         print("Save successfully for city")
-
-    city_data["latitude"] = existing_city.latitude
-    city_data["longitude"] = existing_city.longitude
-    city_objs = City.objects.get(city=city_name)
-    if city_objs:
-        city_obj = city_objs[0]
-    print(city_obj, "city_obj")
-
     
-    attraction_for_data=(process_attractions(landmarks, city_name, country, city_obj, city_data))
-    restaurant_for_data=(process_restaurants(landmarks, city_name, country, city_obj, city_data))
-    hotels_for_data=(process_hotels(landmarks, city_name, country, city_obj, city_data))
-    night_life_for_data=(process_night_life(landmarks, city_name, country, city_obj, city_data))
-    sunset_for_data=process_sunset(landmarks)
+    try:
+        city_data["latitude"] = landmarks[0]
+        city_data["longitude"] = landmarks[1]
+        city_obj = City.objects.get(city=city_name)
+        # if city_objs:
+            
+        #     # city_obj = city_objs[0]
+        print(city_obj, "city_obj")
+    except Exception as e:
+        print (e,'@@@@@@@@@@@@@@@@@@@@@@@@@@')
 
-    # main_attractions.extend(attraction_for_data)
-    # main_restaurants.extend(restaurant_for_data)
-    # main_hotels.extend(hotels_for_data)
-    
-    # try:
-    #     save_to_db(attraction_for_data,restaurant_for_data,hotels_for_data)
 
-    # except:
-    #     print ('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    try:
+        attraction_for_data=(process_attractions(landmarks, city_name, country, city_obj))
+        restaurant_for_data=(process_restaurants(landmarks, city_name, city_obj))
+        hotels_for_data=(process_hotels(landmarks, city_name))
+        night_life_for_data=(process_night_life(landmarks))
+        sunset_for_data=process_sunset(landmarks)
+    except Exception as e:
+        print ('erorr 92',e)
     city_data["attractions"] = attraction_for_data
     city_data["restaurants"] = restaurant_for_data
     city_data["hotels"] = hotels_for_data
-    city_data['night_life']=night_life_for_data
+    city_data['night-life']=night_life_for_data
     city_data["sunset"]=sunset_for_data
+
     return city_data
 
 
-# restaur_lock=Lock()
 def process_restaurants(landmarks, city_name, city_obj):
     restaurants = []
-
+    print ("start restaurants")
     with restaur_lock:
         reslut = foursquare_restaurant(landmarks)
+        print(reslut)
         if len(reslut) == 0:
             print("Start google restaurant")
             my_restaurant=get_restaurants_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
@@ -122,6 +128,7 @@ def process_restaurants(landmarks, city_name, city_obj):
 
 def process_attractions(landmarks, city_name, country, city_obj):
     attractions = []
+    print ("start attractions")
     with attrac_lock:
         result1 = foursquare_attraction(landmarks, city_name, country)
         threads = []
@@ -150,6 +157,7 @@ def process_attractions(landmarks, city_name, country, city_obj):
 
 
 def process_hotels(landmarks, city_name):
+    print ("start hotels")
     cache_key = f"hotels_{city_name.replace(' ', '_').replace('-', '_')}"
     # Attempt to retrieve data from the cache
     hotels1 = cache.get(cache_key)
@@ -213,6 +221,10 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
             for attempt_data in range(retries):
                 try:
                     try:
+                        answer1=answer1.remove('```')
+                    except:
+                        pass
+                    try:
                         data = json.loads(answer1)
                         data1 = json.loads(answer1)
                     except:
@@ -255,45 +267,43 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                             except City.DoesNotExist:
                                 print ('no regular')
                                 existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                            try:
+                                if existing_city:
+                                    print ('start existing_city')
+                                    cache_key = f"existing_city_{existing_city.city}"
+                                    existing_city_cache = cache.get(cache_key)
+                                    if existing_city_cache is None:
+                                        # Use prefetch_related to fetch related attractions and restaurants efficiently
+                                        attractions_list = existing_city.attractions.all().values()
+                                        restaurants_list = existing_city.restaurants.all().values()
+                                        # Sort attractions by distance, shuffle remaining attractions, and set them in city_data
+                                        try:
+                                            attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
+                                            first_5_attractions = attractions[:5]
+                                            remaining_attractions = attractions[5:]
+                                            random.shuffle(remaining_attractions)
+                                            final_attractions = first_5_attractions + remaining_attractions
+                                        except:
+                                            final_attractions=attractions_list
+                                        city_data["attractions"] = list(final_attractions)
+                                        city_data["restaurants"] = list(restaurants_list)
 
-                            if existing_city:
-                                cache_key = f"existing_city_{existing_city.city}"
-                                existing_city_cache = cache.get(cache_key)
-                                if existing_city_cache is None:
-                                    # Use prefetch_related to fetch related attractions and restaurants efficiently
-                                    attractions_list = existing_city.attractions.all().values()
-                                    restaurants_list = existing_city.restaurants.all().values()
-                                    # Sort attractions by distance, shuffle remaining attractions, and set them in city_data
-                                    try:
-                                        attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
-                                        first_5_attractions = attractions[:5]
-                                        remaining_attractions = attractions[5:]
-                                        random.shuffle(remaining_attractions)
-                                        final_attractions = first_5_attractions + remaining_attractions
-                                    except:
-                                        final_attractions=attractions_list
-                                    city_data["attractions"] = list(final_attractions)
-                                    city_data["restaurants"] = list(restaurants_list)
+                                    
+                                        sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
+                                        hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude], existing_city.city,))
+                                        nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
 
-                                    # Fetch hotels and night-life data
-                                    # hotels = process_hotels(landmarks=[existing_city.latitude, existing_city.longitude], city_name=existing_city.city)
-                                    # night_life = my_night_life(landmarks=[existing_city.latitude, existing_city.longitude])
-                                    # sunset=sunset_api(landmarks=[existing_city.latitude, existing_city.longitude])
-                                    # city_data["hotels"] = hotels
-                                    # city_data["night-life"] = night_life
-                                    # city_data["sunset"]=sunset
-                                    sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
-                                    hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude], existing_city.city,))
-                                    nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
-
-                                    threads.extend([sunset_thread, hotels_thread, nightlife_thread])
-                                    print("Continue")
-                                    cache.set(cache_key, existing_city_cache, timeout=7 * 24 * 60 * 60)
-                                else:
-                                    return existing_city_cache
-
-                            executor.submit(process_city, city_data, country, country_id,existing_city)
+                                        threads.extend([sunset_thread, hotels_thread, nightlife_thread])
+                                        print("Continue")
+                                        cache.set(cache_key, existing_city_cache, timeout=7 * 24 * 60 * 60)
+                                    else:
+                                        return existing_city_cache
+                            except:
+                                print('no exsiting city')
+                            
+                            executor.submit(process_city, city_data, country, country_id)
                             check=False
+                            print ("start exceutor")
                     executor.shutdown()
                     # Start the threads
                     for thread in threads:
@@ -310,6 +320,8 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     total_transport_private_taxi=combined_data["total_transport_private_taxi"]
                     total_food_prices=combined_data['total_food_prices']
                     avrage_daily_spent=existing_country.average_prices
+                    if avrage_daily_spent=='':
+                        avrage_daily_spent=0
                     costs={
                         "total_prices":total_prices,
                         "total_transport_private_taxi":total_transport_private_taxi,

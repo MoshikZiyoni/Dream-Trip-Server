@@ -146,7 +146,7 @@ ASGI_APPLICATION_OPTIONS = {
 # }
 
 
-##POSTGESQL with 20MB
+# #POSTGESQL with 20MB ONLY that!!!!!!
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -159,7 +159,7 @@ DATABASES = {
 }
 
 
-####TEST 20MB
+# ###TEST 20MB
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
