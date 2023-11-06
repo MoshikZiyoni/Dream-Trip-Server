@@ -1,0 +1,2030 @@
+restaurts_name: ', Nomadic plate, 'city_name: ',Tsenkher
+restaurts_name: ', Gulliver Restaurante, 'city_name: ',Joao Pessoa
+restaurts_name: ', Collada de la Caülla, 'city_name: ',Escaldes-Engordany
+restaurts_name: ', refugi de les Agols, 'city_name: ',Escaldes-Engordany
+restaurts_name: ', Pic De Pessons, 'city_name: ',Escaldes-Engordany
+restaurts_name: ', Longxiang, 'city_name: ',Wellington
+restaurts_name: ', Parc Del Colat, 'city_name: ',La Massana
+restaurts_name: ', Club Hipic Aldosa, 'city_name: ',La Massana
+restaurts_name: ', Experiencia en muntanya, 'city_name: ',La Massana
+restaurts_name: ', Parc Del Prat Gran, 'city_name: ',La Massana
+restaurts_name: ', andorra ultra trail, 'city_name: ',La Massana
+restaurts_name: ', Mamucium, 'city_name: ',Manchester
+restaurts_name: ', The Ivy Manchester, 'city_name: ',Manchester
+restaurts_name: ', Mr Cooper's House & Garden, 'city_name: ',Manchester
+restaurts_name: ', The Refuge by Volta, 'city_name: ',Manchester
+restaurts_name: ', Rudy's Neapolitan Pizza - Ancoats, 'city_name: ',Manchester
+restaurts_name: ', The French, 'city_name: ',Manchester
+restaurts_name: ', Federal Cafe & Bar, 'city_name: ',Manchester
+restaurts_name: ', San Carlo Cicchetti, 'city_name: ',Manchester
+restaurts_name: ', Bundobust Manchester, 'city_name: ',Manchester
+restaurts_name: ', Almost Famous Burgers Manchester, 'city_name: ',Manchester
+restaurts_name: ', Kharkhorin Steakhouse, 'city_name: ',Kharkhorin
+restaurts_name: ', Ikh Mongol, 'city_name: ',Kharkhorin
+restaurts_name: ', Khorkhiin Cafe, 'city_name: ',Kharkhorin
+restaurts_name: ', Nomad Restaurant, 'city_name: ',Kharkhorin
+restaurts_name: ', Khushuur King, 'city_name: ',Kharkhorin
+restaurts_name: ', Modern Nomads, 'city_name: ',Kharkhorin
+restaurts_name: ', Khorkhiin Khaan, 'city_name: ',Kharkhorin
+restaurts_name: ', Oasis Cafe, 'city_name: ',Kharkhorin
+restaurts_name: ', Khorkhiin Steak, 'city_name: ',Kharkhorin
+restaurts_name: ', Erdene Zuu Cafe, 'city_name: ',Kharkhorin
+restaurts_name: ', Altai Kitchen, 'city_name: ',Tsenkher
+restaurts_name: ', Tsagaan Ovoo, 'city_name: ',Tsenkher
+restaurts_name: ', Altai Cafe, 'city_name: ',Tsenkher
+restaurts_name: ', Ikh Khuan, 'city_name: ',Tsenkher
+restaurts_name: ', Lawaki Beach House Restaurant, 'city_name: ',Beqa Island
+restaurts_name: ', Altai Ger, 'city_name: ',Tsenkher
+restaurts_name: ', Ikh Bulag, 'city_name: ',Tsenkher
+restaurts_name: ', Modern Nomads, 'city_name: ',Tsenkher
+restaurts_name: ', Altai View, 'city_name: ',Tsenkher
+restaurts_name: ', Steppe Kitchen, 'city_name: ',Tsenkher
+restaurts_name: ', Lakeview Restaurant, 'city_name: ',Khorgo
+restaurts_name: ', Ikh Tamir, 'city_name: ',Tsetserleg
+restaurts_name: ', Modern Nomads, 'city_name: ',Tsetserleg
+restaurts_name: ', Khangai Cafe, 'city_name: ',Tsetserleg
+restaurts_name: ', Ikh Khangai, 'city_name: ',Tsetserleg
+restaurts_name: ', Orkhon Steakhouse, 'city_name: ',Tsetserleg
+restaurts_name: ', Ikh Khentii, 'city_name: ',Tsetserleg
+restaurts_name: ', Steppe Kitchen, 'city_name: ',Tsetserleg
+restaurts_name: ', Khukh Lakeview, 'city_name: ',Tsetserleg
+restaurts_name: ', Ongiin Ger, 'city_name: ',Tsetserleg
+restaurts_name: ', Orkhon Cafe, 'city_name: ',Tsetserleg
+restaurts_name: ', Uvs Lakeview , 'city_name: ',Uvs
+restaurts_name: ', Khar Us Lake, 'city_name: ',Uvs
+restaurts_name: ', Ikh Uvs, 'city_name: ',Uvs
+restaurts_name: ', Modern Nomads, 'city_name: ',Uvs
+restaurts_name: ', Tsagaan Nuur, 'city_name: ',Uvs
+restaurts_name: ', Ulaangom Steakhouse, 'city_name: ',Uvs
+restaurts_name: ', Altai Kitchen, 'city_name: ',Uvs
+restaurts_name: ', Nuur Ger Cafe, 'city_name: ',Uvs
+restaurts_name: ', Ulaankhus Cafe, 'city_name: ',Uvs
+restaurts_name: ', Khugjliin Buuz, 'city_name: ',Uvs
+restaurts_name: ', Eagle Valley, 'city_name: ',Altai
+restaurts_name: ', Altai Steak House, 'city_name: ',Altai
+restaurts_name: ', Modern Nomads, 'city_name: ',Altai
+restaurts_name: ', Khangai Kitchen, 'city_name: ',Altai
+restaurts_name: ', Ikh Altai Cafe, 'city_name: ',Altai
+restaurts_name: ', Eagle's View Ger, 'city_name: ',Altai
+restaurts_name: ', Khan Tengri, 'city_name: ',Altai
+restaurts_name: ', Tsambagarav Kitchen, 'city_name: ',Altai
+restaurts_name: ', Khoton Lakeview, 'city_name: ',Altai
+restaurts_name: ', Altai Nuur, 'city_name: ',Altai
+restaurts_name: ', Ger Cafe, 'city_name: ',Khorgo
+restaurts_name: ', Khorgo Steakhouse, 'city_name: ',Khorgo
+restaurts_name: ', Terkhiin Tsagaan Lakeview, 'city_name: ',Khorgo
+restaurts_name: ', Nomad's Ger, 'city_name: ',Khorgo
+restaurts_name: ', Ikh Khorgo, 'city_name: ',Khorgo
+restaurts_name: ', Modern Nomads, 'city_name: ',Khorgo
+restaurts_name: ', Lakeview Ger, 'city_name: ',Khorgo
+restaurts_name: ', Tsagaan Lake Cafe, 'city_name: ',Khorgo
+restaurts_name: ', Khorgo Cafe, 'city_name: ',Khorgo
+restaurts_name: ', Saffron Indian Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Anjelo's, 'city_name: ',Nadi
+restaurts_name: ', Charcoal and Spice Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Bamboo Indian Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Baracus Bar & Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Kaubai Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Oasis Cafe, 'city_name: ',Nadi
+restaurts_name: ', Vilisite's Seafood Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Daikoku Restaurant, 'city_name: ',Nadi
+restaurts_name: ', Shtastliveca, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Ego Pizza & Grill, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Hadji Nikoli Inn, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Restaurant Bar & Grill Tsarevgrad, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Rezident, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Shtoranite, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Talpa, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Mehana Gurko, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Izba, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Riverside, 'city_name: ',Veliko Tarnovo
+restaurts_name: ', Katz's Delicatessen, 'city_name: ',New York City
+restaurts_name: ', Russ & Daughters, 'city_name: ',New York City
+restaurts_name: ', Junior's Cheesecake, 'city_name: ',New York City
+restaurts_name: ', Jacob's Pickles, 'city_name: ',New York City
+restaurts_name: ', Chelsea Market, 'city_name: ',New York City
+restaurts_name: ', La Cocina de Pepina, 'city_name: ',Cartagena
+restaurts_name: ', La Mulata, 'city_name: ',Cartagena
+restaurts_name: ', La Cevichería, 'city_name: ',Cartagena
+restaurts_name: ', Caribe Soul, 'city_name: ',Cartagena
+restaurts_name: ', Demente, 'city_name: ',Cartagena
+restaurts_name: ', Carmen, 'city_name: ',Cartagena
+restaurts_name: ', 1621, 'city_name: ',Cartagena
+restaurts_name: ', El Boliche Cebichería, 'city_name: ',Cartagena
+restaurts_name: ', La Suiza, 'city_name: ',Cartagena
+restaurts_name: ', Oh La La, 'city_name: ',Cartagena
+restaurts_name: ', Restaurant Sarafovo, 'city_name: ',Burgas
+restaurts_name: ', Lazur, 'city_name: ',Burgas
+restaurts_name: ', Rosé, 'city_name: ',Burgas
+restaurts_name: ', Pizzico, 'city_name: ',Burgas
+restaurts_name: ', Happy, 'city_name: ',Burgas
+restaurts_name: ',  Istanbul, 'city_name: ',Burgas
+restaurts_name: ', Kasuka, 'city_name: ',Burgas
+restaurts_name: ', Bankata, 'city_name: ',Burgas
+restaurts_name: ', Ribarska Sreshta, 'city_name: ',Burgas
+restaurts_name: ', Surf and Turf, 'city_name: ',Savusavu
+restaurts_name: ', Captain's Table, 'city_name: ',Savusavu
+restaurts_name: ', Joe's Pizza, 'city_name: ',New York City
+restaurts_name: ', Club A Steakhouse, 'city_name: ',New York City
+restaurts_name: ', Happy Bar & Grill, 'city_name: ',Burgas
+restaurts_name: ', Hidden Paradise, 'city_name: ',Savusavu
+restaurts_name: ', Mum's Country Kitchen, 'city_name: ',Savusavu
+restaurts_name: ', Restaurante Cuco Bistrô, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Solar Canto da Rua, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Porto Salvador, 'city_name: ',Salvador
+restaurts_name: ', Restaurante La Taverna, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Al Mare, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Porto de Lenha, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Pereira, 'city_name: ',Salvador
+restaurts_name: ', Restaurante Bar Zulu, 'city_name: ',Salvador
+restaurts_name: ', Lucia, 'city_name: ',York
+restaurts_name: ', Walmgate Ale House, 'city_name: ',York
+restaurts_name: ', Sotto Sotto, 'city_name: ',York
+restaurts_name: ', The Blue Bicycle, 'city_name: ',York
+restaurts_name: ', Nadina Authentic Fijian Restaurant, 'city_name: ',Denarau Island
+restaurts_name: ', Indigo Restaurant, 'city_name: ',Denarau Island
+restaurts_name: ', Restaurante Manjericão, 'city_name: ',Salvador
+restaurts_name: ', Rhum-Ba, 'city_name: ',Denarau Island
+restaurts_name: ', Bonefish Seafood Restaurant, 'city_name: ',Denarau Island
+restaurts_name: ', Mikado Japanese Restaurant, 'city_name: ',Denarau Island
+restaurts_name: ', Cardo's Steakhouse, 'city_name: ',Denarau Island
+restaurts_name: ', Big Bula Restaurant & Bar, 'city_name: ',Denarau Island
+restaurts_name: ', Tommy's Kitchen, 'city_name: ',Denarau Island
+restaurts_name: ', Waterfront Cafe, 'city_name: ',Denarau Island
+restaurts_name: ', Casa do Pensador, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Castelhana, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Tacacá na Bossa, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Sabor da Terra, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Giratório, 'city_name: ',Manaus
+restaurts_name: ', Restaurante La Cabana, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Nonna Lúcia, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Lá em Casa, 'city_name: ',Manaus
+restaurts_name: ', Restaurante Canto da Peixada, 'city_name: ',Manaus
+restaurts_name: ', El Moro, 'city_name: ',Mexico City
+restaurts_name: ', El Farolito, 'city_name: ',Mexico City
+restaurts_name: ', The Hop, 'city_name: ',York
+restaurts_name: ', Ambiente Tapas, 'city_name: ',York
+restaurts_name: ', The Pig & Pastry, 'city_name: ',York
+restaurts_name: ', Churrascaria Búfalo, 'city_name: ',Manaus
+restaurts_name: ', Azul Restaurante, 'city_name: ',Mexico City
+restaurts_name: ', La Casa de las Sirenas, 'city_name: ',Mexico City
+restaurts_name: ', Los Danzantes, 'city_name: ',Mexico City
+restaurts_name: ', Mercado Roma, 'city_name: ',Mexico City
+restaurts_name: ', Pujol, 'city_name: ',Mexico City
+restaurts_name: ', Quintonil, 'city_name: ',Mexico City
+restaurts_name: ', El Indio Feliz, 'city_name: ',Machu Picchu
+restaurts_name: ', La Cantina de Mercedes, 'city_name: ',Machu Picchu
+restaurts_name: ', El MaPi Hotel Cafe, 'city_name: ',Machu Picchu
+restaurts_name: ', Chullpi, 'city_name: ',Machu Picchu
+restaurts_name: ', Indio Feliz Lomo Saltado, 'city_name: ',Machu Picchu
+restaurts_name: ', Pueblo Viejo, 'city_name: ',Machu Picchu
+restaurts_name: ', Mr. Soup Peru, 'city_name: ',Machu Picchu
+restaurts_name: ', La Cabana de Machu Picchu, 'city_name: ',Machu Picchu
+restaurts_name: ', The Tree House, 'city_name: ',Machu Picchu
+restaurts_name: ', Kaiser Cafe, 'city_name: ',Kathmandu
+restaurts_name: ', OR2K, 'city_name: ',Kathmandu
+restaurts_name: ', Koto Restaurant, 'city_name: ',Kathmandu
+restaurts_name: ', Baan Thai, 'city_name: ',Kathmandu
+restaurts_name: ', El Turko, 'city_name: ',Arequipa
+restaurts_name: ', Yangling Tibetan Restaurant, 'city_name: ',Kathmandu
+restaurts_name: ', Chimney Restaurant, 'city_name: ',Kathmandu
+restaurts_name: ', Chez Caroline, 'city_name: ',Kathmandu
+restaurts_name: ', Summit Hotel Restaurant, 'city_name: ',Kathmandu
+restaurts_name: ', Krishnarpan Restaurant, 'city_name: ',Kathmandu
+restaurts_name: ', Tradición Arequipeña, 'city_name: ',Arequipa
+restaurts_name: ', La Nueva Palomino, 'city_name: ',Arequipa
+restaurts_name: ', Chicha Restaurant, 'city_name: ',Arequipa
+restaurts_name: ', La Trattoria del Monasterio, 'city_name: ',Arequipa
+restaurts_name: ', Hatunpa, 'city_name: ',Arequipa
+restaurts_name: ', La Capitana, 'city_name: ',Arequipa
+restaurts_name: ', Sol de Mayo, 'city_name: ',Arequipa
+restaurts_name: ', Crepisimo, 'city_name: ',Arequipa
+restaurts_name: ', Katz's Delicatessen, 'city_name: ',New York city
+restaurts_name: ', Russ & Daughters, 'city_name: ',New York city
+restaurts_name: ', Junior's Cheesecake, 'city_name: ',New York city
+restaurts_name: ', Jacob's Pickles, 'city_name: ',New York city
+restaurts_name: ', Treehouse, 'city_name: ',Machu Picchu
+restaurts_name: ', Russo's Mozzarella & Pasta Cafe, 'city_name: ',New York city
+restaurts_name: ', The Halal Guys, 'city_name: ',New York city
+restaurts_name: ', Thelewala, 'city_name: ',New York city
+restaurts_name: ', Surf and Turf, 'city_name: ',Vanua Levu
+restaurts_name: ', Captain's Cafe, 'city_name: ',Vanua Levu
+restaurts_name: ', Nabouwalu Hotel Restaurant, 'city_name: ',Vanua Levu
+restaurts_name: ', Chilli Tree Cafe, 'city_name: ',Vanua Levu
+restaurts_name: ', The Ovalau, 'city_name: ',Vanua Levu
+restaurts_name: ', Smugglers Cove Beach Bar & Grill, 'city_name: ',Vanua Levu
+restaurts_name: ', Mum's Country Kitchen, 'city_name: ',Vanua Levu
+restaurts_name: ', Nabouwalu Market Canteen, 'city_name: ',Vanua Levu
+restaurts_name: ', Garden Cafe, 'city_name: ',Vanua Levu
+restaurts_name: ', Martha's Cafe, 'city_name: ',Vanua Levu
+restaurts_name: ', Amisfield Bistro, 'city_name: ',Queenstown
+restaurts_name: ', The Bunker, 'city_name: ',Queenstown
+restaurts_name: ', Wakatipu Grill, 'city_name: ',Queenstown
+restaurts_name: ', Patagonia, 'city_name: ',Queenstown
+restaurts_name: ', The Cow, 'city_name: ',Queenstown
+restaurts_name: ', Chica Pitanga, 'city_name: ',Recife
+restaurts_name: ', Restaurante Dona Carolina, 'city_name: ',Recife
+restaurts_name: ', Restaurante Gaúcho, 'city_name: ',Recife
+restaurts_name: ', Restaurante Cantina diPizza, 'city_name: ',Recife
+restaurts_name: ', Bargaço, 'city_name: ',Recife
+restaurts_name: ', Restaurante Palhoça da Colina, 'city_name: ',Recife
+restaurts_name: ', Momofuku Noodle Bar, 'city_name: ',New York city
+restaurts_name: ', Restaurante Thai, 'city_name: ',Recife
+restaurts_name: ', Restaurante Parraxaxá, 'city_name: ',Recife
+restaurts_name: ', Emerson Spice, 'city_name: ',Zanzibar
+restaurts_name: ', Pagoda Restaurant, 'city_name: ',Zanzibar
+restaurts_name: ', The Rock, 'city_name: ',Zanzibar
+restaurts_name: ', Kimte Beach Restaurant, 'city_name: ',Zanzibar
+restaurts_name: ', Botswana Butchery, 'city_name: ',Queenstown
+restaurts_name: ', Devil Burger, 'city_name: ',Queenstown
+restaurts_name: ', Public Kitchen & Bar, 'city_name: ',Queenstown
+restaurts_name: ', Vudu Cafe, 'city_name: ',Queenstown
+restaurts_name: ', 6 Degrees South, 'city_name: ',Zanzibar
+restaurts_name: ', The Vine Lodge Restaurant, 'city_name: ',Zanzibar
+restaurts_name: ', Ali Barbour's Cave Restaurant, 'city_name: ',Zanzibar
+restaurts_name: ', Mambo Beach Bungalows, 'city_name: ',Zanzibar
+restaurts_name: ', The Z Hotel Restaurant, 'city_name: ',Zanzibar
+restaurts_name: ', Haven, 'city_name: ',Angkor Wat
+restaurts_name: ', Sugar Palm, 'city_name: ',Angkor Wat
+restaurts_name: ', Khmer Family Restaurant, 'city_name: ',Angkor Wat
+restaurts_name: ', Marum, 'city_name: ',Angkor Wat
+restaurts_name: ', Chanrey Tree, 'city_name: ',Angkor Wat
+restaurts_name: ', Angkor Reach Restaurant, 'city_name: ',Angkor Wat
+restaurts_name: ', Siem Reap Food Court, 'city_name: ',Angkor Wat
+restaurts_name: ', Viroth's Restaurant, 'city_name: ',Angkor Wat
+restaurts_name: ', Sala Bai Restaurant School, 'city_name: ',Angkor Wat
+restaurts_name: ', My Mom's Recipe Restaurant, 'city_name: ',Petra
+restaurts_name: ', Cleopatra Restaurant, 'city_name: ',Petra
+restaurts_name: ', Red Cave Restaurant, 'city_name: ',Petra
+restaurts_name: ', Al-Saraya Restaurant, 'city_name: ',Petra
+restaurts_name: ', Petra Kitchen, 'city_name: ',Petra
+restaurts_name: ', Sheba's Cafe, 'city_name: ',Petra
+restaurts_name: ', Ali Baba Restaurant, 'city_name: ',Petra
+restaurts_name: ', Seven Wonders Bedouin Camp, 'city_name: ',Petra
+restaurts_name: ', Cuisine Wat Damnak, 'city_name: ',Angkor Wat
+restaurts_name: ', Basin Restaurant, 'city_name: ',Petra
+restaurts_name: ', La Taverne du Pêcheur, 'city_name: ',Easter Island
+restaurts_name: ', Kanahau Restaurant, 'city_name: ',Easter Island
+restaurts_name: ', Paila, 'city_name: ',Easter Island
+restaurts_name: ', Te Pito O Te Henua, 'city_name: ',Easter Island
+restaurts_name: ', Hotu Matua Regent, 'city_name: ',Easter Island
+restaurts_name: ', La Cueva, 'city_name: ',Valle de los Caídos
+restaurts_name: ', La Posada, 'city_name: ',Valle de los Caídos
+restaurts_name: ', El Charolés, 'city_name: ',Valle de los Caídos
+restaurts_name: ', La Herrería, 'city_name: ',Valle de los Caídos
+restaurts_name: ', La Manga, 'city_name: ',Valle de los Caídos
+restaurts_name: ', El Jardin Secreto, 'city_name: ',Valle de los Caídos
+restaurts_name: ', El Secreto de Guadarrama, 'city_name: ',Valle de los Caídos
+restaurts_name: ', Casa Cirilo, 'city_name: ',Valle de los Caídos
+restaurts_name: ', La Abuela del Alba, 'city_name: ',Valle de los Caídos
+restaurts_name: ', El Secreto de la Abuela María, 'city_name: ',Valle de los Caídos
+restaurts_name: ', El Tovar Dining Room, 'city_name: ',Grand Canyon
+restaurts_name: ', Bright Angel Restaurant, 'city_name: ',Grand Canyon
+restaurts_name: ', Maswick Lodge Cafeteria, 'city_name: ',Grand Canyon
+restaurts_name: ', Yavapai Lodge Restaurant, 'city_name: ',Grand Canyon
+restaurts_name: ', Grand Canyon Cookout Experience, 'city_name: ',Grand Canyon
+restaurts_name: ', Delicatessen at Canyon Village, 'city_name: ',Grand Canyon
+restaurts_name: ', Grand Canyon North Rim Campground Store, 'city_name: ',Grand Canyon
+restaurts_name: ', Coronado Room Restaurant, 'city_name: ',Grand Canyon
+restaurts_name: ', Balcones de Puno, 'city_name: ',Puno
+restaurts_name: ', La Table del Inca, 'city_name: ',Puno
+restaurts_name: ', Mareas Restaurant, 'city_name: ',Puno
+restaurts_name: ', Tulipans Restaurant, 'city_name: ',Puno
+restaurts_name: ', Keros Restaurant, 'city_name: ',Puno
+restaurts_name: ', Colors Cafe, 'city_name: ',Puno
+restaurts_name: ', Ukuku's Restaurant, 'city_name: ',Puno
+restaurts_name: ', La Casa del Corregidor, 'city_name: ',Puno
+restaurts_name: ', Sandan Restaurant, 'city_name: ',Sihanoukville
+restaurts_name: ', Starfish Bakery & Cafe, 'city_name: ',Sihanoukville
+restaurts_name: ', Holy Cow, 'city_name: ',Sihanoukville
+restaurts_name: ', Psar Leu Market, 'city_name: ',Sihanoukville
+restaurts_name: ', JJ's Playground, 'city_name: ',Sihanoukville
+restaurts_name: ', Cafe Mango, 'city_name: ',Sihanoukville
+restaurts_name: ', Starfish Restaurant, 'city_name: ',Sihanoukville
+restaurts_name: ', Papagayo Restaurant, 'city_name: ',Sihanoukville
+restaurts_name: ', La Casona Restaurant, 'city_name: ',Puno
+restaurts_name: ', Mojsa Restaurant, 'city_name: ',Puno
+restaurts_name: ', Euro Pizza, 'city_name: ',Sihanoukville
+restaurts_name: ', Fair Travel Cafe & Crafts, 'city_name: ',Sihanoukville
+restaurts_name: ', Cafe Pushkin, 'city_name: ',Moscow
+restaurts_name: ', Elardzhi, 'city_name: ',Moscow
+restaurts_name: ', Ugolek, 'city_name: ',Moscow
+restaurts_name: ', Coffee 22, 'city_name: ',Moscow
+restaurts_name: ', Cafe Barashka, 'city_name: ',Moscow
+restaurts_name: ', Darbazi, 'city_name: ',Moscow
+restaurts_name: ', Mizandari, 'city_name: ',Moscow
+restaurts_name: ', Farsh, 'city_name: ',Moscow
+restaurts_name: ', Khachapuri, 'city_name: ',Moscow
+restaurts_name: ', Nedalny Vostok, 'city_name: ',Moscow
+restaurts_name: ', Circles Cafe, 'city_name: ',Lake Atitlán
+restaurts_name: ', Sabor Cruceno, 'city_name: ',Lake Atitlán
+restaurts_name: ', Comedor Elenita, 'city_name: ',Lake Atitlán
+restaurts_name: ', La Casa del Mundo, 'city_name: ',Lake Atitlán
+restaurts_name: ', Iguana Perdida, 'city_name: ',Lake Atitlán
+restaurts_name: ', Zoola, 'city_name: ',Lake Atitlán
+restaurts_name: ', El Artesano, 'city_name: ',Lake Atitlán
+restaurts_name: ', Cafe Loco, 'city_name: ',Lake Atitlán
+restaurts_name: ', La Cuchara de la Abuela, 'city_name: ',Lake Atitlán
+restaurts_name: ', Restaurante El Patio, 'city_name: ',Lake Atitlán
+restaurts_name: ', Maní, 'city_name: ',Sao Paulo
+restaurts_name: ', D.O.M., 'city_name: ',Sao Paulo
+restaurts_name: ', A Casa do Porco, 'city_name: ',Sao Paulo
+restaurts_name: ', Dalva e Dito, 'city_name: ',Sao Paulo
+restaurts_name: ', Kan Suke, 'city_name: ',Sao Paulo
+restaurts_name: ', Mocotó, 'city_name: ',Sao Paulo
+restaurts_name: ', Oshi, 'city_name: ',Sao Paulo
+restaurts_name: ', Bráz Elettrica, 'city_name: ',Sao Paulo
+restaurts_name: ', Famiglia Mancini, 'city_name: ',Sao Paulo
+restaurts_name: ', Casa do Baixo Augusta, 'city_name: ',Sao Paulo
+restaurts_name: ', Terrazzo, 'city_name: ',Tikal
+restaurts_name: ', La Luna, 'city_name: ',Tikal
+restaurts_name: ', La Mesa de los Mayas, 'city_name: ',Tikal
+restaurts_name: ', Las Orquideas, 'city_name: ',Tikal
+restaurts_name: ', Restaurant del Aeropuerto Internacional Mundo Maya, 'city_name: ',Tikal
+restaurts_name: ', Restaurant at Jungle Lodge, 'city_name: ',Tikal
+restaurts_name: ', Mon Ami, 'city_name: ',Tikal
+restaurts_name: ', Raices, 'city_name: ',Tikal
+restaurts_name: ', Ku De Ta, 'city_name: ',Bali
+restaurts_name: ', Locavore, 'city_name: ',Bali
+restaurts_name: ', Old Mans Restaurant, 'city_name: ',Bali
+restaurts_name: ', Kayu Putih Bali, 'city_name: ',Bali
+restaurts_name: ', Room 4 Dessert, 'city_name: ',Bali
+restaurts_name: ', Byrdhouse Beach Club, 'city_name: ',Bali
+restaurts_name: ', Motel Mexicola, 'city_name: ',Bali
+restaurts_name: ', Rock Bar at Ayana, 'city_name: ',Bali
+restaurts_name: ', Sardine, 'city_name: ',Bali
+restaurts_name: ', Bar Tarobá, 'city_name: ',Iguazu Falls
+restaurts_name: ', Cool Beans, 'city_name: ',Tikal
+restaurts_name: ', The Shady Shack, 'city_name: ',Bali
+restaurts_name: ', Octopus Resort Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Beachcomber Island Resort Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Mantaray Island Resort Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Paradise Cove Resort Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Matacawa Cafe, 'city_name: ',Yasawa Islands
+restaurts_name: ', Botaira Beach Resort Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Safari Lodge Restaurant, 'city_name: ',Yasawa Islands
+restaurts_name: ', Duck de Chine, 'city_name: ',Beijing
+restaurts_name: ', Temple Restaurant, 'city_name: ',Beijing
+restaurts_name: ', Capital M, 'city_name: ',Beijing
+restaurts_name: ', Lost Heaven, 'city_name: ',Beijing
+restaurts_name: ', Najia Xiaoguan, 'city_name: ',Beijing
+restaurts_name: ', Black Sesame Kitchen, 'city_name: ',Beijing
+restaurts_name: ', Baoyuan Dumpling, 'city_name: ',Beijing
+restaurts_name: ', Made in China, 'city_name: ',Beijing
+restaurts_name: ', TRB Hutong, 'city_name: ',Beijing
+restaurts_name: ', Treyvaud's Restaurant, 'city_name: ',Killarney
+restaurts_name: ', Murphy's on the Mall, 'city_name: ',Killarney
+restaurts_name: ', Treyvaud's Bistro & Wine Bar, 'city_name: ',Killarney
+restaurts_name: ', Brícín Restaurant, 'city_name: ',Killarney
+restaurts_name: ', Tatler Jack's Restaurant, 'city_name: ',Killarney
+restaurts_name: ', The Smoke House, 'city_name: ',Killarney
+restaurts_name: ', Danú at The Europe Hotel, 'city_name: ',Killarney
+restaurts_name: ', The Jarvey's Rest, 'city_name: ',Killarney
+restaurts_name: ', Bake My Day Cafe, 'city_name: ',Killarney
+restaurts_name: ', Gaby's Seafood Restaurant, 'city_name: ',Killarney
+restaurts_name: ', Universal Diner, 'city_name: ',Brasília
+restaurts_name: ', Bar do Mano, 'city_name: ',Brasília
+restaurts_name: ', Nau Culinária, 'city_name: ',Brasília
+restaurts_name: ', Bulls Steakhouse, 'city_name: ',Brasília
+restaurts_name: ', Mangai, 'city_name: ',Brasília
+restaurts_name: ', Coco Bambu, 'city_name: ',Brasília
+restaurts_name: ', Mercearia do Conde, 'city_name: ',Brasília
+restaurts_name: ', Quitinete, 'city_name: ',Brasília
+restaurts_name: ', JK Mixto, 'city_name: ',Brasília
+restaurts_name: ', Al Tayar, 'city_name: ',Brasília
+restaurts_name: ', Din Tai Fung, 'city_name: ',Beijing
+restaurts_name: ', Musket Cove Island Resort Restaurant, 'city_name: ',Beqa Island
+restaurts_name: ', Beqa Lagoon Resort Restaurant, 'city_name: ',Beqa Island
+restaurts_name: ', Local Village Cafe, 'city_name: ',Beqa Island
+restaurts_name: ', Lunch at Daku Resort, 'city_name: ',Beqa Island
+restaurts_name: ', Sunset Cafe, 'city_name: ',Beqa Island
+restaurts_name: ', Beach Bar & Grill, 'city_name: ',Beqa Island
+restaurts_name: ', Ocean View Restaurant, 'city_name: ',Beqa Island
+restaurts_name: ', Nomad, 'city_name: ',Marrakesh
+restaurts_name: ', Le Jardin, 'city_name: ',Marrakesh
+restaurts_name: ', PepeNero, 'city_name: ',Marrakesh
+restaurts_name: ', Grand Café De La Poste, 'city_name: ',Marrakesh
+restaurts_name: ', Latitude31, 'city_name: ',Marrakesh
+restaurts_name: ', Le Salama, 'city_name: ',Marrakesh
+restaurts_name: ', Earth Cafe, 'city_name: ',Marrakesh
+restaurts_name: ', Kechmara, 'city_name: ',Marrakesh
+restaurts_name: ', Dar Moha, 'city_name: ',Marrakesh
+restaurts_name: ', Tika Restaurant, 'city_name: ',Uyuni
+restaurts_name: ', Restaurante El Mirador, 'city_name: ',Uyuni
+restaurts_name: ', Arca Andina Cafe, 'city_name: ',Uyuni
+restaurts_name: ', Restaurant 16 de Julio, 'city_name: ',Uyuni
+restaurts_name: ', Ristorante Italia, 'city_name: ',Uyuni
+restaurts_name: ', El Ceibo Cafe, 'city_name: ',Uyuni
+restaurts_name: ', Tika Restaurant, 'city_name: ',Salar de Uyuni
+restaurts_name: ', Restaurante El Mirador, 'city_name: ',Salar de Uyuni
+restaurts_name: ', Arca Andina Cafe, 'city_name: ',Salar de Uyuni
+restaurts_name: ', Restaurant 16 de Julio, 'city_name: ',Salar de Uyuni
+restaurts_name: ', Ristorante Italia, 'city_name: ',Salar de Uyuni
+restaurts_name: ', El Ceibo Cafe, 'city_name: ',Salar de Uyuni
+restaurts_name: ', Restaurante Cuscuz, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Restaurante Doce de Noronha, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Pizzaria Namoita, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Restaurante Teca, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Pousada Maravilha - Restaurante, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Restaurante Zé Maria, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Restaurante Cachorro Velho, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Picolé Café, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Empório Sushi, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Restaurante Natureza, 'city_name: ',Fernando de Noronha
+restaurts_name: ', Wake Up Varna, 'city_name: ',Varna
+restaurts_name: ', Mercedes Benz Varna meetings, 'city_name: ',Varna
+restaurts_name: ', Feťácká Ulička Před Intrem, 'city_name: ',Pilsen
+restaurts_name: ', Es Furnell, 'city_name: ',Ibiza
+restaurts_name: ', Bar Classic, 'city_name: ',Gjirokaster
+restaurts_name: ', Caffe Vergnano, 'city_name: ',Berat
+restaurts_name: ', Zgara Korcare, 'city_name: ',Berat
+restaurts_name: ', The Salt House, 'city_name: ',Galway
+restaurts_name: ', Cassidy's Bar, 'city_name: ',Dublin
+restaurts_name: ', Strandbygrillen, 'city_name: ',Esbjerg
+restaurts_name: ', Peking Spisehus, 'city_name: ',Randers
+restaurts_name: ', Belvedera Pizza, 'city_name: ',Randers
+restaurts_name: ', Maesrk Angola, 'city_name: ',Luanda
+restaurts_name: ', BrewDog Manchester, 'city_name: ',Manchester
+restaurts_name: ', Meru trek Safari, 'city_name: ',Arusha
+restaurts_name: ', Rooftop, 'city_name: ',Arusha
+restaurts_name: ', Air Museum Kabul, 'city_name: ',Kabul
+restaurts_name: ', Lido degli Artisti Amalfi Windsurf Club, 'city_name: ',Amalfi
+restaurts_name: ', Amalfi Coast Holidays, 'city_name: ',Amalfi
+restaurts_name: ', Cannaverde - Amalfi Coast Camp, 'city_name: ',Amalfi
+restaurts_name: ', Municipal Museum of Amalfi Amalfi, 'city_name: ',Amalfi
+restaurts_name: ', Praiano In Miniatura, 'city_name: ',Amalfi
+restaurts_name: ', Centro Internazionale di Studi Numismatici Del Museo G.filangieri, 'city_name: ',Naples
+restaurts_name: ', Commissario di Governo Per L'emergenza Rifiuti in Campania, 'city_name: ',Naples
+restaurts_name: ', In Scena SRL, 'city_name: ',Naples
+restaurts_name: ', Labilissima, Naples, 'city_name: ',Naples
+restaurts_name: ', La chiesa San Michele a Port'Alba, Naples, 'city_name: ',Naples
+restaurts_name: ', Piazza Dante, Naples, Italy, 'city_name: ',Naples
+restaurts_name: ', Fontana degli Innamorati, 'city_name: ',Naples
+restaurts_name: ', Naples Underground, 'city_name: ',Naples
+restaurts_name: ', Camera di Commercio Industria Artigianato e Agricoltura, 'city_name: ',Naples
+restaurts_name: ', Megaride Charter - Boat Rentals, Naples, 'city_name: ',Naples
+restaurts_name: ', Ospedale Incurabili, 'city_name: ',Naples
+restaurts_name: ', Fondazione Plart Plastiche e Arte di Maria Pia Incutti, 'city_name: ',Naples
+restaurts_name: ', Museo Artistico Industriale Filippo Palizzi, 'city_name: ',Naples
+restaurts_name: ', disney cruse nassau bahamas, 'city_name: ',Nassau
+restaurts_name: ', royal carribean serenade of the seas, 'city_name: ',Nassau
+restaurts_name: ', The National Museum Of The Bahamas, 'city_name: ',Nassau
+restaurts_name: ', National Museums of the Bahamas, 'city_name: ',Nassau
+restaurts_name: ', Bahamas Adventures Luxury Sail, 'city_name: ',Nassau
+restaurts_name: ', Banff Ave Park, 'city_name: ',Banff
+restaurts_name: ', Lake Louise at Banff National Park, 'city_name: ',Banff
+restaurts_name: ', Luxton Museum Of-Plains Indian, 'city_name: ',Banff
+restaurts_name: ', Canada Parks Svc-Main Ofc, 'city_name: ',Banff
+restaurts_name: ', Canada Place, 'city_name: ',Banff
+restaurts_name: ', Whyte Museum of the Canadian Rockies, Banff Ave Shop, 'city_name: ',Banff
+restaurts_name: ', Angola, 'city_name: ',Luanda
+restaurts_name: ', Ravintola Hella, 'city_name: ',Oulu
+restaurts_name: ', Mpakalógatos, 'city_name: ',Larissa
+restaurts_name: ', Ακαμάτρα - Akamatra, 'city_name: ',Larissa
+restaurts_name: ', Ten Doors gastrobar, 'city_name: ',Larissa
+restaurts_name: ', Bukowski Eatery&Drink, 'city_name: ',Larissa
+restaurts_name: ', Toripolliisi, 'city_name: ',Oulu
+restaurts_name: ', Restaurant Uleåborg 1881, 'city_name: ',Oulu
+restaurts_name: ', Viking Restaurant Harald, 'city_name: ',Oulu
+restaurts_name: ', Crecian, 'city_name: ',Oulu
+restaurts_name: ', Ravintola Teerenpeli, 'city_name: ',Oulu
+restaurts_name: ', Blue Sea Restaurant, 'city_name: ',Savusavu
+restaurts_name: ', Themi Hill, 'city_name: ',Arusha
+restaurts_name: ', Ravintola Pannu, 'city_name: ',Oulu
+restaurts_name: ', The big fat Greek Gyros Tori, 'city_name: ',Oulu
+restaurts_name: ', Snowy House, 'city_name: ',Savusavu
+restaurts_name: ', Restaurant Slippen Fredrikstad, 'city_name: ',Fredrikstad
+restaurts_name: ', Fredrikstad Restaurantdrift As, 'city_name: ',Fredrikstad
+restaurts_name: ', Mormors Cafe, 'city_name: ',Fredrikstad
+restaurts_name: ', Besenstiel, 'city_name: ',Basel
+restaurts_name: ', Holzpark Klybeck, 'city_name: ',Basel
+restaurts_name: ', Divan restaurant, 'city_name: ',Fredrikstad
+restaurts_name: ', Shiki sushi Bar, 'city_name: ',Fredrikstad
+restaurts_name: ', Leo's Lekeland, 'city_name: ',Fredrikstad
+restaurts_name: ', Solveig's Pizza Fredrikstad, 'city_name: ',Fredrikstad
+restaurts_name: ', Rhywyera, 'city_name: ',Basel
+restaurts_name: ', L'Unique | House of Rock by Pastardo, 'city_name: ',Basel
+restaurts_name: ', Atlantis Basel, 'city_name: ',Basel
+restaurts_name: ', Lodge79, 'city_name: ',Basel
+restaurts_name: ', PARK Lange Erlen, 'city_name: ',Basel
+restaurts_name: ', Restaurant Bel Etage (im Teufelhof), 'city_name: ',Basel
+restaurts_name: ', Restaurant Safran Zunft Basel, 'city_name: ',Basel
+restaurts_name: ', Kiliwarrior Expeditions, 'city_name: ',Arusha
+restaurts_name: ', City Bar & Spiseri, 'city_name: ',Fredrikstad
+restaurts_name: ', Bira dos Namorados, 'city_name: ',Braga
+restaurts_name: ', Boa Boca, 'city_name: ',Braga
+restaurts_name: ', Complejo Turístico Flotante UROS TITICACA KURMI LAGO TITICACA PERÚ, 'city_name: ',Lake Titicaca
+restaurts_name: ', Uros Suma Jakaña Lodge Titicaca Experiencia, 'city_name: ',Lake Titicaca
+restaurts_name: ', Cafe Bar de la Casa del corregidor, 'city_name: ',Lake Titicaca
+restaurts_name: ', TITICACA RESTAURANT PERU, 'city_name: ',Lake Titicaca
+restaurts_name: ', Los Uros, 'city_name: ',Lake Titicaca
+restaurts_name: ', Lucsay Titicaca Lodge, 'city_name: ',Lake Titicaca
+restaurts_name: ', Anjo Verde, 'city_name: ',Braga
+restaurts_name: ', Colher d'pau, 'city_name: ',Braga
+restaurts_name: ', Centurium, 'city_name: ',Braga
+restaurts_name: ', Tábuas, Copos & outras cenas, 'city_name: ',Braga
+restaurts_name: ', Restaurante Delicatum, 'city_name: ',Braga
+restaurts_name: ', Velhos Tempos, 'city_name: ',Braga
+restaurts_name: ', Mesa na Praça - Mercado Municipal de Braga, 'city_name: ',Braga
+restaurts_name: ', Tasquinha Dom Ferreira, 'city_name: ',Braga
+restaurts_name: ', Belaya Loshad', 'city_name: ',Chelyabinsk
+restaurts_name: ', Ресторан На старом месте | Центральный район, 'city_name: ',Chelyabinsk
+restaurts_name: ', Schast'ye Ne Za Gorami, 'city_name: ',Chelyabinsk
+restaurts_name: ', Ural'skiye Pel'meni, 'city_name: ',Chelyabinsk
+restaurts_name: ', Cezon, 'city_name: ',Chelyabinsk
+restaurts_name: ', Chester-Chelyabinsk, 'city_name: ',Chelyabinsk
+restaurts_name: ', Langeron Chelyabinsk, 'city_name: ',Chelyabinsk
+restaurts_name: ', Oblaka, Restoran, 'city_name: ',Chelyabinsk
+restaurts_name: ', Restoran "Korol' Gustav", 'city_name: ',Chelyabinsk
+restaurts_name: ', Pod Wawelem Kompania Kuflowa, 'city_name: ',Krakow
+restaurts_name: ', Pod Aniołami Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Island of Aquariums, 'city_name: ',Porto Seguro
+restaurts_name: ', Restaurante Rabanete Porto Seguro, 'city_name: ',Porto Seguro
+restaurts_name: ', Kogel Mogel, 'city_name: ',Krakow
+restaurts_name: ', The Rouga, 'city_name: ',Thessaloniki
+restaurts_name: ', Zennup1844 I Bursa, 'city_name: ',Bursa
+restaurts_name: ', Tsyplyata Tabaka, 'city_name: ',Chelyabinsk
+restaurts_name: ', Душевный ресторан Родня | Деловые обеды, живая музыка, Челябинск, 'city_name: ',Chelyabinsk
+restaurts_name: ', Zhuravlina, 'city_name: ',Chelyabinsk
+restaurts_name: ', Family grill, 'city_name: ',Chelyabinsk
+restaurts_name: ', Sitsiliya, 'city_name: ',Chelyabinsk
+restaurts_name: ', La Rose D`OR, 'city_name: ',Chelyabinsk
+restaurts_name: ', Titanik-2000, 'city_name: ',Chelyabinsk
+restaurts_name: ', Tianjin Jietou Anhao Restaurant, 'city_name: ',Tianjin
+restaurts_name: ', Chengdu Yingxiang, 'city_name: ',Chengdu
+restaurts_name: ', Youth Restaurant, 'city_name: ',Tianjin
+restaurts_name: ', Ashihai Resort, 'city_name: ',Khuvsgul Lake
+restaurts_name: ', Shu Qiaoyuan, 'city_name: ',Chengdu
+restaurts_name: ', Tianjin Go Believe Branch, 'city_name: ',Tianjin
+restaurts_name: ', Furong Town Restaurant, 'city_name: ',Chengdu
+restaurts_name: ', Bellavita, 'city_name: ',Tianjin
+restaurts_name: ', 成都名堂, 'city_name: ',Chengdu
+restaurts_name: ', Piwnica pod Kominkiem, 'city_name: ',Krakow
+restaurts_name: ', Old Town Restaurant and Wine Bar, 'city_name: ',Krakow
+restaurts_name: ', Czarna Kaczka/ Black Duck, 'city_name: ',Krakow
+restaurts_name: ', Jama Michalika | Est. 1895, 'city_name: ',Krakow
+restaurts_name: ', Starka | Restaurant & Vodkas, 'city_name: ',Krakow
+restaurts_name: ', Padre Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Kawaleria Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Restauracja The Piano Rouge, 'city_name: ',Krakow
+restaurts_name: ', Biała Róża, 'city_name: ',Krakow
+restaurts_name: ', Morskie Oko, 'city_name: ',Krakow
+restaurts_name: ', Amarylis Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Restauracja Pod Baranem | Rok zal. 1997, 'city_name: ',Krakow
+restaurts_name: ', Galicyjska Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Lokmahane, 'city_name: ',Konya
+restaurts_name: ', Cemo Restaurant, 'city_name: ',Konya
+restaurts_name: ', Taka Balık (Fish), 'city_name: ',Konya
+restaurts_name: ', Art Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Mevlevi Sofrası Restaurant, 'city_name: ',Konya
+restaurts_name: ', Konya Restoran, 'city_name: ',Konya
+restaurts_name: ', TARİHİ FUAR ETLİEKMEK, 'city_name: ',Konya
+restaurts_name: ', Palati Thessaloniki, 'city_name: ',Thessaloniki
+restaurts_name: ', Kanoula, 'city_name: ',Thessaloniki
+restaurts_name: ', The Greek, 'city_name: ',Thessaloniki
+restaurts_name: ', Full tou Meze, 'city_name: ',Thessaloniki
+restaurts_name: ', 7 Thalasses, 'city_name: ',Thessaloniki
+restaurts_name: ', The Heavy Melon - To vari peponi, 'city_name: ',Thessaloniki
+restaurts_name: ', Opsopoion Maganeiai, 'city_name: ',Thessaloniki
+restaurts_name: ', Grada nuevo, 'city_name: ',Thessaloniki
+restaurts_name: ', Tarantoúla, 'city_name: ',Thessaloniki
+restaurts_name: ', Donkey Garden, 'city_name: ',Thessaloniki
+restaurts_name: ', Tarti, 'city_name: ',Thessaloniki
+restaurts_name: ', MAREA sea spirit, 'city_name: ',Thessaloniki
+restaurts_name: ', Loupino Restaurant, 'city_name: ',Thessaloniki
+restaurts_name: ', Old Athens, 'city_name: ',Thessaloniki
+restaurts_name: ', Molyvos, 'city_name: ',Thessaloniki
+restaurts_name: ', Tsipouradiko Papadis, 'city_name: ',Volos
+restaurts_name: ', Brighton Gastronomic Tavern Volos, 'city_name: ',Volos
+restaurts_name: ', Veggera, 'city_name: ',Volos
+restaurts_name: ', Staphylos, 'city_name: ',Volos
+restaurts_name: ', Mezen, 'city_name: ',Volos
+restaurts_name: ', Lola & Luna, 'city_name: ',Volos
+restaurts_name: ', Creperie Poquito, 'city_name: ',Volos
+restaurts_name: ', Colher de Pau - Centro Restaurante, 'city_name: ',Porto Seguro
+restaurts_name: ', Porto Geraes Restaurante, 'city_name: ',Porto Seguro
+restaurts_name: ', Boa Beach, 'city_name: ',Porto Seguro
+restaurts_name: ', Acarajé da Jaque, 'city_name: ',Porto Seguro
+restaurts_name: ', Restaurante - Barraca do Gaúcho - Churrascaria - Rodízio de churrasco, 'city_name: ',Porto Seguro
+restaurts_name: ', A Queda, 'city_name: ',Amadora
+restaurts_name: ', Chafariz das Gravatas, 'city_name: ',Amadora
+restaurts_name: ', O Quintal, 'city_name: ',Amadora
+restaurts_name: ', O Nosso Prego Amadora, 'city_name: ',Amadora
+restaurts_name: ', O Carrada, 'city_name: ',Amadora
+restaurts_name: ', Beira Alta, 'city_name: ',Amadora
+restaurts_name: ', Adega-Fernando, 'city_name: ',Amadora
+restaurts_name: ', Churrasqueira Os Cunhados, 'city_name: ',Amadora
+restaurts_name: ', Casarao Adega Restô, 'city_name: ',Porto Seguro
+restaurts_name: ', Penny Lane Resto Bar, 'city_name: ',Porto Seguro
+restaurts_name: ', porto artesanato, 'city_name: ',Porto Seguro
+restaurts_name: ', Porto Bistrô, 'city_name: ',Porto Seguro
+restaurts_name: ', Restaurante Toa Toa, 'city_name: ',Porto Seguro
+restaurts_name: ', Le Petit Amadora, 'city_name: ',Amadora
+restaurts_name: ', Restaurante, 'city_name: ',Amadora
+restaurts_name: ', Hacı Dayı Tophane, 'city_name: ',Bursa
+restaurts_name: ', Bursa Kebapcisi, 'city_name: ',Bursa
+restaurts_name: ', The Hunger Bursa Parkora, 'city_name: ',Bursa
+restaurts_name: ', RESTÓ MEXICANO VIVA LA PEPA, 'city_name: ',Salta
+restaurts_name: ', Adobe Cocina Regional, 'city_name: ',Salta
+restaurts_name: ', Aires Caseros, 'city_name: ',Salta
+restaurts_name: ', Ekabir restaurant, 'city_name: ',Bursa
+restaurts_name: ', QASIR Cafe, 'city_name: ',Bursa
+restaurts_name: ', HİDDEN GARDEN BURSA, 'city_name: ',Bursa
+restaurts_name: ', Asiklar Restaurant, 'city_name: ',Bursa
+restaurts_name: ', Restaurant Don Salvador, 'city_name: ',Salta
+restaurts_name: ', Patio de Salta, 'city_name: ',Salta
+restaurts_name: ', Sandweria PLANTAS VS ZOMBIES, 'city_name: ',Salta
+restaurts_name: ', Salta, 'city_name: ',Salta
+restaurts_name: ', El Trineo, 'city_name: ',Salta
+restaurts_name: ', Kayhan Köftecisi, 'city_name: ',Bursa
+restaurts_name: ', La Casona del Molino, 'city_name: ',Salta
+restaurts_name: ', Doña Salta, 'city_name: ',Salta
+restaurts_name: ', José Balcarce bistró, 'city_name: ',Salta
+restaurts_name: ', Bursa Restaurant, 'city_name: ',Bursa
+restaurts_name: ', MİTHAT TİRİT, 'city_name: ',Konya
+restaurts_name: ', Sifa Restaurant, 'city_name: ',Konya
+restaurts_name: ', konyada restaurant, 'city_name: ',Konya
+restaurts_name: ', Ziyapaşa Etli Ekmek, 'city_name: ',Konya
+restaurts_name: ', פסטיבל התמר, 'city_name: ',Dead Sea
+restaurts_name: ', Rush Rush, 'city_name: ',Dead Sea
+restaurts_name: ', Maruf Türbeönü Lokantası, 'city_name: ',Konya
+restaurts_name: ', Sille Konak Restaurant, 'city_name: ',Konya
+restaurts_name: ', Ali Baba Fırın Kebap, 'city_name: ',Konya
+restaurts_name: ', Vamos À Maria Cachucha, 'city_name: ',Amadora
+restaurts_name: ', O Javali, 'city_name: ',Amadora
+restaurts_name: ', Maurice de Talleyrand, 'city_name: ',Asuncion
+restaurts_name: ', Greek Restaurant AGALMA, 'city_name: ',Rhodes
+restaurts_name: ', Anne-Sophie Pic au Beau-Rivage Palace, 'city_name: ',Lausanne
+restaurts_name: ', Restaurante O Barco, 'city_name: ',Buzios
+restaurts_name: ', Vieil Ouchy, 'city_name: ',Lausanne
+restaurts_name: ', The Lacustre, 'city_name: ',Lausanne
+restaurts_name: ', Buda Beach Búzios, 'city_name: ',Buzios
+restaurts_name: ', Ravello Ristorante, 'city_name: ',Ciudad del Este
+restaurts_name: ', Vieux-Lausanne Restaurant & Giraf Bar, 'city_name: ',Lausanne
+restaurts_name: ', at Thomas, 'city_name: ',Rhodes
+restaurts_name: ', Pizanias "The Sea Star", 'city_name: ',Rhodes
+restaurts_name: ', Novo Manjar, 'city_name: ',Amadora
+restaurts_name: ', Desi Dabha, 'city_name: ',Amadora
+restaurts_name: ', Savana Sushi Amadora, 'city_name: ',Amadora
+restaurts_name: ', Cosmic Minigolf Pub, 'city_name: ',Krakow
+restaurts_name: ', Le Spot | Poke Bowls | Lausanne, 'city_name: ',Lausanne
+restaurts_name: ', Kadu Festas - Parque e Buffet, 'city_name: ',Sao Luis
+restaurts_name: ', SAX Palace, 'city_name: ',Ciudad del Este
+restaurts_name: ', O Porcalho, 'city_name: ',Amadora
+restaurts_name: ', Mama Sofia, 'city_name: ',Rhodes
+restaurts_name: ', Bananaland, 'city_name: ',Buzios
+restaurts_name: ', Capitão Bar, 'city_name: ',Ciudad del Este
+restaurts_name: ', Aitiopaikka, 'city_name: ',Turku
+restaurts_name: ', Mistico Restaurant, 'city_name: ',Buzios
+restaurts_name: ', Mata Hari Buzios Restaurante, 'city_name: ',Buzios
+restaurts_name: ', Wasven, 'city_name: ',Eindhoven
+restaurts_name: ', Restaurant Wiesen, 'city_name: ',Eindhoven
+restaurts_name: ', VANE Restaurant, 'city_name: ',Eindhoven
+restaurts_name: ', Giornale, 'city_name: ',Eindhoven
+restaurts_name: ', Umami by Han, 'city_name: ',Eindhoven
+restaurts_name: ', Grand Café Plein 4, 'city_name: ',Eindhoven
+restaurts_name: ', Boca Grande Eindhoven | Mexican Cocktails & Tapas, 'city_name: ',Eindhoven
+restaurts_name: ', Down Town Gourmet Market, 'city_name: ',Eindhoven
+restaurts_name: ', ראנץ' האוס, 'city_name: ',Dead Sea
+restaurts_name: ', ביאנקיני, 'city_name: ',Dead Sea
+restaurts_name: ', טאג' מאהל, 'city_name: ',Dead Sea
+restaurts_name: ', מסעדת ביאנקיני, 'city_name: ',Dead Sea
+restaurts_name: ', Restaurant El Puente, 'city_name: ',Eindhoven
+restaurts_name: ', Bistron - Restaurante, 'city_name: ',Ciudad del Este
+restaurts_name: ', Letuchiy Gollandets, 'city_name: ',Saint Petersburg
+restaurts_name: ', Grad Petrov, 'city_name: ',Saint Petersburg
+restaurts_name: ', Venetian Well, 'city_name: ',Corfu
+restaurts_name: ', Taverna Bikolis, 'city_name: ',Corfu
+restaurts_name: ', Taverna Ninos, 'city_name: ',Corfu
+restaurts_name: ', Da Giovanni Aglio e Olio, 'city_name: ',Corfu
+restaurts_name: ', Elia, 'city_name: ',Corfu
+restaurts_name: ', Hotel Casino Acaray, 'city_name: ',Ciudad del Este
+restaurts_name: ', Παλαιά Περίθεια, 'city_name: ',Corfu
+restaurts_name: ', 4 Rodies, 'city_name: ',Rhodes
+restaurts_name: ', Kerasma, 'city_name: ',Rhodes
+restaurts_name: ', Οδυσσέας Εστιατόριο, 'city_name: ',Rhodes
+restaurts_name: ', Traditional Cafe Symi - Παραδοσιακό Καφενείο Σύμη, 'city_name: ',Rhodes
+restaurts_name: ', Nireas Restaurant, 'city_name: ',Rhodes
+restaurts_name: ', Aegean Fish, 'city_name: ',Rhodes
+restaurts_name: ', to Rodi Mediterranean Cuisine, 'city_name: ',Rhodes
+restaurts_name: ', Peskesi Greek Cuisine, 'city_name: ',Rhodes
+restaurts_name: ', Taqueria Muchachos Rhodes, 'city_name: ',Rhodes
+restaurts_name: ', De Kafétaria, 'city_name: ',Antwerp
+restaurts_name: ', Galereya Vkusa "Park Kul'tury", 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Mitrich steakhouse, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Vesolaya Kuma, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Club-restaurant "Onegin", 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Ribs - ресторан трех кухонь мира, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Pyatkin", 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Bakladzhan, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Зимний СадЪ | Кафе Нижний Новгород | Ресторан, банкетный зал, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Stadsrestaurant Welp, 'city_name: ',Eindhoven
+restaurts_name: ', Restoran Krylov", 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Romantic Palace, 'city_name: ',Corfu
+restaurts_name: ', YESEMEK GAZİANTEP MUTFAĞI, 'city_name: ',Gaziantep
+restaurts_name: ', Dzhordzhiano, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Olympia Mare Restaurant Corfu, 'city_name: ',Corfu
+restaurts_name: ', Ресторан NEMO | Кафе, бизнес-ланч, рыбный ресторан Нижегородский район, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Restaurant Stories Eindhoven, 'city_name: ',Eindhoven
+restaurts_name: ', Ekspeditsiya, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Luzt Gastrobar, 'city_name: ',Eindhoven
+restaurts_name: ', Gaziantep Restoran, 'city_name: ',Gaziantep
+restaurts_name: ', Asiye 1927, 'city_name: ',Gaziantep
+restaurts_name: ', 1910 Restaurant, 'city_name: ',Eindhoven
+restaurts_name: ', Ketelhuis Strijp-S, 'city_name: ',Eindhoven
+restaurts_name: ', Holland Casino, 'city_name: ',Eindhoven
+restaurts_name: ', Sopranos, 'city_name: ',Eindhoven
+restaurts_name: ', Küşlemeci Mehmet Usta, 'city_name: ',Gaziantep
+restaurts_name: ', Bistro PrimeMall, 'city_name: ',Gaziantep
+restaurts_name: ', Kasap Halil Usta Fırınlı Et Lokantası, 'city_name: ',Gaziantep
+restaurts_name: ', Bayazhan Butik Hotel & Restaurant, 'city_name: ',Gaziantep
+restaurts_name: ', Hışvahan - HAN | LOKANTA | DÜKKAN, 'city_name: ',Gaziantep
+restaurts_name: ', Gaziantep Suhan Restaurant, 'city_name: ',Gaziantep
+restaurts_name: ', kale evi restaurant, 'city_name: ',Gaziantep
+restaurts_name: ', KÖMBEHAN RESTORAN, 'city_name: ',Gaziantep
+restaurts_name: ', Restoran Tyubeteyka, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Kurkuma, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', PHISQA WARMIS, 'city_name: ',Potosi
+restaurts_name: ', Restaurante el Bote Cerveza Natales, 'city_name: ',Puerto Natales
+restaurts_name: ', Restaurante Barrica's, 'city_name: ',Maceio
+restaurts_name: ', Cangrejo Rojo, 'city_name: ',Puerto Natales
+restaurts_name: ', CUBE Restaurant, 'city_name: ',Stuttgart
+restaurts_name: ', Cafe Pub 4060, 'city_name: ',Potosi
+restaurts_name: ', restaurante La Picada De Carlitos, 'city_name: ',Puerto Natales
+restaurts_name: ', Maria Antonieta: Ravioli, Pizzas, Massas, Vinhos, Restaurante Italiano em Maceió, 'city_name: ',Maceio
+restaurts_name: ', La Disqueria Restaurant, 'city_name: ',Puerto Natales
+restaurts_name: ', "Wayna Potojsi", El Palacio de la Kalaphurka, 'city_name: ',Potosi
+restaurts_name: ', Fao Fao China Box, 'city_name: ',Potosi
+restaurts_name: ', Terraço Restaurante e Cervejaria, 'city_name: ',Maceio
+restaurts_name: ', Del Mare, 'city_name: ',Maceio
+restaurts_name: ', Anamá Restaurante, 'city_name: ',Maceio
+restaurts_name: ', Restaurante Casa de Mainha | Self Service | Pajuçara, 'city_name: ',Maceio
+restaurts_name: ', Massagueirinha Ponta Verde, 'city_name: ',Maceio
+restaurts_name: ', D’Alagoas Restaurante, 'city_name: ',Maceio
+restaurts_name: ', Casa de Praia Restaurante e Bar, 'city_name: ',Maceio
+restaurts_name: ', Sá Menina Restaurante, 'city_name: ',Maceio
+restaurts_name: ', The Singing Lamb - Bar, 'city_name: ',Puerto Natales
+restaurts_name: ', Restaurant Cormoran, 'city_name: ',Puerto Natales
+restaurts_name: ', Café Artimaña, 'city_name: ',Puerto Natales
+restaurts_name: ', Austral Restorant, 'city_name: ',Puerto Natales
+restaurts_name: ', Patagonia'food, 'city_name: ',Puerto Natales
+restaurts_name: ', Base Camp Pizzeria, 'city_name: ',Puerto Natales
+restaurts_name: ', Trzy Rybki, 'city_name: ',Krakow
+restaurts_name: ', Szara Resto&Bar, 'city_name: ',Krakow
+restaurts_name: ', Balaton Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Copernicus Restaurant | Copernicus Hotel, 'city_name: ',Krakow
+restaurts_name: ', ZAZIE Bistro, 'city_name: ',Krakow
+restaurts_name: ', Viale Verde Ristorante | Restauracja Kraków, 'city_name: ',Krakow
+restaurts_name: ', Hablemos Coco Restaurant, 'city_name: ',Puerto Natales
+restaurts_name: ', Restaurant Bahía Mansa, 'city_name: ',Puerto Natales
+restaurts_name: ', Kazimir Legendary Rock, 'city_name: ',Krakow
+restaurts_name: ', Khachapuri Restaurant, 'city_name: ',Krakow
+restaurts_name: ', Taberna Española, 'city_name: ',Asuncion
+restaurts_name: ', Paseo Carmelitas, 'city_name: ',Asuncion
+restaurts_name: ', La Cabrera, 'city_name: ',Asuncion
+restaurts_name: ', Hacienda Las Palomas, 'city_name: ',Asuncion
+restaurts_name: ', Coco Bambu São Luís: Restaurante, Peixe, Camarão, Carnes, Lagosta, Salada, MA, 'city_name: ',Sao Luis
+restaurts_name: ', Casa de Juja, 'city_name: ',Sao Luis
+restaurts_name: ', CASA7 Restaurante, 'city_name: ',Sao Luis
+restaurts_name: ', Bolsi, 'city_name: ',Asuncion
+restaurts_name: ', Cabana do Sol, 'city_name: ',Sao Luis
+restaurts_name: ', Tinctura Restaurant & Cocktail Bar, 'city_name: ',Krakow
+restaurts_name: ', Slots del Sol, 'city_name: ',Asuncion
+restaurts_name: ', Kaffetario, 'city_name: ',Asuncion
+restaurts_name: ', Galetão Do Moraes, 'city_name: ',Sao Luis
+restaurts_name: ', Dom Luiz, 'city_name: ',Sao Luis
+restaurts_name: ', Rossini Steakhouse, 'city_name: ',Sao Luis
+restaurts_name: ', Musiu, 'city_name: ',Asuncion
+restaurts_name: ', Restaurant Kaskis, 'city_name: ',Turku
+restaurts_name: ', Pancho Villa Turku, 'city_name: ',Turku
+restaurts_name: ', Rioni Turku, 'city_name: ',Turku
+restaurts_name: ', 후포항 남양호, 'city_name: ',Incheon
+restaurts_name: ', Restaurant Roster, 'city_name: ',Turku
+restaurts_name: ', Tiirikkala, 'city_name: ',Turku
+restaurts_name: ', Rantakerttu, 'city_name: ',Turku
+restaurts_name: ', Restaurant Maneerat, 'city_name: ',Turku
+restaurts_name: ', Turun Kellariravintola, 'city_name: ',Turku
+restaurts_name: ', Tintå, 'city_name: ',Turku
+restaurts_name: ', Vaakahuoneen Paviljonki, 'city_name: ',Turku
+restaurts_name: ', Fu 1088, 'city_name: ',Shanghai
+restaurts_name: ', Shanghai Grandmother Restaurant, 'city_name: ',Shanghai
+restaurts_name: ', Lost Heaven Bar, 'city_name: ',Shanghai
+restaurts_name: ', Jia Jia Tang Bao, 'city_name: ',Shanghai
+restaurts_name: ', yang's fried dumpling, 'city_name: ',Shanghai
+restaurts_name: ', M on the Bund, 'city_name: ',Shanghai
+restaurts_name: ', La Brasserie de La Mer, 'city_name: ',Natal
+restaurts_name: ', Old Five Beach Restaurante Natal, 'city_name: ',Natal
+restaurts_name: ', Camarões, 'city_name: ',Natal
+restaurts_name: ', Ark, 'city_name: ',Shanghai
+restaurts_name: ', Guilin Rice Noodles, 'city_name: ',Shanghai
+restaurts_name: ', Fengjing Ancient Town, 'city_name: ',Shanghai
+restaurts_name: ', SWFC, 'city_name: ',Shanghai
+restaurts_name: ', Shuizhongtian Yunnan Cross-bridge Rice Noodles, 'city_name: ',Shanghai
+restaurts_name: ', Lao Shanghai 8 Restaurant, 'city_name: ',Shanghai
+restaurts_name: ', Shanghai Guyi Garden Restaurant, 'city_name: ',Shanghai
+restaurts_name: ', 1931 Restaurant, 'city_name: ',Shanghai
+restaurts_name: ', Xin Guang, 'city_name: ',Shanghai
+restaurts_name: ', Shanghai Home Huangpu Shop, 'city_name: ',Shanghai
+restaurts_name: ', Marenosso Restaurante, 'city_name: ',Natal
+restaurts_name: ', Camarões Potiguar, 'city_name: ',Natal
+restaurts_name: ', Manary Gastronomia & Arte, 'city_name: ',Natal
+restaurts_name: ', La Praia Beach Lounge, 'city_name: ',Natal
+restaurts_name: ', Yu Shanghai, 'city_name: ',Shanghai
+restaurts_name: ', Camarões Midway Mall, 'city_name: ',Natal
+restaurts_name: ', Beira Mar Restaurante, 'city_name: ',Natal
+restaurts_name: ', Restaurant Concerto St. Gallen, 'city_name: ',St. Gallen
+restaurts_name: ', National zum goldenen Leuen, 'city_name: ',St. Gallen
+restaurts_name: ', Zum Schlössli, 'city_name: ',St. Gallen
+restaurts_name: ', Drahtseilbähnli, 'city_name: ',St. Gallen
+restaurts_name: ', Zur alten Post, 'city_name: ',St. Gallen
+restaurts_name: ', LaVigna, 'city_name: ',St. Gallen
+restaurts_name: ', Gartenhaus, 'city_name: ',St. Gallen
+restaurts_name: ', tibits St. Gallen, 'city_name: ',St. Gallen
+restaurts_name: ', Restaurant Zur Brugg St. Gallen, 'city_name: ',St. Gallen
+restaurts_name: ', Bryggeloftet & Stuene Restaurant, 'city_name: ',Bergen
+restaurts_name: ', The Unicorn Fish Restaurant, 'city_name: ',Bergen
+restaurts_name: ', Ulriksbanen, 'city_name: ',Bergen
+restaurts_name: ', Brasilia Bergen, 'city_name: ',Bergen
+restaurts_name: ', Natal, 'city_name: ',Natal
+restaurts_name: ', Einstein Gourmet, 'city_name: ',St. Gallen
+restaurts_name: ', Restaurant Jägerhof, 'city_name: ',St. Gallen
+restaurts_name: ', Osteria San Gallo, 'city_name: ',St. Gallen
+restaurts_name: ', Brasserie LOK, 'city_name: ',St. Gallen
+restaurts_name: ', Restaurant Kolosseum, 'city_name: ',St. Gallen
+restaurts_name: ', Bäumli, 'city_name: ',St. Gallen
+restaurts_name: ', Pingvinen, 'city_name: ',Bergen
+restaurts_name: ', Falkenburg, 'city_name: ',St. Gallen
+restaurts_name: ', Lysverket, 'city_name: ',Bergen
+restaurts_name: ', Savanna Restaurant, 'city_name: ',Bergen
+restaurts_name: ', Fjellskål Seafood Restaurant, 'city_name: ',Bergen
+restaurts_name: ', Naaima Cafe, 'city_name: ',Haifa
+restaurts_name: ', Estacion de la Papa, 'city_name: ',Cali
+restaurts_name: ', Café Libro Casa Libro Alebrije, 'city_name: ',Cali
+restaurts_name: ', Waunana Restaurante, 'city_name: ',Cali
+restaurts_name: ', Naboen Pub & Restaurant, 'city_name: ',Bergen
+restaurts_name: ', Storia D'Amore Granada, 'city_name: ',Cali
+restaurts_name: ', Restaurante la Zarzuela, 'city_name: ',Cali
+restaurts_name: ', El Zaguán de San Antonio, 'city_name: ',Cali
+restaurts_name: ', Castle Cafe & Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Leman Kultur, 'city_name: ',Antalya
+restaurts_name: ', Vanilla Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Kuğulu Park Manzara, 'city_name: ',Antalya
+restaurts_name: ', 7 Mehmet, 'city_name: ',Antalya
+restaurts_name: ', İSKELE RESTAURANT MARİNA, 'city_name: ',Antalya
+restaurts_name: ', Arma Restaurant, 'city_name: ',Antalya
+restaurts_name: ', LUNA GARDEN, 'city_name: ',Antalya
+restaurts_name: ', Yemenli Meyhanesi Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Grand Friends Fish & Steak Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Piazza by Storia D'amore Unicentro Cali, 'city_name: ',Cali
+restaurts_name: ', Hangzhou Restaurant, 'city_name: ',Hangzhou
+restaurts_name: ', Edalya restaurant and terrace, 'city_name: ',Antalya
+restaurts_name: ', Aynalı, 'city_name: ',Antalya
+restaurts_name: ', Panoramik Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Al Dente Cafe&Bistro TAHÇİN Restoran irani ANTALYA رستوران ایرانی آنتالیا ( ته چین ), 'city_name: ',Antalya
+restaurts_name: ', Pio Gastro Bar & Bistro, 'city_name: ',Antalya
+restaurts_name: ', Ayar Meyhanesi, 'city_name: ',Antalya
+restaurts_name: ', Seraser Fine Dining Restaurant, 'city_name: ',Antalya
+restaurts_name: ', Topcu Kebap, 'city_name: ',Antalya
+restaurts_name: ', Route Burger House, 'city_name: ',Antalya
+restaurts_name: ', Powidok bistro by Stacja Zero, 'city_name: ',Lodz
+restaurts_name: ', Bierhalle Esplanada, 'city_name: ',Lodz
+restaurts_name: ', Anatewka Manufaktura, 'city_name: ',Lodz
+restaurts_name: ', Siekany Mieszany Restauracja, 'city_name: ',Lodz
+restaurts_name: ', The Dumplings Piotrkowska, 'city_name: ',Lodz
+restaurts_name: ', Plac do grilowania, 'city_name: ',Lodz
+restaurts_name: ', Hot Coffee House, 'city_name: ',Uyuni
+restaurts_name: ', Almirato Coffee, 'city_name: ',Uyuni
+restaurts_name: ', Ignorantka, 'city_name: ',Lodz
+restaurts_name: ', Tiger Prawn Vietnamese Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Guangzhou Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Panxi Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Καστέλλα, 'city_name: ',Heraklion
+restaurts_name: ', Parasties, 'city_name: ',Heraklion
+restaurts_name: ', Ntoré Gastronomy, 'city_name: ',Heraklion
+restaurts_name: ', Erasitexnes Psarades, 'city_name: ',Heraklion
+restaurts_name: ', KOUZEINERI, 'city_name: ',Heraklion
+restaurts_name: ', Erganos, 'city_name: ',Heraklion
+restaurts_name: ', Vourvourladikon, 'city_name: ',Heraklion
+restaurts_name: ', Amalia's Kitchen, 'city_name: ',Heraklion
+restaurts_name: ', Paralia, 'city_name: ',Heraklion
+restaurts_name: ', Lei Garden Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Shangdian, 'city_name: ',Guangzhou
+restaurts_name: ', Luming Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Lychee Bay, 'city_name: ',Guangzhou
+restaurts_name: ', Yangcheng Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Beiyuan Cuisine, 'city_name: ',Guangzhou
+restaurts_name: ', Yutang Chunnuan Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', Hoi Fan Restaurant, 'city_name: ',Guangzhou
+restaurts_name: ', 至top茶餐厅, 'city_name: ',Guangzhou
+restaurts_name: ', Chagiati, 'city_name: ',Heraklion
+restaurts_name: ', Kriti Allios / Κρήτη Αλλιώς, 'city_name: ',Heraklion
+restaurts_name: ', En Plo, 'city_name: ',Heraklion
+restaurts_name: ', Hook, 'city_name: ',Espoo
+restaurts_name: ', Athali Cretan Cuisine, 'city_name: ',Heraklion
+restaurts_name: ', 7 Thalases, 'city_name: ',Heraklion
+restaurts_name: ', Restaurace Kamenný dům Liberec Letní terasa, 'city_name: ',Liberec
+restaurts_name: ', Fisherman's Bastion, 'city_name: ',Liberec
+restaurts_name: ', Restaurace Potrefená husa Liberec, 'city_name: ',Liberec
+restaurts_name: ', Labský Zámek, 'city_name: ',Liberec
+restaurts_name: ', Ravintola Fat Lizard Espoo, 'city_name: ',Espoo
+restaurts_name: ', Ravintola Pomo d’or, 'city_name: ',Espoo
+restaurts_name: ', Restaurant Lucy in the Sky, 'city_name: ',Espoo
+restaurts_name: ', La Locanda vantaa, 'city_name: ',Vantaa
+restaurts_name: ', Ravintola Koseli, 'city_name: ',Vantaa
+restaurts_name: ', Restaurant Zilla, 'city_name: ',Vantaa
+restaurts_name: ', Ravintola Ginger, 'city_name: ',Vantaa
+restaurts_name: ', Panorama Restaurant Haikaranpesä, 'city_name: ',Espoo
+restaurts_name: ', Serena Water Park, 'city_name: ',Espoo
+restaurts_name: ', My Kampung, 'city_name: ',Vantaa
+restaurts_name: ', Hao King & Sushi, 'city_name: ',Vantaa
+restaurts_name: ', Shoku burger, 'city_name: ',Vantaa
+restaurts_name: ', Restaurante Paladino, 'city_name: ',Belo Horizonte
+restaurts_name: ', Restaurante Glouton, 'city_name: ',Belo Horizonte
+restaurts_name: ', Chalé da Mata Restaurante, 'city_name: ',Belo Horizonte
+restaurts_name: ', República da Esbórnia, 'city_name: ',Belo Horizonte
+restaurts_name: ', D'Artagnan, 'city_name: ',Belo Horizonte
+restaurts_name: ', Alguidares Bar e Restaurante Ltda, 'city_name: ',Belo Horizonte
+restaurts_name: ', Bar e Museu Clube da Esquina, 'city_name: ',Belo Horizonte
+restaurts_name: ', La Palma Restaurante, Pizzaria e Cervejaria, 'city_name: ',Belo Horizonte
+restaurts_name: ', A Pão de Queijaria - Savassi, 'city_name: ',Belo Horizonte
+restaurts_name: ', Takos Mexican, 'city_name: ',Belo Horizonte
+restaurts_name: ', Melhor Bar, 'city_name: ',Belo Horizonte
+restaurts_name: ', Restaurante Drummond, 'city_name: ',Belo Horizonte
+restaurts_name: ', Estação Central - Restaurante, 'city_name: ',Belo Horizonte
+restaurts_name: ', Per Lui Restaurante, 'city_name: ',Belo Horizonte
+restaurts_name: ', Bodega Bouza, 'city_name: ',Montevideo
+restaurts_name: ', Phillips, 'city_name: ',Arusha
+restaurts_name: ', Restaurant Primuseum, 'city_name: ',Montevideo
+restaurts_name: ', Bodega, 'city_name: ',Waterford
+restaurts_name: ', Uluru, 'city_name: ',Waterford
+restaurts_name: ', Momo Restaurant, 'city_name: ',Waterford
+restaurts_name: ', HEERY'S Bar & Restaurant, 'city_name: ',Waterford
+restaurts_name: ', Eddie Rockets, 'city_name: ',Waterford
+restaurts_name: ', La Mafia Tratoria, 'city_name: ',Foz do Iguacu
+restaurts_name: ', Munster Room Restaurant, 'city_name: ',Waterford
+restaurts_name: ', Everett's Restaurant, 'city_name: ',Waterford
+restaurts_name: ', Dreams Park Show, 'city_name: ',Foz do Iguacu
+restaurts_name: ', Lenny's, 'city_name: ',Cayo Coco
+restaurts_name: ', Adam's Restaurant, 'city_name: ',Birmingham
+restaurts_name: ', Kastro's Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', Captain's - Food for Sharing, 'city_name: ',Mykonos
+restaurts_name: ', Roca Sunset Restaurant Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', Spilia Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', Hippie Fish Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', Interni Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', Nikolas Tavern Mykonos - Seafood Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', To Maereio, 'city_name: ',Mykonos
+restaurts_name: ', Ranchon Flamenco, 'city_name: ',Cayo Coco
+restaurts_name: ', Ranchon Las Dunas, 'city_name: ',Cayo Coco
+restaurts_name: ', Lobster Shack, 'city_name: ',Cayo Coco
+restaurts_name: ', Ranchon Cuba Libre, 'city_name: ',Cayo Coco
+restaurts_name: ', Parador La Silla, 'city_name: ',Cayo Coco
+restaurts_name: ', Sarehole Mill Museum, 'city_name: ',Birmingham
+restaurts_name: ', Land Restaurant, 'city_name: ',Birmingham
+restaurts_name: ', Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', Oniro Sunset Bar - Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', Olive Tree Restaurant Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', NOA Greek Taverna, 'city_name: ',Mykonos
+restaurts_name: ', Kounelas Fish Tavern, 'city_name: ',Mykonos
+restaurts_name: ', Stoa Louli, 'city_name: ',Ioannina
+restaurts_name: ', Metsovitiki Folia, 'city_name: ',Ioannina
+restaurts_name: ', Φρόντζου Πολιτεία - Frontzu Politia Restaurant, 'city_name: ',Ioannina
+restaurts_name: ', PRESVEIA Restaurant Meze, 'city_name: ',Ioannina
+restaurts_name: ', Μπακαλόγατος Ιωάννινα - Τσιπουράδικο και Μεζεδοπωλείο, 'city_name: ',Ioannina
+restaurts_name: ', Fysa Roufa, 'city_name: ',Ioannina
+restaurts_name: ', Amadeus, 'city_name: ',Ioannina
+restaurts_name: ', Fige Restaurant, 'city_name: ',Ankara
+restaurts_name: ', Kugulupark Restaurant & Cafe, 'city_name: ',Ankara
+restaurts_name: ', Ege Restaurant, 'city_name: ',Ankara
+restaurts_name: ', Fevzi Hoca Balık Lokantası, 'city_name: ',Ankara
+restaurts_name: ', PuppenHaus, 'city_name: ',Novosibirsk
+restaurts_name: ', PRYTANEIO DESIGN HOTEL Restaurant-Cafe-Pool Bar (Best Price...Best Choice:), 'city_name: ',Ioannina
+restaurts_name: ', The Meating street food, 'city_name: ',Ioannina
+restaurts_name: ', İtalyan Restoran, 'city_name: ',Ankara
+restaurts_name: ', Adzhikinezhal', 'city_name: ',Novosibirsk
+restaurts_name: ', Beerman On river, 'city_name: ',Novosibirsk
+restaurts_name: ', Avocado Queen Novosibirsk, 'city_name: ',Novosibirsk
+restaurts_name: ', Sky lounge (Небо), 'city_name: ',Novosibirsk
+restaurts_name: ', Baranzhar, 'city_name: ',Novosibirsk
+restaurts_name: ', Tsarskiy Dvor, Restoran, 'city_name: ',Novosibirsk
+restaurts_name: ', Restoran Khamovniki, 'city_name: ',Novosibirsk
+restaurts_name: ', Shinok U Vakuly, 'city_name: ',Novosibirsk
+restaurts_name: ', Ресторан Бочкари, 'city_name: ',Novosibirsk
+restaurts_name: ', Sosedi, Restoran Natsional'noy Kukhni, 'city_name: ',Novosibirsk
+restaurts_name: ', La Trenta, trattoria, 'city_name: ',Novosibirsk
+restaurts_name: ', Cavas Del Fin Del Mundo, 'city_name: ',Ushuaia
+restaurts_name: ', Taberna Del Viejo Lobo, 'city_name: ',Ushuaia
+restaurts_name: ', Kaupé Restaurant, 'city_name: ',Ushuaia
+restaurts_name: ', SEVEN SWANS, 'city_name: ',Frankfurt
+restaurts_name: ', Park Cafe, 'city_name: ',Novosibirsk
+restaurts_name: ', MainNizza, 'city_name: ',Frankfurt
+restaurts_name: ', Pontão do Lago Sul, 'city_name: ',Brasilia
+restaurts_name: ', Coves de Gènova, 'city_name: ',Palma de Mallorca
+restaurts_name: ', Spot Mallorca, 'city_name: ',Palma de Mallorca
+restaurts_name: ', Cesarica, 'city_name: ',Kotor
+restaurts_name: ', Restaurant Galion, 'city_name: ',Kotor
+restaurts_name: ', Restaurant PRŽUN, 'city_name: ',Kotor
+restaurts_name: ', Restaurant Les Armures, 'city_name: ',Geneva
+restaurts_name: ', Chat-Botté, 'city_name: ',Geneva
+restaurts_name: ', EL SANTO ANGEL, 'city_name: ',Leticia
+restaurts_name: ', Bar Restaurante Tierras Amazónicas, 'city_name: ',Leticia
+restaurts_name: ', Punto Lounge SAS, 'city_name: ',Leticia
+restaurts_name: ', La Quinta Restaurante y Eventos, 'city_name: ',Leticia
+restaurts_name: ', La Cigale Alsancak, 'city_name: ',Izmir
+restaurts_name: ', Yengec Restaurant, 'city_name: ',Izmir
+restaurts_name: ', PASSAPORTE Coimbra, 'city_name: ',Coimbra
+restaurts_name: ', La Playa, 'city_name: ',Valparaiso
+restaurts_name: ', La Bicicleta Resto - Bar, 'city_name: ',Mendoza
+restaurts_name: ', Govindas Vegetarian Food & Yoga, 'city_name: ',Leticia
+restaurts_name: ', Ouzo Santa Marta, 'city_name: ',Santa Marta
+restaurts_name: ', Faro Place, 'city_name: ',Santa Marta
+restaurts_name: ', La Canoa, 'city_name: ',Santa Marta
+restaurts_name: ', El BemBe del Parque Cafe Bar, 'city_name: ',Santa Marta
+restaurts_name: ', Lulo Cafe Bar, 'city_name: ',Santa Marta
+restaurts_name: ', BAHIA TROPICAL RESTAURANTE & BAR, 'city_name: ',Santa Marta
+restaurts_name: ', Pigen Cafe & Bar, 'city_name: ',Drammen
+restaurts_name: ', Skjenkestua AS, 'city_name: ',Drammen
+restaurts_name: ', Singh Saab - The Authentic Indisk Restaurant, 'city_name: ',Drammen
+restaurts_name: ', Dynastiet restaurant AS, 'city_name: ',Drammen
+restaurts_name: ', Kings Arms Pub, 'city_name: ',Drammen
+restaurts_name: ', Cappadocia restaurant AS, 'city_name: ',Drammen
+restaurts_name: ', Tiffany´s CC Drammen, 'city_name: ',Drammen
+restaurts_name: ', Kurdernes Hus drammen AS, 'city_name: ',Drammen
+restaurts_name: ', Labyrinthos, 'city_name: ',Patras
+restaurts_name: ', Κατσαρόλα της Τούλας, 'city_name: ',Patras
+restaurts_name: ', Goody's Burger House, 'city_name: ',Patras
+restaurts_name: ', Paşalimanı, 'city_name: ',Adana
+restaurts_name: ', Adana Koço, 'city_name: ',Adana
+restaurts_name: ', Cacık restaurant, 'city_name: ',Adana
+restaurts_name: ', Maki Restoran Uğur Mumcu, 'city_name: ',Adana
+restaurts_name: ', TAŞ MEKAN, 'city_name: ',Adana
+restaurts_name: ', Sirdanci Bedo, 'city_name: ',Adana
+restaurts_name: ', İştah Kebap, 'city_name: ',Adana
+restaurts_name: ', Onbasilar Kebap, 'city_name: ',Adana
+restaurts_name: ', Birbicer Kebap Salonu, 'city_name: ',Adana
+restaurts_name: ', Restaurant del Sol, 'city_name: ',Mendoza
+restaurts_name: ', Lemonokipos Restaurant, 'city_name: ',Crete
+restaurts_name: ', Pelagos Sea Side Restaurant, 'city_name: ',Crete
+restaurts_name: ', Liméri, 'city_name: ',Crete
+restaurts_name: ', "Η Αγορά - Agora" Ρακάδικο Μεζεδοπωλείο στις Αρχάνες / Restaurant Archanes, 'city_name: ',Crete
+restaurts_name: ', Palio Kantouni, 'city_name: ',Crete
+restaurts_name: ', TAMAM RESTAURANT CHANIA, 'city_name: ',Crete
+restaurts_name: ', Parasties, 'city_name: ',Crete
+restaurts_name: ', Elia and Diosmos - Olive Mint, 'city_name: ',Crete
+restaurts_name: ', Petousis Restaurant, 'city_name: ',Crete
+restaurts_name: ', Karnagio / Pita tou Riga, 'city_name: ',Crete
+restaurts_name: ', PATSAS AGNOS - TRADITIONAL COOKING - MARMARITSAKIS STAMATHS, 'city_name: ',Crete
+restaurts_name: ', Georgia's Traditional Taverna, 'city_name: ',Crete
+restaurts_name: ', Mi Viejo, 'city_name: ',El Calafate
+restaurts_name: ', Isabel Cocina al Disco, 'city_name: ',El Calafate
+restaurts_name: ', El cucharon, 'city_name: ',El Calafate
+restaurts_name: ', Casimiro Biguá Parrilla & Asador-Steak House - El Calafate, 'city_name: ',El Calafate
+restaurts_name: ', Parrilla Don Pichon, 'city_name: ',El Calafate
+restaurts_name: ', La Chacrita de Nimez, 'city_name: ',El Calafate
+restaurts_name: ', Biolea Astrikas Estate, 'city_name: ',Crete
+restaurts_name: ', Kornhauskeller Restaurant & Bar, 'city_name: ',Bern
+restaurts_name: ', Wein & Sein, 'city_name: ',Bern
+restaurts_name: ', Marzilibrücke, 'city_name: ',Bern
+restaurts_name: ', Mille Sens, 'city_name: ',Bern
+restaurts_name: ', Restaurant Mühlirad, 'city_name: ',Bern
+restaurts_name: ', Ravintola Puisto, 'city_name: ',Tampere
+restaurts_name: ', Telyach'i Nezhnosti, 'city_name: ',Yekaterinburg
+restaurts_name: ', Gans, 'city_name: ',Yekaterinburg
+restaurts_name: ', Pashtet, 'city_name: ',Yekaterinburg
+restaurts_name: ', Restaurant Krushon, 'city_name: ',Yekaterinburg
+restaurts_name: ', Restaurant "Podkova", 'city_name: ',Yekaterinburg
+restaurts_name: ', Makkeroni, 'city_name: ',Yekaterinburg
+restaurts_name: ', Gastroli, 'city_name: ',Yekaterinburg
+restaurts_name: ', Pan Smetan, 'city_name: ',Yekaterinburg
+restaurts_name: ', Seoul Restaurant, 'city_name: ',Yekaterinburg
+restaurts_name: ', Inflagranti, 'city_name: ',Hradec Kralove
+restaurts_name: ', RESTAURANT ARCHWAY, 'city_name: ',Hradec Kralove
+restaurts_name: ', Pannenkoekfabrique Het Ketelhuis, 'city_name: ',Tilburg
+restaurts_name: ', Karakter Tilburg, 'city_name: ',Tilburg
+restaurts_name: ', Restaurant De Houtloods, 'city_name: ',Tilburg
+restaurts_name: ', Hofstede de Blaak, 'city_name: ',Tilburg
+restaurts_name: ', Masal Restaurant, 'city_name: ',Tilburg
+restaurts_name: ', Gastrovino-Harboury Restaurant, 'city_name: ',Tilburg
+restaurts_name: ', Doloris' Rooftop, 'city_name: ',Tilburg
+restaurts_name: ', Restaurante La Vista, 'city_name: ',Punta del Este
+restaurts_name: ', Floreal Restaurante - Punta del Este, 'city_name: ',Punta del Este
+restaurts_name: ', Parador Imarangatu, 'city_name: ',Punta del Este
+restaurts_name: ', Manantiales Point Café, 'city_name: ',Punta del Este
+restaurts_name: ', Rustic resto bar, 'city_name: ',Punta del Este
+restaurts_name: ', Posto 5, 'city_name: ',Punta del Este
+restaurts_name: ', L'Incanto Restaurante Punta del Este, 'city_name: ',Punta del Este
+restaurts_name: ', Lo de Tere, 'city_name: ',Punta del Este
+restaurts_name: ', Arábigos Coffee House, 'city_name: ',La Fortuna
+restaurts_name: ', La Table de Jean Paul, 'city_name: ',Punta del Este
+restaurts_name: ', Dukley Seafront Restaurant, 'city_name: ',Budva
+restaurts_name: ', Restoran Vista Vidikovac, 'city_name: ',Budva
+restaurts_name: ', RESTORAN " ADRIATIC " Budva, 'city_name: ',Budva
+restaurts_name: ', Lim Restaurant, 'city_name: ',Budva
+restaurts_name: ', Pivnica, 'city_name: ',Budva
+restaurts_name: ', Moon House Sandnes, 'city_name: ',Sandnes
+restaurts_name: ', Little Bangkok Restaurant, 'city_name: ',Sandnes
+restaurts_name: ', Egon Sandnes, 'city_name: ',Sandnes
+restaurts_name: ', nOi Restaurant, 'city_name: ',Sandnes
+restaurts_name: ', Delikatessen by Foodfighters, 'city_name: ',Sandnes
+restaurts_name: ', Chai Nashta by Mogul India, 'city_name: ',Sandnes
+restaurts_name: ', Sabi Sushi, 'city_name: ',Sandnes
+restaurts_name: ', Golden Star Take Away, 'city_name: ',Sandnes
+restaurts_name: ', Konoba Portun, 'city_name: ',Budva
+restaurts_name: ', Rivijera Restaurant, 'city_name: ',Budva
+restaurts_name: ', Panda House Sandnes, 'city_name: ',Sandnes
+restaurts_name: ', Retiro Da Sé, 'city_name: ',Belem
+restaurts_name: ', Restaurante Manjar das Garças, 'city_name: ',Belem
+restaurts_name: ', Ver O Açaí, Restaurante, 'city_name: ',Belem
+restaurts_name: ', Restaurante Palafita, 'city_name: ',Belem
+restaurts_name: ', SAN TITO, 'city_name: ',Belem
+restaurts_name: ', Restaurant Explora Torres Del Paine, 'city_name: ',Torres del Paine
+restaurts_name: ', Bar e Restaurante do Gugu, 'city_name: ',Belem
+restaurts_name: ', RESTAURANT "SAJAMA", 'city_name: ',Oruro
+restaurts_name: ', The Horde Bar Arcade, 'city_name: ',Monterrey
+restaurts_name: ', Silpanchos Oreja De Elefante, 'city_name: ',Oruro
+restaurts_name: ', Factory Xpress, 'city_name: ',Oruro
+restaurts_name: ', Restaurante Bombar, 'city_name: ',Oruro
+restaurts_name: ', Nick & Jonnies, 'city_name: ',Stavanger
+restaurts_name: ', Bølgen & Moi Stavanger AS, 'city_name: ',Stavanger
+restaurts_name: ', Walysuma, 'city_name: ',Oruro
+restaurts_name: ', Bevaremegvel Bar & restaurant AS, 'city_name: ',Stavanger
+restaurts_name: ', Matbaren Bistro by Renaa, 'city_name: ',Stavanger
+restaurts_name: ', Firelake Grill House & Cocktail Bar, 'city_name: ',Stavanger
+restaurts_name: ', Døgnvill Burger Stavanger, 'city_name: ',Stavanger
+restaurts_name: ', Mushmula, 'city_name: ',Samara
+restaurts_name: ', Restaurant "Marrakesh", 'city_name: ',Samara
+restaurts_name: ', Restoran "Piteynaya Kipyatok"", 'city_name: ',Samara
+restaurts_name: ', Genatsvale Restaurant, 'city_name: ',Samara
+restaurts_name: ', Ooo "Restoran Samara", 'city_name: ',Samara
+restaurts_name: ', Perchini Na Ogne, 'city_name: ',Samara
+restaurts_name: ', Johnny Woo, 'city_name: ',Samara
+restaurts_name: ', Skryabin, 'city_name: ',Samara
+restaurts_name: ', Hadson, 'city_name: ',Samara
+restaurts_name: ', PURI, 'city_name: ',Samara
+restaurts_name: ', Megapolisbar People`s, 'city_name: ',Samara
+restaurts_name: ', Spildr, 'city_name: ',Stavanger
+restaurts_name: ', Boa Vista, 'city_name: ',Boa Vista
+restaurts_name: ', The Black Beef - Boa Vista, 'city_name: ',Boa Vista
+restaurts_name: ', Leandro Restaurante, 'city_name: ',Boa Vista
+restaurts_name: ', Restaurante Bal2, 'city_name: ',Boa Vista
+restaurts_name: ', Lúcia Restaurante, 'city_name: ',Boa Vista
+restaurts_name: ', Kafe "Goroda Mira", 'city_name: ',Samara
+restaurts_name: ', Perchini, 'city_name: ',Samara
+restaurts_name: ', Public Fontanny, 'city_name: ',Szczecin
+restaurts_name: ', Novo Rodeio - Rey do lazo, 'city_name: ',Encarnacion
+restaurts_name: ', Prímoli Restaurant, 'city_name: ',Encarnacion
+restaurts_name: ', Piccola Italia Encarnacion, Paraguay, 'city_name: ',Encarnacion
+restaurts_name: ', Pashmir, 'city_name: ',Kazan
+restaurts_name: ', Tatarskaya Usadba, 'city_name: ',Kazan
+restaurts_name: ', Na Kryshe, 'city_name: ',Kazan
+restaurts_name: ', Hemingway Restaurant, 'city_name: ',Kazan
+restaurts_name: ', Matsoni, 'city_name: ',Kazan
+restaurts_name: ', Drevnyaya Bukhara, 'city_name: ',Kazan
+restaurts_name: ', Restaurant courtyard at the Astronomy, 7, 'city_name: ',Kazan
+restaurts_name: ', Restoran Olli, 'city_name: ',Samara
+restaurts_name: ', Z Drugiej Strony Lustra, 'city_name: ',Szczecin
+restaurts_name: ', Real Costanera, 'city_name: ',Encarnacion
+restaurts_name: ', Neuf Paris, 'city_name: ',Encarnacion
+restaurts_name: ', Minoya Ramen, 'city_name: ',Encarnacion
+restaurts_name: ', Tugan Avylym, 'city_name: ',Kazan
+restaurts_name: ', Priyut Kholostyaka, 'city_name: ',Kazan
+restaurts_name: ', Bakhcha, 'city_name: ',Kazan
+restaurts_name: ', Грузинские Истории | Ресторан Казань | Грузинская кухня, кафе, бар, 'city_name: ',Kazan
+restaurts_name: ', Ля Фамилия, 'city_name: ',Kazan
+restaurts_name: ', Khochu I Budu, 'city_name: ',Kazan
+restaurts_name: ', Ratskeller der Stadt Leipzig GmbH, 'city_name: ',Leipzig
+restaurts_name: ', Zills Tunnel, 'city_name: ',Leipzig
+restaurts_name: ', Restaurant Weinstock Leipzig, 'city_name: ',Leipzig
+restaurts_name: ', Restaurant Apels Garten, 'city_name: ',Leipzig
+restaurts_name: ', Tattu Leeds, 'city_name: ',Leeds
+restaurts_name: ', The Man Behind The Curtain, 'city_name: ',Leeds
+restaurts_name: ', Amerikano, 'city_name: ',Kazan
+restaurts_name: ', OSKAR, 'city_name: ',Leipzig
+restaurts_name: ', C’est la vie Französisches Gourmet Restaurant, 'city_name: ',Leipzig
+restaurts_name: ', SYNDEO Restaurant Leipzig, 'city_name: ',Leipzig
+restaurts_name: ', Leeds Dock, 'city_name: ',Leeds
+restaurts_name: ', Napoleons Casino & Restaurant, Leeds, 'city_name: ',Leeds
+restaurts_name: ', Pizza Punks Leeds, 'city_name: ',Leeds
+restaurts_name: ', Fazenda Rodizio Bar & Grill Leeds, 'city_name: ',Leeds
+restaurts_name: ', Estabulo Rodizio Bar & Grill - Leeds, 'city_name: ',Leeds
+restaurts_name: ', LIVIN'Italy, 'city_name: ',Leeds
+restaurts_name: ', Alea Glasgow Casino, 'city_name: ',Glasgow
+restaurts_name: ', The Willow Tea Rooms, 'city_name: ',Glasgow
+restaurts_name: ', Floating Grace, 'city_name: ',Liverpool
+restaurts_name: ', Panoramic 34, 'city_name: ',Liverpool
+restaurts_name: ', Schiffrestaurant Wilhelm Tell, 'city_name: ',Lucerne
+restaurts_name: ', Restaurant Schiff, 'city_name: ',Lucerne
+restaurts_name: ', Pfistern, 'city_name: ',Lucerne
+restaurts_name: ', Geissmatt, 'city_name: ',Lucerne
+restaurts_name: ', Mill'Feuille, 'city_name: ',Lucerne
+restaurts_name: ', Pláž OSTENDE BOLEVÁK, 'city_name: ',Plzen
+restaurts_name: ', WOW Porto - The Best Cultural District, 'city_name: ',Vila Nova de Gaia
+restaurts_name: ', House for an Art Lover, 'city_name: ',Glasgow
+restaurts_name: ', The National Piping Centre, 'city_name: ',Glasgow
+restaurts_name: ', Restaurante El Museo, 'city_name: ',Tijuana
+restaurts_name: ', Restaurant HERMITAGE, Luzern, 'city_name: ',Lucerne
+restaurts_name: ', Bolero, 'city_name: ',Lucerne
+restaurts_name: ', Cała Naprzód - Restauracja Gdańsk, 'city_name: ',Gdansk
+restaurts_name: ', Restauracja Gvara, 'city_name: ',Gdansk
+restaurts_name: ', Taverna "Djepi Shqipetar", 'city_name: ',Vlore
+restaurts_name: ', Taverna Te LILO, 'city_name: ',Vlore
+restaurts_name: ', Tre Forchette Restaurant, 'city_name: ',Vlore
+restaurts_name: ', Pulbardha, 'city_name: ',Vlore
+restaurts_name: ', Restorant 'Joni ' Vlore, 'city_name: ',Vlore
+restaurts_name: ', Restaurant San Giorgio Al Porto, 'city_name: ',Vlore
+restaurts_name: ', Olivia Star, 'city_name: ',Gdansk
+restaurts_name: ', Black Pearl Ship, 'city_name: ',Gdansk
+restaurts_name: ', Papugarnia Gdańsk, 'city_name: ',Gdansk
+restaurts_name: ', RESTAURACJA GOLDWASSER, 'city_name: ',Gdansk
+restaurts_name: ', Restaurant - Plazh / Zhanpovel Bay, 'city_name: ',Vlore
+restaurts_name: ', Gusto di mare by Zulu Beach, 'city_name: ',Vlore
+restaurts_name: ', Ya mas, 'city_name: ',Vlore
+restaurts_name: ', Oaz Food and Wine Coffee, 'city_name: ',Vlore
+restaurts_name: ', Taverna Canaj, 'city_name: ',Vlore
+restaurts_name: ', Osteria Vlore, 'city_name: ',Vlore
+restaurts_name: ', Anima Italian Bar and Restaurant, 'city_name: ',Vlore
+restaurts_name: ', CAFE del MAR, 'city_name: ',Vlore
+restaurts_name: ', Danté Restaurant, 'city_name: ',Vlore
+restaurts_name: ', Miramare Restaurant, 'city_name: ',Vlore
+restaurts_name: ', THE COCOON - SAMUI VIEWPOINT, 'city_name: ',Samui
+restaurts_name: ', Mit Samui Restaurant, 'city_name: ',Samui
+restaurts_name: ', Sea View Restaurant, 'city_name: ',Samui
+restaurts_name: ', The Roof Samui, 'city_name: ',Samui
+restaurts_name: ', Vikasa Life Cafe, 'city_name: ',Samui
+restaurts_name: ', Dr Frogs Bar & Grill, 'city_name: ',Samui
+restaurts_name: ', Pier One, 'city_name: ',Montego Bay
+restaurts_name: ', Day-O Plantation Restaurant & Bar, 'city_name: ',Montego Bay
+restaurts_name: ', smokeez by the sea, 'city_name: ',Montego Bay
+restaurts_name: ', Peter Pan Wine Farm, 'city_name: ',Samui
+restaurts_name: ', Tree Tops Signature Dining, 'city_name: ',Samui
+restaurts_name: ', The Journey Bar, 'city_name: ',Samui
+restaurts_name: ', Silver Spoon, 'city_name: ',Samui
+restaurts_name: ', The View, 'city_name: ',Samui
+restaurts_name: ', Honey Seafood Restaurant | Samui Island, 'city_name: ',Samui
+restaurts_name: ', Eating on Samui, 'city_name: ',Samui
+restaurts_name: ', Coral Cliff, 'city_name: ',Montego Bay
+restaurts_name: ', AL’s Soup and Jerk spot, 'city_name: ',Montego Bay
+restaurts_name: ', Taco Spot Ltd, 'city_name: ',Montego Bay
+restaurts_name: ', CHABAD KOSHER HOT SPOT, 'city_name: ',Montego Bay
+restaurts_name: ', Poklisar Restaurant, 'city_name: ',Dubrovnik
+restaurts_name: ', Restaurant Kopun, 'city_name: ',Dubrovnik
+restaurts_name: ', Azur, 'city_name: ',Dubrovnik
+restaurts_name: ', Aquarius Tavern, 'city_name: ',Dubrovnik
+restaurts_name: ', Nautika, 'city_name: ',Dubrovnik
+restaurts_name: ', Lucin Kantun Dubrovnik, 'city_name: ',Dubrovnik
+restaurts_name: ', MOSKAR Street Food, 'city_name: ',Dubrovnik
+restaurts_name: ', Gradska kavana Arsenal Restaurant, 'city_name: ',Dubrovnik
+restaurts_name: ', Pull Over Restaurant, 'city_name: ',Dubrovnik
+restaurts_name: ', Sounds of Silence, 'city_name: ',Ayers Rock (Uluru)
+restaurts_name: ', Bulwar | Restauracja Regionalna, 'city_name: ',Poznan
+restaurts_name: ', Miłość - Kuchnia Roślinna, 'city_name: ',Poznan
+restaurts_name: ', Restauracja MOMO love at first bite, 'city_name: ',Poznan
+restaurts_name: ', Restauracja Rynek 95, 'city_name: ',Poznan
+restaurts_name: ', Podkoziołek Jadło i Napitki, 'city_name: ',Poznan
+restaurts_name: ', Bota Šare Oyster & Sushi Bar, 'city_name: ',Dubrovnik
+restaurts_name: ', La Bodega Dubrovnik sushi restaurant & wine bar, 'city_name: ',Dubrovnik
+restaurts_name: ', Ilkari Restaurant, 'city_name: ',Ayers Rock (Uluru)
+restaurts_name: ', Ratuszova Restauracja & Apartamenty A.D. 1954, 'city_name: ',Poznan
+restaurts_name: ', Stara Loza, 'city_name: ',Dubrovnik
+restaurts_name: ', Zuzori, 'city_name: ',Dubrovnik
+restaurts_name: ', Czerwone Sombrero Stary Rynek, 'city_name: ',Poznan
+restaurts_name: ', Loft restaurant, 'city_name: ',Ostrava
+restaurts_name: ', Babetti Ristorante Ostrava Centrum, 'city_name: ',Ostrava
+restaurts_name: ', BERNIES GRILL & WINE RESTAURANT, 'city_name: ',Ostrava
+restaurts_name: ', Hogo Fogo Bistro, 'city_name: ',Ostrava
+restaurts_name: ', Gokana Japanese restaurant, 'city_name: ',Ostrava
+restaurts_name: ', Restaurace Knossos, 'city_name: ',Ostrava
+restaurts_name: ', Restaurace a pivnice U Rady, 'city_name: ',Ostrava
+restaurts_name: ', Agiu Georgiu - Greek Taverna, 'city_name: ',Ostrava
+restaurts_name: ', Mustang, 'city_name: ',Ostrava
+restaurts_name: ', Greek Restaurant Delphi, 'city_name: ',Ostrava
+restaurts_name: ', Nha Cretcheu Café & Restaurant., 'city_name: ',Ostrava
+restaurts_name: ', Restaurace Kartáč, 'city_name: ',Ostrava
+restaurts_name: ', C' La Vie Restaurante, 'city_name: ',Curitiba
+restaurts_name: ', Coco Bambu Restaurant Curitiba, 'city_name: ',Curitiba
+restaurts_name: ', Ibérico, 'city_name: ',Curitiba
+restaurts_name: ', Restaurante Armazém Santo Antônio, 'city_name: ',Curitiba
+restaurts_name: ', Bamboo Restaurant & Bar, 'city_name: ',Ostrava
+restaurts_name: ', Restaurante Ile de France, 'city_name: ',Curitiba
+restaurts_name: ', Barolo Curitiba, 'city_name: ',Curitiba
+restaurts_name: ', Lellis Trattoria - Curitiba, 'city_name: ',Curitiba
+restaurts_name: ', Spaghetto, 'city_name: ',Curitiba
+restaurts_name: ', Swadisht Traditional Indian Cuisine, 'city_name: ',Curitiba
+restaurts_name: ', Restaurante Vindouro, 'city_name: ',Curitiba
+restaurts_name: ', A Sacristia Restaurante, 'city_name: ',Curitiba
+restaurts_name: ', Laurel, 'city_name: ',Santo Domingo
+restaurts_name: ', El Mesón de la Cava, 'city_name: ',Santo Domingo
+restaurts_name: ', Restaurant Sully, 'city_name: ',Santo Domingo
+restaurts_name: ', Ajuala, 'city_name: ',Santo Domingo
+restaurts_name: ', Mila Restaurante, 'city_name: ',Santo Domingo
+restaurts_name: ', Mesón Iberia, 'city_name: ',Santo Domingo
+restaurts_name: ', O.Livia, 'city_name: ',Santo Domingo
+restaurts_name: ', Casa Vera, 'city_name: ',Santo Domingo
+restaurts_name: ', Tasca Ihuey, 'city_name: ',Tenerife
+restaurts_name: ', El Taller de Seve Diaz, 'city_name: ',Tenerife
+restaurts_name: ', Nub Restaurante, 'city_name: ',Tenerife
+restaurts_name: ', Limoncello, 'city_name: ',Tenerife
+restaurts_name: ', Restaurante El Mirador, 'city_name: ',Tenerife
+restaurts_name: ', Restaurante La Farola Del Mar, 'city_name: ',Tenerife
+restaurts_name: ', Restaurante El Rincón de Juan Carlos, 'city_name: ',Tenerife
+restaurts_name: ', Restaurante Haydée by Víctor Suárez, 'city_name: ',Tenerife
+restaurts_name: ', Guachinche El Cordero, 'city_name: ',Tenerife
+restaurts_name: ', Empire Modern British Restaurant & Steak House | Steakhouse & British Cuisine, 'city_name: ',Tenerife
+restaurts_name: ', Ibérica Restaurante, 'city_name: ',Tenerife
+restaurts_name: ', Pobre Juan - Porto Alegre, 'city_name: ',Porto Alegre
+restaurts_name: ', LA ROUGE, 'city_name: ',Porto Alegre
+restaurts_name: ', Restaurante Didge Steakhouse Pub, 'city_name: ',Porto Alegre
+restaurts_name: ', Restaurante Guacamole Cocina Mexicana, 'city_name: ',Porto Alegre
+restaurts_name: ', Ratskeller Restaurante, 'city_name: ',Porto Alegre
+restaurts_name: ', Namaste Haeundae, 'city_name: ',Busan
+restaurts_name: ', Bonjeon Dwaeji Gukbap, Busan, 'city_name: ',Busan
+restaurts_name: ', Kitchen dongbaek, 'city_name: ',Busan
+restaurts_name: ', Bollywood Hookah Lounge & Indian Food, 'city_name: ',Busan
+restaurts_name: ', BOIBRASIL BUSAN, 'city_name: ',Busan
+restaurts_name: ', Busan Specialty Raw Fish Restaurant, 'city_name: ',Busan
+restaurts_name: ', Gaemijip, 'city_name: ',Busan
+restaurts_name: ', Geumsubokguk, Haeundae Head Store, 'city_name: ',Busan
+restaurts_name: ', Guess WHO Restaurant, 'city_name: ',Busan
+restaurts_name: ', Hi asia(punjab) halal Indian&Pakistani Restaurant, 'city_name: ',Busan
+restaurts_name: ', Anga, 'city_name: ',Busan
+restaurts_name: ', Ssangdung-e Dwaeji-gukbap, 'city_name: ',Busan
+restaurts_name: ', Go-og, 'city_name: ',Busan
+restaurts_name: ', SBG Punta Cana, 'city_name: ',Punta Cana
+restaurts_name: ', Playa Blanca Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Jellyfish Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Citrus Fusion Cuisine, 'city_name: ',Punta Cana
+restaurts_name: ', Noah, 'city_name: ',Punta Cana
+restaurts_name: ', Mamma Luisa, 'city_name: ',Punta Cana
+restaurts_name: ', Restaurante capitán Cook, 'city_name: ',Punta Cana
+restaurts_name: ', La Casita de Yeya, 'city_name: ',Punta Cana
+restaurts_name: ', Burlao Grill Punta Cana, 'city_name: ',Punta Cana
+restaurts_name: ', Pastrata Mexican Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Coco Bambu - Beira Mar: Restaurante, Peixe, Camarão, Carnes, Lagosta, Salada, 'city_name: ',Fortaleza
+restaurts_name: ', Moranga Bistrô, 'city_name: ',Fortaleza
+restaurts_name: ', Santa Grelha Meireles, 'city_name: ',Fortaleza
+restaurts_name: ', Coco Bambu Meireles: Restaurante, Peixe, Camarão, Carnes, Lagosta, Fortaleza, CE, 'city_name: ',Fortaleza
+restaurts_name: ', Geppos Praia - Restaurante na Praia de Iracema, 'city_name: ',Fortaleza
+restaurts_name: ', La Bella Itália, 'city_name: ',Fortaleza
+restaurts_name: ', Misaki - Restaurante Japonês Contemporâneo em Fortaleza, 'city_name: ',Fortaleza
+restaurts_name: ', Coco Bambu Sul, 'city_name: ',Fortaleza
+restaurts_name: ', Vignoli Fortaleza – Virgílio Távora, 'city_name: ',Fortaleza
+restaurts_name: ', Cabaña Del Primo - Restaurante de Carnes em Fortaleza, 'city_name: ',Fortaleza
+restaurts_name: ', Ryori Buganvília, 'city_name: ',Fortaleza
+restaurts_name: ', Restaurante Marquês da Varjota, 'city_name: ',Fortaleza
+restaurts_name: ', Restaurante La France, 'city_name: ',Fortaleza
+restaurts_name: ', OCI.mde, 'city_name: ',Medellin
+restaurts_name: ', Tal Cual y Mi Ceviche Medellín, 'city_name: ',Medellin
+restaurts_name: ', Dom Antunes Steakhouse, 'city_name: ',Fortaleza
+restaurts_name: ', Restaurante Piqueo, 'city_name: ',Medellin
+restaurts_name: ', La Pampa Parrilla Argentina (Provenza) - Restaurantes Medellin - Musica en Vivo, 'city_name: ',Medellin
+restaurts_name: ', Ammazza, 'city_name: ',Medellin
+restaurts_name: ', Restaurante Mondongo's El Poblado, 'city_name: ',Medellin
+restaurts_name: ', Bárbaro Cocina Primitiva, 'city_name: ',Medellin
+restaurts_name: ', Restaurante Mistura Provenza, 'city_name: ',Medellin
+restaurts_name: ', Oh La La Bistrot, 'city_name: ',Medellin
+restaurts_name: ', Tony Romas Revolving Restaurant Bar, 'city_name: ',Medellin
+restaurts_name: ', Restaurante Hatoviejo, 'city_name: ',Medellin
+restaurts_name: ', Tequilaz, 'city_name: ',Gwangju
+restaurts_name: ', Hagoseu, 'city_name: ',Gwangju
+restaurts_name: ', Minsokchon, 'city_name: ',Gwangju
+restaurts_name: ', Raj indian restaurant, Chonnam Univ branch, 'city_name: ',Gwangju
+restaurts_name: ', 마한지, 'city_name: ',Gwangju
+restaurts_name: ', 예향식당, 'city_name: ',Gwangju
+restaurts_name: ', 김강심칼국수, 'city_name: ',Gwangju
+restaurts_name: ', El Santo Restaurante, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante Deliciosa Marta, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante LoLa, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante Parque Romántico, 'city_name: ',Gran Canaria
+restaurts_name: ', West End Restaurant, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante Que leche!, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante Aramara, 'city_name: ',Gran Canaria
+restaurts_name: ', Rincón de Triana, 'city_name: ',Gran Canaria
+restaurts_name: ', Ranchon Bellamar, 'city_name: ',Varadero
+restaurts_name: ', Marisquería Ragù, 'city_name: ',Gran Canaria
+restaurts_name: ', Artusi Restaurante, 'city_name: ',Florianopolis
+restaurts_name: ', Ostradamus Restaurante, 'city_name: ',Florianopolis
+restaurts_name: ', Píer 54 Restaurante, 'city_name: ',Florianopolis
+restaurts_name: ', Blackpot Restaurant, 'city_name: ',Florianopolis
+restaurts_name: ', Restaurante Guacamole Cocina Mexicana, 'city_name: ',Florianopolis
+restaurts_name: ', Sabor da Costa Restaurante, 'city_name: ',Florianopolis
+restaurts_name: ', Ponta das Caranhas, 'city_name: ',Florianopolis
+restaurts_name: ', O Timoneiro, 'city_name: ',Florianopolis
+restaurts_name: ', Black Sheep Sushi Bar, 'city_name: ',Florianopolis
+restaurts_name: ', Amalfi Restaurante, 'city_name: ',Florianopolis
+restaurts_name: ', Deilla, 'city_name: ',Ulsan
+restaurts_name: ', Bela Moti, 'city_name: ',Ulsan
+restaurts_name: ', Namaskar Samsan Store, 'city_name: ',Ulsan
+restaurts_name: ', 매드포갈릭 울산현대백화점, 'city_name: ',Ulsan
+restaurts_name: ', Chayhana, 'city_name: ',Daejeon
+restaurts_name: ', Ali-Baba’s Treasure, 'city_name: ',Daejeon
+restaurts_name: ', Aztekila Mexican Restaurant, 'city_name: ',Daejeon
+restaurts_name: ', Mad For Garlic, 'city_name: ',Daejeon
+restaurts_name: ', Moru Brunch Cafe Dunsan, 'city_name: ',Daejeon
+restaurts_name: ', Malgm: Indian Restaurant, 'city_name: ',Daejeon
+restaurts_name: ', 인디 indy, 'city_name: ',Daejeon
+restaurts_name: ', Eat My Thai, 'city_name: ',Daejeon
+restaurts_name: ', Outback Steakhouse Dunsan, 'city_name: ',Daejeon
+restaurts_name: ', Wangwan Sikdang, 'city_name: ',Daejeon
+restaurts_name: ', Porto Restaurante, 'city_name: ',Joao Pessoa
+restaurts_name: ', NAU Frutos do Mar, 'city_name: ',Joao Pessoa
+restaurts_name: ', Tábua de Carne - João Pessoa, 'city_name: ',Joao Pessoa
+restaurts_name: ', Gulliver Mar Restaurante, 'city_name: ',Joao Pessoa
+restaurts_name: ', Camarada Camarão: Camarões, Peixes, Happy Hour, Restaurante, João Pessoa PB, 'city_name: ',Joao Pessoa
+restaurts_name: ', Família Franco (Divina Itália), 'city_name: ',Joao Pessoa
+restaurts_name: ', Famiglia Muccini Italian Restaurant, 'city_name: ',Joao Pessoa
+restaurts_name: ', Quintal Restô | Restaurante Contemporâneo, 'city_name: ',Joao Pessoa
+restaurts_name: ', Santa Grelha João Pessoa, 'city_name: ',Joao Pessoa
+restaurts_name: ', Levíssimo, 'city_name: ',Joao Pessoa
+restaurts_name: ', All Garden Restaurante, 'city_name: ',Joao Pessoa
+restaurts_name: ', Estaleiro Restaurante - Seixas, 'city_name: ',Joao Pessoa
+restaurts_name: ', معبد رمسيس الثالث, 'city_name: ',Luxor
+restaurts_name: ', citysquare, 'city_name: ',Kampala
+restaurts_name: ', Garden City Playground, 'city_name: ',Kampala
+restaurts_name: ', Efendys Club and PubAddress:Station is accessible, 'city_name: ',Kampala
+restaurts_name: ', murchisonfallsuganda, 'city_name: ',Murchison Falls National Park
+restaurts_name: ', Magoogo Kakiri, 'city_name: ',Kampala
+restaurts_name: ', Murchison Falls Uganda, 'city_name: ',Murchison Falls National Park
+restaurts_name: ', KK Travellers, 'city_name: ',Kampala
+restaurts_name: ', Murchison Falls National Park, 'city_name: ',Murchison Falls National Park
+restaurts_name: ', University Hall Gardens, 'city_name: ',Kampala
+restaurts_name: ', Murchison falls uganda, 'city_name: ',Murchison Falls National Park
+restaurts_name: ', Amazing Grace Gardens, 'city_name: ',Kampala
+restaurts_name: ', Murchison Falls National Park - Kichubanyobo entrance gate, 'city_name: ',Murchison Falls National Park
+restaurts_name: ', Staff Sergeant Kaoke's Pig Fa, 'city_name: ',Entebbe
+restaurts_name: ', Children's Park, 'city_name: ',Entebbe
+restaurts_name: ', Havila Gardens, 'city_name: ',Entebbe
+restaurts_name: ', The Banana, 'city_name: ',Entebbe
+restaurts_name: ', tea Valley shores, 'city_name: ',Entebbe
+restaurts_name: ', SSesse Beach, 'city_name: ',Entebbe
+restaurts_name: ', Lift OFF point, 'city_name: ',Entebbe
+restaurts_name: ', Bolvar Soumman/Oran/Cezayir, 'city_name: ',Oran
+restaurts_name: ', Promenade Ibn Sina (ex De Létang), 'city_name: ',Oran
+restaurts_name: ', Queen TRAFİK, 'city_name: ',Oran
+restaurts_name: ', Jardin Public, 'city_name: ',Oran
+restaurts_name: ', belediye spor kompleksi, 'city_name: ',Oran
+restaurts_name: ', Jardin Khemisti, 'city_name: ',Oran
+restaurts_name: ', Square "Emile Cayla", 'city_name: ',Oran
+restaurts_name: ', Ahmad Zabana National Museum, 'city_name: ',Oran
+restaurts_name: ', حوض الكبير, 'city_name: ',Tlemcen
+restaurts_name: ', Grand Bassin, 'city_name: ',Tlemcen
+restaurts_name: ', Café Cambrinus, 'city_name: ',Bruges
+restaurts_name: ', Duomo di Amalfi, 'city_name: ',Amalfi
+restaurts_name: ', National Archaeological Museum of Naples, 'city_name: ',Naples
+restaurts_name: ', Mamo Restaurant, 'city_name: ',Eilat
+restaurts_name: ', Marina de Luanda, 'city_name: ',Luanda
+restaurts_name: ', angola, 'city_name: ',Luanda
+restaurts_name: ', Passagem Inferior Prenda, 'city_name: ',Luanda
+restaurts_name: ', Bootti Ravintola, 'city_name: ',Oulu
+restaurts_name: ', Hagia Sofia, 'city_name: ',Oulu
+restaurts_name: ', Sokeri-Jussi Tavern, 'city_name: ',Oulu
+restaurts_name: ', Antell Cafe Piha, 'city_name: ',Oulu
+restaurts_name: ', 45 Special, 'city_name: ',Oulu
+restaurts_name: ', Buffet ravintola Oulun little New York avoin yhtiö, 'city_name: ',Oulu
+restaurts_name: ', Arusha National Natural History Museum, 'city_name: ',Arusha
+restaurts_name: ', Restauracja Kuchnia Marché Świdnicka Wrocław, 'city_name: ',Wroclaw
+restaurts_name: ', Pod Papugami Restaurant & Cocktail Bar, 'city_name: ',Wroclaw
+restaurts_name: ', Whiskey in the Jar, 'city_name: ',Wroclaw
+restaurts_name: ', Atrakcja Restauracja Wrocławska, 'city_name: ',Wroclaw
+restaurts_name: ', El Mural de los Poblanos, 'city_name: ',Puebla City
+restaurts_name: ', Die Waid, 'city_name: ',Zurich
+restaurts_name: ', Conrad, 'city_name: ',Zurich
+restaurts_name: ', Kronenhalle, 'city_name: ',Zurich
+restaurts_name: ', Tessin Grotto, 'city_name: ',Zurich
+restaurts_name: ', Viadukt, 'city_name: ',Zurich
+restaurts_name: ', Anjirang Gopchang Street, 'city_name: ',Daegu
+restaurts_name: ', Rua de Santa Maria, Funchal, 'city_name: ',Funchal
+restaurts_name: ', The Hole in the Wall / O Buraco na Parede, 'city_name: ',Funchal
+restaurts_name: ', Casa Velha Restaurant Funchal, 'city_name: ',Funchal
+restaurts_name: ', O Calhau, 'city_name: ',Funchal
+restaurts_name: ', Restaurante Hemingway, Funchal, 'city_name: ',Funchal
+restaurts_name: ', Ristorante Villa Cipriani, 'city_name: ',Funchal
+restaurts_name: ', MadMarket Restaurante, 'city_name: ',Funchal
+restaurts_name: ', Real Canoa, 'city_name: ',Funchal
+restaurts_name: ', Espaço Funchal, 'city_name: ',Funchal
+restaurts_name: ', Restaurante Lá ao Fundo, 'city_name: ',Funchal
+restaurts_name: ', Santa Maria Funchal Restaurant, 'city_name: ',Funchal
+restaurts_name: ', Restaurante Alta Vista, 'city_name: ',Funchal
+restaurts_name: ', William Restaurant, 'city_name: ',Funchal
+restaurts_name: ', Porta do Lado Restaurante, 'city_name: ',Funchal
+restaurts_name: ', Leeno's Bar & Restaurant, 'city_name: ',Funchal
+restaurts_name: ', O.Giro churros & paninis, 'city_name: ',Funchal
+restaurts_name: ', Restaurante O Dragoeiro, 'city_name: ',Funchal
+restaurts_name: ', Restaurante O Portão, 'city_name: ',Funchal
+restaurts_name: ', O americano, 'city_name: ',Funchal
+restaurts_name: ', Solar da Ajuda, 'city_name: ',Funchal
+restaurts_name: ', Troll Restaurant, 'city_name: ',Trondheim
+restaurts_name: ', Baklandet Skydsstation, 'city_name: ',Trondheim
+restaurts_name: ', La Casita de Rones, 'city_name: ',San Juan
+restaurts_name: ', El Buen Suspiro, 'city_name: ',Colonia
+restaurts_name: ', Lentas Maravillas, 'city_name: ',Colonia
+restaurts_name: ', La tapera de Enrique, 'city_name: ',Colonia
+restaurts_name: ', Charco bistró, 'city_name: ',Colonia
+restaurts_name: ', Caliu Earthship Restaurant y Ecolodge, 'city_name: ',Colonia
+restaurts_name: ', DOS 22 Restaurante, 'city_name: ',Colonia
+restaurts_name: ', Parrillada El Portón, 'city_name: ',Colonia
+restaurts_name: ', La Bodeguita, 'city_name: ',Colonia
+restaurts_name: ', La Chopería Colonia, 'city_name: ',Colonia
+restaurts_name: ', Meson de la Plaza, 'city_name: ',Colonia
+restaurts_name: ', Casa Viera, 'city_name: ',Colonia
+restaurts_name: ', El Colonial, 'city_name: ',Colonia
+restaurts_name: ', Bohemia Bistro, 'city_name: ',Colonia
+restaurts_name: ', Calma Coco, 'city_name: ',Colonia
+restaurts_name: ', Río Ancho Gourmet Lodge, 'city_name: ',Colonia
+restaurts_name: ', NAPO Pizza Napoletana, 'city_name: ',Colonia
+restaurts_name: ', Paa Brygga i Fredrikstad, 'city_name: ',Fredrikstad
+restaurts_name: ', One World Safari HQ, 'city_name: ',Arusha
+restaurts_name: ', Tiramisu Cafe & Restaurant, 'city_name: ',Fredrikstad
+restaurts_name: ', Major Inn and Living Room, 'city_name: ',Fredrikstad
+restaurts_name: ', Restaurant hosMartin - Victoria, 'city_name: ',Fredrikstad
+restaurts_name: ', Lille Italia, 'city_name: ',Fredrikstad
+restaurts_name: ', Cactus cafe&restaurant, 'city_name: ',Fredrikstad
+restaurts_name: ', Restaurant Køl AS, 'city_name: ',Fredrikstad
+restaurts_name: ', Ristorante Fabbrica, 'city_name: ',Fredrikstad
+restaurts_name: ', Thai Market, 'city_name: ',Fredrikstad
+restaurts_name: ', Los Tacos Fredrikstad, 'city_name: ',Fredrikstad
+restaurts_name: ', blindekuh Basel, 'city_name: ',Basel
+restaurts_name: ', Shakh I Myata, 'city_name: ',Chelyabinsk
+restaurts_name: ', Restauracja Pod Smoczą Jamą, 'city_name: ',Krakow
+restaurts_name: ', Adega dos Lordes, 'city_name: ',Porto Seguro
+restaurts_name: ', Restaurante & Pizzaria Porto Seguro, 'city_name: ',Porto Seguro
+restaurts_name: ', Bryggen Tracteursted, 'city_name: ',Bergen
+restaurts_name: ', Casa Ibérica cali, 'city_name: ',Cali
+restaurts_name: ', Restauracja, 'city_name: ',Lodz
+restaurts_name: ', The Walls exclusive cuisine, 'city_name: ',Heraklion
+restaurts_name: ', SuperPark Vantaa, 'city_name: ',Vantaa
+restaurts_name: ', Katrin Mykonos Restaurant, 'city_name: ',Mykonos
+restaurts_name: ', Andreas & Maria, 'city_name: ',Mykonos
+restaurts_name: ', Traktir Patron, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Aniuge Guilin Rice Noodles, 'city_name: ',Shanghai
+restaurts_name: ', Fisketorget Stavanger, 'city_name: ',Stavanger
+restaurts_name: ', Panorama, 'city_name: ',Samara
+restaurts_name: ', Porto Maltese, 'city_name: ',Kazan
+restaurts_name: ', FONDUE HOUSE DU PONT, 'city_name: ',Lucerne
+restaurts_name: ', Bar Restorant Shen Vasil, 'city_name: ',Vlore
+restaurts_name: ', Lamai Viewpoint & Valentine Stone, 'city_name: ',Samui
+restaurts_name: ', Forty Four Restaurant, 'city_name: ',Dubrovnik
+restaurts_name: ', Guest Restaurant, 'city_name: ',Ostrava
+restaurts_name: ', Pescara, 'city_name: ',Curitiba
+restaurts_name: ', Nomade Restaurante (Nomaa Hotel), 'city_name: ',Curitiba
+restaurts_name: ', NacanDR, 'city_name: ',Santo Domingo
+restaurts_name: ', Restaurante Filigrana Santo Domingo, 'city_name: ',Santo Domingo
+restaurts_name: ', Capsula - купольный ресторан на крыше, 'city_name: ',Novosibirsk
+restaurts_name: ', «ЛЮБИТЬ ПО-РУССКИ», 'city_name: ',Novosibirsk
+restaurts_name: ', La Maison, restaurant complex, 'city_name: ',Novosibirsk
+restaurts_name: ', BEERMAN & ПЕЛЬМЕНИ, 'city_name: ',Novosibirsk
+restaurts_name: ', Leto-café, 'city_name: ',Novosibirsk
+restaurts_name: ', Veranda by DI, 'city_name: ',Novosibirsk
+restaurts_name: ', Centro de visitantes Alakush, 'city_name: ',Ushuaia
+restaurts_name: ', Restaurant Goldmund in the Literaturhaus, 'city_name: ',Frankfurt
+restaurts_name: ', Luna Rossa, 'city_name: ',Kotor
+restaurts_name: ', Old Town Little bay, 'city_name: ',Kotor
+restaurts_name: ', La Catedrale Pasta Bar, 'city_name: ',Kotor
+restaurts_name: ', Restaurante TIKUNA, 'city_name: ',Leticia
+restaurts_name: ', EL MONO CACHACO, 'city_name: ',Leticia
+restaurts_name: ', Balneario Arbelaez, 'city_name: ',Leticia
+restaurts_name: ', Las Amazonas Balneario-Restaurant, 'city_name: ',Leticia
+restaurts_name: ', Perrada y pizzería de paulo, 'city_name: ',Leticia
+restaurts_name: ', Tradiciones Amazonicas, 'city_name: ',Leticia
+restaurts_name: ', Waira Suites Hotel, 'city_name: ',Leticia
+restaurts_name: ', Omshanty Jungle Lodge, 'city_name: ',Leticia
+restaurts_name: ', Wuhan Regan Noodle Restaurant, 'city_name: ',Wuhan
+restaurts_name: ', Wuhan Chinese Strange Stones Museum, 'city_name: ',Wuhan
+restaurts_name: ', Wuhan Hot and Dry Noodles, 'city_name: ',Wuhan
+restaurts_name: ', Yuanhelou, 'city_name: ',Wuhan
+restaurts_name: ', Wuhan International Expo Center VIP Canqu, 'city_name: ',Wuhan
+restaurts_name: ', Aquarium Restaurant, 'city_name: ',Izmir
+restaurts_name: ', Portofino Restaurant, 'city_name: ',Valparaiso
+restaurts_name: ', Casa Dumplings, 'city_name: ',Valparaiso
+restaurts_name: ', Patio Valparaiso, 'city_name: ',Valparaiso
+restaurts_name: ', Circular Valparaiso, 'city_name: ',Valparaiso
+restaurts_name: ', Valparaiso Eterno, 'city_name: ',Valparaiso
+restaurts_name: ', Kapura, 'city_name: ',Valparaiso
+restaurts_name: ', Restaurant Fauna, 'city_name: ',Valparaiso
+restaurts_name: ', María maría, 'city_name: ',Valparaiso
+restaurts_name: ', Maralegre, 'city_name: ',Valparaiso
+restaurts_name: ', Restaurante Mañe Cayon, 'city_name: ',Santa Marta
+restaurts_name: ', Diana's Cafe as, 'city_name: ',Drammen
+restaurts_name: ', Brasserie X Drammen, 'city_name: ',Drammen
+restaurts_name: ', Frukt & Grønt, 'city_name: ',Drammen
+restaurts_name: ', Alpenhaus Drammen, 'city_name: ',Drammen
+restaurts_name: ', STENGT, 'city_name: ',Drammen
+restaurts_name: ', Ssk AS, 'city_name: ',Drammen
+restaurts_name: ', Su Sushi Bar, 'city_name: ',Drammen
+restaurts_name: ', Anatolia Restaurant Drammen, 'city_name: ',Drammen
+restaurts_name: ', Voukamvilia, 'city_name: ',Patras
+restaurts_name: ', Troufa, 'city_name: ',Patras
+restaurts_name: ', Büyük Adana Kebap, 'city_name: ',Adana
+restaurts_name: ', TheJanku, 'city_name: ',Adana
+restaurts_name: ', Num Num, 'city_name: ',Adana
+restaurts_name: ', Adana Kebap, 'city_name: ',Adana
+restaurts_name: ', Abidin Usta, 'city_name: ',Adana
+restaurts_name: ', Botanik Cafe, 'city_name: ',Adana
+restaurts_name: ', Santé Natural Wellness (Glutensiz & Vegan) Cafe - Restoran, 'city_name: ',Adana
+restaurts_name: ', Limnokastro, 'city_name: ',Crete
+restaurts_name: ', WEST CRETE, 'city_name: ',Crete
+restaurts_name: ', Mexico Street Food Calafate, 'city_name: ',El Calafate
+restaurts_name: ', Volpi Bistró Puertas Adentro, 'city_name: ',El Calafate
+restaurts_name: ', Comida árabe Elia Esber, 'city_name: ',El Calafate
+restaurts_name: ', Restaurant Mora, 'city_name: ',El Calafate
+restaurts_name: ', Restaurante La Posta, 'city_name: ',El Calafate
+restaurts_name: ', Altes Tramdepot Brauerei Restaurant, 'city_name: ',Bern
+restaurts_name: ', Näsinneula, 'city_name: ',Tampere
+restaurts_name: ', Museokeskus Vapriikki, 'city_name: ',Tampere
+restaurts_name: ', Morebar, 'city_name: ',Yekaterinburg
+restaurts_name: ', BREADWAY, 'city_name: ',Yekaterinburg
+restaurts_name: ', Villa la Vida, 'city_name: ',Tilburg
+restaurts_name: ', Cinecitta, 'city_name: ',Tilburg
+restaurts_name: ', T.F.G - The Fat Greek, 'city_name: ',Tilburg
+restaurts_name: ', Focus Foodbar, 'city_name: ',Tilburg
+restaurts_name: ', Restaurant Chapelle, 'city_name: ',Tilburg
+restaurts_name: ', Los Dedos Point, 'city_name: ',Punta del Este
+restaurts_name: ', Lighthouse Restaurant, 'city_name: ',Punta del Este
+restaurts_name: ', The Tea House punta, 'city_name: ',Punta del Este
+restaurts_name: ', Yacht Club Uruguayo Restaurante, 'city_name: ',Punta del Este
+restaurts_name: ', Escape Beach & Restaurant, 'city_name: ',Budva
+restaurts_name: ', Fontana, 'city_name: ',Budva
+restaurts_name: ', Citadela Restaurant, 'city_name: ',Budva
+restaurts_name: ', Kangaroo Ethno Restaurant, 'city_name: ',Budva
+restaurts_name: ', Restaurant Konoba Demizana, 'city_name: ',Budva
+restaurts_name: ', Restaurant Setzkasten Düsseldorf, 'city_name: ',Düsseldorf
+restaurts_name: ', Ti Spiseri&Bar, 'city_name: ',Sandnes
+restaurts_name: ', Braai Bar and BBQ restaurant, 'city_name: ',Sandnes
+restaurts_name: ', SOT Bar & Burger - Vågen, 'city_name: ',Sandnes
+restaurts_name: ', Pasha Sandnes, 'city_name: ',Sandnes
+restaurts_name: ', Huong Viet, 'city_name: ',Sandnes
+restaurts_name: ', Remanso do Peixe, 'city_name: ',Belem
+restaurts_name: ', Maria Belém GastroBar, 'city_name: ',Belem
+restaurts_name: ', ÉGUA DE BOM, 'city_name: ',Belem
+restaurts_name: ', RESTAURANTE BACCALA, 'city_name: ',Belem
+restaurts_name: ', Restaurante o Molequito, 'city_name: ',Belem
+restaurts_name: ', Pedacinho de Belém, 'city_name: ',Belem
+restaurts_name: ', Porto Ver-o-Rio, 'city_name: ',Belem
+restaurts_name: ', Safari Park Shenzhen Mountain Top Restaurant, 'city_name: ',Shenzhen
+restaurts_name: ', Huacheng Fishing Port, 'city_name: ',Shenzhen
+restaurts_name: ', Shengji Park Shop, 'city_name: ',Shenzhen
+restaurts_name: ', Haizhucheng Delicacies Hotel, 'city_name: ',Shenzhen
+restaurts_name: ', Barrio Antiguo, 'city_name: ',Monterrey
+restaurts_name: ', Paradise Casino (Monterrey), 'city_name: ',Monterrey
+restaurts_name: ', Hollywood Entertainment Casino (Valle Alto), 'city_name: ',Monterrey
+restaurts_name: ', Jubilee Casino (Monterrey), 'city_name: ',Monterrey
+restaurts_name: ', EL PALACIO DE LOS GUISOS, 'city_name: ',Oruro
+restaurts_name: ', RESTAURANT VEGETARIANO GOVINDA, 'city_name: ',Oruro
+restaurts_name: ', AZHTIRAM DELICIOUS, 'city_name: ',Oruro
+restaurts_name: ', Ay Jalisco Oruro, 'city_name: ',Oruro
+restaurts_name: ', restauran El Folklore, 'city_name: ',Oruro
+restaurts_name: ', almuerzos Derby, 'city_name: ',Oruro
+restaurts_name: ', Antojitos, 'city_name: ',Oruro
+restaurts_name: ', 1221 Steakhouse, 'city_name: ',Oruro
+restaurts_name: ', Restaurante Stevia, 'city_name: ',Oruro
+restaurts_name: ', Restaurant El Oriental, 'city_name: ',Oruro
+restaurts_name: ', ALADO, 'city_name: ',Oruro
+restaurts_name: ', Churrasqueria Sauce, 'city_name: ',Oruro
+restaurts_name: ', Restaurant Andino, 'city_name: ',Oruro
+restaurts_name: ', CEVICHERIA ORURO, 'city_name: ',Oruro
+restaurts_name: ', El buen sabor oruro alta gastronomia, 'city_name: ',Oruro
+restaurts_name: ', Masai Mara Ulusal Doğa Koruma Alanı Vahşi Yaşam, 'city_name: ',Maasai Mara
+restaurts_name: ', Aruba Mara Bush Camp, 'city_name: ',Maasai Mara
+restaurts_name: ', Guraya, 'city_name: ',Mombasa
+restaurts_name: ', Folana, 'city_name: ',Mombasa
+restaurts_name: ', La Casa Shiraz, 'city_name: ',Mombasa
+restaurts_name: ', KPA Berth 19, 'city_name: ',Mombasa
+restaurts_name: ', Likoni Channel, 'city_name: ',Mombasa
+restaurts_name: ', Punta Gorda, 'city_name: ',Belize City
+restaurts_name: ', Butts Up Cave Tubing, 'city_name: ',Belize City
+restaurts_name: ', Carnival Magic In Belize, 'city_name: ',Belize City
+restaurts_name: ', Sebastian Cayetano Garufina Museum, 'city_name: ',Belize City
+restaurts_name: ', Bacab eco-Park, 'city_name: ',Belize City
+restaurts_name: ', Dolphin Park, 'city_name: ',Belize City
+restaurts_name: ', Princess Coastline, 'city_name: ',Belize City
+restaurts_name: ', Park View, 'city_name: ',Kampala
+restaurts_name: ', kadib thakkah, 'city_name: ',Kampala
+restaurts_name: ', Buzz Teeniez Awards, 'city_name: ',Kampala
+restaurts_name: ', sleek and slender, 'city_name: ',Kampala
+restaurts_name: ', Magashe Tours, 'city_name: ',Kampala
+restaurts_name: ', La Cupula Restaurant, 'city_name: ',Tenerife
+restaurts_name: ', San Hô Restaurant, 'city_name: ',Tenerife
+restaurts_name: ', The Cheeky Turtle, 'city_name: ',Tenerife
+restaurts_name: ', مقبرة معبد سيتي الاول, 'city_name: ',Luxor
+restaurts_name: ', Little India Tenerife, 'city_name: ',Tenerife
+restaurts_name: ', RESTAURANTE MELVIN'S, 'city_name: ',Tenerife
+restaurts_name: ', Restaurante D'Mar, 'city_name: ',Tenerife
+restaurts_name: ', Zumaque, 'city_name: ',Tenerife
+restaurts_name: ', Mandarinier Gastronomia, 'city_name: ',Porto Alegre
+restaurts_name: ', POA Parrilla, 'city_name: ',Porto Alegre
+restaurts_name: ', Restaurante Vivenda Portuguesa, 'city_name: ',Porto Alegre
+restaurts_name: ', Suzanne Marie Restaurant, 'city_name: ',Porto Alegre
+restaurts_name: ', el olive, 'city_name: ',Busan
+restaurts_name: ', Boksoondoga F1963, 'city_name: ',Busan
+restaurts_name: ', Morigui Restaurant, 'city_name: ',Busan
+restaurts_name: ', Piggy Bistro (피기비스트로), 'city_name: ',Busan
+restaurts_name: ', Mugunghwa, 'city_name: ',Busan
+restaurts_name: ', Cappadocia, 'city_name: ',Busan
+restaurts_name: ', La Bella Cita, 'city_name: ',Busan
+restaurts_name: ', Pepe's Tavern Punta Cana, 'city_name: ',Punta Cana
+restaurts_name: ', Dinner in the Sky Punta Cana, 'city_name: ',Punta Cana
+restaurts_name: ', La Palapa by Eden Roc, 'city_name: ',Punta Cana
+restaurts_name: ', Herman 311 Bar & Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Barbudo Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Castaways Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Chic Cabaret & Restaurant Punta Cana, 'city_name: ',Punta Cana
+restaurts_name: ', RESTAURANTE NAKAMURA Cap Cana, 'city_name: ',Punta Cana
+restaurts_name: ', Turia Restaurant, 'city_name: ',Punta Cana
+restaurts_name: ', Fire and Rescue Statiton Tower, 'city_name: ',Arusha
+restaurts_name: ', L'Ô Restaurante, 'city_name: ',Fortaleza
+restaurts_name: ', ZOI Restaurante, 'city_name: ',Fortaleza
+restaurts_name: ', Marcel Restaurante., 'city_name: ',Fortaleza
+restaurts_name: ', Geppos Italiano, 'city_name: ',Fortaleza
+restaurts_name: ', Restaurante La Provincia, 'city_name: ',Medellin
+restaurts_name: ', Restaurante IN SITU, 'city_name: ',Medellin
+restaurts_name: ', Mekong, 'city_name: ',Medellin
+restaurts_name: ', Songjeong Tteokgalbi, 'city_name: ',Gwangju
+restaurts_name: ', Le Ciel Blue, 'city_name: ',Gwangju
+restaurts_name: ', First Nepal Resturant, 'city_name: ',Gwangju
+restaurts_name: ', Another Kitchen, 'city_name: ',Gwangju
+restaurts_name: ', Baden Baden, 'city_name: ',Gwangju
+restaurts_name: ', 무등산호랭이, 'city_name: ',Gwangju
+restaurts_name: ', Ray Restaurant, 'city_name: ',Gwangju
+restaurts_name: ', Sokoa, 'city_name: ',Gwangju
+restaurts_name: ', Bon&Bon, 'city_name: ',Gwangju
+restaurts_name: ', THE MOON, 'city_name: ',Gwangju
+restaurts_name: ', 지노스가든, 'city_name: ',Gwangju
+restaurts_name: ', 메타포 레스토랑, 'city_name: ',Gwangju
+restaurts_name: ', 베네치아신세계광주점, 'city_name: ',Gwangju
+restaurts_name: ', Restaurante Los 5 Sentidos, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante Los Guayres, 'city_name: ',Gran Canaria
+restaurts_name: ', Lupé, 'city_name: ',Gran Canaria
+restaurts_name: ', Gorbea Chill Out & Restaurant, 'city_name: ',Gran Canaria
+restaurts_name: ', Restaurante La Guagua Blanca, 'city_name: ',Gran Canaria
+restaurts_name: ', El Puerto, 'city_name: ',Gran Canaria
+restaurts_name: ', Maji Moto, 'city_name: ',Arusha
+restaurts_name: ', Restaurante Villa Maggioni, 'city_name: ',Florianopolis
+restaurts_name: ', Bistrô da Praça, 'city_name: ',Florianopolis
+restaurts_name: ', La Cave, 'city_name: ',Florianopolis
+restaurts_name: ', Anima, 'city_name: ',Ulsan
+restaurts_name: ', The Sweet Thai 더 스위트 타이, 'city_name: ',Ulsan
+restaurts_name: ', Bujohwa, 'city_name: ',Ulsan
+restaurts_name: ', 노아레스토랑, 'city_name: ',Ulsan
+restaurts_name: ', NAMASKAR (나마스까르 ), 'city_name: ',Ulsan
+restaurts_name: ', 사이먼스테이크 롯데백화점 울산점, 'city_name: ',Ulsan
+restaurts_name: ', 헤이다이닝, 'city_name: ',Ulsan
+restaurts_name: ', Konya, 'city_name: ',Konya
+restaurts_name: ', Clochard, 'city_name: ',Thessaloniki
+restaurts_name: ', Tripia Potiria, 'city_name: ',Thessaloniki
+restaurts_name: ', rOOTS, 'city_name: ',Thessaloniki
+restaurts_name: ', Frutti Di Mare, 'city_name: ',Thessaloniki
+restaurts_name: ', Flokos, 'city_name: ',Volos
+restaurts_name: ', Vovó Bela Restaurante, 'city_name: ',Porto Seguro
+restaurts_name: ', Lugar ao Sul, 'city_name: ',Amadora
+restaurts_name: ', Maria Azeitona, 'city_name: ',Amadora
+restaurts_name: ', A Cabaninha, 'city_name: ',Amadora
+restaurts_name: ', Acarajé Gourmet, 'city_name: ',Porto Seguro
+restaurts_name: ', Gallo Praia, 'city_name: ',Porto Seguro
+restaurts_name: ', Selçuk Restaurant, 'city_name: ',Bursa
+restaurts_name: ', Sümbüllü Bahçe Konağı, 'city_name: ',Bursa
+restaurts_name: ', Arap Şükrü Aydın, 'city_name: ',Bursa
+restaurts_name: ', Dababa Restaurant, 'city_name: ',Bursa
+restaurts_name: ', Celal Bey Etli Ekmek, 'city_name: ',Konya
+restaurts_name: ', Keshav, 'city_name: ',Amadora
+restaurts_name: ', Socratous Garden, 'city_name: ',Rhodes
+restaurts_name: ', Mr. Brad, 'city_name: ',Buzios
+restaurts_name: ', De Vooruitgang, 'city_name: ',Eindhoven
+restaurts_name: ', Frank, 'city_name: ',Saint Petersburg
+restaurts_name: ', Fishalida, 'city_name: ',Corfu
+restaurts_name: ', La Veranda, 'city_name: ',Rhodes
+restaurts_name: ', ONO by Marouli, 'city_name: ',Rhodes
+restaurts_name: ', Alexis 4 Seasons, 'city_name: ',Rhodes
+restaurts_name: ', Greek Stories, 'city_name: ',Rhodes
+restaurts_name: ', Archipelagos, 'city_name: ',Rhodes
+restaurts_name: ', Meltemi, 'city_name: ',Rhodes
+restaurts_name: ', Sehr Gut!, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Akınal Gar Restaurant, 'city_name: ',Gaziantep
+restaurts_name: ', Salvador Dali, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Fresh, 'city_name: ',Corfu
+restaurts_name: ', Monet, 'city_name: ',Nizhny Novgorod
+restaurts_name: ', Kazerne, 'city_name: ',Eindhoven
+restaurts_name: ', Restaurant Anthos, 'city_name: ',Corfu
+restaurts_name: ', Çulcuoğlu Et Lokantası, 'city_name: ',Gaziantep
+restaurts_name: ', Lavash Ciğer, 'city_name: ',Gaziantep
+restaurts_name: ', Paşa Mangalı, 'city_name: ',Gaziantep
+restaurts_name: ', Kebapçı Halil Usta, 'city_name: ',Gaziantep
+restaurts_name: ', Antep Sofrası, 'city_name: ',Gaziantep
+restaurts_name: ', Bodega do Sertão, 'city_name: ',Maceio
+restaurts_name: ', Akuaba, 'city_name: ',Maceio
+restaurts_name: ', Espacio Ñandu, 'city_name: ',Puerto Natales
+restaurts_name: ', Bicho do Mar, 'city_name: ',Maceio
+restaurts_name: ', Cafe Kaiken, 'city_name: ',Puerto Natales
+restaurts_name: ', Divina Gula, 'city_name: ',Maceio
+restaurts_name: ', Doña Eugenia, 'city_name: ',Potosi
+restaurts_name: ', Restaurante Filé do Zezé, 'city_name: ',Maceio
+restaurts_name: ', Afrigonia, 'city_name: ',Puerto Natales
+restaurts_name: ', La Casona 1775, 'city_name: ',Potosi
+restaurts_name: ', Der Zauberlehrling, 'city_name: ',Stuttgart
+restaurts_name: ', Budega do Zito, 'city_name: ',Maceio
+restaurts_name: ', Lopana, 'city_name: ',Maceio
+restaurts_name: ', Massarella, 'city_name: ',Maceio
+restaurts_name: ', Hamburgueseria La Forastera, 'city_name: ',Puerto Natales
+restaurts_name: ', Santolla, 'city_name: ',Puerto Natales
+restaurts_name: ', Del Papa Ristorante, 'city_name: ',Krakow
+restaurts_name: ', La Caldera, 'city_name: ',Puerto Natales
+restaurts_name: ', Restauracja Wentzl, 'city_name: ',Krakow
+restaurts_name: ', Tierra Colorada Gastro, 'city_name: ',Asuncion
+restaurts_name: ', El Café de Acá, 'city_name: ',Asuncion
+restaurts_name: ', Cafofinho da Tia Dica, 'city_name: ',Sao Luis
+restaurts_name: ', Tårget, 'city_name: ',Turku
+restaurts_name: ', Pikku-Torre, 'city_name: ',Turku
+restaurts_name: ', Nerå, 'city_name: ',Turku
+restaurts_name: ', Hacienda de los Morales, 'city_name: ',Mexico city
+restaurts_name: ', Casa do Matuto, 'city_name: ',Natal
+restaurts_name: ', Mangai, 'city_name: ',Natal
+restaurts_name: ', La Praia Rooftop, 'city_name: ',Natal
+restaurts_name: ', Zum Goldenen Schäfli, 'city_name: ',St. Gallen
+restaurts_name: ', Candela, 'city_name: ',St. Gallen
+restaurts_name: ', HANS IM GLÜCK - ST. GALLEN Kugelgasse, 'city_name: ',St. Gallen
+restaurts_name: ', Marg & Bein, 'city_name: ',Bergen
+restaurts_name: ', Antigua Contemporanea, 'city_name: ',Cali
+restaurts_name: ', La Comitiva, 'city_name: ',Cali
+restaurts_name: ', ParkFoz Steakhouse, 'city_name: ',Foz do Iguacu
+restaurts_name: ', La Taquería # 12, 'city_name: ',Cali
+restaurts_name: ', Nejat Balık, 'city_name: ',Antalya
+restaurts_name: ', Ramki Restauracja, 'city_name: ',Lodz
+restaurts_name: ', Ukryte Rzeki, 'city_name: ',Lodz
+restaurts_name: ', Restauracja Stary Rynek 2, 'city_name: ',Lodz
+restaurts_name: ', FALLA Łódź, 'city_name: ',Lodz
+restaurts_name: ', Imber, 'city_name: ',Lodz
+restaurts_name: ', Kaminari Sushi, 'city_name: ',Lodz
+restaurts_name: ', Susharnia, 'city_name: ',Lodz
+restaurts_name: ', Peskesi, 'city_name: ',Heraklion
+restaurts_name: ', Herbs' Garden, 'city_name: ',Heraklion
+restaurts_name: ', Arismari & Varsamo, 'city_name: ',Heraklion
+restaurts_name: ', Λίγο Κρασί Λίγο Θάλασσα, 'city_name: ',Heraklion
+restaurts_name: ', Central Park, 'city_name: ',Heraklion
+restaurts_name: ', Antik, 'city_name: ',Liberec
+restaurts_name: ', Balada, 'city_name: ',Liberec
+restaurts_name: ', Black Horse, 'city_name: ',Liberec
+restaurts_name: ', Nokkalan Majakka, 'city_name: ',Espoo
+restaurts_name: ', Kathmandu Palace, 'city_name: ',Espoo
+restaurts_name: ', Mozaik Bar & Restaurant, 'city_name: ',Espoo
+restaurts_name: ', Bla Bla Bla, 'city_name: ',Vantaa
+restaurts_name: ', The One Thai Kitchen, 'city_name: ',Vantaa
+restaurts_name: ', Vintero, 'city_name: ',Vantaa
+restaurts_name: ', Everest Dine, 'city_name: ',Vantaa
+restaurts_name: ', Wanda's Kitchen & Lounge, 'city_name: ',Vantaa
+restaurts_name: ', Mike's Diner, 'city_name: ',Vantaa
+restaurts_name: ', Casa dos Contos, 'city_name: ',Belo Horizonte
+restaurts_name: ', Cantina do Lucas, 'city_name: ',Belo Horizonte
+restaurts_name: ', Peixe Frito, 'city_name: ',Belo Horizonte
+restaurts_name: ', Kanpai, 'city_name: ',Belo Horizonte
+restaurts_name: ', Casa Bonomi, 'city_name: ',Belo Horizonte
+restaurts_name: ', Kitchen & Table Helsinki Airport, 'city_name: ',Vantaa
+restaurts_name: ', Restaurante Xapuri, 'city_name: ',Belo Horizonte
+restaurts_name: ', Loko, 'city_name: ',Waterford
+restaurts_name: ', McLeary's Restaurant, 'city_name: ',Waterford
+restaurts_name: ', The Riverside Cottage, 'city_name: ',Waterford
+restaurts_name: ', La Fontana, 'city_name: ',Waterford
+restaurts_name: ', Ramen, 'city_name: ',Waterford
+restaurts_name: ', The Reg, 'city_name: ',Waterford
+restaurts_name: ', Castelo Libanês, 'city_name: ',Foz do Iguacu
+restaurts_name: ', Castelo Alemão, 'city_name: ',Foz do Iguacu
+restaurts_name: ', Empório com Arte, 'city_name: ',Foz do Iguacu
+restaurts_name: ', Kilcohan Park Greyhound Stadium, 'city_name: ',Waterford
+restaurts_name: ', Tattu Birmingham, 'city_name: ',Birmingham
+restaurts_name: ', Remezzo Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', Niko's Taverna, 'city_name: ',Mykonos
+restaurts_name: ', Avli Tou Thodori, 'city_name: ',Mykonos
+restaurts_name: ', Local Mykonos, 'city_name: ',Mykonos
+restaurts_name: ', Katerina's Restaurant & Cocktail Bar, 'city_name: ',Mykonos
+restaurts_name: ', Deli Yengeç, 'city_name: ',Ankara
+restaurts_name: ', Dafne Restaurant, 'city_name: ',Ankara
+restaurts_name: ', Mezzaluna, 'city_name: ',Ankara
+restaurts_name: ', Amarillo, 'city_name: ',Ankara
+restaurts_name: ', Kınacızade Konağı, 'city_name: ',Ankara
+restaurts_name: ', Kirit Cafe, 'city_name: ',Ankara
+restaurts_name: ', And Cafe, 'city_name: ',Ankara
+restaurts_name: ', Cafemiz, 'city_name: ',Ankara
+restaurts_name: ', Trilye Restaurant, 'city_name: ',Ankara
+restaurts_name: ', Niki Restaurant, 'city_name: ',Ankara
+restaurts_name: ', Chez Manu, 'city_name: ',Ushuaia
+restaurts_name: ', Main Tower Restaurant & Lounge, 'city_name: ',Frankfurt
+restaurts_name: ', Römer Pils Brunnen, 'city_name: ',Frankfurt
+restaurts_name: ', Villa Merton, 'city_name: ',Frankfurt
+restaurts_name: ', LugInsLand - Main Skyline Restaurant & Bar, 'city_name: ',Frankfurt
+restaurts_name: ', Konoba Scala Santa, 'city_name: ',Kotor
+restaurts_name: ', La Vie des Champs, 'city_name: ',Geneva
+restaurts_name: ', Loggia, 'city_name: ',Coimbra
+restaurts_name: ', Notes Bar & Kitchen, 'city_name: ',Coimbra
+restaurts_name: ', La Caperucita y el Lobo, 'city_name: ',Valparaiso
+restaurts_name: ', Cafe Turri, 'city_name: ',Valparaiso
+restaurts_name: ', El Internado, 'city_name: ',Valparaiso
+restaurts_name: ', Restaurant La Concepción, 'city_name: ',Valparaiso
+restaurts_name: ', Cocina Puerto, 'city_name: ',Valparaiso
+restaurts_name: ', La Bruschetta, 'city_name: ',Valparaiso
+restaurts_name: ', Giardino Malandrino, 'city_name: ',Valparaiso
+restaurts_name: ', Valpo Ramen, 'city_name: ',Valparaiso
+restaurts_name: ', Ikaro Cafe, 'city_name: ',Santa Marta
+restaurts_name: ', Skutebrygga, 'city_name: ',Drammen
+restaurts_name: ', Anchas Bodega, 'city_name: ',Drammen
+restaurts_name: ', Fuji Sushi Drammen, 'city_name: ',Drammen
+restaurts_name: ', Mekong Kjøkken, 'city_name: ',Drammen
+restaurts_name: ', Prego, 'city_name: ',Patras
+restaurts_name: ', Lagos Balık Restaurant, 'city_name: ',Adana
+restaurts_name: ', Kaburgacı Yaşar Usta, 'city_name: ',Adana
+restaurts_name: ', Kebapçı Mesut, 'city_name: ',Adana
+restaurts_name: ', Eyvan Kebap, 'city_name: ',Adana
+restaurts_name: ', Arismari & Varsamo, 'city_name: ',Crete
+restaurts_name: ', Peskesi, 'city_name: ',Crete
+restaurts_name: ', Herbs' Garden, 'city_name: ',Crete
+restaurts_name: ', Petrino Garden, 'city_name: ',Crete
+restaurts_name: ', La Tablita, 'city_name: ',El Calafate
+restaurts_name: ', Viva la Pepa, 'city_name: ',El Calafate
+restaurts_name: ', La Zaina Restaurant, 'city_name: ',El Calafate
+restaurts_name: ', Pura Vida, 'city_name: ',El Calafate
+restaurts_name: ', Mako Fuegos y Vinos, 'city_name: ',El Calafate
+restaurts_name: ', Quidu, 'city_name: ',El Calafate
+restaurts_name: ', Pietro's Cafe, 'city_name: ',El Calafate
+restaurts_name: ', Mako Premium Bar, 'city_name: ',El Calafate
+restaurts_name: ', Elba'r, 'city_name: ',El Calafate
+restaurts_name: ', Restaurant Rosengarten, 'city_name: ',Bern
+restaurts_name: ', Brasserie Bärengraben, 'city_name: ',Bern
+restaurts_name: ', Restaurant Na Statku, 'city_name: ',Hradec Kralove
+restaurts_name: ', Šatlava, 'city_name: ',Hradec Kralove
+restaurts_name: ', Silk Road Tilburg, 'city_name: ',Tilburg
+restaurts_name: ', Restaurant RAK, 'city_name: ',Tilburg
+restaurts_name: ', Pig & Rye, 'city_name: ',Tilburg
+restaurts_name: ', Peerkes Hoeve, 'city_name: ',Tilburg
+restaurts_name: ', Stadsbrouwerij 013, 'city_name: ',Tilburg
+restaurts_name: ', Slagroom Eten & Drinken, 'city_name: ',Tilburg
+restaurts_name: ', Eetbar De Wagon, 'city_name: ',Tilburg
+restaurts_name: ', The Talk, 'city_name: ',Tilburg
+restaurts_name: ', Leonardo Etxea, 'city_name: ',Punta del Este
+restaurts_name: ', Virazón Puerto, 'city_name: ',Punta del Este
+restaurts_name: ', La Bourgogne, 'city_name: ',Punta del Este
+restaurts_name: ', Il Baretto, 'city_name: ',Punta del Este
+restaurts_name: ', Bungalow Suizo, 'city_name: ',Punta del Este
+restaurts_name: ', Wantan, 'city_name: ',Punta del Este
+restaurts_name: ', El Palenque, 'city_name: ',Punta del Este
+restaurts_name: ', Jadran, 'city_name: ',Budva
+restaurts_name: ', Obala, 'city_name: ',Budva
+restaurts_name: ', Tropico, 'city_name: ',Budva
+restaurts_name: ', Taste of Asia, 'city_name: ',Budva
+restaurts_name: ', La Bocca, 'city_name: ',Budva
+restaurts_name: ', Garden Cafe, 'city_name: ',Budva
+restaurts_name: ', Kužina, 'city_name: ',Budva
+restaurts_name: ', Zlatibor, 'city_name: ',Budva
+restaurts_name: ', QOMO Restaurant & Bar, 'city_name: ',Düsseldorf
+restaurts_name: ', Brasserie Stadthaus, 'city_name: ',Düsseldorf
+restaurts_name: ', Hereford & Friends Steakhouse, 'city_name: ',Sandnes
+restaurts_name: ', Engenho Dedé, 'city_name: ',Belem
+restaurts_name: ', Na Maré, 'city_name: ',Belem
+restaurts_name: ', The Burger Spot, 'city_name: ',Belem
+restaurts_name: ', Famiglia Sicilia, 'city_name: ',Belem
+restaurts_name: ', Restaurante Largo da Palmeira, 'city_name: ',Belem
+restaurts_name: ', Roxy Bar, 'city_name: ',Belem
+restaurts_name: ', Saldosa Maloca, 'city_name: ',Belem
+restaurts_name: ', El Lingote, 'city_name: ',Monterrey
+restaurts_name: ', Me Muero de Hambre, 'city_name: ',Monterrey
+restaurts_name: ', Phileas Fogg, 'city_name: ',Stavanger
+restaurts_name: ', Fish & Cow, 'city_name: ',Stavanger
+restaurts_name: ', På Kornet, 'city_name: ',Stavanger
+restaurts_name: ', Harry Pepper, 'city_name: ',Stavanger
+restaurts_name: ', Porto do Babazinho, 'city_name: ',Boa Vista
+restaurts_name: ', Oscar Restaurante, 'city_name: ',Boa Vista
+restaurts_name: ', Alex Restaurante, 'city_name: ',Boa Vista
+restaurts_name: ', Adalgiza Restaurante, 'city_name: ',Boa Vista
+restaurts_name: ', Галерея Ресторанов, 'city_name: ',Samara
+restaurts_name: ', Чайхона №1, 'city_name: ',Samara
+restaurts_name: ', Karczma Polska, 'city_name: ',Szczecin
+restaurts_name: ', Mała Tumska, 'city_name: ',Szczecin
+restaurts_name: ', Hiroshima, 'city_name: ',Encarnacion
+restaurts_name: ', Restaurant Doña Susana, 'city_name: ',Encarnacion
+restaurts_name: ', Burger King, 'city_name: ',Encarnacion
+restaurts_name: ', Рубаи, 'city_name: ',Kazan
+restaurts_name: ', Kremlin, 'city_name: ',Kazan
+restaurts_name: ', Love story, 'city_name: ',Kazan
+restaurts_name: ', Чирэм, 'city_name: ',Kazan
+restaurts_name: ', Panorama Tower - Plate of Art, 'city_name: ',Leipzig
+restaurts_name: ', Thüringer Hof, 'city_name: ',Leipzig
+restaurts_name: ', Auerbachs Keller, 'city_name: ',Leipzig
+restaurts_name: ', Mein Leipzig, 'city_name: ',Leipzig
+restaurts_name: ', Max Enk, 'city_name: ',Leipzig
+restaurts_name: ', The Swine That Dines, 'city_name: ',Leeds
+restaurts_name: ', Riva Blu Italian Restaurant & Bar, Leeds, 'city_name: ',Leeds
+restaurts_name: ', Da Vito Ristorante, 'city_name: ',Leeds
+restaurts_name: ', Museo Civico della Bussola Del Ducato Marinaro di Amalfi, 'city_name: ',Amalfi Coast
+restaurts_name: ', Giardini di Villa Rufolo, 'city_name: ',Amalfi Coast
+restaurts_name: ', Bagni Mar di Cobalto, 'city_name: ',Amalfi Coast
+restaurts_name: ', Terrazza panoramica di Villa Cimbrone, 'city_name: ',Amalfi Coast
+restaurts_name: ', Belvedere Principessa di Piemonte, 'city_name: ',Amalfi Coast
+restaurts_name: ', Fiordo di Furore, 'city_name: ',Amalfi Coast
+restaurts_name: ', Emerald Grotto (Grotta dello Smeraldo), 'city_name: ',Amalfi Coast
+restaurts_name: ', Path of the Gods (Sentiero degli Dei), 'city_name: ',Amalfi Coast
+restaurts_name: ', Limoncello Factory, 'city_name: ',Amalfi Coast
+restaurts_name: ', Fontana di Sant’andrea, 'city_name: ',Amalfi Coast
+restaurts_name: ', Duomo di Ravello, 'city_name: ',Amalfi Coast
+restaurts_name: ', Cattedrale di Amalfi - Chiostro del Paradiso, 'city_name: ',Amalfi Coast
+restaurts_name: ', Museo della Carta, 'city_name: ',Amalfi Coast
+restaurts_name: ', Costa Amalfitana, 'city_name: ',Amalfi Coast
+restaurts_name: ', Porto di Amalfi, 'city_name: ',Amalfi Coast
+restaurts_name: ', Duomo di S. Andrea, 'city_name: ',Amalfi Coast
+restaurts_name: ', Duomo - Orario Museo, 'city_name: ',Amalfi Coast
+restaurts_name: ', Parco La Pineta, 'city_name: ',Amalfi Coast
+restaurts_name: ', Museo di Civiltà Contadina Arte e Mestieri, 'city_name: ',Amalfi Coast

@@ -17,8 +17,7 @@ import ast
 from unidecode import unidecode
 from threading import Thread,RLock
 from django.core.cache import cache
-
-# shared_resource_lock = RLock()
+from app.restaurantsfunctions import get_next_breakfast_restaurant, get_next_dinner_restaurant,get_next_lunch_restaurant
 
 load_dotenv()
 
@@ -267,174 +266,234 @@ def process_hotel(hotel, hotels):
     hotels.append(hotels_info)
     
 
+generate_schedule_lock=RLock()
 
-def generate_schedule(data,country,check,):
-    print ('@@@@@@@@@@@@@@@@@@@',check)
-    total = 0    
-    try:
-        cities = data['cities']
-        
-        num_attractions_per_day = 3
-        attraction_duration = timedelta(hours=3)
-        lunch_break_start = datetime.strptime('14:00', '%H:%M').time()
-        lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
-        daily_schedule_end = datetime.strptime('19:00', '%H:%M').time()
+def generate_schedule(data,country,check):
+    with generate_schedule_lock:
 
-        schedule = {'schedules': [] }  # Initialize the schedule dictionary
-        for city in cities:
-            city_name = city['city']
-            query1=City.objects.get(city=city_name)
-            landmarks=[query1.latitude,query1.longitude]
-            city_description = city['description']
-            attractions = city['attractions']
-            count=0
+        print ('@@@@@@@@@@@@@@@@@@@',check)
+        total = 0    
+        try:
+            cities = data['cities']
+            
+            num_attractions_per_day = 3
+            attraction_duration = timedelta(hours=3)
+            lunch_break_start = datetime.strptime('14:00', '%H:%M').time()
+            lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
+            daily_schedule_end = datetime.strptime('19:00', '%H:%M').time()
 
-            for attraction in attractions:
-                
-                count+=1
-                try:
-                    prices=calculate_total_price_attractions(attraction)
-                    total+=prices
-                except: 
-                    pass
-           
-            restaurants = city.get('restaurants',"")
-            hotels=city.get('hotels',"")
-            night_life=city.get("night-life","")
-            sunset=city.get('sunset',"")
-            days_spent = city['days_spent']
-            print (days_spent,'@@@@@@@')
-            try:
-                if check==False:
-                    attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
-            except Exception as e:
-                print('already sorted')
+            schedule = {'schedules': [] }  # Initialize the schedule dictionary
+            for city in cities:
+                city_name = city['city']
+                query1=City.objects.get(city=city_name)
+                landmarks=[query1.latitude,query1.longitude]
+                city_description = city['description']
+                attractions = city['attractions']
+                count=0
 
-            days_spent=int(days_spent)
-            num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
-            num_attractions_per_day = int(num_attractions_per_day) 
-
-            # num_attractions = min(len(attractions), num_attractions_per_day * days_spent)
-            attractions_per_day = num_attractions // days_spent
-            extra_attractions = num_attractions % days_spent
-
-            start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
-
-            city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night-life':night_life,'sunset':sunset,'schedules': []}
-
-            for day in range(days_spent):
-                day_schedule = {'day': day + 1, 'attractions': []}
-
-                for i in range(attractions_per_day):
-                    attraction_index = day * attractions_per_day + i
-                    attraction = attractions[attraction_index]
-                    attraction_start = start_time + (attraction_duration * i)
-
-                    # Add lunch break if within attraction hours
+                for attraction in attractions:
+                    
+                    count+=1
                     try:
-                        lunch_break_start = datetime.strptime('14:00', '%H:%M').time() 
-                        lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
+                        prices=calculate_total_price_attractions(attraction)
+                        total+=prices
+                    except: 
+                        pass
+            
+                restaurants = city.get('restaurants',"")
+                breakfast_list = []
+                restaurants=list(restaurants)
+                lunch_list = []
+                dinner_list = []
+                rest_of_restaurants = []
 
-                        if lunch_break_start <= attraction_start.time() < lunch_break_end:
-                            attraction_start += timedelta(hours=2)
-                    except Exception as e:
-                        print('filaed in 212',e)
-                    attraction_end = attraction_start + attraction_duration
+                for restaurant  in restaurants:
+                    print ('restaurant:','!!!!!!!!!!!!!!!!!!')
+                    category=restaurant ['category'].lower().strip()
+                    if 'breakfast' in category or 'cafe' in category:
+                        breakfast_list.append(restaurant )
+                    elif 'lunch' in category:
+                        lunch_list.append(restaurant )
+                    elif 'dinner' in category or re.search(r'\bdinner\b', category):
+                        print ('@@@@@@')
+                        # dinner_list.append(restaurant )
+                    else:
+                        rest_of_restaurants.append(restaurant )
 
-                    attraction_data = {
-                        # 'attraction': {
-                              'id': attraction.get('id', ''),
-                                'city_id': attraction.get('city_id', ''),
-                                'name': attraction.get('name', ''),
-                                'latitude': attraction.get('latitude', ''),
-                                'longitude': attraction.get('longitude', ''),
-                                'photos': attraction.get('photos', ''),
-                                'review_score': attraction.get('review_score', ''),
-                                'description': attraction.get('description', ''),
-                                'website': attraction.get('website', ''),
-                                'hours_popular': attraction.get('hours_popular', ''),
-                                'hours': attraction.get('hours', ''),
-                                'address': attraction.get('address', ''),
-                                'tips': attraction.get('tips', ''),
-                                'tel': attraction.get('tel', ''),
-                                'distance': attraction.get('distance', ''),
-                                'real_price': attraction.get('real_price', ''),
-                                'start_time': attraction_start.strftime('%H:%M'),
-                                'end_time': attraction_end.strftime('%H:%M')
+                
+                
                         
-                    }
-
-                    day_schedule['attractions'].append(attraction_data)
+                hotels=city.get('hotels',"")
+                night_life=city.get("night-life","")
+                sunset=city.get('sunset',"")
+                days_spent = city['days_spent']
+                
                 try:
-                # Add extra attraction if available and within the schedule
-                    if extra_attractions > 0 and day_schedule['attractions'][-1]['attraction']['end_time'] < daily_schedule_end.strftime('%H:%M'):
-                        extra_attraction = attractions[num_attractions - extra_attractions]
-                        extra_attraction_start = start_time + (attraction_duration * (attractions_per_day + extra_attractions - 1))
-                        extra_attraction_end = extra_attraction_start + attraction_duration
-
-                        try:
-                            if extra_attraction_end.time() <= daily_schedule_end:
-                                extra_attraction_data = {
-                                    'attraction': {
-                                        'id': extra_attraction.get('id', ''),
-                                        'city_id': extra_attraction.get('city_id', ''),
-                                        'name': extra_attraction.get('name', ''),
-                                        'latitude': extra_attraction.get('latitude', ''),
-                                        'longitude': extra_attraction.get('longitude', ''),
-                                        'photos': extra_attraction.get('photos', ''),
-                                        'review_score': extra_attraction.get('review_score', ''),
-                                        'description': extra_attraction.get('description', ''),
-                                        'website': extra_attraction.get('website', ''),
-                                        'hours_popular': extra_attraction.get('hours_popular', ''),
-                                        'hours': extra_attraction.get('hours', ''),
-                                        'address': extra_attraction.get('address', ''),
-                                        'tips': extra_attraction.get('tips', ''),
-                                        'tel': extra_attraction.get('tel', ''),
-                                        'distance': extra_attraction.get('distance', ''),
-                                        'real_price': extra_attraction.get('real_price', ''),
-                                        'start_time': extra_attraction_start.strftime('%H:%M'),
-                                        'end_time': extra_attraction_end.strftime('%H:%M')
-                                    }
-                                }
-                                day_schedule['attractions'].append(extra_attraction_data)
-                                extra_attractions -= 1
-                        except Exception as e:
-                            print ('Error in 265',e)
-                            
+                    if check==False:
+                        attractions = sort_attractions_by_distance(attractions=attractions, first_attraction=attractions[0])
                 except Exception as e:
-                    print('not extra attraction',e)
+                    print('already sorted')
+
+                days_spent=int(days_spent)
+                num_attractions = min(len(attractions), int(num_attractions_per_day) * int(days_spent))
+                num_attractions_per_day = int(num_attractions_per_day) 
+
+                # num_attractions = min(len(attractions), num_attractions_per_day * days_spent)
+                attractions_per_day = num_attractions // days_spent
+                extra_attractions = num_attractions % days_spent
+
+                start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
+                
+                city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night-life':night_life,'sunset':sunset,'schedules': []}
+                # try:
+                #     restaurants.remove(restaurant)
+                # except:
+                for day in range(days_spent):
+                    day_schedule = {'day': day + 1, 'attractions': []}
+                    
+
+                    for i in range(attractions_per_day):
+                        attraction_index = day * attractions_per_day + i
+                        attraction = attractions[attraction_index]
+                        attraction_start = start_time + (attraction_duration * i)
+
+                    
+                        try:
+                            lunch_break_start = datetime.strptime('14:00', '%H:%M').time() 
+                            lunch_break_end = datetime.strptime('16:00', '%H:%M').time()
+
+                            if lunch_break_start <= attraction_start.time() < lunch_break_end:
+                                attraction_start += timedelta(hours=2)
+                        except Exception as e:
+                            print('filaed in 212',e)
+                        attraction_end = attraction_start + attraction_duration
+
+                        daily_schedule = {
+                                
+                                'id': attraction.get('id', ''),
+                                    'city_id': attraction.get('city_id', ''),
+                                    'name': attraction.get('name', ''),
+                                    'latitude': attraction.get('latitude', ''),
+                                    'longitude': attraction.get('longitude', ''),
+                                    'photos': attraction.get('photos', ''),
+                                    'review_score': attraction.get('review_score', ''),
+                                    'description': attraction.get('description', ''),
+                                    'website': attraction.get('website', ''),
+                                    'hours_popular': attraction.get('hours_popular', ''),
+                                    'hours': attraction.get('hours', ''),
+                                    'address': attraction.get('address', ''),
+                                    'tips': attraction.get('tips', ''),
+                                    'tel': attraction.get('tel', ''),
+                                    'distance': attraction.get('distance', ''),
+                                    'real_price': attraction.get('real_price', ''),
+                                    'start_time': attraction_start.strftime('%H:%M'),
+                                    'end_time': attraction_end.strftime('%H:%M')
+                            
+                        }
+                        if len(breakfast_list) == 0:
+                            breakfast = random.choice(restaurants)
+                        else:
+                            breakfast = random.choice(breakfast_list)
+
+                        # Choose lunch
+                        if len(lunch_list) == 0:
+                            lunch = random.choice(restaurants)
+                        else:
+                            lunch = random.choice(lunch_list)
+                            # Remove the selected restaurant from all three lists
+                            if lunch in breakfast_list:
+                                breakfast_list.remove(lunch)
+                            if lunch in dinner_list:
+                                dinner_list.remove(lunch)
+                            lunch_list.remove(lunch)
+
+                        # Choose dinner
+                        if len(dinner_list) == 0:
+                            dinner = random.choice(restaurants)
+                        else:
+                            dinner = random.choice(dinner_list)
+                            # Remove the selected restaurant from all three lists
+                            if dinner in breakfast_list:
+                                breakfast_list.remove(dinner)
+                            if dinner in lunch_list:
+                                lunch_list.remove(dinner)
+                            dinner_list.remove(dinner)
+                            
+
+                        day_schedule['attractions'].append(daily_schedule)
+                        day_schedule['breakfast_restaurant'] = breakfast
+                        day_schedule['lunch_restaurant'] = lunch
+                        day_schedule['dinner_restaurant'] = dinner
+                    
+                    try:
+                    # Add extra attraction if available and within the schedule
+                        if extra_attractions > 0 and day_schedule['attractions'][-1]['attraction']['end_time'] < daily_schedule_end.strftime('%H:%M'):
+                            extra_attraction = attractions[num_attractions - extra_attractions]
+                            extra_attraction_start = start_time + (attraction_duration * (attractions_per_day + extra_attractions - 1))
+                            extra_attraction_end = extra_attraction_start + attraction_duration
+
+                            try:
+                                if extra_attraction_end.time() <= daily_schedule_end:
+                                    extra_attraction_data = {
+                                        'attraction': {
+                                            'id': extra_attraction.get('id', ''),
+                                            'city_id': extra_attraction.get('city_id', ''),
+                                            'name': extra_attraction.get('name', ''),
+                                            'latitude': extra_attraction.get('latitude', ''),
+                                            'longitude': extra_attraction.get('longitude', ''),
+                                            'photos': extra_attraction.get('photos', ''),
+                                            'review_score': extra_attraction.get('review_score', ''),
+                                            'description': extra_attraction.get('description', ''),
+                                            'website': extra_attraction.get('website', ''),
+                                            'hours_popular': extra_attraction.get('hours_popular', ''),
+                                            'hours': extra_attraction.get('hours', ''),
+                                            'address': extra_attraction.get('address', ''),
+                                            'tips': extra_attraction.get('tips', ''),
+                                            'tel': extra_attraction.get('tel', ''),
+                                            'distance': extra_attraction.get('distance', ''),
+                                            'real_price': extra_attraction.get('real_price', ''),
+                                            'start_time': extra_attraction_start.strftime('%H:%M'),
+                                            'end_time': extra_attraction_end.strftime('%H:%M')
+                                        }
+                                    }
+                                    day_schedule['attractions'].append(extra_attraction_data)
+                                    extra_attractions -= 1
+                            except Exception as e:
+                                print ('Error in 265',e)
+                                
+                    except Exception as e:
+                        print('not extra attraction',e)
 
 
-                start_time += timedelta(days=1)
-                city_schedule['schedules'].append(day_schedule)
+                    start_time += timedelta(days=1)
+                    city_schedule['schedules'].append(day_schedule)
+                schedule['schedules'].append(city_schedule)
+        except Exception as e:
+            
+            print('failed in 261')
+            traceback.print_exc() 
+        taxi_cost = 0
+        Lunch = 0
+        price_for_dinner = 0
+        prices_for_country=get_cities_by_country(country, limit=2)
+        if prices_for_country:
+            taxi_cost = prices_for_country.get('5km taxi ride', 0)
+            Lunch = prices_for_country.get('Lunch', 0)
+            price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)
+        else:
+            print('No cities found.')
 
-            schedule['schedules'].append(city_schedule)
-    except Exception as e:
+        try:
+            
+            total_transport_private_taxi = count * int(taxi_cost)
+        except:
+            total_transport_private_taxi = 0
+
+        price_for_dinner=price_for_dinner*days_spent
+        total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
         
-        print('failed in 261')
-        traceback.print_exc() 
-    taxi_cost = 0
-    Lunch = 0
-    price_for_dinner = 0
-    prices_for_country=get_cities_by_country(country, limit=2)
-    if prices_for_country:
-        taxi_cost = prices_for_country.get('5km taxi ride', 0)
-        Lunch = prices_for_country.get('Lunch', 0)
-        price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)
-    else:
-        print('No cities found.')
-
-    try:
-        
-        total_transport_private_taxi = count * int(taxi_cost)
-    except:
-        total_transport_private_taxi = 0
-
-    price_for_dinner=price_for_dinner*days_spent
-    total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
-    
-    return {"schedule":schedule,"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
-    # return schedule
+        return {"schedule":schedule,"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
+        # return schedule
 
 
 
@@ -478,6 +537,7 @@ def sort_attractions_by_distance(attractions, first_attraction):
 
 
 
+
 def quick_from_data_base(country,answer_dict,request_left,trip_id):
 
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
@@ -509,28 +569,46 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
             existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
         
         if existing_city:
-            attractions_list = existing_city.attractions.all().values()
-            restaurants_list = existing_city.restaurants.all().values()
+            
+            
             lat = existing_city.latitude
             lon = existing_city.longitude
             landmarks = [lat, lon]
-            
-            
-            
-            
-            if len(restaurants_list)==0:
-                from app.chat import process_restaurants
-                restaurants_list=process_restaurants(landmarks=landmarks, city_name=existing_city.city, city_obj=existing_city)
-            
-            if len(attractions_list)==0:
-                from app.chat import process_attractions
-                attractions_list=process_attractions(landmarks=landmarks,city_name=existing_city.city,city_obj=existing_city,country=existing_city.country)        
+            attractions_cache_key = f"attractions_{landmarks[0]}"
+            # Attempt to retrieve data from the cache
+            attractions_cache = cache.get(attractions_cache_key)
+
+            if attractions_cache is None:
+                attractions_list = existing_city.attractions.all().values()
+                if len(attractions_list)==0:
+                    from app.chat import process_attractions
+                    attractions_list=process_attractions(landmarks=landmarks,city_name=existing_city.city,city_obj=existing_city,country=existing_city.country)  
+                cache.set(attractions_cache_key, attractions_list, timeout=7 * 24 * 60 * 60)
+            else:
+                print ('attractions_cache')
+                attractions_list=attractions_cache
+
+            restaurants_cache_key = f"restaurants_{landmarks[0]}"
+            restaurants_cache = cache.get(restaurants_cache_key)
+            if restaurants_cache is None:
+                restaurants_list = existing_city.restaurants.all().values()
+                if len(restaurants_list)==0:
+                    from app.chat import process_restaurants
+                    restaurants_list=process_restaurants(landmarks=landmarks, city_name=existing_city.city, city_obj=existing_city)
+                cache.set(restaurants_cache_key, restaurants_list, timeout=7 * 24 * 60 * 60)
+            else:
+                print('restaurants_cache')
+                restaurants_list=restaurants_cache
+                 
             sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, landmarks))
             hotels_thread = Thread(target=fetch_hotels_and_update, args=(city_data, landmarks, city_name))
             nightlife_thread = Thread(target=fetch_nightlife_and_update, args=(city_data, landmarks))
 
             threads.extend([sunset_thread, hotels_thread, nightlife_thread])
 
+            
+
+           
             try:
                 attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
                 first_5_attractions = attractions[:5]
@@ -539,6 +617,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
                 final_attractions = first_5_attractions + remaining_attractions
             except:
                 final_attractions=attractions_list
+            
             city_data["attractions"] = final_attractions
             city_data["restaurants"] = list(restaurants_list)
     # Start the threads
@@ -552,6 +631,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
     
     
     check=True
+    
     answer_from_data1=generate_schedule(answer_dict,country,check)
    
     total_prices=answer_from_data1['total_prices']

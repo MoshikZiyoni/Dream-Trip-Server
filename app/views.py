@@ -30,7 +30,37 @@ geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    # resta=Restaurant.objects.filter(city_id=366).values()
+    
+    
+    # for i in resta:
+    #     print (i['name'])
+    #     print (i['category'])
+    #     # if len(i.category)==0:
+    #     #     with open('my_list.txt', 'a', encoding='utf-8') as f:
+    #     #         data_to_write = f"restaurts_name: ', {i.name}, 'city_name: ',{i.city.city}\n"
+    #     #         f.write(data_to_write)
+            
+            
+    # return 'kk'
 
+
+    # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
+
+    # for city in cities_without_hotels:
+    #     print(city.city)
+    #     # try:
+    #     #     landmarks=[city.latitude,city.longitude]
+    #     #     result=foursquare_hotels(landmarks)
+    #     #     hotels= []
+    #     #     if len(result) == 0:
+    #     #         continue
+    #     #     for hotel in result:
+    #     # #         process_hotel(hotel=hotel, city_obj=city, hotels=hotels)    
+    #     # except Exception as e:
+    #     #     print ('NOT GOOOODDDDDDDDDDDDDDDDDD',e)
+
+    # return 'ok'
     # ApplicationRating.objects.filter(user_email='moshiktm1995@gmail.com').delete()
     # return 'ok'
     email=request.data['email']
@@ -269,7 +299,7 @@ def user_delete_trip(request):
     try:
         delete_the_user_trip = Users.objects.get(email=email)
         if delete_the_user_trip:
-            trip_to_delete=UserTrip.objects.get(liked_trips=trip_id)
+            trip_to_delete=UserTrip.objects.get(id=trip_id)
             if trip_to_delete:
                 trip_to_delete.delete()
                 return JsonResponse({'message': f'Trip {trip_id} removed from liked trips for email: {email}'})

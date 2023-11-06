@@ -32,6 +32,7 @@ city_lock=RLock()
 hotel_lock=RLock()
 night_life_lock=RLock()
 lock = RLock()
+generate_schedule_lock=RLock()
 executor = ThreadPoolExecutor(max_workers=20)
 
 # Load environment variables from .env file
@@ -300,10 +301,10 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                         return existing_city_cache
                             except:
                                 print('no exsiting city')
-                            
-                            executor.submit(process_city, city_data, country, country_id)
+                                executor.submit(process_city, city_data, country, country_id)
+                                print ("start exceutor")
                             check=False
-                            print ("start exceutor")
+                                
                     executor.shutdown()
                     # Start the threads
                     for thread in threads:
@@ -311,9 +312,10 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
 
                     # Wait for all threads to finish
                     for thread in threads:
-                        thread.join()   
-                    combined_data=generate_schedule(data,country,check)
-                    print(combined_data)
+                        thread.join()
+                    with generate_schedule_lock:
+                        combined_data=generate_schedule(data,country,check)
+                    
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     total_prices=combined_data['total_prices']
