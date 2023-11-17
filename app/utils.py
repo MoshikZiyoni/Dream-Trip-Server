@@ -17,7 +17,7 @@ import ast
 from unidecode import unidecode
 from threading import Thread,RLock
 from django.core.cache import cache
-from app.restaurantsfunctions import get_next_breakfast_restaurant, get_next_dinner_restaurant,get_next_lunch_restaurant
+
 
 load_dotenv()
 
@@ -134,6 +134,13 @@ def process_restaurant(restaur, city_obj, restaurants):
     except:
         pass  
     rating = restaur.get("rating", "0")
+    categories= restaur.get("categories", "")
+    try:
+        categorie_name=(categories[1])
+        categorie_name=categorie_name['name']
+        # print (categorie_name,'@@@@')
+    except:
+        categorie_name=[]
     price = restaur.get("price", "")
     website = restaur.get("website", "")
     social_media = restaur.get("social_media", "")
@@ -144,6 +151,7 @@ def process_restaurant(restaur, city_obj, restaurants):
         social_media = ""
         print ('no insta')
     menu = restaur.get("menu", "")
+   
     distance=restaur.get("distance","")
     hours_for_resta = restaur.get('hours', {}).get('display', "")
     address_resta = restaur.get('location', {}).get('formatted_address', "")
@@ -174,7 +182,8 @@ def process_restaurant(restaur, city_obj, restaurants):
         "social_media": social_media,
         "menu": menu,
         "distance":distance,
-        'city_obj':city_obj.id
+        'city_obj':city_obj.id,
+        'category':categorie_name
 
     }
     restaurants.append(restaurant_info)
@@ -264,6 +273,68 @@ def process_hotel(hotel, hotels):
     }
 
     hotels.append(hotels_info)
+
+
+def process_night_life_foursquare(night_life, night_lifes):
+    name12 = night_life.get("name", "")
+    latitude12 = (
+        night_life["geocodes"]["main"]["latitude"]
+        if "geocodes" in night_life
+        and "main" in night_life["geocodes"]
+        and "latitude" in night_life["geocodes"]["main"]
+        else ""
+    )
+    longitude12 = (
+        night_life["geocodes"]["main"]["longitude"]
+        if "geocodes" in night_life
+        and "main" in night_life["geocodes"]
+        and "longitude" in night_life["geocodes"]["main"]
+        else ""
+    )
+    rating12 = night_life.get("rating", "0")
+    website12 = night_life.get("website", "")
+    description1 = night_life.get("description", "")
+    hours=night_life.get('hours', {}).get('display', "")
+    address=night_life.get('location', {}).get('formatted_address', "")
+    tel=night_life.get('tel', "")
+    tips = []
+    result_tips = night_life.get("tips", [])  # Get the list of tips from the current result
+    for j, tip in enumerate(result_tips):
+        if j >= 3:
+            break
+        tip_text = tip.get("text", "")  # Get the text from the tip dictionary
+        tips.append(tip_text)
+    
+    photos12 = night_life.get("photos", "")
+    if photos12:
+        first_photo = photos12[0]
+        prefix = first_photo.get("prefix", "")
+        suffix = first_photo.get("suffix", "")
+        url1 = f"{prefix}original{suffix}"
+        photos12=url1
+        
+    else:
+        try:
+            photos12 = flickr_api(name=name12, latitude=latitude12, longitude=longitude12)
+        except:
+            print ("flickr api can't bring an image")
+
+    night_life_info = {
+        "name": name12,
+        "latitude": latitude12,
+        "longitude": longitude12,
+        "photos": photos12,
+        "review_score": rating12,
+        "website": website12,
+        "description": description1,
+        "hours":hours,
+        "address":address,
+        "tel":tel,
+        'tips':tips,
+        # 'city_obj':city_obj.id
+    }
+
+    night_lifes.append(night_life_info)
     
 
 generate_schedule_lock=RLock()
@@ -285,21 +356,28 @@ def generate_schedule(data,country,check):
             schedule = {'schedules': [] }  # Initialize the schedule dictionary
             for city in cities:
                 city_name = city['city']
-                query1=City.objects.get(city=city_name)
-                landmarks=[query1.latitude,query1.longitude]
+                # print (city)
+                # query1=City.objects.get(city=city_name)
+                # landmarks=[query1.latitude,query1.longitude]
+                try:
+                    landmarks=city['landmarks']
+                except Exception as e :
+                    print (e)
                 city_description = city['description']
-                attractions = city['attractions']
-                count=0
+                try:
+                    attractions = city['attractions']
+                    count=0
 
-                for attraction in attractions:
-                    
-                    count+=1
-                    try:
-                        prices=calculate_total_price_attractions(attraction)
-                        total+=prices
-                    except: 
-                        pass
-            
+                    for attraction in attractions:
+                        
+                        count+=1
+                        try:
+                            prices=calculate_total_price_attractions(attraction)
+                            total+=prices
+                        except: 
+                            pass
+                except:
+                    pass
                 restaurants = city.get('restaurants',"")
                 breakfast_list = []
                 restaurants=list(restaurants)
@@ -308,23 +386,26 @@ def generate_schedule(data,country,check):
                 rest_of_restaurants = []
 
                 for restaurant  in restaurants:
-                    print ('restaurant:','!!!!!!!!!!!!!!!!!!')
-                    category=restaurant ['category'].lower().strip()
-                    if 'breakfast' in category or 'cafe' in category:
-                        breakfast_list.append(restaurant )
-                    elif 'lunch' in category:
-                        lunch_list.append(restaurant )
-                    elif 'dinner' in category or re.search(r'\bdinner\b', category):
-                        print ('@@@@@@')
-                        # dinner_list.append(restaurant )
-                    else:
-                        rest_of_restaurants.append(restaurant )
+                    try:
+                        print ('restaurant:','!!!!!!!!!!!!!!!!!!')
+                        category=restaurant ['category'].lower().strip()
+                        if 'breakfast' in category or 'cafe' in category:
+                            breakfast_list.append(restaurant )
+                        elif 'lunch' in category:
+                            lunch_list.append(restaurant )
+                        elif 'dinner' in category or re.search(r'\bdinner\b', category):
+                            print ('@@@@@@')
+                            # dinner_list.append(restaurant )
+                        else:
+                            rest_of_restaurants.append(restaurant )
+                    except:
+                        pass
 
-                
+                    
                 
                         
                 hotels=city.get('hotels',"")
-                night_life=city.get("night-life","")
+                night_life=city.get("night_life","")
                 sunset=city.get('sunset',"")
                 days_spent = city['days_spent']
                 
@@ -344,7 +425,7 @@ def generate_schedule(data,country,check):
 
                 start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
                 
-                city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night-life':night_life,'sunset':sunset,'schedules': []}
+                city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night_life':night_life,'sunset':sunset,'schedules': []}
                 # try:
                 #     restaurants.remove(restaurant)
                 # except:
@@ -579,6 +660,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
             attractions_cache = cache.get(attractions_cache_key)
 
             if attractions_cache is None:
+                print ('attraction is none')
                 attractions_list = existing_city.attractions.all().values()
                 if len(attractions_list)==0:
                     from app.chat import process_attractions
@@ -617,7 +699,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
                 final_attractions = first_5_attractions + remaining_attractions
             except:
                 final_attractions=attractions_list
-            
+            city_data['landmarks']=landmarks
             city_data["attractions"] = final_attractions
             city_data["restaurants"] = list(restaurants_list)
     # Start the threads
@@ -744,8 +826,14 @@ def fetch_sunset_and_update(city_data,landmarks):
                 cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
 
         else:
-            print ('sunset cache')
-            city_data["sunset"] = sunset1
+            if len(sunset1)<1:
+                sunset = sunset_api(landmarks)
+                if sunset:
+                    city_data["sunset"] = sunset
+                    cache.set(cache_key, sunset, timeout=7 * 24 * 60 * 60)
+            else:
+                print ('sunset cache')
+                city_data["sunset"] = sunset1
 
 
 
@@ -763,14 +851,24 @@ def fetch_nightlife_and_update(city_data, landmarks):
         # Attempt to retrieve data from the cache
         nightlife1 = cache.get(cache_key)
 
-        if nightlife1 is None or nightlife1=={'night-life': ''}:
+        if nightlife1 is None or nightlife1=={'night_life': ''}:
+            print ('start nightlife')
             nightlife = my_night_life(landmarks)
-            city_data["night-life"] = nightlife
+            
+            try:
+                if nightlife=={'night_life': ''}:
+                    from app.chat import process_night_life
+                    nightlife=process_night_life(landmarks)
+                    # print(jsonto,'!!!!!!!!!!!!!!!')
+            except Exception as e:
+                print('line 166' ,e)
+
+            city_data["night_life"] = nightlife
             cache.set(cache_key, nightlife, timeout=7 * 24 * 60 * 60)
 
         else:
             print ('night_life cache')
-            city_data["night-life"] = nightlife1
+            city_data["night_life"] = nightlife1
 
 
 
@@ -784,3 +882,6 @@ def clean_json_data(data_str):
     cleaned_data = f'{{{data_str}}}'
     
     return cleaned_data
+
+
+

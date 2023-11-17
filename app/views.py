@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from app.chat import run_long_poll_async
-from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users
+from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users,Country
 from django.core.cache import cache
 from app.utils import quick_from_data_base
 import traceback
@@ -30,6 +30,9 @@ geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    # s=City.objects.filter(country_id=209).first()
+    # # for i in s:
+    # print (s)
     # resta=Restaurant.objects.filter(city_id=366).values()
     
     
@@ -351,3 +354,6 @@ def user_requests_cache(email):
     timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
     cache.set(email, request_count, timeout=timeout_seconds)
     return request_left
+
+
+

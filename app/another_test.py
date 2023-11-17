@@ -6,27 +6,27 @@
 # from selenium.webdriver.chrome.service import Service
 # from selenium.webdriver.common.by import By
 # import base64
-import requests
+# import requests
 # import json
 
 
-import json
-def my_night_life(landmarks):
-    url='https://moshiktm1995.pythonanywhere.com/night-life'
-    query={
-        "city":"tel aviv",
-        "latitude": landmarks[0],
-        "longitude": landmarks[1], 
+# import json
+# def my_night_life(landmarks):
+#     url='https://moshiktm1995.pythonanywhere.com/night-life'
+#     query={
+#         "city":"tel aviv",
+#         "latitude": landmarks[0],
+#         "longitude": landmarks[1], 
 		
-    }
+#     }
 	
-    response = requests.post(url, json=query)
-    print(response)
-    response_text=(response.text)
-    jsonto=json.loads(response_text)
+#     response = requests.post(url, json=query)
+#     print(response)
+#     response_text=(response.text)
+#     jsonto=json.loads(response_text)
     
-    print(jsonto)
-    return jsonto
+#     print(jsonto)
+#     return jsonto
 
 
-my_night_life(landmarks=[32.080168,34.780909])
+# my_night_life(landmarks=[32.080168,34.780909])

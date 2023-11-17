@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 import os
 import flickrapi
+
 load_dotenv()
 
 
@@ -55,7 +56,7 @@ def foursquare_restaurant(landmarks):
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':5000,
         'limit' : 20,
-        'fields':'geocodes,name,rating,price,website,photos,social_media,menu,hours,location,tel,tastes,tips'
+        'fields':'geocodes,name,rating,price,website,photos,social_media,menu,hours,location,tel,tastes,tips,categories'
     }
     response = requests.get(url, params=query,headers=headers)
 
@@ -78,7 +79,7 @@ def foursquare_attraction(landmarks,city_name,country):
         "ll" :  f"{landmarks[0]},{landmarks[1]}",
         'radius':8000,
         'limit' : 20,
-        'fields':'description,geocodes,name,rating,distance,website,photos,menu,hours_popular,hours,location,tel'
+        'fields':'description,geocodes,name,rating,distance,website,photos,menu,hours_popular,hours,location,tel,tips'
 
     }
     response1 = requests.get(url1, params=query1,headers=headers)
@@ -114,6 +115,29 @@ def foursquare_hotels(landmarks):
 
 
 
+def foursquare_night_life(landmarks):
+    url = "https://api.foursquare.com/v3/places/search?"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": api_key
+    }
+    query= {
+        'categories':'10032',
+        "ll" :  f"{landmarks[0]},{landmarks[1]}",
+        'radius':5000,
+        'limit' : 20,
+        
+        'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
+    }
+    response = requests.get(url, params=query,headers=headers,timeout=5)
+
+    response_text=(response.text)
+    jsonto=json.loads(response_text)
+    reslut=jsonto['results']
+    return (reslut)
+
+
 def my_night_life(landmarks):
     url=os.environ.get('night_life_url')
     query={
@@ -126,15 +150,16 @@ def my_night_life(landmarks):
         response_text = response.text
         jsonto = json.loads(response_text)
     except requests.Timeout:
-        # Handle timeout (no response within 7 seconds)
-        jsonto = {'night-life': ''}
+        # Handle timeout (no response within 3 seconds)
+        print ('timeout for nightlife')
+        jsonto = {'night_life': ''}
     except requests.RequestException as e:
         # Handle other request exceptions (e.g., network error)
         print(f"Request Exception: {e}")
-        jsonto = {'night-life': ''}
+        jsonto = {'night_life': ''}
     
     if len(jsonto) <= 0:
-        jsonto = {'night-life': ''}
+        jsonto = {'night_life': ''}
     return jsonto
 
 
@@ -149,7 +174,9 @@ def sunset_api(landmarks):
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
         response_text = response.text
         jsonto = json.loads(response_text)
+        # print (response_text)
     except requests.Timeout:
+        print ('timeout for sunset')
         jsonto = {'sunset': ''}
     except requests.RequestException as e:
         print(f"Request Exception: {e}")
@@ -158,5 +185,8 @@ def sunset_api(landmarks):
     if len(jsonto) <= 0:
         jsonto = {'sunset': ''}
         
-    
+    # print ('sunset!!!!!',jsonto)
     return jsonto
+
+
+

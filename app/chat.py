@@ -10,6 +10,7 @@ from app.google_place import get_attraction_from_google, get_hotels_from_google,
 from app.trip_advisor import (
     foursquare_attraction,
     foursquare_hotels,
+    foursquare_night_life,
     foursquare_restaurant,
     my_night_life,
     sunset_api,
@@ -19,7 +20,7 @@ from dotenv import load_dotenv
 from app.models import  Country, QueryChatGPT, City
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_restaurant, restarunts_from_google, sort_attractions_by_distance
+from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_night_life_foursquare, process_restaurant, restarunts_from_google, sort_attractions_by_distance
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
@@ -91,10 +92,12 @@ def process_city(city_data, country, country_id):
         sunset_for_data=process_sunset(landmarks)
     except Exception as e:
         print ('erorr 92',e)
+    # city_data['landmarks']=landmarks
     city_data["attractions"] = attraction_for_data
     city_data["restaurants"] = restaurant_for_data
     city_data["hotels"] = hotels_for_data
-    city_data['night-life']=night_life_for_data
+    print (night_life_for_data,'###########')
+    city_data['night_life']=night_life_for_data
     city_data["sunset"]=sunset_for_data
 
     return city_data
@@ -105,7 +108,7 @@ def process_restaurants(landmarks, city_name, city_obj):
     print ("start restaurants")
     with restaur_lock:
         reslut = foursquare_restaurant(landmarks)
-        print(reslut)
+        # print(reslut)
         if len(reslut) == 0:
             print("Start google restaurant")
             my_restaurant=get_restaurants_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
@@ -190,8 +193,22 @@ def process_hotels(landmarks, city_name):
         
 
 def process_night_life(landmarks):
+    night_lifes = []
     result_for_night_life=my_night_life(landmarks)
+    print (result_for_night_life,'@@@@@@')
+    if ( result_for_night_life=={'night_life': ''}):
+        result_for_night_life=foursquare_night_life(landmarks)
+        threads = []
+        for night_life in result_for_night_life:
+            thread = Thread(target=process_night_life_foursquare, args=(night_life, night_lifes))
+            thread.start()
+            threads.append(thread)
+
+        for thread in threads:
+                thread.join()
+        return night_lifes
     print ('return night-life')
+
     return result_for_night_life
 
 
@@ -232,7 +249,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                         print('not valid json')
                         cleaned_data = clean_json_data(cleaned_data)
                         data=ast.literal_eval(cleaned_data)
-                        print(data)
+                        # print(data)
                         data1=ast.literal_eval(answer1)
                     country = data["country"]
                     if country != mainland:
@@ -260,14 +277,19 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     
                     executor = ThreadPoolExecutor()
                     for city_data in data["cities"]:
+                        city_name = city_data["city"]
+                        normalized_city_name = unidecode(city_name)
                         with city_lock:
-                            city_name = city_data["city"]
-                            normalized_city_name = unidecode(city_name)
+
                             try:
                                 existing_city = City.objects.prefetch_related('attractions', 'restaurants').filter(city__iexact=normalized_city_name).first()
+                                print ('This is the City name of the existing city',normalized_city_name)
                             except City.DoesNotExist:
                                 print ('no regular')
-                                existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                                try:
+                                    existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                                except:
+                                    pass
                             try:
                                 if existing_city:
                                     print ('start existing_city')
@@ -288,6 +310,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                             final_attractions=attractions_list
                                         city_data["attractions"] = list(final_attractions)
                                         city_data["restaurants"] = list(restaurants_list)
+                                        city_data['landmarks']=[existing_city.latitude,existing_city.longitude]
 
                                     
                                         sunset_thread = Thread(target=fetch_sunset_and_update, args=(city_data, [existing_city.latitude, existing_city.longitude],))
@@ -299,10 +322,15 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                                         cache.set(cache_key, existing_city_cache, timeout=7 * 24 * 60 * 60)
                                     else:
                                         return existing_city_cache
+                                else:
+                                    if existing_city==None:
+                                        print('no exsiting city')
+                                        executor.submit(process_city, city_data, country, country_id)
+                                        print ("start exceutor")
                             except:
-                                print('no exsiting city')
-                                executor.submit(process_city, city_data, country, country_id)
-                                print ("start exceutor")
+                                print ('last expet 309')
+                                pass
+                        
                             check=False
                                 
                     executor.shutdown()
@@ -313,6 +341,7 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     # Wait for all threads to finish
                     for thread in threads:
                         thread.join()
+                    
                     with generate_schedule_lock:
                         combined_data=generate_schedule(data,country,check)
                     
