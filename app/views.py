@@ -64,8 +64,7 @@ def gpt_view(request):
     #     #     print ('NOT GOOOODDDDDDDDDDDDDDDDDD',e)
 
     # return 'ok'
-    # ApplicationRating.objects.filter(user_email='moshiktm1995@gmail.com').delete()
-    # return 'ok'
+   
     email=request.data['email']
     if not email:
         return JsonResponse({'error': 'Email not provided'})

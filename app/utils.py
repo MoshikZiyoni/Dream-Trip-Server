@@ -557,7 +557,7 @@ def generate_schedule(data,country,check):
         Lunch = 0
         price_for_dinner = 0
         prices_for_country=get_cities_by_country(country, limit=2)
-        if prices_for_country:
+        if prices_for_country is not None:
             taxi_cost = prices_for_country.get('5km taxi ride', 0)
             Lunch = prices_for_country.get('Lunch', 0)
             price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)

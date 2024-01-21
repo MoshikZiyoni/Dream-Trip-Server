@@ -28,7 +28,6 @@ def add_new_attraction(request):
     normalized_city_name = unidecode(city_name)
     existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
     if existing_city:
-        # return JsonResponse (existing_city.city,safe=False)
 
         url = "https://api.imgbb.com/1/upload"
         api_key = os.environ.get('imgbb')
@@ -37,7 +36,6 @@ def add_new_attraction(request):
         files = {'image': uploaded_image}
         params = {
             'key': api_key,
-            # other optional parameters for imgbb API
         }
         
         response = requests.post(url, files=files, data=params)
@@ -57,8 +55,8 @@ def add_new_attraction(request):
             tel=tel,
             address=address,
             tips=tips,
-            photos=photos
-        )
+            photos=photos)
+        # ).save()
 
         print ('ok')
 
