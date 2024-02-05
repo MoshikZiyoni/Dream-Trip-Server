@@ -344,6 +344,7 @@ def generate_schedule(data,country,check):
 
         print ('@@@@@@@@@@@@@@@@@@@',check)
         total = 0    
+        total_day = 0
         try:
             cities = data['cities']
             
@@ -431,8 +432,8 @@ def generate_schedule(data,country,check):
                 #     restaurants.remove(restaurant)
                 # except:
                 for day in range(days_spent):
-                    day_schedule = {'day': day + 1, 'attractions': []}
-                    
+                    total_day+=1
+                    day_schedule = {'day': day + 1,'total_day':total_day, 'attractions': []}
 
                     for i in range(attractions_per_day):
                         attraction_index = day * attractions_per_day + i
@@ -539,6 +540,8 @@ def generate_schedule(data,country,check):
                                         }
                                     }
                                     day_schedule['attractions'].append(extra_attraction_data)
+                                    
+                                    
                                     extra_attractions -= 1
                             except Exception as e:
                                 print ('Error in 265',e)
