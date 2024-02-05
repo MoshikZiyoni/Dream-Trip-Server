@@ -408,6 +408,7 @@ def generate_schedule(data,country,check):
                 night_life=city.get("night_life","")
                 sunset=city.get('sunset',"")
                 days_spent = city['days_spent']
+                print (days_spent,'@@@@@@@@@@@@@@@@@')
                 
                 try:
                     if check==False:
@@ -425,7 +426,7 @@ def generate_schedule(data,country,check):
 
                 start_time = datetime(year=1, month=1, day=1, hour=8, minute=0)
                 
-                city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'restaurants':restaurants,'hotels':hotels,'night_life':night_life,'sunset':sunset,'schedules': []}
+                city_schedule = {'city': city_name, 'description': city_description,'landmarks':landmarks,'days_spent':days_spent,'restaurants':restaurants,'hotels':hotels,'night_life':night_life,'sunset':sunset,'schedules': []}
                 # try:
                 #     restaurants.remove(restaurant)
                 # except:
