@@ -89,7 +89,7 @@ def gpt_view(request):
             cache_key = f"Trip_{trip_id}"
             cache_trip_id=cache.get(cache_key)
             if cache_trip_id is None:
-                answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
+                answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id,durring=durring))
                 cache.set(cache_key, answer, timeout=7 * 24 * 60 * 60)
                 return JsonResponse(answer,safe=False)
             else:
@@ -108,7 +108,8 @@ def gpt_view(request):
             "answer":combined_data,
             "itinerary_description":itinerary_description1,
             "request_left":request_left,
-            "trip_id":trip_id
+            "trip_id":trip_id,
+            "days":durring
             
         }
         result1.update(costs)

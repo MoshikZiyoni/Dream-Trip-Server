@@ -620,7 +620,7 @@ def sort_attractions_by_distance(attractions, first_attraction):
 
 
 
-def quick_from_data_base(country,answer_dict,request_left,trip_id):
+def quick_from_data_base(country,answer_dict,request_left,trip_id,durring):
 
     answer_string_modified = re.sub(r"(?<!\w)'(?!:)|(?<!:)'(?!\w)", '"', answer_dict)
     try:
@@ -735,7 +735,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id):
     }
     end_result=answer_from_data1["schedule"]
     end_result.update(costs)
-    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"trip_id":trip_id})
+    answer=({'answer' :end_result,"itinerary_description":itinerary_description,"request_left":request_left,"trip_id":trip_id,"durring":durring})
     return answer
 
 
