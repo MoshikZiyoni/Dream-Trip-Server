@@ -176,7 +176,7 @@ def make_short_trip(request):
     answer=(random_query.answer)
     trip_id=(random_query.id)
     print (trip_id)
-    new_result=(quick_from_data_base(country=country,answer_dict=answer,request_left=request_left,trip_id=trip_id))
+    new_result=(quick_from_data_base(country=country,answer_dict=answer,request_left=request_left,trip_id=trip_id,durring=first_number))
     days={"days":first_number}
     new_result.update(days)
     return JsonResponse(new_result,safe=False)
@@ -322,7 +322,7 @@ def user_single_trip(request):
     email=request.data['email']
     trip_id=(request.data['trip_id'])
     print(trip_id)
-    user_trip_id = UserTrip.objects.get(liked_trips=trip_id)
+    user_trip_id = UserTrip.objects.get(id=trip_id)
     real_trip_id=(user_trip_id.liked_trips)
     request_left = user_requests_cache(email)
     request_left+=1    
