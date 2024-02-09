@@ -4,7 +4,6 @@ import re
 from django.db.models import Q
 import requests
 from app.models import  City,Country
-from app.teleport_api import get_cities_by_country
 from app.trip_advisor import flickr_api,my_night_life, sunset_api
 from app.wikipediaapi import process_query
 import json
@@ -557,27 +556,27 @@ def generate_schedule(data,country,check):
             
             print('failed in 261')
             traceback.print_exc() 
-        taxi_cost = 0
-        Lunch = 0
-        price_for_dinner = 0
-        prices_for_country=get_cities_by_country(country, limit=2)
-        if prices_for_country is not None:
-            taxi_cost = prices_for_country.get('5km taxi ride', 0)
-            Lunch = prices_for_country.get('Lunch', 0)
-            price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)
-        else:
-            print('No cities found.')
+        # taxi_cost = 0
+        # Lunch = 0
+        # price_for_dinner = 0
+        # prices_for_country=get_cities_by_country(country, limit=2)
+        # if prices_for_country is not None:
+        #     taxi_cost = prices_for_country.get('5km taxi ride', 0)
+        #     Lunch = prices_for_country.get('Lunch', 0)
+        #     price_for_dinner=prices_for_country.get('Price of a meal at a restaurant',0)
+        # else:
+        #     print('No cities found.')
 
-        try:
+        # try:
             
-            total_transport_private_taxi = count * int(taxi_cost)
-        except:
-            total_transport_private_taxi = 0
+        #     total_transport_private_taxi = count * int(taxi_cost)
+        # except:
+        #     total_transport_private_taxi = 0
 
-        price_for_dinner=price_for_dinner*days_spent
-        total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
+        # price_for_dinner=price_for_dinner*days_spent
+        # total_food_prices=((Lunch*days_spent*2)+price_for_dinner)
         
-        return {"schedule":schedule,"total_prices":int(total),"total_transport_private_taxi":(total_transport_private_taxi),"total_food_prices":int(total_food_prices)}
+        return {"schedule":schedule,"total_attraction_prices":int(total)}
         # return schedule
 
 
@@ -720,21 +719,37 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id,durring):
     
     answer_from_data1=generate_schedule(answer_dict,country,check)
    
-    total_prices=answer_from_data1['total_prices']
-    total_transport_private_taxi=answer_from_data1["total_transport_private_taxi"]
-    total_food_prices=answer_from_data1['total_food_prices']
+    total_prices=answer_from_data1['total_attraction_prices']
+    # total_transportation=answer_from_data1["total_transport_private_taxi"]
+    # total_food_prices=answer_from_data1['total_food_prices']
     existing_country = Country.objects.get(name=country)
     avrage_daily_spent=(existing_country.average_prices)
+    print('@@@@@@@@@@@@@@@@@',type(durring),'@@@@@@@@@@@@@@@@@@@@')
+    if type(durring)==int:
+        parts=durring
+    else:
+        parts = durring.split(' ')
+        parts=int(parts[0])
+    
+    total_food_prices=int(existing_country.average_food)*int(parts)
+
+
+    total_transportation=int(existing_country.average_transportation)*int(parts)
+
+    total_hotels=int(existing_country.average_hotels)*int(parts)
+
     if avrage_daily_spent=='':
         avrage_daily_spent=0
     else:
         avrage_daily_spent=int(avrage_daily_spent)
 
     costs={
-        "total_prices":total_prices,
-        "total_transport_private_taxi":total_transport_private_taxi,
+        "total_attraction_prices":total_prices,
+        "total_transportation":total_transportation,
         "total_food_prices":total_food_prices,
+        "total_hotels":total_hotels,
         "avrage_daily_spent":avrage_daily_spent,
+        
     }
     end_result=answer_from_data1["schedule"]
     end_result.update(costs)

@@ -1,4 +1,4 @@
-from app.models import Attraction,Restaurant,City
+from app.models import CheckNewAttraction,City
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 import requests
@@ -43,7 +43,8 @@ def add_new_attraction(request):
         photos=(response.json()["data"]["url"])
         print (photos,'@@@@@')
 
-        Attraction(
+        CheckNewAttraction(
+            city=existing_city,
             name=attraction_name,
             latitude=lat,
             longitude=lon,
@@ -55,8 +56,7 @@ def add_new_attraction(request):
             tel=tel,
             address=address,
             tips=tips,
-            photos=photos)
-        # ).save()
+            photos=photos).save()
 
         print ('ok')
 

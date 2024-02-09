@@ -139,6 +139,9 @@ class UserTrip(models.Model):
 class Country(models.Model):
     name=models.CharField(max_length=100)
     average_prices=models.TextField(max_length=200,default=0)
+    average_food=models.TextField(max_length=200,default=0)
+    average_transportation=models.TextField(max_length=200,default=0)
+    average_hotels=models.TextField(max_length=200,default=0)
     popularity_score = models.IntegerField(default=0)
 
     def increase_popularity(self):
@@ -206,3 +209,20 @@ class Popular(models.Model):
 
 
 
+class CheckNewAttraction(models.Model):
+    city = models.ForeignKey(City, related_name='addnewattractions', on_delete=models.CASCADE)
+    name = models.TextField(max_length=500)
+    latitude=models.FloatField(null=False)
+    longitude=models.FloatField(null=False)
+    photos=models.TextField(max_length=100)
+    review_score=models.TextField(max_length=20,null=False)
+    description=models.TextField(max_length=1000,null=False)
+    real_price=models.TextField(max_length=200,null=False)
+    website=models.TextField(max_length=100,null=True)
+    hours_popular=models.TextField(null=True)
+    distance=models.TextField(max_length=200,null=True)
+    hours=models.TextField(max_length=150,null=True)
+    tel=models.TextField(max_length=100,null=True)
+    address=models.TextField(max_length=100,null=True)
+    place_id=models.TextField(max_length=150,null=True)
+    tips=models.TextField(max_length=3000,null=True)

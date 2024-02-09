@@ -1,32 +1,15 @@
-# from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
-# import time
-# import threading
-# import random
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.common.by import By
-# import base64
-# import requests
-# import json
+import requests
+
+def get_driving_distance(api_key, origin_coords, destination_coords):
+    url1=f'https://maps.googleapis.com/maps/api/directions/json?destination={destination_coords}&origin={origin_coords}&key={api_key}'
+    response = requests.get(url1)
+    data = response.json()
+    print(data)
 
 
-# import json
-# def my_night_life(landmarks):
-#     url='https://moshiktm1995.pythonanywhere.com/night-life'
-#     query={
-#         "city":"tel aviv",
-#         "latitude": landmarks[0],
-#         "longitude": landmarks[1], 
-		
-#     }
-	
-#     response = requests.post(url, json=query)
-#     print(response)
-#     response_text=(response.text)
-#     jsonto=json.loads(response_text)
-    
-#     print(jsonto)
-#     return jsonto
+my_api_key = "AIzaSyAbnt3oN_YRb9fzxvai7xGbPBkgGSTg91U"
+start_coords = (32.0853, 34.7818)  # Example starting coordinates
+end_coords = (31.7683, 35.2137)   # Example destination coordinates
 
-
-# my_night_life(landmarks=[32.080168,34.780909])
+distance = get_driving_distance(my_api_key, start_coords, end_coords)
+print(f"Driving distance: {distance}")

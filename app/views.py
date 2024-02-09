@@ -30,9 +30,13 @@ geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    # s=City.objects.filter(country_id=209).first()
-    # # for i in s:
-    # print (s)
+   
+#     for item in average_meal_costs:
+#         country = Country.objects.get(name=item['country'])
+#         country.average_food = item['cost']
+#         country.save()
+#     return 'k'  
+
     # resta=Restaurant.objects.filter(city_id=366).values()
     
     
@@ -97,7 +101,7 @@ def gpt_view(request):
                 return JsonResponse(cache_trip_id,safe=False)
 
         
-        result1=(run_long_poll_async(ourmessage,mainland))
+        result1=(run_long_poll_async(ourmessage,mainland,durring))
         combined_data = result1['answer']
         itinerary_description1 =result1['itinerary_description']
         costs=result1['costs']
@@ -316,20 +320,30 @@ def user_delete_trip(request):
 @api_view(['GET','POST'])
 def user_single_trip(request):
     email=request.data['email']
-    trip_id=int(request.data['trip_id'])
+    trip_id=(request.data['trip_id'])
+    print(trip_id)
+    user_trip_id = UserTrip.objects.get(liked_trips=trip_id)
+    real_trip_id=(user_trip_id.liked_trips)
     request_left = user_requests_cache(email)
     request_left+=1    
-    trip=QueryChatGPT.objects.get(id=trip_id)
+    trip=QueryChatGPT.objects.get(id=real_trip_id)
+    pattern = r'\b\d+\b'
+    
     if trip:
             print('answer in data') 
             answer_string = trip.answer
             question=trip.question   
+            # Use re.search to find the first match of the pattern in the question
+            durring = re.search(pattern, question)
+            if durring:
+                first_number = int(durring.group())
+                print(first_number,'@@@')
             country_match = re.search(r'in (\w+),', question)
             # Check if a match was found
             if country_match:
                 country = country_match.group(1)  # Get the matched text and remove leading/trailing spaces
             print("Country:", country)
-            answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id))
+            answer=(quick_from_data_base(country=country,answer_dict=answer_string,request_left=request_left,trip_id=trip_id,durring=int(first_number)))
             return JsonResponse(answer,safe=False)
     else:
         return JsonResponse('not good',safe=False)

@@ -34,21 +34,21 @@ response = requests.get(url, params=params)
 
 data=(response.json())
 print(data)
-features = data['features']
+# features = data['features']
 
-# Loop through each feature
-for feature in features:
+# # Loop through each feature
+# for feature in features:
 
-  # Extract properties
-  properties = feature['properties']
+#   # Extract properties
+#   properties = feature['properties']
 
-  # Extract individual properties  
-  stop_name = properties['stop_name']
-  location_type = properties['location_type']
-  coordinates = feature['geometry']['coordinates']
+#   # Extract individual properties  
+#   stop_name = properties['stop_name']
+#   location_type = properties['location_type']
+#   coordinates = feature['geometry']['coordinates']
 
-  # Print out values
-  print("stop_name: ",stop_name,"---", "location_type: ",location_type,"---", "coordinates: ",coordinates)
+#   # Print out values
+#   print("stop_name: ",stop_name,"---", "location_type: ",location_type,"---", "coordinates: ",coordinates)
 # plan = response.json()
 
 # options = plan["plan"]["itineraries"]

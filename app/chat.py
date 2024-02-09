@@ -220,7 +220,7 @@ def process_sunset(landmarks):
     return result_for_sunset
 
 
-def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
+def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
     print("Start GPT")
     try:
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -347,16 +347,19 @@ def run_long_poll_async(ourmessage, mainland, retries=3, delay=1):
                     
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
-                    total_prices=combined_data['total_prices']
-                    total_transport_private_taxi=combined_data["total_transport_private_taxi"]
-                    total_food_prices=combined_data['total_food_prices']
+                    total_prices=combined_data['total_attraction_prices']
+                    parts = durring.split(' ')
+                    total_food_prices=int(existing_country.average_food)*int(parts[0])
+                    total_transportation=int(existing_country.average_transportation)*int(parts[0])
+                    total_hotels=int(existing_country.average_hotels)*int(parts[0])
                     avrage_daily_spent=existing_country.average_prices
                     if avrage_daily_spent=='':
                         avrage_daily_spent=0
                     costs={
-                        "total_prices":total_prices,
-                        "total_transport_private_taxi":total_transport_private_taxi,
+                        "total_attraction_prices":total_prices,
+                        "total_transport_private_taxi":total_transportation,
                         "total_food_prices":total_food_prices,
+                        "total_hotels":total_hotels,
                         "avrage_daily_spent":avrage_daily_spent,
                     }
                     trip_id=QueryChatGPT.objects.get(question=ourmessage)
