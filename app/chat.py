@@ -348,10 +348,10 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                     query = QueryChatGPT(question=ourmessage, answer=data1,itinerary_description=itinerary_description)
                     query.save()
                     total_prices=combined_data['total_attraction_prices']
-                    parts = durring.split(' ')
-                    total_food_prices=int(existing_country.average_food)*int(parts[0])
-                    total_transportation=int(existing_country.average_transportation)*int(parts[0])
-                    total_hotels=int(existing_country.average_hotels)*int(parts[0])
+                    
+                    total_food_prices=int(existing_country.average_food)*int(durring)
+                    total_transportation=int(existing_country.average_transportation)*int(durring)
+                    total_hotels=int(existing_country.average_hotels)*int(durring)
                     avrage_daily_spent=existing_country.average_prices
                     if avrage_daily_spent=='':
                         avrage_daily_spent=0

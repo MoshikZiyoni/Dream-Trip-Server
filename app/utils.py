@@ -728,8 +728,7 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id,durring):
     if type(durring)==int:
         parts=durring
     else:
-        parts = durring.split(' ')
-        parts=int(parts[0])
+        pass
     
     total_food_prices=int(existing_country.average_food)*int(parts)
 

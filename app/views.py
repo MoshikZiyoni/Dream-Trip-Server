@@ -74,6 +74,7 @@ def gpt_view(request):
     if not email:
         return JsonResponse({'error': 'Email not provided'})
     request_left = user_requests_cache(email)
+    
 
     try:
 
@@ -82,10 +83,9 @@ def gpt_view(request):
         print("mainland:",mainland)
         # adult = request.data['adult']
         # children = request.data['children']
-        durring = request.data['durringDays']
-        days_durring_number = durring.split(' ')
-        days_durring_number=int(days_durring_number[0])
-        if days_durring_number>30:
+        durring = request.data['durringDays'] 
+        print(durring)       
+        if durring>30:
             response_data = {
             'error': 'Too many days.'
         }
