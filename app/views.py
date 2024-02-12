@@ -30,6 +30,7 @@ geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
+    
    
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
@@ -82,6 +83,10 @@ def gpt_view(request):
         # adult = request.data['adult']
         # children = request.data['children']
         durring = request.data['durringDays']
+        days_durring_number = durring.split(' ')
+        days_durring_number=int(days_durring_number[0])
+        if days_durring_number>30:
+            return JsonResponse('Too much Days',safe=False)
         question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }], "itinerary-description": ""}'
         ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer','id').first()

@@ -1,4 +1,5 @@
-from app.models import CheckNewAttraction,City
+import time
+from app.models import CheckNewAttraction,City,Attraction
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 import requests
@@ -59,4 +60,31 @@ def add_new_attraction(request):
             photos=photos).save()
 
         print ('ok')
+
+@api_view(['POST'])
+def approve_new_attraction(id):
+    id=(id.data['id'])
+    new_attraction=CheckNewAttraction.objects.get(id=id)
+    # existing_city = City.objects.filter(city__iexact=new_attraction.city )
+    # print(existing_city.id)
+    # if existing_city:
+    Attraction(
+        city=new_attraction.city,
+            name=new_attraction.name,
+            latitude=new_attraction.latitude,
+            longitude=new_attraction.longitude,
+            description=new_attraction.description,
+            review_score=new_attraction.review_score,
+            website=new_attraction.website,
+            real_price=new_attraction.real_price,
+            hours=new_attraction.hours,
+            tel=new_attraction.tel,
+            address=new_attraction.address,
+            tips=new_attraction.tips,
+            photos=new_attraction.photos).save()
+        
+    time.sleep(3)
+    new_attraction1=Attraction.objects.filter(name=new_attraction.name)
+    print(new_attraction1.id,'@@@@@@@@')
+        
 
