@@ -48,7 +48,7 @@ def foursquare_restaurant(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key
+        "Authorization": api_key+'='
     }
     query= {
         # 'query': f"attractions in {city_name},{country}",
@@ -70,7 +70,7 @@ def foursquare_attraction(landmarks,city_name,country):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key
+        "Authorization": api_key+'='
     }
 
     query1= {
@@ -87,6 +87,7 @@ def foursquare_attraction(landmarks,city_name,country):
     response_text1=(response1.text)
     jsonto1=json.loads(response_text1)
     reslut=jsonto1['results']
+    # print('Attracion reslut!!!!!! : ',reslut)
     return reslut
 
 
@@ -96,7 +97,7 @@ def foursquare_hotels(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key
+        "Authorization": api_key+'='
     }
     query= {
         'categories':'19014',
@@ -120,7 +121,7 @@ def foursquare_night_life(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key
+        "Authorization": api_key+'='
     }
     query= {
         'categories':'10032',

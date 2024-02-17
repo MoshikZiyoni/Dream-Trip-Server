@@ -10,12 +10,12 @@ def get_wikipedia_description(query):
     endpoint = f"https://en.wikipedia.org/api/rest_v1/page/summary/{query}"
     try:
         # Send a GET request to the API endpoint
-        response = requests.get(endpoint)
+        response = requests.get(endpoint,timeout=5)
         data = response.json()
         # Extract the description from the API response
         description = data["extract"]
         try:
-            response = requests.get(f"https://en.wikipedia.org/wiki/{query}")
+            response = requests.get(f"https://en.wikipedia.org/wiki/{query}",timeout=5)
             # Create a BeautifulSoup object from the response text
             soup = BeautifulSoup(response.text, "html.parser")
             # Find the link element that has the text "Official website"
@@ -51,7 +51,7 @@ def get_wikipedia_description(query):
             "srprop": "snippet",
             "srlimit": 1,
         }
-        response = requests.get(endpoint, params=params)
+        response = requests.get(endpoint, params=params,timeout=5)
         response.raise_for_status()
 
         # Parse the JSON response
@@ -70,7 +70,7 @@ def get_wikipedia_description(query):
                 "format": "json",
                 "prop": "extlinks",
                 "pageids": page_id,}
-            response = requests.get(endpoint, params=params)
+            response = requests.get(endpoint, params=params,timeout=5)
             response.raise_for_status()
 
             # Parse the JSON response

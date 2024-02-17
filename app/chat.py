@@ -22,10 +22,9 @@ from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
 from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_night_life_foursquare, process_restaurant, restarunts_from_google, sort_attractions_by_distance
 from threading import Thread
-from concurrent.futures import ThreadPoolExecutor
 from threading import RLock
 from django.core.cache import cache
-
+import concurrent.futures
 
 attrac_lock = RLock()
 restaur_lock = RLock() 
@@ -34,6 +33,7 @@ hotel_lock=RLock()
 night_life_lock=RLock()
 lock = RLock()
 generate_schedule_lock=RLock()
+new_city_lock= RLock()
 executor = ThreadPoolExecutor(max_workers=20)
 
 # Load environment variables from .env file
@@ -45,63 +45,118 @@ main_restaurants = []
 main_attractions = []
 main_hotels = []
 main_night_life = []
-def process_city(city_data, country, country_id):
-    print ('start process city,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    city_name = city_data["city"]
-    description = city_data["description"]
-    
 
-    print("City:", city_name)
-    check=''
+
+def process_attractions_thread(landmarks, city_name, country, city_obj):
+    # with lock:
     try:
-        city_obj = City.objects.get(city=city_name)
-        if city_obj:
-            check='True'
-    except:
-        pass
-    location = geolocator.geocode(f"{city_name},{country}")
-    landmarks = [location.latitude, location.longitude]
-    if check=='':
-        city_query = City(
-            country_id=country_id,
-            city=city_name,
-            latitude=landmarks[0],
-            longitude=landmarks[1],
-            description=description,
-        )
-        city_query.save()
-        print("Save successfully for city")
-    
+        return process_attractions(landmarks, city_name, country, city_obj)
+    except Exception as e:
+        print('error in process_attractions_thread:', e)
+
+
+def process_restaurants_thread(landmarks, city_name, city_obj):
+    # with lock:
     try:
-        city_data["latitude"] = landmarks[0]
-        city_data["longitude"] = landmarks[1]
-        city_obj = City.objects.get(city=city_name)
-        # if city_objs:
+        return process_restaurants(landmarks, city_name, city_obj)
+    except Exception as e:
+        print('error in process_restaurants_thread:', e)
+
+
+def process_hotels_thread(landmarks, city_name):
+    # with lock:
+    try:
+        return process_hotels(landmarks, city_name)
+    except Exception as e:
+        print('error in process_hotels_thread:', e)
+
+
+def process_night_life_thread(landmarks):
+    # with lock:
+    try:
+        return process_night_life(landmarks)
+    except Exception as e:
+        print('error in process_night_life_thread:', e)
+
+
+def process_sunset_thread(landmarks):
+    # with lock:
+    try:
+        return process_sunset(landmarks)
+    except Exception as e:
+        print('error in process_sunset_thread:', e)
             
-        #     # city_obj = city_objs[0]
-        print(city_obj, "city_obj")
-    except Exception as e:
-        print (e,'@@@@@@@@@@@@@@@@@@@@@@@@@@')
+
+def process_city(city_data, country, existing_country):
+   with new_city_lock:
+        print ('start process city,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        city_name = city_data["city"]
+        description = city_data["description"]
+        print("City:", city_name)
+        check2=''
+        try:
+            city_obj = City.objects.get(city=city_name)
+            if city_obj:
+                 check2=True
+        except:
+             pass
+        location = geolocator.geocode(f"{city_name},{country}")
+        landmarks = [location.latitude, location.longitude]
+        print('landmarks for process_city',city_name,' : ',landmarks)
+        try:
+            if check2!=True:
+                print('start to save city')
+                # time.sleep(1)
+                city_query = City(
+                country=existing_country,
+                city=city_name,
+                latitude=float(landmarks[0]),
+                longitude=float(landmarks[1]),
+                description=description,
+                )
+                city_query.save()
+                print("Save successfully for city")
+        except Exception as e:
+            print('not able to save line 78',e)
+
+        try:
+            # time.sleep(0.6)
+            city_data['landmarks']=[float(landmarks[0]),float(landmarks[1])]
+            # city_data["latitude"] = float(landmarks[0])
+            # city_data["longitude"] = float(landmarks[1])
+            city_obj = City.objects.get(city=city_name)
+            print(city_obj, "city_obj")
+        except Exception as e:
+            print (e,'@@@@@@@@@@@@@@@@@@@@@@@@@@','line 86 chat.py')
 
 
-    try:
-        attraction_for_data=(process_attractions(landmarks, city_name, country, city_obj))
-        restaurant_for_data=(process_restaurants(landmarks, city_name, city_obj))
-        hotels_for_data=(process_hotels(landmarks, city_name))
-        night_life_for_data=(process_night_life(landmarks))
-        sunset_for_data=process_sunset(landmarks)
-    except Exception as e:
-        print ('erorr 92',e)
-    # city_data['landmarks']=landmarks
-    city_data["attractions"] = attraction_for_data
-    city_data["restaurants"] = restaurant_for_data
-    city_data["hotels"] = hotels_for_data
-    print (night_life_for_data,'###########')
-    city_data['night_life']=night_life_for_data
-    city_data["sunset"]=sunset_for_data
+        try:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                # Submit the threads to the executor
+                attraction_thread = executor.submit(process_attractions_thread, landmarks, city_name, country, city_obj)
+                restaurant_thread = executor.submit(process_restaurants_thread, landmarks, city_name, city_obj)
+                hotels_thread = executor.submit(process_hotels_thread, landmarks, city_name)
+                night_life_thread = executor.submit(process_night_life_thread, landmarks)
+                sunset_thread = executor.submit(process_sunset_thread, landmarks)
 
-    return city_data
-
+                # Get the results from the submitted threads
+                attractions_result = attraction_thread.result()
+                restaurants_result = restaurant_thread.result()
+                hotels_result = hotels_thread.result()
+                night_life_result = night_life_thread.result()
+                sunset_result = sunset_thread.result()
+            
+            # print('attractions_result: ',attractions_result,'@@@@@@@')
+            # Store the results in the city_data dictionary
+            city_data["attractions"] = attractions_result
+            city_data["restaurants"] = restaurants_result
+            city_data["hotels"] = hotels_result
+            city_data["night_life"] = night_life_result
+            city_data["sunset"] = sunset_result
+        
+        except Exception as e:
+            print('error in process_city:', e)
+        return city_data
 
 def process_restaurants(landmarks, city_name, city_obj):
     restaurants = []
@@ -275,7 +330,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                         country_id = existing_country.id
                     threads = []
                     
-                    executor = ThreadPoolExecutor()
+                    # executor = ThreadPoolExecutor()
                     for city_data in data["cities"]:
                         city_name = city_data["city"]
                         normalized_city_name = unidecode(city_name)
@@ -297,8 +352,17 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                     existing_city_cache = cache.get(cache_key)
                                     if existing_city_cache is None:
                                         # Use prefetch_related to fetch related attractions and restaurants efficiently
-                                        attractions_list = existing_city.attractions.all().values()
-                                        restaurants_list = existing_city.restaurants.all().values()
+                                        try:
+                                            attractions_list = existing_city.attractions.all().values()
+                                            restaurants_list = existing_city.restaurants.all().values()
+                                        except:
+                                            print('There isno attracionts yet for this existing city')
+                                            check_for_attraction=True
+
+                                        if check_for_attraction==True:
+                                            landmarks=[existing_city.latitude,existing_city.longitude]
+                                            attractions_list=process_attractions(landmarks, city_name, country,existing_city)
+                                            restaurants_list=process_restaurants(landmarks, city_name, existing_city)
                                         # Sort attractions by distance, shuffle remaining attractions, and set them in city_data
                                         try:
                                             attractions = sort_attractions_by_distance(attractions=attractions_list, first_attraction=attractions_list[0])
@@ -325,7 +389,8 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                 else:
                                     if existing_city==None:
                                         print('no exsiting city')
-                                        executor.submit(process_city, city_data, country, country_id)
+                                        # process_city(city_data,country,existing_country)
+                                        executor.submit(process_city, city_data, country,existing_country)
                                         print ("start exceutor")
                             except:
                                 print ('last expet 309')

@@ -18,6 +18,7 @@ urlpatterns = [
     path("show-all-restaurants/",show_all.show_all_restaurants,name="show_all_restaurants"),
     path("add-new-attraction/",add_new_attractions.add_new_attraction,name="add_new_attraction"),
     path("approve_new_attraction/",add_new_attractions.approve_new_attraction,name="approve_new_attraction"),
+    path("country_list/",views.country_list,name="country_list")
 
     
     

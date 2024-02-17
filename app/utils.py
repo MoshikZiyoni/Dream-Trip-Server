@@ -357,17 +357,27 @@ def generate_schedule(data,country,check):
             for city in cities:
                 city_name = city['city']
                 # print (city)
-                # query1=City.objects.get(city=city_name)
-                # landmarks=[query1.latitude,query1.longitude]
+                
                 try:
                     landmarks=city['landmarks']
                 except Exception as e :
-                    print (e)
+                    print("city_name: ",city_name)
+                    ############# Do normal!!!!!
+                    normalized_city_name = unidecode(city_name)
+                    query1 = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                    landmarks=[query1.latitude,query1.longitude]
+                    print ('not good at 365 now fix',landmarks)
                 city_description = city['description']
                 try:
-                    attractions = city['attractions']
-                    count=0
-
+                    try:
+                        attractions = city['attractions']
+                        count=0
+                        print('Atrracions in the schedule: ',attractions,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                        
+                    except Exception as e:
+                        print('line 374 there is not attractions maybe',e,'@@')
+                        from app.chat import process_attractions
+                        attractions=process_attractions(landmarks, city_name, country,query1)
                     for attraction in attractions:
                         
                         count+=1
@@ -379,6 +389,9 @@ def generate_schedule(data,country,check):
                 except:
                     pass
                 restaurants = city.get('restaurants',"")
+                if len(restaurants)<2:
+                    from app.chat import process_restaurants
+                    restaurants=process_restaurants(landmarks, city_name, query1)
                 breakfast_list = []
                 restaurants=list(restaurants)
                 lunch_list = []
@@ -472,34 +485,37 @@ def generate_schedule(data,country,check):
                                     'end_time': attraction_end.strftime('%H:%M')
                             
                         }
-                        if len(breakfast_list) == 0:
-                            breakfast = random.choice(restaurants)
-                        else:
-                            breakfast = random.choice(breakfast_list)
+                        try:
+                            if len(breakfast_list) == 0:
+                                breakfast = random.choice(restaurants)
+                            else:
+                                breakfast = random.choice(breakfast_list)
 
-                        # Choose lunch
-                        if len(lunch_list) == 0:
-                            lunch = random.choice(restaurants)
-                        else:
-                            lunch = random.choice(lunch_list)
-                            # Remove the selected restaurant from all three lists
-                            if lunch in breakfast_list:
-                                breakfast_list.remove(lunch)
-                            if lunch in dinner_list:
-                                dinner_list.remove(lunch)
-                            lunch_list.remove(lunch)
+                            # Choose lunch
+                            if len(lunch_list) == 0:
+                                lunch = random.choice(restaurants)
+                            else:
+                                lunch = random.choice(lunch_list)
+                                # Remove the selected restaurant from all three lists
+                                if lunch in breakfast_list:
+                                    breakfast_list.remove(lunch)
+                                if lunch in dinner_list:
+                                    dinner_list.remove(lunch)
+                                lunch_list.remove(lunch)
 
-                        # Choose dinner
-                        if len(dinner_list) == 0:
-                            dinner = random.choice(restaurants)
-                        else:
-                            dinner = random.choice(dinner_list)
-                            # Remove the selected restaurant from all three lists
-                            if dinner in breakfast_list:
-                                breakfast_list.remove(dinner)
-                            if dinner in lunch_list:
-                                lunch_list.remove(dinner)
-                            dinner_list.remove(dinner)
+                            # Choose dinner
+                            if len(dinner_list) == 0:
+                                dinner = random.choice(restaurants)
+                            else:
+                                dinner = random.choice(dinner_list)
+                                # Remove the selected restaurant from all three lists
+                                if dinner in breakfast_list:
+                                    breakfast_list.remove(dinner)
+                                if dinner in lunch_list:
+                                    lunch_list.remove(dinner)
+                                dinner_list.remove(dinner)
+                        except Exception as e:
+                            print('restaurants error  witht schedule line 505',e)
                             
 
                         day_schedule['attractions'].append(daily_schedule)

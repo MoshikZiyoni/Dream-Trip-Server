@@ -10,6 +10,7 @@ import traceback
 import re
 from django.db.models import Q
 import random
+import json
 # from rest_framework.authtoken.models import Token
 # from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
@@ -30,8 +31,7 @@ geolocator = Nominatim(user_agent="dream-trip")
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-    
-   
+
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
 #         country.average_food = item['cost']
@@ -357,7 +357,23 @@ def user_single_trip(request):
         return JsonResponse('not good',safe=False)
 
 
+@cache_page(36000)
+@api_view(['GET','POST'])
+def country_list(request):
+    cache_key = f"country_list"
+    country_cache=cache.get(cache_key)
+    if country_cache is None:
+        email=request.data['email']
+        countries=Country.objects.all()
+        countries_list = []
+        for country in countries:
+            countries_list.append(country.name)
 
+        cache.set(cache_key, countries_list, timeout=7 * 24 * 60 * 60)
+        return JsonResponse(countries_list,safe=False)
+    else:
+        print ('country_cache')
+        return JsonResponse(country_cache,safe=False)
 
 
 
