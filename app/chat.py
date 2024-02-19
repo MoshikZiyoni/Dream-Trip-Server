@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 from app.models import  Country, QueryChatGPT, City
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
-from app.utils import clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_night_life_foursquare, process_restaurant, restarunts_from_google, sort_attractions_by_distance
+from app.utils import attraction_from_google, clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_night_life_foursquare, process_restaurant, restarunts_from_google, sort_attractions_by_distance
 from threading import Thread
 from threading import RLock
 from django.core.cache import cache
@@ -160,64 +160,79 @@ def process_city(city_data, country, existing_country):
 
 def process_restaurants(landmarks, city_name, city_obj):
     restaurants = []
-    print ("start restaurants")
-    with restaur_lock:
-        reslut = foursquare_restaurant(landmarks)
-        # print(reslut)
-        if len(reslut) == 0:
-            print("Start google restaurant")
-            my_restaurant=get_restaurants_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
-            threads = []
-            for restaur in my_restaurant['results']:
-                thread = Thread(target=restarunts_from_google, args=(restaur, city_obj, restaurants))
-                thread.start()
-                threads.append(thread)
-        else:
-            threads = []
-            for restaur in reslut:
-                thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
-                thread.start()
-                threads.append(thread)
+    cache_key = f"restaurants1{city_name.replace(' ', '_').replace('-', '_')}"
+    # Attempt to retrieve data from the cache
+    restaurants_cache = cache.get(cache_key)
+    if restaurants_cache is None:
+        print ("start restaurants")
+        with restaur_lock:
+            reslut = foursquare_restaurant(landmarks)
+            # print(reslut)
+            if len(reslut) == 0:
+                print("Start google restaurant")
+                my_restaurant=get_restaurants_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
+                threads = []
+                for restaur in my_restaurant['results']:
+                    thread = Thread(target=restarunts_from_google, args=(restaur, city_obj, restaurants))
+                    thread.start()
+                    threads.append(thread)
+            else:
+                threads = []
+                for restaur in reslut:
+                    thread = Thread(target=process_restaurant, args=(restaur, city_obj, restaurants))
+                    thread.start()
+                    threads.append(thread)
 
-        # Wait for all threads to complete
-        for thread in threads:
-            thread.join()
-    print('return restaurants')
-    return restaurants
+            # Wait for all threads to complete
+            for thread in threads:
+                thread.join()
+        print('return restaurants')
+        return restaurants
+    else:
+        print('restaurants_cache')
+        return restaurants_cache
 
 def process_attractions(landmarks, city_name, country, city_obj):
     attractions = []
-    print ("start attractions")
-    with attrac_lock:
-        result1 = foursquare_attraction(landmarks, city_name, country)
-        threads = []
+    cache_key = f"attractions1{city_name.replace(' ', '_').replace('-', '_')}"
+    # Attempt to retrieve data from the cache
+    attractions_cache = cache.get(cache_key)
+    if attractions_cache is None:
+        print ("start attractions")
+        with attrac_lock:
+            result1 = foursquare_attraction(landmarks, city_name, country)
+            threads = []
 
-        if len(result1) == 0:
-            print("Start google attraction")
-            attractions_info_trip = get_attraction_from_google(city=city_name,city_obj=city_obj,lat=landmarks[0],lon=landmarks[1],attractions=attractions)
-            for attracs in attractions_info_trip['results']:
-                thread = Thread(target=restarunts_from_google, args=(attracs, city_obj, attractions))
-                thread.start()
-                threads.append(thread)
-        else:
-            print("Start the else line 94")
+            if len(result1) == 0:
+                print("Start google attraction")
+                attractions_info_trip = get_attraction_from_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
+                for attracs in attractions_info_trip['results']:
+                    thread = Thread(target=attraction_from_google, args=(attracs, city_obj, attractions))
+                    thread.start()
+                    threads.append(thread)
+            else:
+                print("Start the else line 94")
 
-            for attrac in result1:
-                thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
-                thread.start()
-                threads.append(thread)
+                for attrac in result1:
+                    thread = Thread(target=process_attraction, args=(attrac, city_obj, attractions))
+                    thread.start()
+                    threads.append(thread)
 
-        # Wait for all threads to complete
-        for thread in threads:
-            thread.join()
+            # Wait for all threads to complete
+            for thread in threads:
+                thread.join()
 
-    print ('return attractions')
-    return attractions
+        cache.set(cache_key, attractions, timeout=7 * 24 * 60 * 60)
+        print ('return attractions')
+        return attractions
+    else:
+        print('attractions_cache')
+        return attractions_cache
 
 
 def process_hotels(landmarks, city_name):
     print ("start hotels")
-    cache_key = f"hotels_{city_name.replace(' ', '_').replace('-', '_')}"
+    cache_key = f"hotels{city_name.replace(' ', '_').replace('-', '_')}"
     # Attempt to retrieve data from the cache
     hotels1 = cache.get(cache_key)
     if hotels1 is None:
@@ -308,8 +323,12 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                         data1=ast.literal_eval(answer1)
                     country = data["country"]
                     if country != mainland:
-                        print("Country is not mainland. Retrying...")
-                        break
+                        try:
+                            if country=='USA' or country=='United States':
+                                continue
+                        except:
+                            print("Country is not mainland. Retrying...")
+                            break
                     
                     try:
                         itinerary_description=data['itinerary-description']
@@ -345,10 +364,11 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                     existing_city = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
                                 except:
                                     pass
+                            check_for_attraction=None
                             try:
                                 if existing_city:
-                                    print ('start existing_city')
-                                    cache_key = f"existing_city_{existing_city.city}"
+                                    print ('start existing_city for city',city_name)
+                                    cache_key = f"existing-city{existing_city.city}"
                                     existing_city_cache = cache.get(cache_key)
                                     if existing_city_cache is None:
                                         # Use prefetch_related to fetch related attractions and restaurants efficiently
@@ -356,7 +376,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                             attractions_list = existing_city.attractions.all().values()
                                             restaurants_list = existing_city.restaurants.all().values()
                                         except:
-                                            print('There isno attracionts yet for this existing city')
+                                            print('There is no attracionts yet for this existing city')
                                             check_for_attraction=True
 
                                         if check_for_attraction==True:
@@ -373,6 +393,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                         except:
                                             final_attractions=attractions_list
                                         city_data["attractions"] = list(final_attractions)
+                                        print ('final_attractions before genurate schedules@@@@@@@@@@@@@@',final_attractions)
                                         city_data["restaurants"] = list(restaurants_list)
                                         city_data['landmarks']=[existing_city.latitude,existing_city.longitude]
 
@@ -385,6 +406,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                         print("Continue")
                                         cache.set(cache_key, existing_city_cache, timeout=7 * 24 * 60 * 60)
                                     else:
+                                        print ('existing_city_cache for city',city_name)
                                         return existing_city_cache
                                 else:
                                     if existing_city==None:
@@ -392,8 +414,8 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                         # process_city(city_data,country,existing_country)
                                         executor.submit(process_city, city_data, country,existing_country)
                                         print ("start exceutor")
-                            except:
-                                print ('last expet 309')
+                            except Exception as e:
+                                print ('last expet 309',e)
                                 pass
                         
                             check=False

@@ -26,12 +26,34 @@ from datetime import date
 # import os
 # import ast
 from geopy.geocoders import Nominatim
+import base64
+import json
+import os
+from django.shortcuts import render
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from unidecode import unidecode
+from rest_framework.decorators import api_view
+from selenium import webdriver
+from app.models import Attraction,City
+import random
+import time
+import requests
+import re
+from selenium.webdriver.common.by import By
+from django.db.models import Q
+from geopy.geocoders import Nominatim
+import math
+from geopy.distance import geodesic
+from dotenv import load_dotenv
 
-geolocator = Nominatim(user_agent="dream-trip")
+
 
 @api_view(['GET', 'POST'])
 def gpt_view(request):
-
+    
+   
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
 #         country.average_food = item['cost']
@@ -53,10 +75,10 @@ def gpt_view(request):
     # return 'kk'
 
 
-    # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
+    # cities_without_hotels = City.objects.filter(attractions__isnull=True)
 
     # for city in cities_without_hotels:
-    #     print(city.city)
+    #     print(city.country.name, city.city)
     #     # try:
     #     #     landmarks=[city.latitude,city.longitude]
     #     #     result=foursquare_hotels(landmarks)
@@ -363,11 +385,11 @@ def country_list(request):
     cache_key = f"country_list"
     country_cache=cache.get(cache_key)
     if country_cache is None:
-        email=request.data['email']
+        # email=request.data['email']
+        # print(email)
         countries=Country.objects.all()
-        countries_list = []
-        for country in countries:
-            countries_list.append(country.name)
+        countries_list = [country.name for country in countries]
+        countries_list.sort()
 
         cache.set(cache_key, countries_list, timeout=7 * 24 * 60 * 60)
         return JsonResponse(countries_list,safe=False)

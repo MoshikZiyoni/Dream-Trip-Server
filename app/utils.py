@@ -356,6 +356,7 @@ def generate_schedule(data,country,check):
             schedule = {'schedules': [] }  # Initialize the schedule dictionary
             for city in cities:
                 city_name = city['city']
+                normalized_city_name = unidecode(city_name)
                 # print (city)
                 
                 try:
@@ -372,7 +373,7 @@ def generate_schedule(data,country,check):
                     try:
                         attractions = city['attractions']
                         count=0
-                        print('Atrracions in the schedule: ',attractions,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                        # print('Atrracions in the schedule: ',attractions,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                         
                     except Exception as e:
                         print('line 374 there is not attractions maybe',e,'@@')
@@ -391,6 +392,7 @@ def generate_schedule(data,country,check):
                 restaurants = city.get('restaurants',"")
                 if len(restaurants)<2:
                     from app.chat import process_restaurants
+                    query1 = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
                     restaurants=process_restaurants(landmarks, city_name, query1)
                 breakfast_list = []
                 restaurants=list(restaurants)
@@ -738,9 +740,13 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id,durring):
     total_prices=answer_from_data1['total_attraction_prices']
     # total_transportation=answer_from_data1["total_transport_private_taxi"]
     # total_food_prices=answer_from_data1['total_food_prices']
+
+    try:
+        country = country.capitalize()
+    except:
+        pass
     existing_country = Country.objects.get(name=country)
     avrage_daily_spent=(existing_country.average_prices)
-    print('@@@@@@@@@@@@@@@@@',type(durring),'@@@@@@@@@@@@@@@@@@@@')
     if type(durring)==int:
         parts=durring
     else:
