@@ -53,6 +53,7 @@ from dotenv import load_dotenv
 @api_view(['GET', 'POST'])
 def gpt_view(request):
     
+
    
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
@@ -96,6 +97,11 @@ def gpt_view(request):
     if not email:
         return JsonResponse({'error': 'Email not provided'})
     request_left = user_requests_cache(email)
+    try:
+        if request_left==False:
+            return JsonResponse({'error': 'Too many requests'})    
+    except:
+        pass
     
 
     try:
@@ -179,7 +185,11 @@ def make_short_trip(request):
     if not email:
         return JsonResponse({'error': 'Email not provided'})
     request_left = user_requests_cache(email)
-
+    try:
+        if request_left==False:
+            return JsonResponse({'error': 'Too many requests'})    
+    except:
+        pass
     country=(request.data["country"])
     queries = QueryChatGPT.objects.filter(
             Q(question__icontains=country)     
@@ -206,10 +216,17 @@ def make_short_trip(request):
     answer=(random_query.answer)
     trip_id=(random_query.id)
     print (trip_id)
-    new_result=(quick_from_data_base(country=country,answer_dict=answer,request_left=request_left,trip_id=trip_id,durring=first_number))
-    days={"days":first_number}
-    new_result.update(days)
-    return JsonResponse(new_result,safe=False)
+    cache_key = f"trip-id{trip_id}"
+    short_trip_cache = cache.get(cache_key)
+    if short_trip_cache is None:
+        new_result=(quick_from_data_base(country=country,answer_dict=answer,request_left=request_left,trip_id=trip_id,durring=first_number))
+        days={"days":first_number}
+        new_result.update(days)
+        cache.set(cache_key, new_result, timeout=7 * 24 * 60 * 60)
+        return JsonResponse(new_result,safe=False)
+    else:
+        print('short_trip_cache')
+        return (JsonResponse(short_trip_cache,safe=False))
 
 
 @api_view(['GET', 'POST'])
@@ -297,7 +314,6 @@ def user_add_trip(request):
         user_trip = UserTrip.objects.filter(user_id=user).values('liked_trips')
         liked_trips_list = [entry['liked_trips'] for entry in user_trip]
         if trip_id not in liked_trips_list:
-            print("not inside")
             # Add the new trip to liked trips
             user_trip1=UserTrip(liked_trips=trip_id,user_id=user,end_trip=end_trip,start_trip=start_trip)
             user_trip1.created_at=date.today()
@@ -306,7 +322,7 @@ def user_add_trip(request):
             # formatted_date =user_trip1.formatted_created_date()
             user_trip1.created_at = formatted_date
             user_trip1.save()
-
+            print("new trip add successfuly")
             return Response({"message": f"Trip added to liked trips for email: {email}"})
         else:
             return Response({"message": f"Trip already exists in liked trips for email: {email}"})
@@ -355,6 +371,11 @@ def user_single_trip(request):
     user_trip_id = UserTrip.objects.get(id=trip_id)
     real_trip_id=(user_trip_id.liked_trips)
     request_left = user_requests_cache(email)
+    try:
+        if request_left==False:
+            return JsonResponse({'error': 'Too many requests'})    
+    except:
+        pass
     request_left+=1    
     trip=QueryChatGPT.objects.get(id=real_trip_id)
     pattern = r'\b\d+\b'
@@ -401,17 +422,17 @@ def country_list(request):
 
 
 def user_requests_cache(email):
-     # Check if the user's email exists in the request count dictionary
+    # Check if the user's email exists in the request count dictionary
     request_count = cache.get(email, 0)
     # If the user has made more than 10 requests in the past 24 hours, block the request
-    if request_count >= 100:
-        return JsonResponse({'error': 'Too many requests'})
+    if int(request_count) == 15:
+        return False
 
     # Otherwise, increment the request count and set the cache with the new value
     request_count += 1
-    print (request_count)
-    request_left=11-request_count
-    timeout_seconds = 24 * 60 * 60  # 24 hoursin seconds
+    print(request_count)
+    request_left = 11 - request_count
+    timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
     cache.set(email, request_count, timeout=timeout_seconds)
     return request_left
 
