@@ -10,47 +10,26 @@ import traceback
 import re
 from django.db.models import Q
 import random
-import json
+from datetime import date
 # from rest_framework.authtoken.models import Token
 # from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
-from datetime import date
-# from collections import Counter
-# from django.db.models import Count
-# from itertools import combinations
-# from django.db.models.functions import Lower
-# from selenium.webdriver.common.by import By
+# from geopy.geocoders import Nominatim
 # import base64
-# import requests
-# from selenium import webdriver
 # import os
-# import ast
-from geopy.geocoders import Nominatim
-import base64
-import json
-import os
-from django.shortcuts import render
-from django.http import JsonResponse
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from unidecode import unidecode
-from rest_framework.decorators import api_view
-from selenium import webdriver
-from app.models import Attraction,City
-import random
-import time
-import requests
-import re
-from selenium.webdriver.common.by import By
-from django.db.models import Q
-from geopy.geocoders import Nominatim
-import math
-from geopy.distance import geodesic
-from dotenv import load_dotenv
+# from unidecode import unidecode
+# from selenium import webdriver
+# from app.models import Attraction,City
+# import requests
+# from selenium.webdriver.common.by import By
+# from geopy.geocoders import Nominatim
+# import math
+# from geopy.distance import geodesic
+# from dotenv import load_dotenv
 
 
 
-@api_view(['GET', 'POST'])
+@api_view([ 'POST'])
 def gpt_view(request):
     
 
@@ -99,7 +78,7 @@ def gpt_view(request):
     request_left = user_requests_cache(email)
     try:
         if request_left==False:
-            return JsonResponse({'error': 'Too many requests'})    
+            return JsonResponse({'error': 'no requests left'},status=404 , safe=False)    
     except:
         pass
     
@@ -187,7 +166,7 @@ def make_short_trip(request):
     request_left = user_requests_cache(email)
     try:
         if request_left==False:
-            return JsonResponse({'error': 'Too many requests'})    
+            return JsonResponse({'error': 'No requests left'})    
     except:
         pass
     country=(request.data["country"])
@@ -373,7 +352,7 @@ def user_single_trip(request):
     request_left = user_requests_cache(email)
     try:
         if request_left==False:
-            return JsonResponse({'error': 'Too many requests'})    
+            return JsonResponse({'error': 'No requests left'},status=404 , safe=False)    
     except:
         pass
     request_left+=1    

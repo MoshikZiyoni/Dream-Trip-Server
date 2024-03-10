@@ -419,9 +419,9 @@ def generate_schedule(data,country,check):
                     
                 
                         
-                hotels=city.get('hotels',"")
-                night_life=city.get("night_life","")
-                sunset=city.get('sunset',"")
+                hotels=city.get('hotels',[])
+                night_life=city.get("night_life",[])
+                sunset=city.get('sunset',[])
                 days_spent = city['days_spent']
                 print (days_spent,'@@@@@@@@@@@@@@@@@')
                 
