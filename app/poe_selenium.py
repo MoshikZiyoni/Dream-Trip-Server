@@ -14,36 +14,59 @@ random_time = random.uniform(5, 20)
 
 @api_view(['POST'])
 def poe(request):
+    print('satrt')
     try:
-        # Attempt to set up the Chrome WebDriver
-        chromedriver_path = ChromeDriverManager().install()
-        
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
-
-        # Set up the Chrome WebDriver with User-Agent and headless mode
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument(f"user-agent={user_agent}")
         chrome_options.add_argument("--headless")  # Run in headless mode
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         
-        # Create a Chrome WebDriver instance
-        driver = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
-
-        # Navigate to the desired URL
-        driver.get('https://poe.com/Claude-instant')
-        time.sleep(5)
+        # Use ChromeDriverManager to install ChromeDriver if not present
+        ChromeDriverManager().install()
         
-        # Print the page title
+        # Create Chrome WebDriver instance
+        driver = webdriver.Chrome(options=chrome_options)
         page_title = driver.title
         print(page_title)
 
         # Close the WebDriver
         driver.quit()
         
-        return JsonResponse({'Check Selenium': page_title}, safe=False)    
+        return JsonResponse({'Check Selenium': page_title}, safe=False)  
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        print('not good',e)
+    
+    # try:
+    #     chrome_options = webdriver.ChromeOptions()
+
+    #     driver = webdriver.Chrome( options=chrome_options)
+        
+    #         # Set up Chrome options
+    #     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
+        
+    #     chrome_options.add_argument(f"user-agent={user_agent}")
+    #     chrome_options.add_argument("--headless")  # Run in headless mode
+    #     chrome_options.add_argument("--no-sandbox")
+    #     chrome_options.add_argument("--disable-dev-shm-usage")
+
+        
+
+    #     # Navigate to the desired URL
+    #     driver.get('https://poe.com/Claude-instant')
+    #     time.sleep(5)
+        
+    #     # Print the page title
+    #     page_title = driver.title
+    #     print(page_title)
+
+    #     # Close the WebDriver
+    #     driver.quit()
+        
+    #     return JsonResponse({'Check Selenium': page_title}, safe=False)    
+    # except Exception as e:
+    #     return JsonResponse({'error': str(e)}, status=500)
     driver.maximize_window()
     time.sleep(random_time)
     driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
