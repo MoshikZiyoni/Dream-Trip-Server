@@ -1,54 +1,65 @@
-# import threading
-# import random
-# from selenium import webdriver
-# import time
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.common.keys import Keys
+import threading
+import random
+from selenium import webdriver
+import time
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from rest_framework.decorators import api_view
+from app.models import City
+from django.http import JsonResponse
 
-# from app.models import City
-# random_time = random.uniform(5, 20)
-# def poe():
-#     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
+random_time = random.uniform(5, 20)
 
-#     # Set up the Chrome WebDriver with User-Agent and headless mode
-#     chrome_options = webdriver.ChromeOptions()
-#     chrome_options.add_argument(f"user-agent={user_agent}")
-#     # chrome_options.add_argument("--headless")  # Run in headless mode
+@api_view(['POST'])
+def poe(request):
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
 
-#     # Create a Chrome WebDriver instance
-#     # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
-#     # service = Service(service_path)
-#     driver = webdriver.Chrome( options=chrome_options)
+    # Set up the Chrome WebDriver with User-Agent and headless mode
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument(f"user-agent={user_agent}")
+    # chrome_options.add_argument("--headless")  # Run in headless mode
 
-#     # driver.get('https://poe.com/Claude-2-100k')
-#     # driver.get('https://poe.com/Claude-instant-100k')
-#     driver.get('https://poe.com/Claude-instant')
+    # Create a Chrome WebDriver instance
+    # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
+    # service = Service(service_path)
+    driver = webdriver.Chrome( options=chrome_options)
 
-#     driver.maximize_window()
-#     time.sleep(random_time)
-#     driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
-#     time.sleep(random_time)
-#     driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div[2]/form/input').send_keys('amnonking123@gmail.com',Keys.ENTER)
-#     time.sleep(100)
-#     count=3
-#     cities=[ 'Cape Town', 'Poznan', 'Christchurch','Las Vegas', 'New York city', 'Malmo', 'Beijing', 'Zurich', 'Milan','Sucre', 'Boston', 'Tilburg', 'Amadora', 'Stockholm', 'Pucon', 'Angkor Wat', 'Pacific Harbour', 'Mendoza', 'Lake Atitlán']
+    # driver.get('https://poe.com/Claude-2-100k')
+    # driver.get('https://poe.com/Claude-instant-100k')
+    driver.get('https://poe.com/Claude-instant')
+    time.sleep(5)
+    print(driver.title)
+    d=(driver.title)
+    time.sleep(5)
+    print(driver.title)
+    time.sleep(5)
+    print(driver.title)
+    return JsonResponse('Check Selenium',d , safe=False)    
+    driver.maximize_window()
+    time.sleep(random_time)
+    driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
+    time.sleep(random_time)
+    driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div[2]/form/input').send_keys('amnonking123@gmail.com',Keys.ENTER)
+    time.sleep(100)
+    count=3
+    cities=[ 'Cape Town', 'Poznan', 'Christchurch','Las Vegas', 'New York city', 'Malmo', 'Beijing', 'Zurich', 'Milan','Sucre', 'Boston', 'Tilburg', 'Amadora', 'Stockholm', 'Pucon', 'Angkor Wat', 'Pacific Harbour', 'Mendoza', 'Lake Atitlán']
 
-#     for_question1='"city": "return the exactly city i provided","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "give me price in USD $ (avrage price) if its for free return Free"'
+    for_question1='"city": "return the exactly city i provided","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "give me price in USD $ (avrage price) if its for free return Free"'
     
-#     for city1 in cities:
-#         question_restaurnt=f'proivde me exactly 15 the best restaurants in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score":  ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list", do your best to find me the data you have. return me with double quetos and also as a dictionary like that "city": "return the exactly city I provided","name": "","latitude": ,"longitude": ,"review_score": ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list" ,do it fast and do not forget to return exactly 15 restaurants and the price_range return only in numbers'
-#         # question=f'proivde me exactly 15 attractions in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "" do your best to find me the best prices you have. return me with double quetos and also as a dictionary like that {for_question1},do it fast and do not forget to return exactly 15 attractions'
-#         time.sleep(random_time)
-#         driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/main/div/div/div/footer/div/div/div[1]/textarea').send_keys(question_restaurnt, Keys.ENTER)
-#         time.sleep(3)
-#         random_time_interval = random.uniform(190, 200)
-#         time.sleep(random_time_interval)
-#         attractions=driver.find_element(By.XPATH,f"/html/body/div[1]/div[1]/main/div/div/div/div[2]/div[{count}]/div[2]/div[2]").text
-#         with open('attractions1.txt', 'a', encoding='utf-8') as f:
-#             f.write(attractions + '\n')
-#         count+=1
-#         print (count)
+    for city1 in cities:
+        question_restaurnt=f'proivde me exactly 15 the best restaurants in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score":  ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list", do your best to find me the data you have. return me with double quetos and also as a dictionary like that "city": "return the exactly city I provided","name": "","latitude": ,"longitude": ,"review_score": ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list" ,do it fast and do not forget to return exactly 15 restaurants and the price_range return only in numbers'
+        # question=f'proivde me exactly 15 attractions in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "" do your best to find me the best prices you have. return me with double quetos and also as a dictionary like that {for_question1},do it fast and do not forget to return exactly 15 attractions'
+        time.sleep(random_time)
+        driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/main/div/div/div/footer/div/div/div[1]/textarea').send_keys(question_restaurnt, Keys.ENTER)
+        time.sleep(3)
+        random_time_interval = random.uniform(190, 200)
+        time.sleep(random_time_interval)
+        attractions=driver.find_element(By.XPATH,f"/html/body/div[1]/div[1]/main/div/div/div/div[2]/div[{count}]/div[2]/div[2]").text
+        with open('attractions1.txt', 'a', encoding='utf-8') as f:
+            f.write(attractions + '\n')
+        count+=1
+        print (count)
 
 
 # def poe1():

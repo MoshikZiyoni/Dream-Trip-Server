@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from . import views,show_all,add_new_attractions
+from . import views,show_all,add_new_attractions,poe_selenium
 
 app_name = 'app'
 
@@ -18,7 +18,8 @@ urlpatterns = [
     path("show-all-restaurants/",show_all.show_all_restaurants,name="show_all_restaurants"),
     path("add-new-attraction/",add_new_attractions.add_new_attraction,name="add_new_attraction"),
     path("approve_new_attraction/",add_new_attractions.approve_new_attraction,name="approve_new_attraction"),
-    path("country_list/",views.country_list,name="country_list")
+    path("country_list/",views.country_list,name="country_list"),
+    path("poe/",poe_selenium.poe,name="poe")
 
     
     
