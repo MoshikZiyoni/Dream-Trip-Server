@@ -9,25 +9,62 @@ from rest_framework.decorators import api_view
 from app.models import City
 from django.http import JsonResponse
 from webdriver_manager.chrome import ChromeDriverManager
+import os
+import requests
+from zipfile import ZipFile
+from selenium.webdriver.chrome.options import Options
+
 
 random_time = random.uniform(5, 20)
+
+def download_and_extract_chromedriver():
+    try:
+        # Define the URL to download Chromedriver
+        chromedriver_url = "https://chromedriver.storage.googleapis.com/index.html?path=114.0.5735.90/chromedriver_linux64.zip"  # Update this URL with the appropriate version
+        
+        # Define the local path to save Chromedriver
+        local_path = os.path.join(os.getcwd(), 'chromedriver')
+
+        # Download Chromedriver zip file
+        response = requests.get(chromedriver_url)
+        with open('chromedriver.zip', 'wb') as f:
+            f.write(response.content)
+
+        # Extract Chromedriver from the zip file
+        with ZipFile('chromedriver.zip', 'r') as zip_ref:
+            zip_ref.extractall(os.getcwd())
+
+        # Make the Chromedriver executable
+        os.chmod(local_path, 0o755)
+
+        print("Chromedriver downloaded and extracted successfully.")
+    except Exception as e:
+        print(f"Error downloading Chromedriver: {e}")
 
 @api_view(['POST'])
 def poe(request):
     print('satrt')
     try:
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument(f"user-agent={user_agent}")
-        chrome_options.add_argument("--headless")  # Run in headless mode
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        
-        # Use ChromeDriverManager to install ChromeDriver if not present
-        ChromeDriverManager().install()
-        
+        # Download and extract Chromedriver
+        download_and_extract_chromedriver()
+
+        # Set up Chrome options
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')  # Run in headless mode
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+
+        # Get the path to the Chrome WebDriver executable
+        webdriver_path = os.path.join(os.getcwd(), 'chromedriver')
+
         # Create Chrome WebDriver instance
-        driver = webdriver.Chrome(options=chrome_options)
+        webdriver_service = Service(webdriver_path)
+        webdriver_service.start()
+
+        # Create Chrome WebDriver instance
+        driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+        driver.get('https://poe.com/Claude-instant')
+        time.sleep(5)
         page_title = driver.title
         print(page_title)
 
