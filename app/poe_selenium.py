@@ -8,18 +8,21 @@ from selenium.webdriver.common.keys import Keys
 from rest_framework.decorators import api_view
 from app.models import City
 from django.http import JsonResponse
+import chromedriver_autoinstaller
 
 random_time = random.uniform(5, 20)
 
 @api_view(['POST'])
 def poe(request):
+    chromedriver_autoinstaller.install()
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
 
     # Set up the Chrome WebDriver with User-Agent and headless mode
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument(f"user-agent={user_agent}")
     chrome_options.add_argument("--headless")  # Run in headless mode
-
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     # Create a Chrome WebDriver instance
     # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
     # service = Service(service_path)
@@ -35,7 +38,8 @@ def poe(request):
     print(driver.title)
     time.sleep(5)
     print(driver.title)
-    return JsonResponse('Check Selenium',d , safe=False)    
+    driver.quit()
+    return JsonResponse({'Check Selenium':d} , safe=False)    
     driver.maximize_window()
     time.sleep(random_time)
     driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
