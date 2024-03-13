@@ -18,7 +18,7 @@ def poe(request):
     # Set up the Chrome WebDriver with User-Agent and headless mode
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument(f"user-agent={user_agent}")
-    # chrome_options.add_argument("--headless")  # Run in headless mode
+    chrome_options.add_argument("--headless")  # Run in headless mode
 
     # Create a Chrome WebDriver instance
     # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
