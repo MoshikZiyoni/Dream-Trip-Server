@@ -155,7 +155,8 @@ DATABASES = {
         'USER': os.environ.get('posgre_user'),
         'PASSWORD': os.environ.get('postgre_new_pass'),
         'PORT':'5432',
-    },
+        
+    }
 }
 
 

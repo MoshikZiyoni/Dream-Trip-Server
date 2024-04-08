@@ -4,6 +4,7 @@ import os
 import random
 from django.db.models import Q
 import time
+from django.db import transaction
 import traceback
 from unidecode import unidecode
 from app.google_place import get_attraction_from_google, get_hotels_from_google, get_restaurants_google
@@ -21,10 +22,8 @@ from app.models import  Country, QueryChatGPT, City
 from geopy.geocoders import Nominatim
 from concurrent.futures import ThreadPoolExecutor
 from app.utils import attraction_from_google, clean_json_data, fetch_hotels_and_update, fetch_nightlife_and_update, fetch_sunset_and_update, generate_schedule, hotel_from_google, process_attraction, process_hotel, process_night_life_foursquare, process_restaurant, restarunts_from_google, sort_attractions_by_distance
-from threading import Thread
-from threading import RLock
+from threading import Thread,RLock
 from django.core.cache import cache
-import concurrent.futures
 
 attrac_lock = RLock()
 restaur_lock = RLock() 
@@ -93,29 +92,51 @@ def process_city(city_data, country, existing_country):
         city_name = city_data["city"]
         description = city_data["description"]
         print("City:", city_name)
-        check2=''
-        try:
-            city_obj = City.objects.get(city=city_name)
-            if city_obj:
-                 check2=True
-        except:
-             pass
+        # check2=False
+        # try:
+        #     city_obj = City.objects.get(city=city_name)
+        #     if city_obj:
+        #          check2=True
+        # except Exception as e:
+        #      print('there is no city obj for the exsiting city',e)
+        #      pass
         location = geolocator.geocode(f"{city_name},{country}")
         landmarks = [location.latitude, location.longitude]
         print('landmarks for process_city',city_name,' : ',landmarks)
         try:
-            if check2!=True:
-                print('start to save city')
-                # time.sleep(1)
-                city_query = City(
-                country=existing_country,
+            with transaction.atomic():
+                city_obj, created = City.objects.update_or_create(
                 city=city_name,
-                latitude=float(landmarks[0]),
-                longitude=float(landmarks[1]),
-                description=description,
-                )
-                city_query.save()
-                print("Save successfully for city")
+                defaults={
+                    'country': existing_country,
+                    'latitude': float(landmarks[0]),
+                    'longitude': float(landmarks[1]),
+                    'description': description,
+                }
+            )
+            if created:
+                print(f"City '{city_name}' saved successfully.")
+            else:
+                print(f"City '{city_name}' already exists.")
+            # if check2==False:
+            #     print(f"start to save city with this details: \
+            #         country={existing_country}, \
+            #         city={city_name}, \
+            #         latitude={float(landmarks[0])}, \
+            #         longitude={float(landmarks[1])}, \
+            #         description={description}")
+            #     with lock:
+                    
+            #         # time.sleep(1)
+            #         city_query = City(
+            #         country=existing_country,
+            #         city=city_name,
+            #         latitude=float(landmarks[0]),
+            #         longitude=float(landmarks[1]),
+            #         description=description,
+            #         )
+            #         city_query.save()
+            #         print("Save successfully for city")
         except Exception as e:
             print('not able to save line 78',e)
 
@@ -131,23 +152,28 @@ def process_city(city_data, country, existing_country):
 
 
         try:
-            with concurrent.futures.ThreadPoolExecutor() as executor:
-                # Submit the threads to the executor
-                attraction_thread = executor.submit(process_attractions_thread, landmarks, city_name, country, city_obj)
-                restaurant_thread = executor.submit(process_restaurants_thread, landmarks, city_name, city_obj)
-                hotels_thread = executor.submit(process_hotels_thread, landmarks, city_name)
-                night_life_thread = executor.submit(process_night_life_thread, landmarks)
-                sunset_thread = executor.submit(process_sunset_thread, landmarks)
+            # with ThreadPoolExecutor() as executor:
+            #     # Submit the threads to the executor
+            #     attraction_thread = executor.submit(process_attractions_thread, landmarks, city_name, country, city_obj)
+            #     restaurant_thread = executor.submit(process_restaurants_thread, landmarks, city_name, city_obj)
+            #     hotels_thread = executor.submit(process_hotels_thread, landmarks, city_name)
+            #     night_life_thread = executor.submit(process_night_life_thread, landmarks)
+            #     sunset_thread = executor.submit(process_sunset_thread, landmarks)
 
-                # Get the results from the submitted threads
-                attractions_result = attraction_thread.result()
-                restaurants_result = restaurant_thread.result()
-                hotels_result = hotels_thread.result()
-                night_life_result = night_life_thread.result()
-                sunset_result = sunset_thread.result()
+            #     # Get the results from the submitted threads
+            #     attractions_result = attraction_thread.result()
+            #     restaurants_result = restaurant_thread.result()
+            #     hotels_result = hotels_thread.result()
+            #     night_life_result = night_life_thread.result()
+            #     sunset_result = sunset_thread.result()
             
             # print('attractions_result: ',attractions_result,'@@@@@@@')
             # Store the results in the city_data dictionary
+            attractions_result = process_attractions(city_data['landmarks'], city_name, country, city_obj)
+            restaurants_result = process_restaurants(city_data['landmarks'], city_name, city_obj)
+            hotels_result = process_hotels(city_data['landmarks'], city_name)
+            night_life_result = process_night_life(city_data['landmarks'])
+            sunset_result = process_sunset(city_data['landmarks'])
             city_data["attractions"] = attractions_result
             city_data["restaurants"] = restaurants_result
             city_data["hotels"] = hotels_result
@@ -349,7 +375,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                         country_id = existing_country.id
                     threads = []
                     
-                    # executor = ThreadPoolExecutor()
+                    executor = ThreadPoolExecutor()
                     for city_data in data["cities"]:
                         city_name = city_data["city"]
                         normalized_city_name = unidecode(city_name)

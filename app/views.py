@@ -11,6 +11,7 @@ import re
 from django.db.models import Q
 import random
 from datetime import date
+from app.gemini import chat_gemini
 # from rest_framework.authtoken.models import Token
 # from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
@@ -32,8 +33,7 @@ from datetime import date
 @api_view([ 'POST'])
 def gpt_view(request):
     
-
-   
+    
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
 #         country.average_food = item['cost']
@@ -82,7 +82,7 @@ def gpt_view(request):
     except:
         pass
     
-
+    success=False
     try:
 
         # Define variables
@@ -97,8 +97,12 @@ def gpt_view(request):
             'error': 'Too many days.'
         }
             return JsonResponse(response_data,status=404 , safe=False)
+        if mainland=='Georgia':
+            mainland='Georgia (country)'
+            print('good')
         question1 = '{"country": "..", "cities": [{"city": "", "description": "", "days_spent": "" }], "itinerary-description": ""}'
         ourmessage=f"Please suggest a round trip itinerary starting and ending at point A in {mainland}, considering {durring} available days. If {durring} is 3 or less, provide an itinerary with a single city. Ensure a minimum stay of 3 days in each city. Return the itinerary in the following JSON structure:{question1}"
+        print(ourmessage)
         answer_from_data = QueryChatGPT.objects.filter(question__exact=ourmessage).values('answer','id').first()
         if answer_from_data:
             print('answer in data')
@@ -132,11 +136,16 @@ def gpt_view(request):
             
         }
         result1.update(costs)
+       
         return  JsonResponse(result1,safe=False)
+        
     except Exception as e:
         print(f'error: {e}')
         traceback.print_exc() 
         return  Response("An error occurred while processing your request.")
+    
+    
+
     
 
 
@@ -404,12 +413,12 @@ def user_requests_cache(email):
     # Check if the user's email exists in the request count dictionary
     request_count = cache.get(email, 0)
     # If the user has made more than 10 requests in the past 24 hours, block the request
-    if int(request_count) == 15:
+    if int(request_count) == 50:
         return False
 
     # Otherwise, increment the request count and set the cache with the new value
     request_count += 1
-    print(request_count)
+    print('Reqeust number:',request_count)
     request_left = 11 - request_count
     timeout_seconds = 24 * 60 * 60  # 24 hours in seconds
     cache.set(email, request_count, timeout=timeout_seconds)

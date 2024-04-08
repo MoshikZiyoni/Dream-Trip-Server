@@ -1,133 +1,133 @@
-import threading
-import random
-from selenium import webdriver
-import time
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from rest_framework.decorators import api_view
-from app.models import City
-from django.http import JsonResponse
-from webdriver_manager.chrome import ChromeDriverManager
-import os
-import requests
-from zipfile import ZipFile
-from selenium.webdriver.chrome.options import Options
+# import threading
+# import random
+# from selenium import webdriver
+# import time
+# from selenium.webdriver.chrome.service import Service
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.keys import Keys
+# from rest_framework.decorators import api_view
+# from app.models import City
+# from django.http import JsonResponse
+# from webdriver_manager.chrome import ChromeDriverManager
+# import os
+# import requests
+# from zipfile import ZipFile
+# from selenium.webdriver.chrome.options import Options
 
 
-random_time = random.uniform(5, 20)
+# random_time = random.uniform(5, 20)
 
-def download_and_extract_chromedriver():
-    try:
-        # Define the URL to download Chromedriver
-        chromedriver_url = "https://chromedriver.storage.googleapis.com/index.html?path=114.0.5735.90/chromedriver_linux64.zip"  # Update this URL with the appropriate version
+# def download_and_extract_chromedriver():
+#     try:
+#         # Define the URL to download Chromedriver
+#         chromedriver_url = "https://chromedriver.storage.googleapis.com/index.html?path=114.0.5735.90/chromedriver_linux64.zip"  # Update this URL with the appropriate version
         
-        # Define the local path to save Chromedriver
-        local_path = os.path.join(os.getcwd(), 'chromedriver')
+#         # Define the local path to save Chromedriver
+#         local_path = os.path.join(os.getcwd(), 'chromedriver')
 
-        # Download Chromedriver zip file
-        response = requests.get(chromedriver_url)
-        with open('chromedriver.zip', 'wb') as f:
-            f.write(response.content)
+#         # Download Chromedriver zip file
+#         response = requests.get(chromedriver_url)
+#         with open('chromedriver.zip', 'wb') as f:
+#             f.write(response.content)
 
-        # Extract Chromedriver from the zip file
-        with ZipFile('chromedriver.zip', 'r') as zip_ref:
-            zip_ref.extractall(os.getcwd())
+#         # Extract Chromedriver from the zip file
+#         with ZipFile('chromedriver.zip', 'r') as zip_ref:
+#             zip_ref.extractall(os.getcwd())
 
-        # Make the Chromedriver executable
-        os.chmod(local_path, 0o755)
+#         # Make the Chromedriver executable
+#         os.chmod(local_path, 0o755)
 
-        print("Chromedriver downloaded and extracted successfully.")
-    except Exception as e:
-        print(f"Error downloading Chromedriver: {e}")
+#         print("Chromedriver downloaded and extracted successfully.")
+#     except Exception as e:
+#         print(f"Error downloading Chromedriver: {e}")
 
-@api_view(['POST'])
-def poe(request):
-    print('satrt')
-    try:
-        # Download and extract Chromedriver
-        download_and_extract_chromedriver()
+# @api_view(['POST'])
+# def poe(request):
+#     print('satrt')
+#     try:
+#         # Download and extract Chromedriver
+#         download_and_extract_chromedriver()
 
-        # Set up Chrome options
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')  # Run in headless mode
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
+#         # Set up Chrome options
+#         chrome_options = Options()
+#         chrome_options.add_argument('--headless')  # Run in headless mode
+#         chrome_options.add_argument('--no-sandbox')
+#         chrome_options.add_argument('--disable-dev-shm-usage')
 
-        # Get the path to the Chrome WebDriver executable
-        webdriver_path = os.path.join(os.getcwd(), 'chromedriver')
+#         # Get the path to the Chrome WebDriver executable
+#         webdriver_path = os.path.join(os.getcwd(), 'chromedriver')
 
-        # Create Chrome WebDriver instance
-        webdriver_service = Service(webdriver_path)
-        webdriver_service.start()
+#         # Create Chrome WebDriver instance
+#         webdriver_service = Service(webdriver_path)
+#         webdriver_service.start()
 
-        # Create Chrome WebDriver instance
-        driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
-        driver.get('https://poe.com/Claude-instant')
-        time.sleep(5)
-        page_title = driver.title
-        print(page_title)
+#         # Create Chrome WebDriver instance
+#         driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
+#         driver.get('https://poe.com/Claude-instant')
+#         time.sleep(5)
+#         page_title = driver.title
+#         print(page_title)
 
-        # Close the WebDriver
-        driver.quit()
+#         # Close the WebDriver
+#         driver.quit()
         
-        return JsonResponse({'Check Selenium': page_title}, safe=False)  
-    except Exception as e:
-        print('not good',e)
+#         return JsonResponse({'Check Selenium': page_title}, safe=False)  
+#     except Exception as e:
+#         print('not good',e)
     
-    # try:
-    #     chrome_options = webdriver.ChromeOptions()
+#     # try:
+#     #     chrome_options = webdriver.ChromeOptions()
 
-    #     driver = webdriver.Chrome( options=chrome_options)
+#     #     driver = webdriver.Chrome( options=chrome_options)
         
-    #         # Set up Chrome options
-    #     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
+#     #         # Set up Chrome options
+#     #     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
         
-    #     chrome_options.add_argument(f"user-agent={user_agent}")
-    #     chrome_options.add_argument("--headless")  # Run in headless mode
-    #     chrome_options.add_argument("--no-sandbox")
-    #     chrome_options.add_argument("--disable-dev-shm-usage")
+#     #     chrome_options.add_argument(f"user-agent={user_agent}")
+#     #     chrome_options.add_argument("--headless")  # Run in headless mode
+#     #     chrome_options.add_argument("--no-sandbox")
+#     #     chrome_options.add_argument("--disable-dev-shm-usage")
 
         
 
-    #     # Navigate to the desired URL
-    #     driver.get('https://poe.com/Claude-instant')
-    #     time.sleep(5)
+#     #     # Navigate to the desired URL
+#     #     driver.get('https://poe.com/Claude-instant')
+#     #     time.sleep(5)
         
-    #     # Print the page title
-    #     page_title = driver.title
-    #     print(page_title)
+#     #     # Print the page title
+#     #     page_title = driver.title
+#     #     print(page_title)
 
-    #     # Close the WebDriver
-    #     driver.quit()
+#     #     # Close the WebDriver
+#     #     driver.quit()
         
-    #     return JsonResponse({'Check Selenium': page_title}, safe=False)    
-    # except Exception as e:
-    #     return JsonResponse({'error': str(e)}, status=500)
-    driver.maximize_window()
-    time.sleep(random_time)
-    driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
-    time.sleep(random_time)
-    driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div[2]/form/input').send_keys('amnonking123@gmail.com',Keys.ENTER)
-    time.sleep(100)
-    count=3
-    cities=[ 'Cape Town', 'Poznan', 'Christchurch','Las Vegas', 'New York city', 'Malmo', 'Beijing', 'Zurich', 'Milan','Sucre', 'Boston', 'Tilburg', 'Amadora', 'Stockholm', 'Pucon', 'Angkor Wat', 'Pacific Harbour', 'Mendoza', 'Lake Atitlán']
+#     #     return JsonResponse({'Check Selenium': page_title}, safe=False)    
+#     # except Exception as e:
+#     #     return JsonResponse({'error': str(e)}, status=500)
+#     driver.maximize_window()
+#     time.sleep(random_time)
+#     driver.find_element(By.XPATH,'/html/body/div/div[1]/div[2]/a').click()
+#     time.sleep(random_time)
+#     driver.find_element(By.XPATH,'/html/body/div[1]/main/div/div[2]/form/input').send_keys('amnonking123@gmail.com',Keys.ENTER)
+#     time.sleep(100)
+#     count=3
+#     cities=[ 'Cape Town', 'Poznan', 'Christchurch','Las Vegas', 'New York city', 'Malmo', 'Beijing', 'Zurich', 'Milan','Sucre', 'Boston', 'Tilburg', 'Amadora', 'Stockholm', 'Pucon', 'Angkor Wat', 'Pacific Harbour', 'Mendoza', 'Lake Atitlán']
 
-    for_question1='"city": "return the exactly city i provided","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "give me price in USD $ (avrage price) if its for free return Free"'
+#     for_question1='"city": "return the exactly city i provided","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "give me price in USD $ (avrage price) if its for free return Free"'
     
-    for city1 in cities:
-        question_restaurnt=f'proivde me exactly 15 the best restaurants in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score":  ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list", do your best to find me the data you have. return me with double quetos and also as a dictionary like that "city": "return the exactly city I provided","name": "","latitude": ,"longitude": ,"review_score": ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list" ,do it fast and do not forget to return exactly 15 restaurants and the price_range return only in numbers'
-        # question=f'proivde me exactly 15 attractions in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "" do your best to find me the best prices you have. return me with double quetos and also as a dictionary like that {for_question1},do it fast and do not forget to return exactly 15 attractions'
-        time.sleep(random_time)
-        driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/main/div/div/div/footer/div/div/div[1]/textarea').send_keys(question_restaurnt, Keys.ENTER)
-        time.sleep(3)
-        random_time_interval = random.uniform(190, 200)
-        time.sleep(random_time_interval)
-        attractions=driver.find_element(By.XPATH,f"/html/body/div[1]/div[1]/main/div/div/div/div[2]/div[{count}]/div[2]/div[2]").text
-        with open('attractions1.txt', 'a', encoding='utf-8') as f:
-            f.write(attractions + '\n')
-        count+=1
-        print (count)
+#     for city1 in cities:
+#         question_restaurnt=f'proivde me exactly 15 the best restaurants in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score":  ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list", do your best to find me the data you have. return me with double quetos and also as a dictionary like that "city": "return the exactly city I provided","name": "","latitude": ,"longitude": ,"review_score": ,"website":"can be social media also","category":"breakfast ,lunch ,dinner","hours": "","telephone:"","formatted address":"","price_range": "from 1 to 5-1cheap, 5 most expensive","tips":"provide me 3 tips as a list" ,do it fast and do not forget to return exactly 15 restaurants and the price_range return only in numbers'
+#         # question=f'proivde me exactly 15 attractions in {city1} with this details ("city": "","name": "","latitude": ,"longitude": ,"review_score": ,"description": "","website":"","hours": "","telephone:"","tips":"provide me 3 tips","distance": "","formatted address":"","real_price": "" do your best to find me the best prices you have. return me with double quetos and also as a dictionary like that {for_question1},do it fast and do not forget to return exactly 15 attractions'
+#         time.sleep(random_time)
+#         driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/main/div/div/div/footer/div/div/div[1]/textarea').send_keys(question_restaurnt, Keys.ENTER)
+#         time.sleep(3)
+#         random_time_interval = random.uniform(190, 200)
+#         time.sleep(random_time_interval)
+#         attractions=driver.find_element(By.XPATH,f"/html/body/div[1]/div[1]/main/div/div/div/div[2]/div[{count}]/div[2]/div[2]").text
+#         with open('attractions1.txt', 'a', encoding='utf-8') as f:
+#             f.write(attractions + '\n')
+#         count+=1
+#         print (count)
 
 
 # def poe1():

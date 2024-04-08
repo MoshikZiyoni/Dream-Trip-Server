@@ -52,13 +52,13 @@ def process_attraction(attrac, city_obj, attractions):
             break
         tip_text = tip.get("text", "")  # Get the text from the tip dictionary
         tips.append(tip_text)
-    if len(description)==0:
-            try:
-                wiki=process_query(name1)
-                description=wiki[0]
-                print ('descrption from wiki')
-            except:
-                 print ('descrption from wiki not gooodddddddddddddddd')
+    # if len(description)==0:
+    #         try:
+    #             wiki=process_query(name1)
+    #             description=wiki[0]
+    #             print ('descrption from wiki')
+    #         except:
+    #              print ('descrption from wiki not gooodddddddddddddddd')
     photos1 = attrac.get("photos", "")
     if photos1:
         first_photo = photos1[0]
@@ -358,21 +358,28 @@ def generate_schedule(data,country,check):
                 city_name = city['city']
                 normalized_city_name = unidecode(city_name)
                 # print (city)
-                
+                query1 = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
                 try:
                     landmarks=city['landmarks']
                 except Exception as e :
+                    from geopy.geocoders import Nominatim
+                    geolocator = Nominatim(user_agent="dream-trip")
                     print("city_name: ",city_name)
                     ############# Do normal!!!!!
                     normalized_city_name = unidecode(city_name)
-                    query1 = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
-                    landmarks=[query1.latitude,query1.longitude]
+                    location = geolocator.geocode(f"{query1.city},{query1.country}")
+                    landmarks = [location.latitude, location.longitude]
                     print ('not good at 365 now fix',landmarks)
                 city_description = city['description']
                 try:
                     try:
                         attractions = city['attractions']
                         count=0
+                        if len(attractions)<2:
+                            print('Attractions is less than 2-@@@@')
+                            from app.chat import process_attractions
+                            attractions=process_attractions(landmarks, city_name, query1.country,query1)
+                            
                         # print('Atrracions in the schedule: ',attractions,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                         
                     except Exception as e:
