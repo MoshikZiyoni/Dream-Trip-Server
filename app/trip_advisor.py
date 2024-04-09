@@ -92,29 +92,54 @@ def foursquare_attraction(landmarks,city_name,country):
 
 
 def foursquare_hotels(landmarks):
+    try:
+        url = "https://api.foursquare.com/v3/places/search?"
 
-    url = "https://api.foursquare.com/v3/places/search?"
-
-    headers = {
-        "accept": "application/json",
-        "Authorization": api_key_foursqaure+'='
-    }
-    query= {
-        'categories':'19014',
-        "ll" :  f"{landmarks[0]},{landmarks[1]}",
-        'radius':5000,
-        'limit' : 20,
+        headers = {
+            "accept": "application/json",
+            "Authorization": api_key_foursqaure+'='
+        }
+        print(api_key_foursqaure,'@@@@@@@@')
+        query= {
+            'categories':'19014',
+            "ll" :  f"{landmarks[0]},{landmarks[1]}",
+            'radius':5000,
+            'limit' : 20,
+            
+            'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
+        }
+        response = requests.get(url, params=query,headers=headers,timeout=5)
         
-        'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
-    }
-    response = requests.get(url, params=query,headers=headers,timeout=5)
-    
-    response_text=(response.text)
-    print('hotel response @@@@@@@@@@@@@@@@@@@@@@@@',response_text,'@@@@@@@@@@@@@@@@@@@@@@@@')
-    jsonto=json.loads(response_text)
-    reslut=jsonto['results']
-    print (reslut)
-    return (reslut)
+        response_text=(response.text)
+        print('hotel response @@@@@@@@@@@@@@@@@@@@@@@@',response_text,'@@@@@@@@@@@@@@@@@@@@@@@@')
+        jsonto=json.loads(response_text)
+        reslut=jsonto['results']
+        print (reslut)
+        return (reslut)
+    except:
+        url = "https://api.foursquare.com/v3/places/search?"
+
+        headers = {
+            "accept": "application/json",
+            "Authorization": api_key_foursqaure
+        }
+        print(api_key_foursqaure,'@@@@@@@@')
+        query= {
+            'categories':'19014',
+            "ll" :  f"{landmarks[0]},{landmarks[1]}",
+            'radius':5000,
+            'limit' : 20,
+            
+            'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
+        }
+        response = requests.get(url, params=query,headers=headers,timeout=5)
+        
+        response_text=(response.text)
+        print('hotel response @@@@@@@@@@@@@@@@@@@@@@@@',response_text,'@@@@@@@@@@@@@@@@@@@@@@@@')
+        jsonto=json.loads(response_text)
+        reslut=jsonto['results']
+        print (reslut)
+        return (reslut)
 
 
 
