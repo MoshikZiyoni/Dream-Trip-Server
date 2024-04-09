@@ -40,7 +40,7 @@ def flickr_api(name,latitude,longitude):
               return (image_url=="")
 # print(flickr_api(name="Manta Ray",latitude= 32.0853,longitude= 34.7818))
 
-api_key=os.environ.get('FOURSQUARE')
+api_key_foursqaure=os.environ.get('FOURSQUARE')
 
 def foursquare_restaurant(landmarks):
 
@@ -48,7 +48,7 @@ def foursquare_restaurant(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key+'='
+        "Authorization": api_key_foursqaure+'='
     }
     query= {
         # 'query': f"attractions in {city_name},{country}",
@@ -70,7 +70,7 @@ def foursquare_attraction(landmarks,city_name,country):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key+'='
+        "Authorization": api_key_foursqaure+'='
     }
 
     query1= {
@@ -97,7 +97,7 @@ def foursquare_hotels(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key+'='
+        "Authorization": api_key_foursqaure+'='
     }
     query= {
         'categories':'19014',
@@ -108,8 +108,9 @@ def foursquare_hotels(landmarks):
         'fields':'geocodes,name,rating,website,photos,hours,location,tel,description,tips'
     }
     response = requests.get(url, params=query,headers=headers,timeout=5)
-
+    
     response_text=(response.text)
+    print('hotel response @@@@@@@@@@@@@@@@@@@@@@@@',response_text,'@@@@@@@@@@@@@@@@@@@@@@@@')
     jsonto=json.loads(response_text)
     reslut=jsonto['results']
     print (reslut)
@@ -122,7 +123,7 @@ def foursquare_night_life(landmarks):
 
     headers = {
         "accept": "application/json",
-        "Authorization": api_key+'='
+        "Authorization": api_key_foursqaure+'='
     }
     query= {
         'categories':'10032',
