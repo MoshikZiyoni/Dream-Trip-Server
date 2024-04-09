@@ -1,176 +1,536 @@
-# def extract_restaurants_data(attractions):
-#         geolocator = Nominatim(user_agent="dream-trip")
+from app.models  import Attraction,City
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from django.views.decorators.cache import cache_page
+from rest_framework.response import Response
+from app.chat import run_long_poll_async
+from app.models import ApplicationRating ,QueryChatGPT,Popular,City,Attraction,Restaurant, UserTrip, Users,Country
+from django.core.cache import cache
+from app.utils import quick_from_data_base
+import traceback
+import re
+from django.db.models import Q
+import random
+from datetime import date
+from app.gemini import chat_gemini
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from geopy.geocoders import Nominatim
+import time
+import base64
+import os
+from unidecode import unidecode
+from selenium import webdriver
+from app.models import Attraction,City
+import requests
+from selenium.webdriver.common.by import By
+from geopy.geocoders import Nominatim
+import math
+from geopy.distance import geodesic
+from dotenv import load_dotenv
+def extract_restaurants_data(attractions):
+        geolocator = Nominatim(user_agent="dream-trip")
 
 
-#         # user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
-#         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/100.0"
+        # user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36"
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/100.0"
 
-#         # Set up the Chrome WebDriver with User-Agent and headless mode
-#         chrome_options = webdriver.ChromeOptions()
-#         # chrome_options.add_argument(f"user-agent={user_agent}")
-#         # chrome_options.add_argument("--headless")  # Run in headless mode
-#         random_time = random.uniform(3,6)
+        # Set up the Chrome WebDriver with User-Agent and headless mode
+        chrome_options = webdriver.ChromeOptions()
+        # chrome_options.add_argument(f"user-agent={user_agent}")
+        # chrome_options.add_argument("--headless")  # Run in headless mode
+        random_time = random.uniform(3,6)
 
-#         # Create a Chrome WebDriver instance
-#         # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
-#         # service = Service(service_path)
-#         driver = webdriver.Chrome( options=chrome_options)
-#         # Initialize the WebDriver (in this case, using Chrome)
-#         cities_list=['Las Vegas', 'Brașov', 'Cluj-Napoca', 'Boquete','Kandy']
-#         for attraction_data in attractions:
-#             city = attraction_data["city"]
-#             # if city not in cities_list:
-#             #     print ('continue')
-#                 # continue
+        # Create a Chrome WebDriver instance
+        # service_path = "C:/Users/moshi/Downloads/chromedriver.exe"
+        # service = Service(service_path)
+        driver = webdriver.Chrome( options=chrome_options)
+        # Initialize the WebDriver (in this case, using Chrome)
+        cities_list=['Las Vegas', 'Brașov', 'Cluj-Napoca', 'Boquete','Kandy']
+        for attraction_data in attractions:
+            city = attraction_data["city"]
+            # if city not in cities_list:
+            #     print ('continue')
+                # continue
             
-#             name = attraction_data["name"]
-#             description=attraction_data["description"]
-#             normalized_city_name = unidecode(city)
-#             try:
-#                 formatted_address=attraction_data["formatted address"]
-#             except:
-#                 pass
-#             try:
-#                 formatted_address=attraction_data["formatted_address"]
-#             except:
-#                 pass
-#             try:
-#                 city_objs = City.objects.filter(city=city).first()
-#                 if not city_objs:
-#                     print ('no regular')
-#                     normalized_city_name = normalized_city_name.strip()
-#                     print(normalized_city_name)
-#                     city_objs = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
-#                 if city_objs:
-#                     print(city_objs.city)
-#                     print(name)
+            name = attraction_data["name"]
+            description=attraction_data["description"]
+            normalized_city_name = unidecode(city)
+            try:
+                formatted_address=attraction_data["formatted address"]
+            except:
+                pass
+            try:
+                formatted_address=attraction_data["formatted_address"]
+            except:
+                pass
+            try:
+                city_objs = City.objects.filter(city=city).first()
+                if not city_objs:
+                    print ('no regular')
+                    normalized_city_name = normalized_city_name.strip()
+                    print(normalized_city_name)
+                    city_objs = City.objects.filter(Q(city__iexact=normalized_city_name) | Q(city__icontains=normalized_city_name)).first()
+                if city_objs:
+                    print(city_objs.city)
+                    print(name)
                 
-#             except:
+            except:
                     
-#                     words = formatted_address.split()
-#                     last_word = words[-1]
-#                     last_word = last_word.strip('",)')
-#                     location = geolocator.geocode(f"{last_word}")
-#                     if location:
-#                         landmarks = [location.latitude, location.longitude]
-#                         print (landmarks)
-#                         city_query = City(
-#                         city=city,
-#                         latitude=landmarks[0],
-#                         longitude=landmarks[1],
-#                         )
-#                         city_query.save()
-#                         city_objs = City.objects.filter(city=city).first()
-#                     else:
-#                         print(f"Could not geocode: {last_word}")
-#             check_name=Attraction.objects.filter(name=name,city_id=city_objs.id).first()
+                    words = formatted_address.split()
+                    last_word = words[-1]
+                    last_word = last_word.strip('",)')
+                    location = geolocator.geocode(f"{last_word}")
+                    if location:
+                        landmarks = [location.latitude, location.longitude]
+                        print (landmarks)
+                        city_query = City(
+                        city=city,
+                        latitude=landmarks[0],
+                        longitude=landmarks[1],
+                        )
+                        city_query.save()
+                        city_objs = City.objects.filter(city=city).first()
+                    else:
+                        print(f"Could not geocode: {last_word}")
+            check_name=Attraction.objects.filter(name=name,city_id=city_objs.id).first()
                     
-#             if not check_name:
+            if not check_name:
                 
                 
-#                 latitude= attraction_data["latitude"] if attraction_data["latitude"] else ""
-#                 longitude= attraction_data["longitude"] if attraction_data["longitude"] else ""
-#                 name_for_flicker=f"{name}, {city}"
+                latitude= attraction_data["latitude"] if attraction_data["latitude"] else ""
+                longitude= attraction_data["longitude"] if attraction_data["longitude"] else ""
+                name_for_flicker=f"{name}, {city}"
                 
-#                 # driver.get(f"google.com/search?tbm=isch&q={name_for_flicker}")
-#                 driver.get(f"https://www.google.com/search?tbm=isch&q={name_for_flicker}")
-#                 # /html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img
-#                 time.sleep(random_time)
-#                 first_image = driver.find_element(By.XPATH,"/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img").get_attribute('src')
+                # driver.get(f"google.com/search?tbm=isch&q={name_for_flicker}")
+                driver.get(f"https://www.google.com/search?tbm=isch&q={name_for_flicker}")
+                # /html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img
+                time.sleep(random_time)
+                first_image = driver.find_element(By.XPATH,"/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img").get_attribute('src')
                 
-#                 # first_image=""
-#                 # photos=""
-#                 # if len(first_image)>2:
-#                 base64_data = first_image.split(',')[1]
-#                     # Remove any whitespace characters from the base64 data
-#                 base64_data = ''.join(base64_data.split())
-#                 # image_data = first_image.split(',')[1].encode()
-#                 url = "https://api.imgbb.com/1/upload"
-#                 api_key = os.environ.get('imgbb')
-#                 payload = {
-#                     "key": api_key,
-#                     "image": base64_data,
-#                 }
-#                 response = requests.post(url, payload)
-#                 print (response.text)
-#                 photos=(response.json()["data"]["url"])
+                # first_image=""
+                # photos=""
+                # if len(first_image)>2:
+                base64_data = first_image.split(',')[1]
+                    # Remove any whitespace characters from the base64 data
+                base64_data = ''.join(base64_data.split())
+                # image_data = first_image.split(',')[1].encode()
+                url = "https://api.imgbb.com/1/upload"
+                api_key = os.environ.get('imgbb')
+                payload = {
+                    "key": api_key,
+                    "image": base64_data,
+                }
+                response = requests.post(url, payload)
+                print (response.text)
+                photos=(response.json()["data"]["url"])
 
-#                 # image_data = base64.b64decode(first_image.split(',')[1])
-#                 # headers = {
-#                 #     # "Authorization": "Client-ID 92a43ec7ca67375" 
-#                 #     "Authorization": "Client-ID ffa26035d00c21a" 
+                # image_data = base64.b64decode(first_image.split(',')[1])
+                # headers = {
+                #     # "Authorization": "Client-ID 92a43ec7ca67375" 
+                #     "Authorization": "Client-ID ffa26035d00c21a" 
 
-#                 # }
-#                 # url = "https://api.imgur.com/3/image"
-#                 # response = requests.post(url, headers=headers, data=image_data)
-#                 # imgur_response = json.loads(response.text)
-#                 # print (imgur_response)
-#                 # # Get image link
-#                 # image_link = imgur_response['data']['link']
-#                 # photos=(image_link)
-#                 # # photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
-#                 # if photos==None:
-#                 #     photos=""
-#                 print (photos,'@@@@@',name)
-#                 review_score= attraction_data["review_score"] if attraction_data["review_score"] else ""
-#                 website = attraction_data.get("website", "")
-#                 try:
-#                     hours= attraction_data["hours"] 
-#                 except:
-#                     hours=""
-#                 real_price= attraction_data["real_price"] if attraction_data["real_price"] else ""
-#                 # category=attraction_data["category"] if attraction_data["category"] else ""
+                # }
+                # url = "https://api.imgur.com/3/image"
+                # response = requests.post(url, headers=headers, data=image_data)
+                # imgur_response = json.loads(response.text)
+                # print (imgur_response)
+                # # Get image link
+                # image_link = imgur_response['data']['link']
+                # photos=(image_link)
+                # # photos = flickr_api(name=name_for_flicker, latitude=latitude, longitude=longitude)
+                # if photos==None:
+                #     photos=""
+                print (photos,'@@@@@',name)
+                review_score= attraction_data["review_score"] if attraction_data["review_score"] else ""
+                website = attraction_data.get("website", "")
+                try:
+                    hours= attraction_data["hours"] 
+                except:
+                    hours=""
+                real_price= attraction_data["real_price"] if attraction_data["real_price"] else ""
+                # category=attraction_data["category"] if attraction_data["category"] else ""
                 
 
-#                 try:
-#                     tel=attraction_data['telephone']
-#                 except:
-#                     tel=""
-#                 website= website or ""
-#                 try:
-#                     tips=attraction_data["tips"]
-#                     if isinstance(tips, list):
-#                         pass
-#                     elif isinstance(tips, str):
-#                         tips_list = [tip.strip() for tip in re.split(r'\d+\.', tips) if tip.strip()]
-#                         tips=tips_list
-#                         print (tips)
-#                 except Exception as e:
-#                     tips= ""
-#                     print(e)
+                try:
+                    tel=attraction_data['telephone']
+                except:
+                    tel=""
+                website= website or ""
+                try:
+                    tips=attraction_data["tips"]
+                    if isinstance(tips, list):
+                        pass
+                    elif isinstance(tips, str):
+                        tips_list = [tip.strip() for tip in re.split(r'\d+\.', tips) if tip.strip()]
+                        tips=tips_list
+                        print (tips)
+                except Exception as e:
+                    tips= ""
+                    print(e)
                 
-#                 # print (name,latitude,longitude,review_score,description,website,hours,distance,real_price,tips,formatted_address)
+                # print (name,latitude,longitude,review_score,description,website,hours,distance,real_price,tips,formatted_address)
                 
-#                 if city_objs:
-#                     try:
-#                         print (city_objs.id,'AAAAAAA')
-#                         # city_obj = city_objs[0]
-#                         # print (city_objs.id,'AAAAAAA')
-#                         atrc_query = Attraction(
-#                         name=name,
-#                         city=city_objs,
-#                         latitude=latitude,
-#                         longitude=longitude,
-#                         description=description,
-#                         review_score=review_score,
-#                         website=website,
-#                         real_price=real_price,
-#                         hours=hours,
-#                         tel=tel,
-#                         address=formatted_address,
-#                         tips=tips,
-#                         photos=photos)
+                if city_objs:
+                    try:
+                        print (city_objs.id,'AAAAAAA')
+                        # city_obj = city_objs[0]
+                        # print (city_objs.id,'AAAAAAA')
+                        atrc_query = Attraction(
+                        name=name,
+                        city=city_objs,
+                        latitude=latitude,
+                        longitude=longitude,
+                        description=description,
+                        review_score=review_score,
+                        website=website,
+                        real_price=real_price,
+                        hours=hours,
+                        tel=tel,
+                        address=formatted_address,
+                        tips=tips,
+                        photos=photos)
                     
-#                         atrc_query.save()
-#                         print("Save attraction successfully")
-#                     except Exception as e:
-#                         print('not good 227 ',e)
+                        atrc_query.save()
+                        print("Save attraction successfully")
+                    except Exception as e:
+                        print('not good 227 ',e)
 
 
 
-#     extract_restaurants_data(attractions=[
+extract_restaurants_data(attractions=[
+
+{"city": "Great Barrier Reef","name": "Whitehaven Beach","latitude": -20.265833,"longitude": 148.953056,"description": "Renowned for its pristine white sand and turquoise waters, Whitehaven Beach is a must-see destination in the Whitsunday Islands.","website": "whitsundayislands.com","real_price": "50-150 AUD","review_score": "4.9","hours": "Daily 6am-6pm","formatted address": "Whitsunday Islands, Queensland, Australia","tips": "Arrive early to beat the crowds, bring water shoes to protect your feet, and pack a picnic lunch."},
+
+{"city": "Great Barrier Reef","name": "Mossman Gorge","latitude": -16.480833,"longitude": 145.330278,"description": "Explore the lush rainforest and crystal-clear waters of Mossman Gorge, a part of the Daintree Rainforest.","website": "mossmangorge.com.au","real_price": "20-40 AUD","review_score": "4.7","hours": "Daily 8am-5pm","formatted address": "Mossman Gorge Road, Port Douglas, Queensland, Australia","tips": "Wear comfortable shoes, bring a swimsuit and towel, and be prepared for a moderate hike."},
+
+{"city": "Great Barrier Reef","name": "Sailing the Whitsundays","latitude": -20.268611,"longitude": 148.715278,"description": "Set sail through the stunning Whitsunday Islands, with opportunities to snorkel, swim, and explore the region's natural wonders.","website": "whitsundaysailing.com.au","real_price": "150-500 AUD","review_score": "4.8","hours": "Daily 8am-5pm","formatted address": "Airlie Beach, Queensland, Australia","tips": "Book your tour in advance, pack plenty of sunscreen, and consider a multi-day sailing trip for a more immersive experience."},
+
+{"city": "Great Barrier Reef","name": "Skyrail Rainforest Cableway","latitude": -16.853333,"longitude": 145.650556,"description": "Ride the Skyrail Rainforest Cableway for a birds-eye view of the Barron Gorge National Park and Wet Tropics World Heritage Area.","website": "skyrail.com.au","real_price": "55-87 AUD","review_score": "4.7","hours": "Daily 8:30am-4:30pm","formatted address": "Smithfield, Queensland, Australia","tips": "Bring a light jacket or sweater, as it can be cooler at the higher elevations, and don't forget your camera."},
+
+{"city": "Great Barrier Reef","name": "Daintree Rainforest","latitude": -16.267222,"longitude": 145.425556,"description": "Explore the ancient Daintree Rainforest, the oldest tropical rainforest in the world, with guided tours and hiking opportunities.","website": "daintree-rainforest.com.au","real_price": "75-150 AUD","review_score": "4.9","hours": "Daily 7am-5pm","formatted address": "Daintree, Queensland, Australia","tips": "Wear mosquito repellent, bring a water bottle, and be prepared for hot and humid conditions."},
+
+{"city": "Great Barrier Reef","name": "Hamilton Island","latitude": -20.345556,"longitude": 148.952222,"description": "Relax on the pristine beaches, go snorkeling or diving, and enjoy the laid-back island lifestyle on Hamilton Island.","website": "hamiltonisland.com.au","real_price": "100-300 AUD","review_score": "4.7","hours": "Daily 24 hours","formatted address": "Hamilton Island, Queensland, Australia","tips": "Book accommodation and activities well in advance, as the island can get quite busy during peak seasons."},
+
+{"city": "Great Barrier Reef","name": "Kuranda Scenic Railway","latitude": -16.820833,"longitude": 145.640278,"description": "Take a scenic train journey through the Barron Gorge National Park, offering stunning views of the lush rainforest and waterfalls.","website": "kurandarailway.com.au","real_price": "65-85 AUD","review_score": "4.6","hours": "Daily 8:30am-4:30pm","formatted address": "Cairns, Queensland, Australia","tips": "Arrive early to secure the best seats, and consider a round-trip ticket to explore Kuranda village."},
+
+{"city": "Great Barrier Reef","name": "Low Isles","latitude": -16.378611,"longitude": 145.564722,"description": "Discover the Low Isles, a stunning coral cay with a lighthouse, pristine beaches, and excellent snorkeling and diving opportunities.","website": "lowisles.com.au","real_price": "110-180 AUD","review_score": "4.8","hours": "Daily 8am-4pm","formatted address": "Low Isles, Queensland, Australia","tips": "Bring your own snorkel gear or rent it on the island, and pack a picnic lunch to enjoy on the beach."},
+
+{"city": "Great Barrier Reef","name": "Whitsunday Islands National Park","latitude": -20.185278,"longitude": 148.855556,"description": "Explore the stunning Whitsunday Islands National Park, with its iconic Whitehaven Beach and opportunities for hiking, kayaking, and snorkeling.","website": "npsr.qld.gov.au","real_price": "50-150 AUD","review_score": "4.9","hours": "Daily 24 hours","formatted address": "Whitsunday Islands, Queensland, Australia","tips": "Pack plenty of water, wear sturdy shoes, and be prepared for changeable weather conditions."},
+
+{"city": "Great Barrier Reef","name": "Fitzroy Island","latitude": -16.927222,"longitude": 146.005556,"description": "Escape to the peaceful Fitzroy Island, with its beaches, hiking trails, and excellent snorkeling and diving spots.","website": "fitzroyisland.com","real_price": "80-150 AUD","review_score": "4.7","hours": "Daily 7am-5pm","formatted address": "Fitzroy Island, Queensland, Australia","tips": "Bring your own snorkel gear or rent it on the island, and consider a multi-day stay to fully explore the island's attractions."},
+
+{"city": "Great Barrier Reefs","name": "Hartley's Crocodile Adventures","latitude": -16.554167,"longitude": 145.485278,"description": "Visit Hartley's Crocodile Adventures, a wildlife park that offers opportunities to see crocodiles, cassowaries, and other native Australian animals.","website": "crocodileadventures.com","real_price": "45-55 AUD","review_score": "4.6","hours": "Daily 8:30am-5pm","formatted address": "Hartley's Creek, Queensland, Australia","tips": "Arrive early to avoid crowds, and consider upgrading to a guided tour for a more informative experience."},
+{"city": "Denali National Park","name": "Wonder Lake","latitude": 63.5218,"longitude": -150.848,"description": "A stunning glacial lake with views of the Alaska Range and Denali, popular for hiking and camping.","website": "nps.gov/dena/planyourvisit/wonder-lake.htm","real_price": "Entry fee for Denali National Park","review_score": "4.7","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Take the shuttle bus to avoid crowds", "Pack for changeable weather", "Bring binoculars for wildlife viewing"]},
+
+{"city": "Denali National Park","name": "Savage River Loop Trail","latitude": 63.6615,"longitude": -149.618,"description": "A scenic hike along the Savage River with excellent opportunities for wildlife spotting.","website": "nps.gov/dena/planyourvisit/savageriverloop.htm","real_price": "Entry fee for Denali National Park","review_score": "4.6","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Wear proper hiking gear", "Respect wildlife from a safe distance", "Carry bear spray"]},
+
+{"city": "Denali National Park","name": "Eielson Visitor Center","latitude": 63.4208,"longitude": -150.241,"description": "A visitor center with exhibits, rangers, and stunning views of Denali and the Alaska Range.","website": "nps.gov/dena/planyourvisit/evc.htm","real_price": "Entry fee for Denali National Park","review_score": "4.5","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Take the shuttle bus to access the center", "Attend ranger-led programs", "Dress warmly for the alpine environment"]},
+
+{"city": "Denali National Park","name": "Sable Pass","latitude": 63.4334,"longitude": -150.085,"description": "A high mountain pass with panoramic views of the Alaska Range, accessible by hiking or shuttle bus.","website": "nps.gov/dena/planyourvisit/sable-pass.htm","real_price": "Entry fee for Denali National Park","review_score": "4.7","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Bring warm layers and rain gear", "Use trekking poles for the steep terrain", "Pack snacks and water"]},
+
+{"city": "Denali National Park","name": "Triple Lakes Trail","latitude": 63.7183,"longitude": -149.073,"description": "A scenic hiking trail that passes three beautiful lakes, offering views of Denali and the Alaska Range.","website": "nps.gov/dena/planyourvisit/triple-lakes-trail.htm","real_price": "Entry fee for Denali National Park","review_score": "4.6","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Wear proper hiking gear", "Bring bug spray", "Stay on the designated trail"]},
+
+{"city": "Denali National Park","name": "Denali Visitor Center","latitude": 63.7317,"longitude": -148.907,"description": "The main visitor center with exhibits, rangers, and information about the park and its attractions.","website": "nps.gov/dena/planyourvisit/visitor-center.htm","real_price": "Entry fee for Denali National Park","review_score": "4.5","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Attend ranger-led programs", "Pick up maps and trail guides", "Visit the bookstore"]},
+
+{"city": "Denali National Park","name": "Polychrome Overlook","latitude": 63.4023,"longitude": -150.219,"description": "A scenic viewpoint offering stunning vistas of the colorful Polychrome Mountains and the Alaska Range.","website": "nps.gov/dena/planyourvisit/polychrome-overlook.htm","real_price": "Entry fee for Denali National Park","review_score": "4.6","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Bring binoculars for better views", "Dress warmly for the alpine environment", "Attend ranger-led programs"]},
+
+{"city": "Denali National Park","name": "Horseshoe Lake Trail","latitude": 63.7611,"longitude": -148.891,"description": "A scenic trail that loops around Horseshoe Lake, offering opportunities for wildlife spotting and views of Denali.","website": "nps.gov/dena/planyourvisit/horseshoe-lake-trail.htm","real_price": "Entry fee for Denali National Park","review_score": "4.5","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Bring binoculars for wildlife viewing", "Wear proper hiking gear", "Stay on the designated trail"]},
+
+{"city": "Denali National Park","name": "Kantishna Wilderness Trails","latitude": 63.5119,"longitude": -150.857,"description": "A network of hiking trails in the remote Kantishna region, offering solitude and stunning wilderness vistas.","website": "nps.gov/dena/planyourvisit/kantishna-wilderness-trails.htm","real_price": "Entry fee for Denali National Park","review_score": "4.7","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Pack proper gear for multi-day hikes", "Obtain backcountry permits", "Respect wildlife and wilderness"]},
+
+{"city": "Denali National Park","name": "Denali Backcountry Lodge","latitude": 63.5247,"longitude": -150.833,"description": "A remote lodge offering rustic accommodations and access to hiking trails in the heart of Denali National Park.","website": "denalibackcountrylodge.com","real_price": "Varies based on room and package","review_score": "4.6","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Book well in advance for availability", "Pack for remote wilderness living", "Prepare for limited amenities"]},
+
+{"city": "Denali National Park","name": "Riley Creek Campground","latitude": 63.7266,"longitude": -148.9,"description": "A large campground with sites for tents and RVs, located near the park entrance and visitor center.","website": "nps.gov/dena/planyourvisit/riley-creek-cg.htm","real_price": "Camping fees apply","review_score": "4.4","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Reserve campsites well in advance", "Follow bear safety protocols", "Use designated fire pits"]},
+
+{"city": "Denali National Park","name": "Denali Wilderness Access Center","latitude": 63.5178,"longitude": -150.851,"description": "A center offering information and guided activities for exploring the Denali backcountry, including hiking, rafting, and flightseeing.","website": "denaliaccess.com","real_price": "Varies based on activity","review_score": "4.5","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Book activities well in advance", "Dress appropriately for outdoor adventures", "Follow guide instructions for safety"]},
+
+{"city": "Denali National Park","name": "Teklanika River","latitude": 63.4722,"longitude": -150.376,"description": "A scenic river winding through the park, popular for rafting, fishing, and wildlife viewing.","website": "nps.gov/dena/planyourvisit/teklanika.htm","real_price": "Entry fee for Denali National Park","review_score": "4.6","hours": "Open during summer months","formatted address": "Denali National Park, Alaska","tips": ["Book guided rafting trips for safety", "Obtain proper permits for fishing", "Watch for bears along the river"]},
+{"city": "Tbilisi","name": "Old Tbilisi","latitude": 41.694167,"longitude": 44.805,"description": "Explore the historic old town of Tbilisi, featuring charming cobblestone streets, traditional houses, and ancient churches.","website": "tbilisi.gov.ge","real_price": "free","review_score": "4.8","hours": "Daily 24 hours","formatted address": "Old Tbilisi, Tbilisi, Georgia","tips": "Wear comfortable walking shoes, be prepared for steep hills, and stop for traditional Georgian cuisine along the way."},
+
+{"city": "Tbilisi","name": "The Narikala Fortress","latitude": 41.691944,"longitude": 44.811389,"description": "Visit the ancient Narikala Fortress, a 4th-century citadel overlooking the city, offering stunning views of Tbilisi.","website": "tbilisi.gov.ge","real_price": "free","review_score": "4.7","hours": "Daily 24 hours","formatted address": "Narikala Fortress, Tbilisi, Georgia","tips": "Wear sturdy shoes for the climb, bring water, and explore the nearby Botanical Gardens."},
+
+{"city": "Tbilisi","name": "The Bridge of Peace","latitude": 41.692222,"longitude": 44.800556,"description": "Marvel at the modern and unique Bridge of Peace, a pedestrian bridge that connects Old Tbilisi to the new city.","website": "tbilisi.gov.ge","real_price": "free","review_score": "4.6","hours": "Daily 24 hours","formatted address": "Bridge of Peace, Tbilisi, Georgia","tips": "Visit at night to see the bridge illuminated, and take in the views of the Mtkvari River."},
+
+{"city": "Tbilisi","name": "Jvari Monastery","latitude": 41.983056,"longitude": 44.722222,"description": "Explore the 6th-century Jvari Monastery, a UNESCO World Heritage site with stunning views of the Aragvi and Mtkvari rivers.","website": "jvarimonastery.ge","real_price": "free","review_score": "4.9","hours": "Daily 9am-5pm","formatted address": "Mtskheta, Tbilisi, Georgia","tips": "Dress modestly, as the monastery is an active place of worship, and be prepared for a steep climb to reach the site."},
+
+{"city": "Tbilisi","name": "Sameba Cathedral","latitude": 41.691667,"longitude": 44.796667,"description": "Visit the Sameba Cathedral, the largest Orthodox Christian cathedral in the Caucasus region, featuring stunning architecture and religious art.","website": "sameba.ge","real_price": "free","review_score": "4.8","hours": "Daily 7am-7pm","formatted address": "Tbilisi, Georgia","tips": "Dress appropriately, as the cathedral is an active place of worship, and explore the surrounding gardens and grounds."},
+
+{"city": "Tbilisi","name": "Sulfur Baths","latitude": 41.688889,"longitude": 44.803056,"description": "Experience the traditional Georgian sulfur baths, known for their therapeutic and relaxing properties.","website": "sulphurbathstbilisi.com","real_price": "15-30 GEL","review_score": "4.7","hours": "Daily 24 hours","formatted address": "Abanotubani, Tbilisi, Georgia","tips": "Bring a swimsuit and towel, and be prepared to relax in the warm, mineral-rich waters."},
+
+{"city": "Tbilisi","name": "National Botanical Garden of Georgia","latitude": 41.724444,"longitude": 44.761667,"description": "Stroll through the serene National Botanical Garden of Georgia, featuring a diverse array of plants and stunning views of the city.","website": "botanikuri.gov.ge","real_price": "free","review_score": "4.8","hours": "Daily 9am-6pm","formatted address": "Botanikuri Baği, Tbilisi, Georgia","tips": "Wear comfortable shoes, bring water, and allow plenty of time to explore the gardens."},
+
+{"city": "Tbilisi","name": "Tbilisi Funicular","latitude": 41.691944,"longitude": 44.806944,"description": "Ride the historic Tbilisi Funicular, a cable car system that transports visitors to the top of Mtatsminda Mountain for panoramic views of the city.","website": "tbilisifunicular.ge","real_price": "1-3 GEL","review_score": "4.6","hours": "Daily 10am-11pm","formatted address": "Mtatsminda Park, Tbilisi, Georgia","tips": "Arrive early to avoid crowds, and consider combining the funicular ride with a visit to Mtatsminda Park."},
+
+{"city": "Tbilisi","name": "Anchiskhati Basilica","latitude": 41.690556,"longitude": 44.802778,"description": "Explore the Anchiskhati Basilica, a 6th-century church known for its stunning frescoes and as one of the oldest surviving churches in Tbilisi.","website": "anchiskhati.ge","real_price": "free","review_score": "4.7","hours": "Daily 9am-6pm","formatted address": "Anchistavis Khevi, Tbilisi, Georgia","tips": "Dress modestly, as the church is an active place of worship, and take time to admire the intricate religious artwork."},
+
+{"city": "Tbilisi","name": "Tbilisi Dry Bridge Market","latitude": 41.688889,"longitude": 44.800556,"description": "Discover the vibrant Tbilisi Dry Bridge Market, a bustling flea market where you can find antiques, souvenirs, and local handicrafts.","website": "tbilisi.gov.ge","real_price": "varies","review_score": "4.5","hours": "Daily 9am-6pm","formatted address": "Dry Bridge, Tbilisi, Georgia","tips": "Bring cash, be prepared to bargain, and explore the surrounding streets for additional local shops and cafes."},
+
+{"city": "Tbilisi","name": "Kaloubani Street","latitude": 41.692778,"longitude": 44.803889,"description": "Wander along the charming Kaloubani Street, lined with colorful houses, art galleries, and traditional Georgian restaurants.","website": "tbilisi.gov.ge","real_price": "free","review_score": "4.6","hours": "Daily 24 hours","formatted address": "Kaloubani Street, Tbilisi, Georgia","tips": "Stop for a traditional Georgian meal, explore the side streets for hidden gems, and be mindful of the steep inclines."},
+
+{"city": "Tbilisi","name": "Mtatsminda Park","latitude": 41.693333,"longitude": 44.803889,"description": "Visit Mtatsminda Park, a popular recreation area atop Mtatsminda Mountain, offering amusement rides, hiking trails, and stunning views of Tbilisi.","website": "mtatsminda.ge","real_price": "5-10 GEL","review_score": "4.7","hours": "Daily 10am-11pm","formatted address": "Mtatsminda Park, Tbilisi, Georgia","tips": "Ride the funicular to the top, explore the hiking trails, and enjoy the amusement park rides and attractions."},
+
+{"city": "Tbilisi","name": "Rike Park","latitude": 41.692778,"longitude": 44.801667,"description": "Stroll through the peaceful Rike Park, located along the Mtkvari River, featuring fountains, sculptures, and stunning views of the city.","website": "tbilisi.gov.ge","real_price": "free","review_score": "4.5","hours": "Daily 24 hours","formatted address": "Rike Park, Tbilisi, Georgia","tips": "Bring a picnic and enjoy the tranquil atmosphere, or explore the nearby cafes and restaurants."},
+{"city": "Ocho Rios","name": "Dunn's River Falls","latitude": 18.4051,"longitude": -77.1028,"description": "A famous waterfall attraction where visitors can climb the terraced falls under the supervision of experienced guides.","website": "dunnsriverfallsjamaica.com","real_price": "Admission fee around $20-25 USD","review_score": "4.5","hours": "Open daily 8:30am-4pm","formatted address": "Ocho Rios, Jamaica","tips": ["Wear water shoes or sandals with good grip", "Bring a waterproof camera or phone case", "Pack a towel and dry clothes"]},
+
+{"city": "Ocho Rios","name": "Dolphin Cove","latitude": 18.4167,"longitude": -77.0933,"description": "An interactive marine park where visitors can swim, interact, and even get a kiss from the resident dolphins.","website": "dolphincovejamaica.com","real_price": "Admission fee around $50-60 USD","review_score": "4.4","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Book your visit in advance", "Bring a swimsuit and towel", "Respect the animals and follow instructions"]},
+
+{"city": "Ocho Rios","name": "Mystic Mountain","latitude": 18.4178,"longitude": -77.0975,"description": "An adventure park featuring a scenic sky explorer chairlift, bobsled ride, zipline, and other thrilling attractions.","website": "mysticmountainjamaica.com","real_price": "Admission fee around $70-90 USD for various packages","review_score": "4.6","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Consider the adventure package for multiple attractions", "Wear comfortable clothing and shoes", "Bring sunscreen and insect repellent"]},
+
+{"city": "Ocho Rios","name": "Blue Hole","latitude": 18.3853,"longitude": -77.1375,"description": "A beautiful natural swimming hole with waterfalls and a deep blue pool, perfect for cooling off and exploring.","website": "jamaicatravelandculture.com/attractions/st_ann/blue_hole.htm","real_price": "Admission fee around $10-15 USD","review_score": "4.7","hours": "Open daily during daylight hours","formatted address": "Ocho Rios, Jamaica","tips": ["Wear water shoes or sandals with good grip", "Pack a towel and dry clothes", "Be cautious when climbing or jumping"]},
+
+{"city": "Ocho Rios","name": "Konoko Falls and Park","latitude": 18.4055,"longitude": -77.1141,"description": "A beautiful nature park featuring a series of cascading waterfalls, gardens, and a natural swimming pool.","website": "konokofallsjamaica.com","real_price": "Admission fee around $15-20 USD","review_score": "4.5","hours": "Open daily 8:30am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Wear water shoes or sandals with good grip", "Bring a towel and dry clothes", "Pack insect repellent and sunscreen"]},
+
+{"city": "Ocho Rios","name": "Fern Gully","latitude": 18.4311,"longitude": -77.1153,"description": "A stunning gorge with lush ferns and vegetation, offering a peaceful and scenic walk or drive through nature.","website": "ferngullyjamaica.com","real_price": "Admission fee around $5-10 USD","review_score": "4.6","hours": "Open daily during daylight hours","formatted address": "Ocho Rios, Jamaica","tips": ["Wear comfortable walking shoes", "Pack insect repellent and sunscreen", "Consider hiring a guide for more information"]},
+
+{"city": "Ocho Rios","name": "Shaw Park Gardens & Waterfalls","latitude": 18.4017,"longitude": -77.1011,"description": "A beautiful botanical garden with lush vegetation, waterfalls, and walking trails, offering a serene escape into nature.","website": "shawparkgardens.com","real_price": "Admission fee around $15-20 USD","review_score": "4.4","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Wear comfortable walking shoes", "Pack insect repellent and sunscreen", "Consider hiring a guide for more information"]},
+
+{"city": "Ocho Rios","name": "Turtle Beach","latitude": 18.4028,"longitude": -77.0933,"description": "A beautiful stretch of beach known for its clear waters, ideal for swimming, sunbathing, and water sports.","website": "turtlebeachresort.com","real_price": "Free public access, or resort fees if staying at the resort","review_score": "4.5","hours": "Open daily during daylight hours","formatted address": "Ocho Rios, Jamaica","tips": ["Bring beach towels and sunscreen", "Rent beach chairs or umbrellas for comfort", "Watch out for strong currents when swimming"]},
+
+{"city": "Ocho Rios","name": "Rainforest Bobsled Jamaica at Mystic Mountain","latitude": 18.4178,"longitude": -77.0975,"description": "A thrilling bobsled ride through the rainforest, offering stunning views and an adrenaline-pumping experience.","website": "mysticmountainjamaica.com","real_price": "Included in Mystic Mountain admission fee","review_score": "4.7","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Book in advance for shorter wait times", "Follow safety instructions carefully", "Secure loose belongings during the ride"]},
+
+{"city": "Ocho Rios","name": "Jamaican Bobsled Team Experience","latitude": 18.4178,"longitude": -77.0975,"description": "An interactive experience where visitors can learn about and celebrate the famous Jamaican bobsled team from the 1988 Olympics.","website": "mysticmountainjamaica.com","real_price": "Included in Mystic Mountain admission fee","review_score": "4.5","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Wear comfortable clothing and shoes", "Take plenty of photos and videos", "Learn about the team's inspiring story"]},
+
+{"city": "Ocho Rios","name": "White River Valley","latitude": 18.4242,"longitude": -77.1339,"description": "A scenic river valley with beautiful waterfalls, gardens, and opportunities for tubing or kayaking down the river.","website": "whiterivervalley.com","real_price": "Admission fee around $10-15 USD, plus additional fees for activities","review_score": "4.4","hours": "Open daily 9am-5pm","formatted address": "Ocho Rios, Jamaica","tips": ["Wear water shoes or sandals with good grip", "Pack a towel and dry clothes", "Consider hiring a guide for tubing or kayaking"]},
+
+{"city": "Ocho Rios","name": "Bamboo Beach Club","latitude": 18.4036,"longitude": -77.0911,"description": "A lively beach club with a restaurant, bar, and various water sports and activities, offering a fun and vibrant atmosphere.","website": "bamboobeachclubja.com","real_price": "Day pass around $10-15 USD, plus additional fees for activities","review_score": "4.3","hours": "Open daily 9am-6pm","formatted address": "Ocho Rios, Jamaica","tips": ["Arrive early to secure beach chairs or cabanas", "Bring cash for food, drinks, and activities", "Respect beach rules and regulations"]},
+{"city": "Garni","name": "Garni Temple","latitude": 40.1126,"longitude": 44.7095,"description": "An ancient Greco-Roman pagan temple built in the 1st century AD, remarkably well-preserved and a significant cultural monument.","website": "armeniapedia.org/wiki/Garni_Temple","real_price": "Entrance fee around 1000 AMD (approx. $2.5 USD)","review_score": "4.7","hours": "Open daily 9am-6pm","formatted address": "Garni, Armenia","tips": ["Hire a local guide for deeper insights", "Bring sun protection and comfortable shoes", "Visit early or late for fewer crowds"]},
+
+{"city": "Garni","name": "Garni Gorge","latitude": 40.1127,"longitude": 44.7036,"description": "A scenic canyon with towering basalt cliffs, a river running through it, and hiking trails offering beautiful natural landscapes.","website": "armeniapedia.org/wiki/Garni_Gorge","real_price": "Free to visit","review_score": "4.6","hours": "Open during daylight hours","formatted address": "Garni, Armenia","tips": ["Wear sturdy hiking shoes", "Pack snacks and water for longer hikes", "Respect nature and stay on designated trails"]},
+
+{"city": "Garni","name": "Symphony of Stones","latitude": 40.1173,"longitude": 44.7092,"description": "A unique outdoor sculpture park featuring intricate stone carvings and mosaics created by Armenian artists.","website": "armeniapedia.org/wiki/Symphony_of_Stones","real_price": "Entrance fee around 1000 AMD (approx. $2.5 USD)","review_score": "4.5","hours": "Open daily 9am-6pm","formatted address": "Garni, Armenia","tips": ["Hire a guide for deeper understanding", "Bring sun protection and comfortable shoes", "Allow enough time to appreciate the artwork"]},
+
+{"city": "Garni","name": "Garni Village","latitude": 40.1154,"longitude": 44.7101,"description": "A charming village with traditional Armenian architecture, local markets, and opportunities to experience rural life and hospitality.","website": "armeniapedia.org/wiki/Garni_(village)","real_price": "Free to visit, costs for souvenirs and local products","review_score": "4.4","hours": "Open during daylight hours","formatted address": "Garni, Armenia","tips": ["Respect local customs and dress modestly", "Try local dishes and delicacies", "Engage with locals for a more authentic experience"]},
+
+{"city": "Garni","name": "Garni Fortress","latitude": 40.1091,"longitude": 44.7128,"description": "The remains of a 3rd-century fortress with impressive walls and towers, offering panoramic views of the surrounding landscape.","website": "armeniapedia.org/wiki/Garni_Fortress","real_price": "Entrance fee around 500 AMD (approx. $1.25 USD)","review_score": "4.3","hours": "Open daily 9am-6pm","formatted address": "Garni, Armenia","tips": ["Wear comfortable shoes for exploring", "Bring sun protection and water", "Consider hiring a guide for historical context"]},
+
+{"city": "Garni","name": "Havuts Tar Monastery","latitude": 40.1027,"longitude": 44.7183,"description": "A 7th-century Armenian monastery with well-preserved architecture and intricate stone carvings, set against a stunning natural backdrop.","website": "armeniapedia.org/wiki/Havuts_Tar_Monastery","real_price": "Free to visit","review_score": "4.6","hours": "Open during daylight hours","formatted address": "Garni, Armenia","tips": ["Dress modestly and respect religious customs", "Bring water and snacks for the hike", "Hire a guide for deeper insights"]},
+
+{"city": "Garni","name": "Garni Mineral Springs","latitude": 40.1204,"longitude": 44.7099,"description": "Natural mineral springs with healing properties, where visitors can soak in outdoor pools and enjoy picturesque surroundings.","website": "armeniapedia.org/wiki/Garni_Mineral_Springs","real_price": "Entrance fee around 2000 AMD (approx. $5 USD)","review_score": "4.4","hours": "Open daily 9am-6pm","formatted address": "Garni, Armenia","tips": ["Bring swimwear and a towel", "Relax and enjoy the natural surroundings", "Follow safety guidelines for mineral springs"]},
+
+{"city": "Garni","name": "Garni Hiking Trails","latitude": 40.1127,"longitude": 44.7036,"description": "A network of hiking trails through the Garni Gorge and surrounding areas, offering opportunities for outdoor adventures and scenic views.","website": "armeniahiking.info/garni-gorge","real_price": "Free to hike, costs for guided tours or equipment rental","review_score": "4.5","hours": "Open during daylight hours","formatted address": "Garni, Armenia","tips": ["Wear proper hiking gear and bring water", "Follow marked trails and respect nature", "Hire a local guide for safety and insights"]},
+
+{"city": "Garni","name": "Garni Bridge","latitude": 40.1126,"longitude": 44.7064,"description": "A historic stone bridge dating back to the 12th century, spanning the Azat River and offering picturesque views of the gorge.","website": "armeniapedia.org/wiki/Garni_Bridge","real_price": "Free to visit","review_score": "4.4","hours": "Open during daylight hours","formatted address": "Garni, Armenia","tips": ["Take scenic photographs from the bridge", "Explore the nearby river banks", "Learn about the bridge's history and architecture"]},
+
+{"city": "Garni","name": "Garni Rock Art Museum","latitude": 40.1151,"longitude": 44.7093,"description": "A unique museum showcasing ancient rock carvings and petroglyphs found in the Garni area, providing insights into prehistoric cultures.","website": "armeniapedia.org/wiki/Garni_Rock_Art_Museum","real_price": "Entrance fee around 1000 AMD (approx. $2.5 USD)","review_score": "4.3","hours": "Open daily 9am-6pm","formatted address": "Garni, Armenia","tips": ["Hire a guide for deeper understanding", "Bring sun protection and comfortable shoes", "Allow enough time to appreciate the artwork"]},
+
+{"city": "Garni","name": "Garni Winery","latitude": 40.1181,"longitude": 44.7157,"description": "A local winery offering tours, tastings, and opportunities to learn about Armenian winemaking traditions and purchase locally produced wines.","website": "armeniawine.com/garni-winery","real_price": "Tasting fees and wine prices vary","review_score": "4.5","hours": "Open daily, hours may vary","formatted address": "Garni, Armenia","tips": ["Book a tour or tasting in advance", "Try a variety of Armenian wine styles", "Purchase bottles to take home as souvenirs"]},
+
+{"city": "Garni","name": "Garni Ceramic Studio","latitude": 40.1159,"longitude": 44.7116,"description": "A local studio where visitors can learn about and participate in traditional Armenian pottery-making techniques and purchase ceramic souvenirs.","website": "garniceramic.am","real_price": "Costs vary for workshops and purchases","review_score": "4.4","hours": "Open daily, hours may vary","formatted address": "Garni, Armenia","tips": ["Book a workshop in advance for availability", "Bring an extra bag for ceramic purchases", "Learn about the history and techniques"]},
+{"city": "Tallinn","name": "Tallinn Old Town","latitude": 59.4369,"longitude": 24.7454,"description": "A beautifully preserved medieval city center, with cobblestone streets, historic buildings, and a wealth of cultural attractions.","website": "www.visittallinn.ee/eng/visitor/see-do/sightseeing/old-town","real_price": "Free to explore, costs for attractions and tours","review_score": "4.8","hours": "Open 24/7","formatted address": "Tallinn, Estonia","tips": ["Wear comfortable shoes for walking", "Visit early or late for fewer crowds", "Explore the hidden alleys and courtyards"]},
+
+{"city": "Tallinn","name": "Toompea Castle","latitude": 59.4372,"longitude": 24.7442,"description": "A historic castle complex on a hill, featuring the Estonian Parliament, stunning architecture, and panoramic views of the city.","website": "www.toompeavalitsus.ee/en","real_price": "Free to explore the grounds, costs for guided tours","review_score": "4.7","hours": "Open 24/7 (grounds), guided tours available","formatted address": "Lossi plats 1, Tallinn, Estonia","tips": ["Book a guided tour for historical insights", "Visit at night for beautiful lighting", "Dress warmly during colder months"]},
+
+{"city": "Tallinn","name": "Aleksander Nevski Cathedral","latitude": 59.4373,"longitude": 24.7501,"description": "An impressive Russian Orthodox cathedral with ornate domes and interiors, offering a glimpse into Estonia's cultural diversity.","website": "www.eoc.ee/english/katoliku-usk-eestis/tallinna-toompea-aleksandri-nevski-peakirik.html","real_price": "Free entry, donations accepted","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "Vene 24, Tallinn, Estonia","tips": ["Dress modestly and respect religious customs", "Admire the intricate architecture and icons", "Attend a service for a unique experience"]},
+
+{"city": "Tallinn","name": "Kiek in de Kök","latitude": 59.4425,"longitude": 24.7441,"description": "A well-preserved medieval defensive tower with a unique name, offering interactive exhibits and panoramic views from the top.","website": "www.linnamuuseum.ee/kok/eng/","real_price": "Entrance fee around €5-7","review_score": "4.5","hours": "Open daily, hours vary","formatted address": "Komandandi tee 16, Tallinn, Estonia","tips": ["Climb to the top for breathtaking views", "Explore the interactive exhibits", "Allow enough time to fully experience the tower"]},
+
+{"city": "Tallinn","name": "Tallinn Town Wall","latitude": 59.4369,"longitude": 24.7454,"description": "The medieval defensive wall surrounding the Old Town, with towers, gates, and opportunities to walk along portions of the wall.","website": "www.visittallinn.ee/eng/visitor/see-do/sightseeing/old-town/town-wall","real_price": "Free to explore","review_score": "4.6","hours": "Open 24/7","formatted address": "Tallinn, Estonia","tips": ["Walk along the scenic sections of the wall", "Learn about the history and defensive purposes", "Admire the views of the Old Town"]},
+
+{"city": "Tallinn","name": "Tallinn TV Tower","latitude": 59.4057,"longitude": 24.6936,"description": "A towering landmark offering panoramic views of the city from an observation deck and a revolving restaurant.","website": "www.teletorn.ee/en/","real_price": "Entrance fee around €13-15","review_score": "4.4","hours": "Open daily, hours vary","formatted address": "Kloostrimetsa tee 58A, Tallinn, Estonia","tips": ["Visit on a clear day for the best views", "Book a table at the revolving restaurant", "Bring a camera for stunning photos"]},
+
+{"city": "Tallinn","name": "Kadriorg Palace and Park","latitude": 59.4368,"longitude": 24.8014,"description": "A beautiful baroque palace with lavish interiors and extensive parklands, perfect for strolling and enjoying the tranquil surroundings.","website": "www.kadriorupark.ee/en/","real_price": "Park is free, palace entrance fee around €6-8","review_score": "4.7","hours": "Park open 24/7, palace hours vary","formatted address": "Weizenbergi 37, Tallinn, Estonia","tips": ["Pack a picnic and enjoy the park", "Explore the palace's opulent rooms", "Visit during summer for outdoor concerts"]},
+
+{"city": "Tallinn","name": "Seaplane Harbour (Maritime Museum)","latitude": 59.4476,"longitude": 24.7432,"description": "A unique maritime museum housed in former seaplane hangars, featuring historic ships, interactive exhibits, and a submarine.","website": "www.meremuuseum.ee/en/","real_price": "Entrance fee around €12-15","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "Vesilennuki 6, Tallinn, Estonia","tips": ["Explore the submarine and ships", "Attend special events and exhibitions", "Allow at least 2-3 hours for a full visit"]},
+
+{"city": "Tallinn","name": "Telliskivi Creative City","latitude": 59.4336,"longitude": 24.7294,"description": "A vibrant neighborhood with former industrial buildings repurposed into trendy shops, cafes, galleries, and creative spaces.","website": "www.telliskivi.info/en/","real_price": "Free to explore, costs for shops and services","review_score": "4.5","hours": "Varies by business","formatted address": "Telliskivi 60a, Tallinn, Estonia","tips": ["Check out the street art and murals", "Visit during events and markets", "Try local food and drinks at the cafes"]},
+
+{"city": "Tallinn","name": "Pirita Beach and Promenade","latitude": 59.4627,"longitude": 24.8336,"description": "A beautiful sandy beach with a scenic promenade, offering opportunities for swimming, sunbathing, and outdoor activities.","website": "www.visittallinn.ee/eng/visitor/see-do/recreation/beach/pirita-beach","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Pirita tee 115, Tallinn, Estonia","tips": ["Visit during summer for beach activities", "Rent bikes and explore the promenade", "Pack a picnic and enjoy the scenery"]},
+
+{"city": "Tallinn","name": "Tallinn City Museum","latitude": 59.4378,"longitude": 24.7437,"description": "A museum dedicated to the history and culture of Tallinn, featuring exhibits, artifacts, and interactive displays.","website": "www.linnamuuseum.ee/en/","real_price": "Entrance fee around €6-8","review_score": "4.4","hours": "Open daily, hours vary","formatted address": "Vene 17, Tallinn, Estonia","tips": ["Explore the interactive exhibits", "Learn about Tallinn's rich history", "Attend special events and workshops"]},
+
+{"city": "Tallinn","name": "Rotermann Quarter","latitude": 59.4447,"longitude": 24.7499,"description": "A trendy neighborhood with renovated industrial buildings, home to shops, restaurants, and a vibrant nightlife scene.","website": "www.rotermannikvartal.ee/en/","real_price": "Free to explore, costs for shops and services","review_score": "4.4","hours": "Varies by business","formatted address": "Rotermann 8, Tallinn, Estonia","tips": ["Visit during events and markets", "Try local cuisine at the restaurants", "Explore the unique architecture and design"]},
+{"city": "Pärnu","name": "Pärnu Beach","latitude": 58.3812,"longitude": 24.4977,"description": "A long sandy beach stretching along the Baltic Sea, popular for sunbathing, swimming, and beach activities.","website": "www.visitparnu.com/en/see-and-do/beach-in-parnu/","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Bring a beach umbrella and towel", "Rent beach chairs or equipment", "Visit during summer for the best weather"]},
+
+{"city": "Pärnu","name": "Pärnu Munamägi Hill","latitude": 58.3912,"longitude": 24.5144,"description": "A picturesque hill offering panoramic views of Pärnu and a popular spot for hiking and picnicking.","website": "www.visitparnu.com/en/see-and-do/munamagi-hill/","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Bring snacks and beverages for a picnic", "Hike to the top for the best views", "Visit during sunset for beautiful scenery"]},
+
+{"city": "Pärnu","name": "Pärnu Beach Promenade","latitude": 58.3843,"longitude": 24.4983,"description": "A scenic promenade running along the beach, perfect for strolling, cycling, or enjoying outdoor cafés and restaurants.","website": "www.visitparnu.com/en/see-and-do/beach-promenade/","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Rent bicycles and explore the promenade", "Stop at the beachside cafés and restaurants", "Visit during summer evenings for a lively atmosphere"]},
+
+{"city": "Pärnu","name": "Pärnu Museum","latitude": 58.3852,"longitude": 24.4961,"description": "A museum showcasing the history, culture, and art of Pärnu, with exhibits on local life, traditions, and handicrafts.","website": "www.parnumuuseum.ee/en/","real_price": "Entrance fee around €5","review_score": "4.4","hours": "Open daily, hours vary","formatted address": "Munga 19, Pärnu, Estonia","tips": ["Attend special exhibitions and events", "Learn about the local culture and history", "Explore the museum's gift shop for souvenirs"]},
+
+{"city": "Pärnu","name": "Pärnu City Park","latitude": 58.3858,"longitude": 24.4913,"description": "A beautiful city park with lush greenery, walking paths, playgrounds, and a pond, perfect for relaxation and outdoor activities.","website": "www.visitparnu.com/en/see-and-do/parnu-city-park/","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Pack a picnic and enjoy the park", "Rent bicycles or scooters for exploring", "Visit during summer for outdoor events"]},
+
+{"city": "Pärnu","name": "Pärnu River Promenade","latitude": 58.3849,"longitude": 24.4982,"description": "A scenic promenade running along the Pärnu River, offering beautiful views, outdoor cafés, and opportunities for walking or cycling.","website": "www.visitparnu.com/en/see-and-do/river-promenade/","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Rent bicycles or scooters for exploring", "Stop at the riverside cafés and restaurants", "Visit during summer evenings for a lively atmosphere"]},
+
+{"city": "Pärnu","name": "Pärnu Jetty","latitude": 58.3764,"longitude": 24.5003,"description": "A long wooden jetty extending into the Baltic Sea, offering stunning views and opportunities for fishing or enjoying the scenery.","website": "www.visitparnu.com/en/see-and-do/parnu-jetty/","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Bring a fishing rod or camera", "Visit during sunset for breathtaking views", "Dress warmly during colder months"]},
+
+{"city": "Pärnu","name": "Pärnu Adventure Park","latitude": 58.3965,"longitude": 24.5207,"description": "An outdoor adventure park featuring ziplines, obstacle courses, and other adrenaline-filled activities suitable for all ages.","website": "www.rannapungerja.ee/en/adventure-park/","real_price": "Ticket prices vary by activity","review_score": "4.6","hours": "Open daily during summer, hours vary","formatted address": "Põllu 2, Pärnu, Estonia","tips": ["Book activities in advance for availability", "Wear appropriate clothing and footwear", "Bring water and snacks for energy"]},
+
+{"city": "Pärnu","name": "Pärnu Yacht Club","latitude": 58.3747,"longitude": 24.5102,"description": "A popular spot for sailing, boating, and water sports, with a marina, clubhouse, and opportunities to rent boats or take sailing lessons.","website": "www.pjk.ee/en/","real_price": "Rental and lesson prices vary","review_score": "4.4","hours": "Open during summer season, hours vary","formatted address": "Vee 7, Pärnu, Estonia","tips": ["Book boat rentals or lessons in advance", "Bring appropriate clothing and footwear", "Check weather conditions before water activities"]},
+
+{"city": "Pärnu","name": "Pärnu Beach Stadium","latitude": 58.3767,"longitude": 24.4914,"description": "A large outdoor stadium located near the beach, hosting various sports events, concerts, and festivals throughout the year.","website": "www.visitparnu.com/en/see-and-do/beach-stadium/","real_price": "Ticket prices vary by event","review_score": "4.5","hours": "Open during events","formatted address": "Pärnu, Estonia","tips": ["Check the event calendar for upcoming activities", "Book tickets in advance for popular events", "Bring sunscreen and water during summer events"]},
+
+{"city": "Pärnu","name": "Pärnu Koidula Park","latitude": 58.3906,"longitude": 24.4999,"description": "A charming park with beautiful gardens, walking paths, and a fountain, perfect for a peaceful stroll or picnic.","website": "www.visitparnu.com/en/see-and-do/koidula-park/","real_price": "Free to visit","review_score": "4.4","hours": "Open 24/7","formatted address": "Pärnu, Estonia","tips": ["Pack a picnic and enjoy the peaceful surroundings", "Explore the garden paths and fountains", "Visit during summer for outdoor events"]},
+
+{"city": "Pärnu","name": "Pärnu Art Museum","latitude": 58.3881,"longitude": 24.4963,"description": "A museum showcasing contemporary art exhibitions, featuring works by Estonian and international artists.","website": "www.parnu.ee/kunstimuuseum/","real_price": "Entrance fee around €4","review_score": "4.3","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Esplanaadi 10, Pärnu, Estonia","tips": ["Attend special exhibitions and events", "Learn about the local art scene", "Explore the museum's gift shop for souvenirs"]},
+{"city": "Timgad","name": "Timgad Archaeological Site","latitude": 35.4685,"longitude": 6.4842,"description": "A remarkably well-preserved ancient Roman colonial town, designated as a UNESCO World Heritage Site, featuring impressive ruins, monuments, and buildings.","website": "www.unesco.org/new/en/culture/resources/atlas-world-heritage-cities/single-view/view/timgad_algeria/","real_price": "Entrance fee around 200 DZD","review_score": "4.7","hours": "Open daily, hours vary","formatted address": "Timgad, Algeria","tips": ["Hire a local guide for historical insights", "Wear comfortable shoes for walking", "Bring sunscreen and a hat"]},
+
+{"city": "Timgad","name": "Arch of Trajan","latitude": 35.4685,"longitude": 6.4849,"description": "An iconic ancient Roman triumphal arch marking the entrance to the city, dedicated to the Roman emperor Trajan.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.6","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Take photos from different angles", "Learn about the arch's historical significance", "Admire the intricate carvings and details"]},
+
+{"city": "Timgad","name": "Capitoline Temple","latitude": 35.4684,"longitude": 6.4848,"description": "The impressive remains of an ancient Roman temple dedicated to the Capitoline Triad of gods (Jupiter, Juno, and Minerva).","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.6","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the temple's architectural elements", "Appreciate the grandeur of the ancient structure", "Imagine the religious rituals once held here"]},
+
+{"city": "Timgad","name": "Timgad Museum","latitude": 35.4682,"longitude": 6.4851,"description": "A museum showcasing artifacts, mosaics, and exhibits related to the ancient Roman city of Timgad and its history.","website": "N/A","real_price": "Entrance fee around 200 DZD","review_score": "4.2","hours": "Open daily, hours may vary","formatted address": "Timgad, Algeria","tips": ["Learn about the city's rich history and culture", "Admire the intricate mosaics and artworks", "Check for guided tours or audio guides"]},
+
+{"city": "Timgad","name": "Cardo Maximus","latitude": 35.4685,"longitude": 6.4847,"description": "The main north-south street of the ancient city, lined with impressive ruins of houses, shops, and public buildings.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.5","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Walk along the ancient street and imagine daily life", "Explore the ruins and remains of buildings", "Take in the overall layout and design of the city"]},
+
+{"city": "Timgad","name": "Timgad Theater","latitude": 35.4687,"longitude": 6.4853,"description": "The well-preserved remains of an ancient Roman theater, once used for plays, performances, and public gatherings.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.6","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the seating area and stage", "Imagine the theatrical performances held here", "Take photos from different vantage points"]},
+
+{"city": "Timgad","name": "Timgad Public Baths","latitude": 35.4684,"longitude": 6.4844,"description": "The impressive ruins of ancient Roman public baths, featuring various rooms, heating systems, and architectural elements.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.4","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the different rooms and facilities", "Learn about the bathing customs and rituals", "Admire the intricate mosaics and decorations"]},
+
+{"city": "Timgad","name": "Timgad Forum","latitude": 35.4686,"longitude": 6.4846,"description": "The central marketplace and public square of the ancient city, surrounded by impressive ruins of temples, basilicas, and other buildings.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.5","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the forum's grand architecture", "Imagine the bustling commercial and social activities", "Take in the overall grandeur of the site"]},
+
+{"city": "Timgad","name": "Timgad Decumanus Maximus","latitude": 35.4686,"longitude": 6.4848,"description": "The main east-west street of the ancient city, lined with impressive ruins of houses, shops, and public buildings.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.4","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Walk along the ancient street and observe the ruins", "Learn about the city's layout and design", "Take photos of the impressive architecture"]},
+
+{"city": "Timgad","name": "Timgad Residential Area","latitude": 35.4685,"longitude": 6.4843,"description": "The well-preserved ruins of ancient Roman houses, providing insights into residential life and architecture.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.4","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the layout and design of the houses", "Observe the intricate mosaics and decorations", "Imagine daily life in ancient times"]},
+
+{"city": "Timgad","name": "Timgad City Gates","latitude": 35.4686,"longitude": 6.4845,"description": "The impressive remains of the ancient city gates, featuring intricate carvings and architectural details.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.3","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Admire the craftsmanship and attention to detail", "Learn about the defensive and symbolic purposes", "Take photos from different angles"]},
+
+{"city": "Timgad","name": "Timgad Visitor Center","latitude": 35.4681,"longitude": 6.4849,"description": "A visitor center providing information, maps, and an introduction to the ancient city of Timgad and its history.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.2","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Start your visit here for an overview", "Pick up a map and guide for self-guided tours", "Check for guided tour availability"]},
+
+{"city": "Timgad","name": "Timgad Basilica","latitude": 35.4685,"longitude": 6.4850,"description": "The impressive remains of an ancient Roman basilica, a public building used for legal and administrative purposes.","website": "N/A","real_price": "Included with Timgad Archaeological Site entrance fee","review_score": "4.4","hours": "Open during site hours","formatted address": "Timgad, Algeria","tips": ["Explore the grand architecture and design", "Learn about the building's various functions", "Observe the intricate details and decorations"]},
+{"city": "Port-au-Prince","name": "Musée du Panthéon National Haïtien","latitude": 18.5436,"longitude": -72.3391,"description": "A museum dedicated to Haiti's national heroes, featuring exhibits on the country's history and independence movements.","website": "https://pantheonmusee.ht/","real_price": "Entrance fee around 500 HTG","review_score": "4.3","hours": "Open Tuesday-Sunday, hours vary","formatted address": "51, Rue Pavee, Port-au-Prince, Haiti","tips": ["Hire a guide for deeper insights", "Learn about Haiti's rich history and culture", "Check for special exhibitions or events"]},
+
+{"city": "Port-au-Prince","name": "Cathédrale de Port-au-Prince","latitude": 18.5413,"longitude": -72.3355,"description": "An iconic Catholic cathedral in the heart of Port-au-Prince, known for its impressive architecture and historical significance.","website": "N/A","real_price": "Free to visit","review_score": "4.2","hours": "Open during daylight hours","formatted address": "Rue des Miracles, Port-au-Prince, Haiti","tips": ["Dress modestly for a place of worship", "Admire the cathedral's architecture and design", "Visit during a Mass or service for a unique experience"]},
+
+{"city": "Port-au-Prince","name": "Marché en Fer","latitude": 18.5401,"longitude": -72.3365,"description": "A historic indoor market known for its vibrant atmosphere and locally sourced goods, including crafts, artwork, and produce.","website": "N/A","real_price": "Free to visit (bring cash for shopping)","review_score": "4.1","hours": "Open daily, hours vary","formatted address": "Rue du Marché, Port-au-Prince, Haiti","tips": ["Bargain for the best prices", "Try local street food and snacks", "Be cautious with valuables in crowded areas"]},
+
+{"city": "Port-au-Prince","name": "Parc de la Canne à Sucre","latitude": 18.5522,"longitude": -72.3199,"description": "A lush urban park featuring a botanical garden, walking trails, and a replica of a sugar cane plantation.","website": "N/A","real_price": "Free to visit","review_score": "4.2","hours": "Open daily during daylight hours","formatted address": "Port-au-Prince, Haiti","tips": ["Pack a picnic and enjoy the greenery", "Explore the walking trails and gardens", "Visit during cooler hours for comfortable strolls"]},
+
+{"city": "Port-au-Prince","name": "Musée du Carnaval","latitude": 18.5379,"longitude": -72.3441,"description": "A museum dedicated to Haiti's vibrant Carnival celebrations, showcasing costumes, masks, and exhibits on the festival's history and traditions.","website": "N/A","real_price": "Entrance fee around 250 HTG","review_score": "4.1","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Route de Delmas, Port-au-Prince, Haiti","tips": ["Learn about the rich cultural traditions", "Admire the intricate costumes and masks", "Check for special events or performances"]},
+
+{"city": "Port-au-Prince","name": "Champ de Mars","latitude": 18.5411,"longitude": -72.3363,"description": "A historic public square and park in the heart of Port-au-Prince, surrounded by important landmarks and often hosting events and gatherings.","website": "N/A","real_price": "Free to visit","review_score": "4.0","hours": "Open 24/7","formatted address": "Champ de Mars, Port-au-Prince, Haiti","tips": ["Explore the surrounding landmarks and buildings", "Visit during events or festivals for a lively atmosphere", "Be cautious with valuables in crowded areas"]},
+
+{"city": "Port-au-Prince","name": "Musée d'Art Haïtien du Collège Saint Pierre","latitude": 18.5402,"longitude": -72.3345,"description": "A museum showcasing Haitian art and culture, featuring exhibitions of paintings, sculptures, and other artworks by local artists.","website": "N/A","real_price": "Entrance fee around 250 HTG","review_score": "4.2","hours": "Open Tuesday-Saturday, hours vary","formatted address": "Rue des Césars, Port-au-Prince, Haiti","tips": ["Admire the intricate artworks and craftsmanship", "Learn about the rich artistic traditions of Haiti", "Check for guided tours or special exhibitions"]},
+
+{"city": "Port-au-Prince","name": "Papillon Marketplace","latitude": 18.5322,"longitude": -72.3447,"description": "A lively outdoor market offering a wide range of goods, including locally made crafts, artwork, clothing, and souvenirs.","website": "N/A","real_price": "Free to visit (bring cash for shopping)","review_score": "4.0","hours": "Open daily, hours vary","formatted address": "Route de Delmas, Port-au-Prince, Haiti","tips": ["Bargain for the best prices", "Look for unique handmade items and souvenirs", "Be cautious with valuables in crowded areas"]},
+
+{"city": "Port-au-Prince","name": "Musée du Vodou","latitude": 18.5390,"longitude": -72.3360,"description": "A museum dedicated to the Vodou religion, featuring exhibits on its history, practices, and cultural significance in Haiti.","website": "N/A","real_price": "Entrance fee around 300 HTG","review_score": "4.1","hours": "Open Tuesday-Saturday, hours vary","formatted address": "Route de Delmas, Port-au-Prince, Haiti","tips": ["Learn about the fascinating Vodou traditions", "Respect the cultural and religious customs", "Check for guided tours or special events"]},
+
+{"city": "Port-au-Prince","name": "Bassin Bois Verna","latitude": 18.5668,"longitude": -72.3014,"description": "A peaceful park and recreation area featuring a small lake, walking trails, and picnic spots, offering a respite from the city.","website": "N/A","real_price": "Free to visit","review_score": "4.0","hours": "Open during daylight hours","formatted address": "Port-au-Prince, Haiti","tips": ["Pack a picnic and enjoy the natural surroundings", "Rent a paddleboat or kayak for the lake", "Visit during cooler hours for comfortable walks"]},
+
+{"city": "Port-au-Prince","name": "Fort Jacques","latitude": 18.5423,"longitude": -72.3418,"description": "The ruins of an ancient fort, offering panoramic views of Port-au-Prince and its surroundings, and insights into the city's history.","website": "N/A","real_price": "Free to visit","review_score": "4.1","hours": "Open during daylight hours","formatted address": "Port-au-Prince, Haiti","tips": ["Wear comfortable shoes for the hike", "Admire the views and take photos", "Learn about the fort's historical significance"]},
+
+{"city": "Port-au-Prince","name": "Plaza Hôtel Oloffson","latitude": 18.5383,"longitude": -72.3365,"description": "A historic and iconic hotel known for its beautiful architecture, lush gardens, and cultural significance in Port-au-Prince.","website": "http://www.hoteloloffson.com/","real_price": "Prices vary for accommodation and dining","review_score": "4.2","hours": "Open 24/7","formatted address": "60, Rue Lamartine, Port-au-Prince, Haiti","tips": ["Explore the hotel's gardens and architecture", "Dine at the on-site restaurant for local cuisine", "Check for live music or cultural events"]},
+{"city": "Almaty","name": "Kok-Tobe Hill","latitude": 43.2535,"longitude": 76.9455,"description": "A popular hilltop destination offering panoramic views of Almaty city and the surrounding mountains, with attractions like a cable car, amusement park, and restaurants.","website": "https://koktobe.kz/","real_price": "Cable car ride around 1000 KZT","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "Kok-Tobe, Almaty, Kazakhstan","tips": ["Take the cable car for scenic views", "Visit during the evening for city lights", "Explore the amusement park and restaurants"]},
+
+{"city": "Almaty","name": "Panfilov Park","latitude": 43.2600,"longitude": 76.9462,"description": "A beautiful urban park in the heart of Almaty, featuring lush greenery, fountains, walking paths, and attractions like the Panfilov Park Zoo and a cable car.","website": "N/A","real_price": "Free to visit the park","review_score": "4.5","hours": "Open daily","formatted address": "Panfilov Park, Almaty, Kazakhstan","tips": ["Rent a bicycle and explore the park", "Visit the zoo and take the cable car", "Pack a picnic and enjoy the green spaces"]},
+
+{"city": "Almaty","name": "Zenkov Cathedral","latitude": 43.2547,"longitude": 76.9442,"description": "A iconic Russian Orthodox cathedral known for its unique wooden architecture and colorful design, dating back to the late 19th century.","website": "N/A","real_price": "Free to visit","review_score": "4.7","hours": "Open daily, hours vary","formatted address": "Zenkov St, Almaty, Kazakhstan","tips": ["Admire the intricate wooden architecture", "Visit during a service for a unique experience", "Take photos of the colorful exterior"]},
+
+{"city": "Almaty","name": "Almaty Central Mosque","latitude": 43.2635,"longitude": 76.9443,"description": "A grand and beautiful mosque featuring a unique blend of Kazakh and Islamic architectural styles, with intricate designs and towering minarets.","website": "N/A","real_price": "Free to visit (modest dress required)","review_score": "4.7","hours": "Open daily for prayers","formatted address": "Kurmangazy St 35, Almaty, Kazakhstan","tips": ["Respect the dress code and religious customs", "Admire the intricate architecture and designs", "Visit during prayer times for a unique experience"]},
+
+{"city": "Almaty","name": "Big Almaty Lake","latitude": 43.0432,"longitude": 76.9660,"description": "A picturesque alpine lake surrounded by stunning mountain scenery, offering hiking trails, recreational activities, and beautiful natural landscapes.","website": "N/A","real_price": "Free to visit the lake area","review_score": "4.8","hours": "Open during daylight hours","formatted address": "Big Almaty Lake, Almaty, Kazakhstan","tips": ["Hike to the lake for scenic views", "Pack a picnic and enjoy the natural surroundings", "Rent equipment for activities like fishing or boating"]},
+
+{"city": "Almaty","name": "Charyn Canyon","latitude": 43.3657,"longitude": 79.0796,"description": "A breathtaking natural canyon featuring red and orange rock formations, hiking trails, and opportunities for rock climbing and exploring.","website": "N/A","real_price": "Entrance fee around 500 KZT","review_score": "4.8","hours": "Open during daylight hours","formatted address": "Charyn Canyon, Almaty Region, Kazakhstan","tips": ["Wear proper hiking shoes and gear", "Explore the different hiking trails", "Bring snacks and water for the hike"]},
+
+{"city": "Almaty","name": "Almaty Central State Museum","latitude": 43.2607,"longitude": 76.9498,"description": "A comprehensive museum showcasing the history, culture, and heritage of Kazakhstan, with exhibits on archaeology, ethnography, and art.","website": "https://museum.almaty.kz/","real_price": "Entrance fee around 500 KZT","review_score": "4.5","hours": "Open Tuesday-Sunday, hours vary","formatted address": "44 Karasay Batyr St, Almaty, Kazakhstan","tips": ["Check for guided tours or audio guides", "Explore the diverse exhibits and artifacts", "Visit the museum's shop for souvenirs"]},
+
+{"city": "Almaty","name": "Shymbulak Ski Resort","latitude": 43.1510,"longitude": 77.5040,"description": "A popular ski resort located in the mountains near Almaty, offering ski slopes, snowboarding, and winter sports activities, as well as summer hiking and recreation.","website": "https://shymbulak.com/","real_price": "Lift ticket prices vary","review_score": "4.6","hours": "Open daily during ski season","formatted address": "Shymbulak Resort, Almaty Region, Kazakhstan","tips": ["Rent gear and take ski lessons if needed", "Check trail conditions and difficulty levels", "Enjoy the scenic mountain views and fresh air"]},
+
+{"city": "Almaty","name": "Almaty Hippodrome","latitude": 43.2790,"longitude": 76.9827,"description": "A historic horse racing venue known for its grand architecture and regular horse racing events, offering a unique cultural experience.","website": "N/A","real_price": "Ticket prices vary for events","review_score": "4.4","hours": "Open during events","formatted address": "Kazybek Bi St, Almaty, Kazakhstan","tips": ["Check for upcoming race events and schedules", "Dress up for the occasion and enjoy the atmosphere", "Try local food and drinks at the venue"]},
+
+{"city": "Almaty","name": "Medeu Ice Rink","latitude": 43.1479,"longitude": 77.0682,"description": "A famous outdoor ice skating rink located high in the mountains, offering stunning views and opportunities for skating, hockey, and other winter activities.","website": "N/A","real_price": "Entrance fee around 500 KZT","review_score": "4.7","hours": "Open during winter season","formatted address": "Medeu District, Almaty, Kazakhstan","tips": ["Rent skating equipment if needed", "Enjoy the scenic mountain backdrop", "Try local food and drinks at the nearby cafes"]},
+
+{"city": "Almaty","name": "Shevchenko Park","latitude": 43.2627,"longitude": 76.9693,"description": "A beautiful urban park in the heart of Almaty, featuring lush greenery, walking paths, fountains, and attractions like an amusement park and a small zoo.","website": "N/A","real_price": "Free to visit the park","review_score": "4.5","hours": "Open daily","formatted address": "Shevchenko Park, Almaty, Kazakhstan","tips": ["Rent bicycles or boats for the lake", "Visit the amusement park and small zoo", "Pack a picnic and enjoy the green spaces"]},
+
+{"city": "Almaty","name": "Ascension Cathedral","latitude": 43.2606,"longitude": 76.9453,"description": "A grand and historic Russian Orthodox cathedral featuring impressive architecture, colorful domes, and intricate interior designs.","website": "N/A","real_price": "Free to visit","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "Dostyk Ave, Almaty, Kazakhstan","tips": ["Admire the intricate architecture and designs", "Visit during a service for a unique experience", "Dress modestly for a place of worship"]},
+{"city": "Masada","name": "Masada National Park","latitude": 31.3193,"longitude": 35.3689,"description": "An ancient fortification situated on a rocky plateau overlooking the Dead Sea, famous for its history and archaeological significance as the site of a Jewish revolt against the Roman Empire in the 1st century CE.","website": "https://www.parks.org.il/en/reserve-park/masada-national-park/","real_price": "Entrance fee: 29 ILS for adults, 15 ILS for children","review_score": "4.8","hours": "Summer hours: 8:00 AM - 5:00 PM, Winter hours: 8:00 AM - 4:00 PM","formatted address": "Masada National Park, D.N. Sedeh Boker, Israel","tips": ["Wear comfortable shoes and bring water for hiking", "Take the cable car or hike the Snake Path for stunning views", "Visit early in the morning or late afternoon to avoid peak heat"]},
+{"city": "Tartu","name": "Tartu University Observatory","latitude": 58.3901,"longitude": 26.7043,"description": "An iconic astronomical observatory dating back to the 19th century, offering guided tours and stargazing opportunities.","website": "https://www.ut.ee/en/observatory","real_price": "Guided tour: 5 EUR for adults, 3 EUR for students","review_score": "4.6","hours": "Open for guided tours, check website for schedule","formatted address": "Observatooriumi 1, Tartu, Estonia","tips": ["Book a guided tour in advance", "Visit during clear nights for stargazing", "Learn about the history of astronomy"]},
+
+{"city": "Tartu","name": "Toomemägi Hill","latitude": 58.3787,"longitude": 26.7264,"description": "A historic hill in the heart of Tartu, featuring the ruins of the Tartu Cathedral, parks, and panoramic views of the city.","website": "N/A","real_price": "Free to visit","review_score": "4.7","hours": "Open 24/7","formatted address": "Toomemägi, Tartu, Estonia","tips": ["Climb to the top for scenic views", "Explore the cathedral ruins and parks", "Visit during summer for outdoor events"]},
+
+{"city": "Tartu","name": "Estonian National Museum","latitude": 58.3775,"longitude": 26.6984,"description": "A modern museum showcasing the history, culture, and traditions of Estonia through interactive exhibits and artifacts.","website": "https://www.erm.ee/en","real_price": "Admission: 10 EUR for adults, 5 EUR for students","review_score": "4.5","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Muuseumi tee 2, Tartu, Estonia","tips": ["Allow plenty of time to explore the exhibits", "Check for temporary exhibitions and events", "Visit the museum shop for souvenirs"]},
+
+{"city": "Tartu","name": "Tartu Town Hall Square","latitude": 58.3785,"longitude": 26.7207,"description": "A picturesque central square surrounded by historic buildings, including the Town Hall, and a popular gathering place for locals and visitors.","website": "N/A","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Town Hall Square, Tartu, Estonia","tips": ["Enjoy the vibrant atmosphere and people-watching", "Visit during special events and festivals", "Stop at nearby cafes and restaurants"]},
+
+{"city": "Tartu","name": "Tartu University Botanical Garden","latitude": 58.3820,"longitude": 26.6889,"description": "A beautiful botanical garden featuring diverse plant collections, greenhouses, and scenic walking trails.","website": "https://bot.emu.ee/","real_price": "Admission: 5 EUR for adults, 3 EUR for students","review_score": "4.5","hours": "Open daily, hours vary","formatted address": "Lai 38, Tartu, Estonia","tips": ["Explore the different themed gardens", "Visit the greenhouses for tropical plants", "Pack a picnic and enjoy the natural surroundings"]},
+
+{"city": "Tartu","name": "Tartu Toy Museum","latitude": 58.3781,"longitude": 26.7253,"description": "A unique museum dedicated to toys from different eras, featuring interactive exhibits and a vast collection of toys from around the world.","website": "https://www.tartulinnamus.ee/en/toymuseum","real_price": "Admission: 5 EUR for adults, 3 EUR for children","review_score": "4.4","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Lossi 25, Tartu, Estonia","tips": ["Great for families with children", "Explore the interactive exhibits and displays", "Check for special events and activities"]},
+
+{"city": "Tartu","name": "Tartu Sculpture Park","latitude": 58.3794,"longitude": 26.7089,"description": "An outdoor sculpture park featuring a collection of contemporary and modern sculptures by Estonian and international artists.","website": "N/A","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Vanemuise Park, Tartu, Estonia","tips": ["Explore the sculptures and their meanings", "Bring a camera for artistic photos", "Visit during different seasons for changing landscapes"]},
+
+{"city": "Tartu","name": "Tartu Art Museum","latitude": 58.3787,"longitude": 26.7258,"description": "An art museum housed in a historic building, showcasing Estonian and international art exhibitions and collections.","website": "https://tartmus.ee/en/","real_price": "Admission: 5 EUR for adults, 3 EUR for students","review_score": "4.4","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Raekoja plats 18, Tartu, Estonia","tips": ["Check for temporary exhibitions and events", "Attend guided tours for deeper insights", "Visit the museum shop for art-related souvenirs"]},
+
+{"city": "Tartu","name": "Tartu Song Festival Grounds","latitude": 58.3958,"longitude": 26.7492,"description": "A large outdoor venue hosting the famous Estonian Song Festival, a celebration of traditional Estonian music and culture.","website": "N/A","real_price": "Ticket prices vary for events","review_score": "4.6","hours": "Open during events","formatted address": "Tartu Lauluvaljak, Tartu, Estonia","tips": ["Attend the Song Festival for a unique cultural experience", "Check event schedules and buy tickets in advance", "Dress warmly for outdoor events"]},
+
+{"city": "Tartu","name": "Tartu Nature House","latitude": 58.3956,"longitude": 26.7290,"description": "A interactive museum and education center focused on nature and environmental conservation, featuring exhibits and activities for all ages.","website": "https://www.loodusmuuseum.ee/en","real_price": "Admission: 5 EUR for adults, 3 EUR for children","review_score": "4.5","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Vanemuise 46, Tartu, Estonia","tips": ["Great for families with kids", "Participate in interactive exhibits and activities", "Check for special events and workshops"]},
+
+{"city": "Tartu","name": "Tartu Riverfront","latitude": 58.3759,"longitude": 26.7249,"description": "A scenic riverfront area along the Emajõgi River, offering walking paths, parks, and outdoor recreational opportunities.","website": "N/A","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Tartu Riverfront, Tartu, Estonia","tips": ["Go for a leisurely walk or jog along the riverfront", "Rent a bike and explore the nearby parks and trails", "Pack a picnic and enjoy the outdoor scenery"]},
+
+{"city": "Tartu","name": "Tartu Kivisilla Bridge","latitude": 58.3752,"longitude": 26.7241,"description": "A historic stone bridge spanning the Emajõgi River, offering scenic views and a popular spot for photography.","website": "N/A","real_price": "Free to visit","review_score": "4.5","hours": "Open 24/7","formatted address": "Kivisilla, Tartu, Estonia","tips": ["Visit during sunset for beautiful lighting", "Take photos from different angles and vantage points", "Walk across the bridge for river views"]},
+{"city": "Ambergris Caye","name": "Hol Chan Marine Reserve","latitude": 17.8833,"longitude": -87.9667,"description": "A renowned marine reserve offering excellent snorkeling and diving opportunities to explore vibrant coral reefs and diverse marine life.","website": "http://holchanmarinereserve.org/","real_price": "Entry fee around $10 USD","review_score": "4.7","hours": "Open daily during daylight hours","formatted address": "Hol Chan Marine Reserve, Ambergris Caye, Belize","tips": ["Book a guided snorkel or dive tour", "Bring an underwater camera to capture the marine life", "Be mindful of preserving the delicate coral reef ecosystem"]},
+
+{"city": "Ambergris Caye","name": "Secret Beach","latitude": 17.9321,"longitude": -87.9648,"description": "A secluded and serene beach located on the northern tip of Ambergris Caye, offering a peaceful escape with soft white sand and turquoise waters.","website": "N/A","real_price": "Free to visit","review_score": "4.8","hours": "Open 24/7","formatted address": "Secret Beach, Ambergris Caye, Belize","tips": ["Pack a picnic and spend the day relaxing", "Rent a golf cart or bike to access the beach", "Bring snorkeling gear to explore the nearby reef"]},
+
+{"city": "Ambergris Caye","name": "Shark Ray Alley","latitude": 17.8613,"longitude": -87.9738,"description": "A popular spot for swimming and snorkeling with nurse sharks and stingrays in their natural habitat, offering a unique and up-close encounter.","website": "N/A","real_price": "Tour prices vary, typically around $40 USD","review_score": "4.6","hours": "Open during daylight hours","formatted address": "Shark Ray Alley, Ambergris Caye, Belize","tips": ["Book a guided tour for a safe and responsible experience", "Bring an underwater camera to capture the sharks and rays", "Avoid touching or feeding the marine life"]},
+
+{"city": "Ambergris Caye","name": "Belize Chocolate Company","latitude": 17.9109,"longitude": -87.9650,"description": "A family-owned chocolate factory offering tours, tastings, and hands-on experiences in chocolate-making using locally sourced cacao.","website": "https://www.belizechocolateco.com/","real_price": "Tour and tasting prices vary, around $15 USD","review_score": "4.8","hours": "Open Monday-Saturday, hours vary","formatted address": "Belize Chocolate Company, Ambergris Caye, Belize","tips": ["Participate in a chocolate-making workshop", "Sample the various chocolate flavors and products", "Purchase unique chocolate souvenirs and gifts"]},
+
+{"city": "Ambergris Caye","name": "Palapa Gardens","latitude": 17.9091,"longitude": -87.9658,"description": "A beautiful botanical garden featuring a diverse collection of tropical plants, butterflies, and a tranquil atmosphere for relaxation and exploration.","website": "https://palapagardensbelize.com/","real_price": "Entry fee around $10 USD","review_score": "4.7","hours": "Open daily, hours vary","formatted address": "Palapa Gardens, Ambergris Caye, Belize","tips": ["Take a guided tour to learn about the plant species", "Visit the butterfly house for a unique experience", "Enjoy a refreshing drink at the on-site café"]},
+
+{"city": "Ambergris Caye","name": "Belize Sailing School","latitude": 17.9141,"longitude": -87.9639,"description": "A sailing school offering various courses and certifications, as well as sailing adventures and charters around Ambergris Caye and the surrounding islands.","website": "https://belizesailingschool.com/","real_price": "Course and charter prices vary","review_score": "4.8","hours": "Open daily, hours vary","formatted address": "Belize Sailing School, Ambergris Caye, Belize","tips": ["Take sailing lessons for beginners or advanced courses", "Book a sunset or island-hopping sailing charter", "Enjoy the freedom and beauty of sailing in the Caribbean"]},
+
+{"city": "Ambergris Caye","name": "San Pedro Belize Express Water Taxi","latitude": 17.9150,"longitude": -87.9744,"description": "A convenient water taxi service offering transportation between Ambergris Caye and various destinations in Belize, including Belize City and Caye Caulker.","website": "https://www.belizewatertaxi.com/","real_price": "One-way fares around $15-25 USD","review_score": "4.5","hours": "Schedules vary, check website","formatted address": "San Pedro Belize Express Water Taxi Terminal, Ambergris Caye, Belize","tips": ["Plan your travel itinerary and book tickets in advance", "Arrive at the terminal early for boarding", "Enjoy the scenic water views during the ride"]},
+
+{"city": "Ambergris Caye","name": "Belize Pro Dive Center","latitude": 17.9148,"longitude": -87.9679,"description": "A reputable diving center offering a wide range of diving tours and experiences, including reef dives, night dives, and diving certification courses.","website": "https://www.belizeprodivers.com/","real_price": "Dive tour prices vary, certification courses around $400 USD","review_score": "4.8","hours": "Open daily, hours vary","formatted address": "Belize Pro Dive Center, Ambergris Caye, Belize","tips": ["Book diving tours and courses in advance", "Rent or bring your own diving gear", "Follow safety guidelines and respect the marine environment"]},
+
+{"city": "Ambergris Caye","name": "The Truck Stop","latitude": 17.9122,"longitude": -87.9642,"description": "A popular local hangout and food truck park, offering a variety of delicious food options, live music, and a lively atmosphere.","website": "https://www.facebook.com/TheOriginalTruckStopBelize/","real_price": "Food and drink prices vary, typically $5-15 USD","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "The Truck Stop, Ambergris Caye, Belize","tips": ["Try different food trucks for variety", "Enjoy the live music and vibrant atmosphere", "Bring cash as some vendors may not accept cards"]},
+
+{"city": "Ambergris Cayeo","name": "Marco Gonzalez Maya Site","latitude": 17.9493,"longitude": -87.9336,"description": "An ancient Maya archaeological site featuring ruins, including temples, plazas, and residential structures, offering insights into the rich history and culture of the Maya civilization.","website": "N/A","real_price": "Entrance fee around $10 USD","review_score": "4.5","hours": "Open daily during daylight hours","formatted address": "Marco Gonzalez Maya Site, Ambergris Caye, Belize","tips": ["Hire a knowledgeable guide for a deeper understanding", "Wear comfortable shoes for exploring the ruins", "Bring sunscreen, hats, and water for the outdoor site"]},
+
+{"city": "Ambergris Caye","name": "Ambergris Caye Beach","latitude": 17.9084,"longitude": -87.9659,"description": "The stunning main beach of Ambergris Caye, offering soft white sand, turquoise waters, and a variety of beachfront restaurants, bars, and resorts.","website": "N/A","real_price": "Free to visit the public beach areas","review_score": "4.7","hours": "Open 24/7","formatted address": "Ambergris Caye Beach, San Pedro, Belize","tips": ["Rent beach chairs and umbrellas for a comfortable day", "Try water sports like kayaking or paddleboarding", "Visit nearby restaurants and bars for refreshments"]},
+
+{"city": "Yerevan","name": "Republic Square","latitude": 40.1812,"longitude": 44.5144,"description": "A massive central square known for its impressive architecture, fountains, and outdoor events.","website": "N/A","real_price": "Free to visit","review_score": "4.7","hours": "Open 24/7","formatted address": "Republic Square, Yerevan, Armenia","tips": ["Witness the singing fountains at night", "Visit during special events and celebrations", "Admire the symmetrical architecture and design"]},
+
+{"city": "Yerevan","name": "Matenadaran","latitude": 40.1902,"longitude": 44.5130,"description": "A museum and repository of ancient manuscripts, housing one of the world's richest collections of Armenian and medieval literature.","website": "https://www.matenadaran.am/","real_price": "Admission fee around 1,000 AMD (approx. $2.50 USD)","review_score": "4.7","hours": "Open Tuesday-Saturday, hours vary","formatted address": "Matenadaran, Mashtots Ave, Yerevan, Armenia","tips": ["Explore the extensive manuscript collection", "Take a guided tour for deeper insights", "Visit the on-site museum shop for souvenirs"]},
+
+{"city": "Yerevan","name": "Cascade Complex","latitude": 40.1876,"longitude": 44.5152,"description": "A massive stairway and outdoor sculpture garden, offering panoramic views of Yerevan and home to the Cafesjian Museum of Art.","website": "https://www.cascadeyerevan.am/","real_price": "Free to visit the outdoor complex, museum admission fee around 1,000 AMD","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "Cascade Complex, Yerevan, Armenia","tips": ["Climb to the top for stunning city views", "Explore the various sculptures and art installations", "Visit the Cafesjian Museum of Art for contemporary art exhibits"]},
+
+{"city": "Yerevan","name": "Vernissage Market","latitude": 40.1882,"longitude": 44.5135,"description": "A lively outdoor market selling handmade crafts, souvenirs, art, and antiques, offering a glimpse into Armenian culture and traditions.","website": "N/A","real_price": "Free to visit, prices vary for souvenirs and goods","review_score": "4.5","hours": "Open daily, hours vary","formatted address": "Vernissage Market, Yerevan, Armenia","tips": ["Haggle for better prices on souvenirs", "Look for unique handmade Armenian crafts and art", "Visit on weekends for a more vibrant atmosphere"]},
+
+{"city": "Yerevan","name": "Tsitsernakaberd Armenian Genocide Memorial Complex","latitude": 40.1781,"longitude": 44.4943,"description": "A solemn memorial and museum dedicated to the victims of the Armenian Genocide, offering historical insight and a place for reflection.","website": "https://www.genocide-museum.am/","real_price": "Free to visit the memorial, museum admission fee around 1,000 AMD","review_score": "4.8","hours": "Open daily, hours vary","formatted address": "Tsitsernakaberd Armenian Genocide Memorial Complex, Yerevan, Armenia","tips": ["Show respect and maintain a solemn atmosphere", "Visit the museum for a deeper understanding", "Witness the eternal flame and memorial monuments"]},
+
+{"city": "Yerevan","name": "Ararat Brandy Factory","latitude": 40.1771,"longitude": 44.5509,"description": "A renowned brandy distillery offering tours, tastings, and a chance to learn about the centuries-old art of Armenian brandy-making.","website": "https://yereranbrandy.com/","real_price": "Tour and tasting prices vary, around 5,000-10,000 AMD","review_score": "4.7","hours": "Open daily, hours vary","formatted address": "Ararat Brandy Factory, Yerevan, Armenia","tips": ["Book a guided tour and tasting experience", "Learn about the history and production process", "Purchase bottles of premium Armenian brandy as souvenirs"]},
+
+{"city": "Yerevan","name": "Yerevan Cascade","latitude": 40.1878,"longitude": 44.5158,"description": "A massive stairway leading up to the Cascade Complex, featuring outdoor sculptures, gardens, and panoramic views of Yerevan.","website": "N/A","real_price": "Free to visit","review_score": "4.6","hours": "Open 24/7","formatted address": "Yerevan Cascade, Yerevan, Armenia","tips": ["Climb the steps for scenic city views", "Explore the various outdoor sculptures and installations", "Visit during the evening for a romantic atmosphere"]},
+
+{"city": "Yerevan","name": "History Museum of Armenia","latitude": 40.1842,"longitude": 44.5145,"description": "A comprehensive museum showcasing the rich history and culture of Armenia through artifacts, exhibitions, and interactive displays.","website": "https://www.hmuseum.am/","real_price": "Admission fee around 1,000 AMD","review_score": "4.5","hours": "Open Tuesday-Sunday, hours vary","formatted address": "History Museum of Armenia, Yerevan, Armenia","tips": ["Allow sufficient time to explore the extensive collections", "Attend guided tours for deeper insights", "Visit the museum shop for souvenirs and books"]},
+
+{"city": "Yerevan","name": "Sergei Parajanov Museum","latitude": 40.1858,"longitude": 44.5113,"description": "A museum dedicated to the renowned Armenian filmmaker Sergei Parajanov, showcasing his artistic works, personal belongings, and film memorabilia.","website": "https://parajanovmuseum.com/","real_price": "Admission fee around 1,000 AMD","review_score": "4.6","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Sergei Parajanov Museum, Yerevan, Armenia","tips": ["Attend guided tours for a deeper understanding", "Explore Parajanov's artwork and film memorabilia", "Visit the museum shop for unique souvenirs"]},
+
+{"city": "Yerevan","name": "Armenian Opera and Ballet Theatre","latitude": 40.1815,"longitude": 44.5149,"description": "A grand theater known for hosting world-class opera and ballet performances, offering a glimpse into Armenia's rich cultural heritage.","website": "https://www.opera.am/","real_price": "Ticket prices vary based on performance","review_score": "4.8","hours": "Performance schedules vary","formatted address": "Armenian Opera and Ballet Theatre, Yerevan, Armenia","tips": ["Book tickets in advance for popular performances", "Dress appropriately for the theater experience", "Arrive early to explore the grand architecture"]},
+
+{"city": "Yerevan","name": "Cafesjian Museum of Art","latitude": 40.1879,"longitude": 44.5155,"description": "A contemporary art museum located within the Cascade Complex, showcasing a diverse collection of modern and contemporary art from Armenia and beyond.","website": "https://www.cmadelft.org/","real_price": "Admission fee around 1,000 AMD","review_score": "4.5","hours": "Open Tuesday-Sunday, hours vary","formatted address": "Cafesjian Museum of Art, Yerevan, Armenia","tips": ["Explore the various temporary and permanent exhibits", "Attend guided tours for deeper insights", "Visit the museum shop for unique art-related souvenirs"]},
+
+{"city": "Yerevan","name": "Victory Park and Mother Armenia Monument","latitude": 40.1824,"longitude": 44.5278,"description": "A large park featuring the iconic Mother Armenia monument, offering panoramic views of Yerevan and serving as a memorial to the fallen soldiers of World War II.","website": "N/A","real_price": "Free to visit","review_score": "4.7","hours": "Open 24/7","formatted address": "Victory Park and Mother Armenia Monument, Yerevan, Armenia","tips": ["Climb to the base of the monument for stunning views", "Explore the surrounding park and gardens", "Visit during sunset for beautiful lighting"]},
+{"city": "Bridgetown","name": "Carlisle Bay","latitude": 13.0821,"longitude": -59.6246,"description": "A beautiful natural bay with calm waters, perfect for swimming, snorkeling, and sunbathing on the white sandy beach.","website": "N/A","real_price": "Free to visit","review_score": "4.7","hours": "Open 24/7","formatted address": "Carlisle Bay, Bridgetown, Barbados","tips": ["Rent snorkel gear to explore the underwater marine life", "Bring an umbrella or rent a beach chair for shade", "Visit nearby restaurants and bars for refreshments"]},
+
+{"city": "Bridgetown","name": "George Washington House","latitude": 13.0964,"longitude": -59.6155,"description": "A historic house where George Washington reportedly stayed in 1751, offering a glimpse into the island's colonial past.","website": "https://www.georgewashingtonbarbados.org/","real_price": "Admission fee around $10 USD","review_score": "4.4","hours": "Open Monday-Saturday, hours vary","formatted address": "George Washington House, Bridgetown, Barbados","tips": ["Take a guided tour to learn about the history", "Visit the museum shop for souvenirs and local crafts", "Explore the surrounding area for nearby attractions"]},
+
+{"city": "Bridgetown","name": "Mount Gay Rum Distillery","latitude": 13.1003,"longitude": -59.6224,"description": "The oldest rum distillery in Barbados, offering tours, tastings, and a chance to learn about the island's rich rum-making history.","website": "https://www.mountgayrum.com/","real_price": "Tour and tasting prices vary, around $10-20 USD","review_score": "4.6","hours": "Open Monday-Saturday, hours vary","formatted address": "Mount Gay Rum Distillery, Bridgetown, Barbados","tips": ["Book a guided tour and tasting experience", "Learn about the rum-making process and history", "Purchase bottles of premium rum as souvenirs"]},
+
+{"city": "Bridgetown","name": "Nidhe Israel Synagogue and Museum","latitude": 13.0997,"longitude": -59.6187,"description": "One of the oldest synagogues in the Western Hemisphere, offering a glimpse into the island's Jewish history and culture.","website": "https://www.nidheisrael.com/","real_price": "Admission fee around $5 USD","review_score": "4.5","hours": "Open Monday-Friday, hours vary","formatted address": "Nidhe Israel Synagogue and Museum, Bridgetown, Barbados","tips": ["Attend a guided tour for a deeper understanding", "Explore the historic synagogue and museum exhibits", "Dress modestly and respect religious customs"]},
+
+{"city": "Bridgetown","name": "Barbados Museum & Historical Society","latitude": 13.0989,"longitude": -59.6183,"description": "A comprehensive museum showcasing the history, culture, and heritage of Barbados through artifacts, exhibitions, and interactive displays.","website": "https://www.barbmuse.org.bb/","real_price": "Admission fee around $10 USD","review_score": "4.4","hours": "Open Monday-Saturday, hours vary","formatted address": "Barbados Museum & Historical Society, Bridgetown, Barbados","tips": ["Allow sufficient time to explore the extensive collections", "Attend guided tours for deeper insights", "Visit the museum shop for souvenirs and local crafts"]},
+
+{"city": "Bridgetown","name": "St. Michael's Cathedral","latitude": 13.0985,"longitude": -59.6173,"description": "An iconic cathedral dating back to the 17th century, featuring Gothic architecture and serving as a landmark in Bridgetown.","website": "N/A","real_price": "Free to visit, donations appreciated","review_score": "4.6","hours": "Open daily, hours vary","formatted address": "St. Michael's Cathedral, Bridgetown, Barbados","tips": ["Attend a service or explore the cathedral during visiting hours", "Admire the impressive Gothic architecture and stained glass", "Dress modestly and respect religious customs"]},
+
+{"city": "Bridgetown","name": "Kensington Oval","latitude": 13.0926,"longitude": -59.6161,"description": "A historic cricket ground and a must-visit for sports enthusiasts, hosting international cricket matches and offering tours.","website": "https://www.windiescricket.com/","real_price": "Ticket prices vary based on matches","review_score": "4.5","hours": "Open during matches and events","formatted address": "Kensington Oval, Bridgetown, Barbados","tips": ["Attend a cricket match for an authentic experience", "Book a behind-the-scenes tour of the grounds", "Bring sun protection and refreshments for outdoor events"]},
+
+{"city": "Bridgetown","name": "Garrison Savannah","latitude": 13.0887,"longitude": -59.6248,"description": "A large open space and historic racetrack, hosting horse racing events and offering a peaceful green area for picnics and leisure activities.","website": "N/A","real_price": "Free to visit, charges for events","review_score": "4.5","hours": "Open 24/7","formatted address": "Garrison Savannah, Bridgetown, Barbados","tips": ["Attend a horse racing event for a unique experience", "Bring a picnic basket and enjoy the beautiful green space", "Explore the nearby attractions and historic sites"]},
+
+{"city": "Bridgetown","name": "Cheapside Market","latitude": 13.0992,"longitude": -59.6156,"description": "A lively open-air market selling fresh produce, spices, crafts, and souvenirs, offering a glimpse into local life and culture.","website": "N/A","real_price": "Prices vary based on products","review_score": "4.4","hours": "Open daily, hours vary","formatted address": "Cheapside Market, Bridgetown, Barbados","tips": ["Haggle for better prices on souvenirs and crafts", "Sample local fruits, vegetables, and street food", "Arrive early for the best selection and fewer crowds"]},
+
+{"city": "Bridgetown","name": "Champers Restaurant","latitude": 13.0992,"longitude": -59.6169,"description": "A renowned upscale restaurant known for its delectable seafood dishes and beachfront location, offering a luxurious dining experience.","website": "https://www.champersbarbados.com/","real_price": "Expensive, around $50-100 USD per person","review_score": "4.7","hours": "Open daily for lunch and dinner","formatted address": "Champers Restaurant, Bridgetown, Barbados","tips": ["Make reservations in advance for a table with a view", "Dress up for the upscale dining experience", "Try their signature seafood dishes and cocktails"]},
+
+{"city": "Bridgetown","name": "Barbados Concorde Experience","latitude": 13.0747,"longitude": -59.4924,"description": "A unique attraction showcasing a retired Concorde aircraft, offering tours and a chance to explore the iconic supersonic jet.","website": "https://www.barbadosconcorde.com/","real_price": "Admission fee around $20 USD","review_score": "4.5","hours": "Open daily, hours vary","formatted address": "Barbados Concorde Experience, Grantley Adams International Airport, Barbados","tips": ["Book a guided tour for a more immersive experience", "Explore the aircraft's interior and learn about its history", "Bring a camera to capture the iconic Concorde jet"]},
+{"city": "Port-Salut","name": "Port-Salut Beach","latitude": 18.0855,"longitude": -73.5379,"description": "A beautiful sandy beach along the southern coast of Haiti, offering opportunities for swimming, sunbathing, and relaxation.","website": "N/A","real_price": "Free to visit","review_score": "4.2","hours": "Open 24/7","formatted address": "Port-Salut Beach, Port-Salut, Haiti","tips": ["Bring your own food and drinks", "Be mindful of the local culture and customs", "Expect basic amenities"]},
+
+{"city": "Port-Salut","name": "Port-Salut Cathedral","latitude": 18.0872,"longitude": -73.5369,"description": "A historic Catholic cathedral located in the center of Port-Salut, showcasing local architecture and religious significance.","website": "N/A","real_price": "Free to visit, donations appreciated","review_score": "4.0","hours": "Open during daylight hours","formatted address": "Port-Salut Cathedral, Port-Salut, Haiti","tips": ["Dress modestly and respect religious customs", "Take a moment to appreciate the architectural details", "Be aware of potential closures during religious events"]},
+
+{"city": "Port-Salut","name": "Local Markets","latitude": 18.0871,"longitude": -73.5367,"description": "Vibrant local markets in Port-Salut, offering a glimpse into the daily life and culture of the town, selling fresh produce, handicrafts, and local goods.","website": "N/A","real_price": "Prices vary based on products","review_score": "3.8","hours": "Open during daylight hours","formatted address": "Local Markets, Port-Salut, Haiti","tips": ["Haggle for better prices on souvenirs and handicrafts", "Explore the variety of local fruits and vegetables", "Be respectful and patient in the bustling market environment"]},
    
     
 
-# ])
-#     return 'kk'
+])

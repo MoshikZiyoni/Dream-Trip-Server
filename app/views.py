@@ -12,6 +12,9 @@ from django.db.models import Q
 import random
 from datetime import date
 from app.gemini import chat_gemini
+
+
+# import time
 # from rest_framework.authtoken.models import Token
 # from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
@@ -33,7 +36,7 @@ from app.gemini import chat_gemini
 @api_view([ 'POST'])
 def gpt_view(request):
     
-    
+
 #     for item in average_meal_costs:
 #         country = Country.objects.get(name=item['country'])
 #         country.average_food = item['cost']
@@ -55,20 +58,20 @@ def gpt_view(request):
     # return 'kk'
 
 
-    # cities_without_hotels = City.objects.filter(attractions__isnull=True)
+    # cities_without_hotels = City.objects.filter(restaurants__isnull=True)
 
     # for city in cities_without_hotels:
     #     print(city.country.name, city.city)
-    #     # try:
-    #     #     landmarks=[city.latitude,city.longitude]
-    #     #     result=foursquare_hotels(landmarks)
-    #     #     hotels= []
-    #     #     if len(result) == 0:
-    #     #         continue
-    #     #     for hotel in result:
-    #     # #         process_hotel(hotel=hotel, city_obj=city, hotels=hotels)    
-    #     # except Exception as e:
-    #     #     print ('NOT GOOOODDDDDDDDDDDDDDDDDD',e)
+    # #     # try:
+    # #     #     landmarks=[city.latitude,city.longitude]
+    # #     #     result=foursquare_hotels(landmarks)
+    # #     #     hotels= []
+    # #     #     if len(result) == 0:
+    # #     #         continue
+    # #     #     for hotel in result:
+    # #     # #         process_hotel(hotel=hotel, city_obj=city, hotels=hotels)    
+    # #     # except Exception as e:
+    # #     #     print ('NOT GOOOODDDDDDDDDDDDDDDDDD',e)
 
     # return 'ok'
    

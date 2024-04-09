@@ -258,34 +258,36 @@ def process_attractions(landmarks, city_name, country, city_obj):
 
 def process_hotels(landmarks, city_name):
     print ("start hotels")
-    cache_key = f"hotels{city_name.replace(' ', '_').replace('-', '_')}"
-    # Attempt to retrieve data from the cache
-    hotels1 = cache.get(cache_key)
-    if hotels1 is None:
-        hotels = []
-        # with lock:
-        result_for_hotel=foursquare_hotels(landmarks)
-        
-        if len(result_for_hotel) == 0:
-            print("Start google hotels")
-            hotels_info_trip = get_hotels_from_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
-            for hotel in hotels_info_trip['results']:
-                thread = Thread(target=hotel_from_google, args=(hotel, hotels))
+    with lock:
+        cache_key = f"hotels{city_name.replace(' ', '_').replace('-', '_')}"
+        # Attempt to retrieve data from the cache
+        hotels1 = cache.get(cache_key)
+    
+        if hotels1 is None:
+            hotels = []
+            
+            result_for_hotel=foursquare_hotels(landmarks)
+            
+            if len(result_for_hotel) == 0:
+                print("Start google hotels")
+                hotels_info_trip = get_hotels_from_google(city=city_name,lat=landmarks[0],lon=landmarks[1])
+                for hotel in hotels_info_trip['results']:
+                    thread = Thread(target=hotel_from_google, args=(hotel, hotels))
+                    thread.start()
+                    threads.append(thread)
+            threads = []
+            for hotel in result_for_hotel:
+                thread = Thread(target=process_hotel, args=(hotel, hotels))
                 thread.start()
                 threads.append(thread)
-        threads = []
-        for hotel in result_for_hotel:
-            thread = Thread(target=process_hotel, args=(hotel, hotels))
-            thread.start()
-            threads.append(thread)
 
-        for thread in threads:
-                thread.join()
-        cache.set(cache_key, hotels, timeout=7 * 24 * 60 * 60)
-        print ('return hotels')
-        return hotels
-    else:
-        return hotels1
+            for thread in threads:
+                    thread.join()
+            cache.set(cache_key, hotels, timeout=7 * 24 * 60 * 60)
+            print ('return hotels')
+            return hotels
+        else:
+            return hotels1
         
 
 def process_night_life(landmarks):
