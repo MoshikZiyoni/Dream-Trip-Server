@@ -151,7 +151,6 @@ def foursquare_hotels(landmarks):
         response_text=(response.text)
         jsonto=json.loads(response_text)
         reslut=jsonto['results']
-        print (reslut)
         return (reslut)
     except:
         url = "https://api.foursquare.com/v3/places/search?"
@@ -173,7 +172,6 @@ def foursquare_hotels(landmarks):
         response_text=(response.text)
         jsonto=json.loads(response_text)
         reslut=jsonto['results']
-        print (reslut)
         return (reslut)
 
 

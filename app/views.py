@@ -261,11 +261,11 @@ def user_trip(request):
             pattern = r'\b\d+\b'
             # Use re.search to find the first match of the pattern in the question
             days_match = re.search(pattern, question)
-            country_match = re.search(r'in (\w+),', question)
+            country_match = re.search(r'in\s+([A-Za-z\s]+(?:\(country\))?)', question)
 
             # Check if a match was found
             if country_match:
-                country = country_match.group(1)  # Get the matched text and remove leading/trailing spaces
+                country = country_match.group(1).strip()  # Get the matched text and remove leading/trailing spaces
                 print("Country:", country)
             else:
                 print("No country name found in the question.")

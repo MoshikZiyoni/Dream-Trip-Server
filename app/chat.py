@@ -421,7 +421,7 @@ def run_long_poll_async(ourmessage, mainland,durring, retries=3, delay=1):
                                         except:
                                             final_attractions=attractions_list
                                         city_data["attractions"] = list(final_attractions)
-                                        print ('final_attractions before genurate schedules@@@@@@@@@@@@@@',final_attractions)
+                                        print ('final_attractions before genurate schedules@@@@@@@@@@@@@@')
                                         city_data["restaurants"] = list(restaurants_list)
                                         city_data['landmarks']=[existing_city.latitude,existing_city.longitude]
 

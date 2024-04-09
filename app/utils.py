@@ -752,6 +752,8 @@ def quick_from_data_base(country,answer_dict,request_left,trip_id,durring):
         country = country.capitalize()
     except:
         pass
+    if country=='Georgia (country)':
+        country='Georgia'
     existing_country = Country.objects.get(name=country)
     avrage_daily_spent=(existing_country.average_prices)
     if type(durring)==int:
