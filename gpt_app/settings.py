@@ -150,7 +150,7 @@ ASGI_APPLICATION_OPTIONS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('posgre_user'),
+        'NAME': os.environ.get('posgre_name'),
         'HOST':os.environ.get('postgre_host'),
         'USER': os.environ.get('posgre_user'),
         'PASSWORD': os.environ.get('postgre_new_pass'),
