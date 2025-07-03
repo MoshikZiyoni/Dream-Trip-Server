@@ -7,10 +7,7 @@ ENV PYTHONUNBUFFERED 1
 
 
 
-# Upgrade libpq-dev
-RUN apt-get update \
-    && apt-get install --only-upgrade -y libpq-dev \
-    && apt-get clean
+
 
 # Install Python dependencies (this step will be cached if requirements.txt doesn't change)
 COPY requirements.txt /code/requirements.txt
