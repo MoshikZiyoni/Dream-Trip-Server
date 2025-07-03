@@ -4,21 +4,7 @@ FROM python:3.12.4
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install system dependencies
-RUN apt-get update \
-    && apt-get install -y \
-        autoconf \
-        automake \
-        build-essential \
-        ca-certificates \
-        g++ \
-        git \
-        libtool \
-        libleptonica-dev \
-        pkg-config \
-        libtiff5-dev \
-        zlib1g-dev \
-    && apt-get clean
+
 
 
 # Upgrade libpq-dev
