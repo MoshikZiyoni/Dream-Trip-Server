@@ -20,7 +20,6 @@ WORKDIR /code
 COPY ./app /code/app
 COPY ./gpt_app /code/gpt_app
 COPY ./manage.py /code/
-COPY build.sh /code/
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
