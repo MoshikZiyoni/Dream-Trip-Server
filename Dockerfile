@@ -11,8 +11,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Install Python dependencies (this step will be cached if requirements.txt doesn't change)
 COPY requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir -r /code/requirements.txt
-
+RUN pip install --no-cache-dir --verbose -r /code/requirements.txt
 # Set the working directory in the container
 WORKDIR /code
 
